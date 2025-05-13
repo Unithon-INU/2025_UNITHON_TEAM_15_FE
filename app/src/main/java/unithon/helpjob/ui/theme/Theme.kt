@@ -1,56 +1,28 @@
+// ui/theme/Theme.kt
 package unithon.helpjob.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
-)
 
 @Composable
 fun HelpJobTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = lightColorScheme(
+            primary = Primary500,        // 하단 버튼
+            secondary = Primary100,      // 중간 선택 버튼
+            tertiary = Grey200,         // 하단 버튼 미적용
+            background = Grey000,       // 화면 배경
+            surface = Grey200,          // 추가 예정
+            onPrimary = Grey000,        // 하단 버튼 텍스트
+            onSecondary = Primary500,   // 중간 선택 버튼 텍스트
+            onTertiary = Grey400,       // 하단 버튼 미적용 텍스트
+            onBackground = Grey700,     // 일반 텍스트
+            onSurface = Grey400,        // 추가 예정
+            error = Warning            // 에러 메시지
+        ),
         typography = Typography,
         content = content
     )
