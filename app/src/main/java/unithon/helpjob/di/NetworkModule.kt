@@ -19,9 +19,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // 실제 URL은 나중에 교체
-    private const val BASE_URL = "https://api.placeholder.com/"
-
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
@@ -48,11 +45,9 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
-
-    // 실제 API 서비스는 추후 정의
 }
