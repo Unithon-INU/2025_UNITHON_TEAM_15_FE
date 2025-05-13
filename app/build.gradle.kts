@@ -20,6 +20,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
+        buildConfigField(
+            "String",
+            "API_BASE_URL",
+            "\"http://ec2-3-36-114-182.ap-northeast-2.compute.amazonaws.com:8080/\""
+        )
+
 //        Room 사용시 적용
 //        javaCompileOptions {
 //            annotationProcessorOptions {
@@ -34,6 +40,11 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"http://ec2-3-36-114-182.ap-northeast-2.compute.amazonaws.com:8080/\""
             )
         }
     }
