@@ -27,10 +27,10 @@ fun HelpJobButton(
         modifier = modifier.height(56.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Primary500 else Grey300,
+            containerColor = if (enabled) Primary500 else Grey200,
             contentColor = Grey000,
-            disabledContainerColor = Grey300,
-            disabledContentColor = Grey000
+            disabledContainerColor = Grey200,
+            disabledContentColor = Grey400
         )
     ) {
         if (isLoading) {
@@ -43,7 +43,7 @@ fun HelpJobButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.titleMedium, // 16sp, Bold
-                color = Grey000
+                color = if (enabled) Grey000 else Grey400
             )
         }
     }

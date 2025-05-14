@@ -1,7 +1,9 @@
 package unithon.helpjob.ui.auth.signin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,10 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
-import unithon.helpjob.ui.theme.Grey500
-import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.Primary500
+import unithon.helpjob.ui.theme.*
 
 @Composable
 fun SignInScreen(
@@ -50,7 +49,7 @@ fun SignInScreen(
             color = Grey700
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(39.dp))
 
         // 이메일 입력
         Text(
@@ -59,7 +58,7 @@ fun SignInScreen(
             color = Grey500
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(9.dp))
 
         HelpJobTextField(
             value = email,
@@ -68,7 +67,7 @@ fun SignInScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         // 비밀번호 입력
         Text(
@@ -77,7 +76,7 @@ fun SignInScreen(
             color = Grey500
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(9.dp))
 
         HelpJobTextField(
             value = password,
@@ -87,7 +86,7 @@ fun SignInScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(46.dp))
 
         // 로그인 버튼
         HelpJobButton(
@@ -100,7 +99,42 @@ fun SignInScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(38.dp))
+
+        // 또는 구분선
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 왼쪽 실선
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp)
+                    .background(Grey300)
+            )
+
+            Spacer(modifier = Modifier.width(22.dp))
+
+            // 중간 텍스트
+            Text(
+                text = "또는",
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey300
+            )
+
+            Spacer(modifier = Modifier.width(22.dp))
+
+            // 오른쪽 실선
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(1.dp)
+                    .background(Grey300)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
 
         // 회원가입 링크
         Row(
