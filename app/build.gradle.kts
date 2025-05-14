@@ -95,6 +95,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.okhttp.logging)
+
+    // DataStore
+    implementation(libs.androidx.dataStore.core)
+    implementation(libs.androidx.dataStore.preferences)
     
     // Jetpack Compose
     val composeBom = platform(libs.androidx.compose.bom)
