@@ -9,11 +9,12 @@ import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 
 val PretendardFontFamily = FontFamily(
+    Font(R.font.pretendard_regular, FontWeight.Normal),
     Font(R.font.pretendard_medium, FontWeight.Medium),
     Font(R.font.pretendard_bold, FontWeight.Bold)
 )
 
-// Typography
+// Typography - 이미지에 정의된 스타일만 포함
 val Typography = Typography(
     // Headline1 - 24px, Bold
     headlineLarge = TextStyle(
@@ -71,34 +72,20 @@ val Typography = Typography(
         lineHeight = 19.sp,
         letterSpacing = 0.sp
     ),
-    // Body3 - 12px, Medium
+    // Body3 - 15px, Regular
     bodySmall = TextStyle(
+        fontFamily = PretendardFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 15.sp,
+        lineHeight = 19.sp,
+        letterSpacing = 0.sp
+    ),
+    // Body4 - 12px, Medium (labelMedium 사용)
+    labelMedium = TextStyle(
         fontFamily = PretendardFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 15.sp,
         letterSpacing = 0.sp
-    ),
-    // Additional styles
-    labelLarge = TextStyle(
-        fontFamily = PretendardFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.1.sp
-    ),
-    labelMedium = TextStyle(
-        fontFamily = PretendardFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = PretendardFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
     )
 )

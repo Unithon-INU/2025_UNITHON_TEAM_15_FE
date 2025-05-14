@@ -45,3 +45,8 @@ val Typography.body3: androidx.compose.ui.text.TextStyle
     @Composable
     @ReadOnlyComposable
     get() = MaterialTheme.typography.bodySmall
+
+val Typography.body4: androidx.compose.ui.text.TextStyle
+    @Composable
+    @ReadOnlyComposable
+    get() = MaterialTheme.typography.labelMedium
