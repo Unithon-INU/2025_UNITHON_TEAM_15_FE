@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import unithon.helpjob.ui.auth.signin.SignInScreen
+import unithon.helpjob.ui.main.TempScreen
 
 @Composable
 fun HelpJobNavGraph(
@@ -14,6 +15,8 @@ fun HelpJobNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE
 ) {
+    val navActions = HelpJobNavigationActions(navController)
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -26,7 +29,16 @@ fun HelpJobNavGraph(
                     // TODO: 회원가입 화면으로 이동
                 },
                 onNavigateToMain = {
-                    // TODO: 메인 화면으로 이동
+                    navActions.navigateToMain()
+                }
+            )
+        }
+
+        // 임시 메인 화면
+        composable(route = HelpJobDestinations.MAIN_ROUTE) {
+            TempScreen(
+                onNavigateToSignIn = {
+                    navActions.navigateToSignIn()
                 }
             )
         }
