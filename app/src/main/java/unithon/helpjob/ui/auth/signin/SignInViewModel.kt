@@ -13,11 +13,20 @@ class SignInViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+    data class SignInUiState(
+        val email: String = "",
+        val password: String = "",
+        val isLoading: Boolean = false,
+        val userMessage: String? = null,
+        val isSignInSuccessful: Boolean = false  // 네비게이션을 위한 플래그
+    ) {
+        val isInputValid: Boolean
+            get() = email.isNotBlank() && password.length >= 6 &&
+                    android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
-
-    private val _signInEvent = MutableSharedFlow<SignInEvent>()
-    val signInEvent: SharedFlow<SignInEvent> = _signInEvent.asSharedFlow()
 
     fun updateEmail(email: String) {
         _uiState.update { it.copy(email = email) }
@@ -37,7 +46,12 @@ class SignInViewModel @Inject constructor(
                     email = uiState.value.email,
                     password = uiState.value.password
                 )
-                _signInEvent.emit(SignInEvent.NavigateToMain)
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isSignInSuccessful = true
+                    )
+                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
@@ -52,8 +66,4 @@ class SignInViewModel @Inject constructor(
     fun userMessageShown() {
         _uiState.update { it.copy(userMessage = null) }
     }
-}
-
-sealed class SignInEvent {
-    object NavigateToMain : SignInEvent()
 }

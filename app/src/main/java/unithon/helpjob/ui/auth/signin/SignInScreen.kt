@@ -1,4 +1,3 @@
-// app/src/main/java/unithon/helpjob/ui/auth/signin/SignInScreen.kt
 package unithon.helpjob.ui.auth.signin
 
 import androidx.compose.foundation.background
@@ -41,12 +40,10 @@ fun SignInScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // SignInEvent 처리
-    LaunchedEffect(viewModel) {
-        viewModel.signInEvent.collect { event ->
-            when (event) {
-                is SignInEvent.NavigateToMain -> onNavigateToMain()
-            }
+    // 로그인 성공시 네비게이션
+    LaunchedEffect(uiState.isSignInSuccessful) {
+        if (uiState.isSignInSuccessful) {
+            onNavigateToMain()
         }
     }
 
