@@ -6,4 +6,6 @@ object ApiConstants {
     // member-controller Endpoint
     const val SIGN_IN = "api/member/sign-in"
     const val SIGN_UP = "api/member/sign-up"
+    const val SET_NICKNAME = "api/member/me/nickname"
+    const val SET_PROFILE = "api/member/me/profile"
 }
