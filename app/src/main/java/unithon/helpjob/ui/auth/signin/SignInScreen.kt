@@ -1,16 +1,32 @@
 package unithon.helpjob.ui.auth.signin
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
+import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.Primary500
 
 @Composable
 fun SignInScreen(
@@ -29,34 +45,44 @@ fun SignInScreen(
     ) {
         // 제목
         Text(
-            text = "환영해요!",
-            fontSize = 24.sp,
-            style = MaterialTheme.typography.headlineLarge
-        )
-        Text(
-            text = "000이 도와드릴게요",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp, bottom = 40.dp)
+            text = "환영해요!\n000이 도와드릴게요",
+            style = MaterialTheme.typography.headlineLarge, // 24sp, Bold
+            color = Grey700
         )
 
+        Spacer(modifier = Modifier.height(32.dp))
+
         // 이메일 입력
+        Text(
+            text = "이메일",
+            style = MaterialTheme.typography.titleSmall, // 14sp, Bold
+            color = Grey500
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         HelpJobTextField(
             value = email,
             onValueChange = { email = it },
-            label = "이메일",
-            placeholder = "shine9324@naver.com",
+            label = "",
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // 비밀번호 입력
+        Text(
+            text = "비밀번호",
+            style = MaterialTheme.typography.titleSmall, // 14sp, Bold
+            color = Grey500
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
         HelpJobTextField(
             value = password,
             onValueChange = { password = it },
-            label = "비밀번호",
-            placeholder = "••••••",
+            label = "",
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier.fillMaxWidth()
         )
@@ -84,14 +110,14 @@ fun SignInScreen(
         ) {
             Text(
                 text = "아직 회원이 아니신가요?",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = MaterialTheme.typography.bodySmall, // 15sp, Regular
+                color = Grey600
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = "회원가입",
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleSmall, // 14sp, Bold
+                color = Primary500,
                 modifier = Modifier.clickable { onNavigateToSignUp() }
             )
         }

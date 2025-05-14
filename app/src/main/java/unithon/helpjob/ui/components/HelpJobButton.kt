@@ -2,13 +2,16 @@ package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import unithon.helpjob.ui.theme.*
 
 @Composable
 fun HelpJobButton(
@@ -22,16 +25,26 @@ fun HelpJobButton(
         onClick = onClick,
         enabled = enabled && !isLoading,
         modifier = modifier.height(56.dp),
-        shape = MaterialTheme.shapes.medium
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (enabled) Primary500 else Grey300,
+            contentColor = Grey000,
+            disabledContainerColor = Grey300,
+            disabledContentColor = Grey000
+        )
     ) {
         if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = Grey000,
                 strokeWidth = 2.dp
             )
         } else {
-            Text(text = text)
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium, // 16sp, Bold
+                color = Grey000
+            )
         }
     }
 }
