@@ -5,7 +5,10 @@ import unithon.helpjob.data.model.response.TokenResponse
 interface AuthRepository {
     suspend fun signIn(email: String, password: String): TokenResponse
     suspend fun signUp(email: String, password: String): TokenResponse
+
+    @Throws(NicknameDuplicateException::class)
     suspend fun setNickname(nickname: String)
+
     suspend fun setProfile(
         language: String,
         languageLevel: String,
