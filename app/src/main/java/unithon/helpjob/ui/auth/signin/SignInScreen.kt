@@ -106,6 +106,7 @@ fun SignInScreen(
                 onValueChange = viewModel::updatePassword,
                 label = "",
                 visualTransformation = PasswordVisualTransformation(),
+                isError = uiState.passwordError,
                 modifier = Modifier.fillMaxWidth()
             )
 

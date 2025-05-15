@@ -52,8 +52,9 @@ fun HelpJobTextField(
                 color = Grey700 // 입력값 텍스트 색상
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Grey200,
-                focusedBorderColor = Primary500,
+                unfocusedBorderColor = if (isError) Warning else Grey200,
+                focusedBorderColor = if (isError) Warning else Primary500,
+                errorBorderColor = Warning,
                 cursorColor = Primary500,
                 unfocusedContainerColor = Grey000,
                 focusedContainerColor = Grey000,

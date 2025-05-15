@@ -19,7 +19,8 @@ class SignInViewModel @Inject constructor(
         val password: String = "",
         val isLoading: Boolean = false,
         val userMessage: Int? = null,
-        val isSignInSuccessful: Boolean = false  // 네비게이션을 위한 플래그
+        val isSignInSuccessful: Boolean = false,  // 네비게이션을 위한 플래그
+        val passwordError: Boolean = false  // 비밀번호 오류 상태
     ) {
         val isInputValid: Boolean
             get() = email.isNotBlank() && password.length >= 6 &&
