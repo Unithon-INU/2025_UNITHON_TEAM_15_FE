@@ -12,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import unithon.helpjob.BuildConfig
+import unithon.helpjob.data.network.AuthInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -21,8 +22,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)  // AuthInterceptor 추가
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
                 else HttpLoggingInterceptor.Level.NONE

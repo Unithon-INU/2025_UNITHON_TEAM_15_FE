@@ -48,9 +48,7 @@ class DefaultAuthRepository @Inject constructor(
     }
 
     override suspend fun setNickname(nickname: String) {
-        val token = getToken() ?: throw UnauthorizedException()
         val response = apiService.setNickname(
-            "Bearer $token",
             MemberNicknameReq(nickname)
         )
 
@@ -74,9 +72,7 @@ class DefaultAuthRepository @Inject constructor(
         visaType: String,
         industry: String
     ): TokenResponse {
-        val token = getToken() ?: throw UnauthorizedException()
         val response = apiService.setProfile(
-            "Bearer $token",
             MemberProfileReq(language, languageLevel, visaType, industry)
         )
         if (response.isSuccessful) {
