@@ -16,16 +16,16 @@
 
     <!-- SignUp Screen -->
     <string name="sign_up_title">회원가입</string>
+    <string name="sign_up_subtitle">간단한 정보를 입력해주세요!</string>
+    <string name="sign_up_email_label">이메일</string>
+    <string name="sign_up_email_hint">이메일을 입력해주세요</string>
+    <string name="sign_up_password_label">비밀번호</string>
+    <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_up_next_button">다음</string>
+    <string name="sign_up_failed">회원가입에 실패했습니다</string>
+    <string name="sign_up_email_exists">이미 존재하는 이메일입니다</string>
 
-    <!-- Onboarding Screen -->
-    <string name="onboarding_title">시작하기</string>
-
-    <!-- Main/Temp Screen -->
-    <string name="temp_login_success">로그인 성공!</string>
-    <string name="temp_main_description">임시 메인 화면입니다</string>
-    <string name="temp_logout">로그아웃</string>
-
-    <!-- Common -->
+    <!-- Common Error Messages -->
     <string name="error_empty_email">이메일을 입력해주세요</string>
     <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
     <string name="error_empty_password">비밀번호를 입력해주세요</string>
