@@ -58,7 +58,8 @@ class SignInViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        userMessage = R.string.sign_in_failed
+                        userMessage = R.string.sign_in_failed,
+                        passwordError = true
                     )
                 }
             }
