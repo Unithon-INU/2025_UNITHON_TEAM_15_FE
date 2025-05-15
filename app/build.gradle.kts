@@ -23,7 +23,7 @@ android {
         buildConfigField(
             "String",
             "API_BASE_URL",
-            "\"http://ec2-3-36-114-182.ap-northeast-2.compute.amazonaws.com:8080/\""
+            "\"http://3.36.2.85:8080/\""
         )
 
 //        Room 사용시 적용
@@ -44,7 +44,7 @@ android {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"http://ec2-3-36-114-182.ap-northeast-2.compute.amazonaws.com:8080/\""
+                "\"http://3.36.2.85:8080/\""
             )
         }
     }
