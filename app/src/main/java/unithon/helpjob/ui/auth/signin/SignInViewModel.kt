@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import javax.inject.Inject
 
@@ -17,7 +18,7 @@ class SignInViewModel @Inject constructor(
         val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
-        val userMessage: String? = null,
+        val userMessage: Int? = null,
         val isSignInSuccessful: Boolean = false  // 네비게이션을 위한 플래그
     ) {
         val isInputValid: Boolean
@@ -56,7 +57,7 @@ class SignInViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        userMessage = e.message ?: "로그인에 실패했습니다"
+                        userMessage = R.string.sign_in_failed
                     )
                 }
             }

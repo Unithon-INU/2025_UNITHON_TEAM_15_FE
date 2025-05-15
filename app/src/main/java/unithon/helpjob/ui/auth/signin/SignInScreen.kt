@@ -22,10 +22,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.*
@@ -48,9 +50,10 @@ fun SignInScreen(
     }
 
     // 에러 메시지 처리
-    LaunchedEffect(uiState.userMessage) {
-        uiState.userMessage?.let { message ->
-            snackbarHostState.showSnackbar(message)
+    uiState.userMessage?.let { message ->
+        val snackbarText = stringResource(message)
+        LaunchedEffect(snackbarHostState, viewModel, message, snackbarText) {
+            snackbarHostState.showSnackbar(snackbarText)
             viewModel.userMessageShown()
         }
     }
@@ -64,7 +67,7 @@ fun SignInScreen(
         ) {
             // 제목
             Text(
-                text = "환영해요!\n000이 도와드릴게요",
+                text = stringResource(id = R.string.sign_in_welcome_title_default),
                 style = MaterialTheme.typography.headlineLarge, // 24sp, Bold
                 color = Grey700
             )
@@ -73,7 +76,7 @@ fun SignInScreen(
 
             // 이메일 입력
             Text(
-                text = "이메일",
+                text = stringResource(id = R.string.sign_in_email_label),
                 style = MaterialTheme.typography.titleSmall, // 14sp, Bold
                 color = Grey500
             )
@@ -91,7 +94,7 @@ fun SignInScreen(
 
             // 비밀번호 입력
             Text(
-                text = "비밀번호",
+                text = stringResource(id = R.string.sign_in_password_label),
                 style = MaterialTheme.typography.titleSmall, // 14sp, Bold
                 color = Grey500
             )
@@ -110,7 +113,7 @@ fun SignInScreen(
 
             // 로그인 버튼
             HelpJobButton(
-                text = "로그인",
+                text = stringResource(id = R.string.sign_in_button),
                 onClick = viewModel::signIn,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
@@ -136,7 +139,7 @@ fun SignInScreen(
 
                 // 중간 텍스트
                 Text(
-                    text = "또는",
+                    text = stringResource(id = R.string.sign_in_or_divider),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey300
                 )
@@ -161,13 +164,13 @@ fun SignInScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "아직 회원이 아니신가요?",
+                    text = stringResource(id = R.string.sign_in_no_account),
                     style = MaterialTheme.typography.bodySmall, // 15sp, Regular
                     color = Grey600
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "회원가입",
+                    text = stringResource(id = R.string.sign_in_go_to_sign_up),
                     style = MaterialTheme.typography.titleSmall, // 14sp, Bold
                     color = Primary500,
                     modifier = Modifier.clickable { onNavigateToSignUp() }

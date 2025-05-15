@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">HelpJob</string>
+
+    <!-- SignIn Screen -->
+    <string name="sign_in_welcome_title">환영해요!\n%s이 도와드릴게요</string>
+    <string name="sign_in_welcome_title_default">환영해요!\nOOO이 도와드릴게요</string>
+    <string name="sign_in_email_label">이메일</string>
+    <string name="sign_in_password_label">비밀번호</string>
+    <string name="sign_in_button">로그인</string>
+    <string name="sign_in_or_divider">또는</string>
+    <string name="sign_in_no_account">아직 회원이 아니신가요?</string>
+    <string name="sign_in_go_to_sign_up">회원가입</string>
+
+    <!-- SignIn Error Messages -->
+    <string name="sign_in_failed">로그인에 실패했습니다</string>
+
+    <!-- SignUp Screen -->
+    <string name="sign_up_title">회원가입</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_title">시작하기</string>
+
+    <!-- Main/Temp Screen -->
+    <string name="temp_login_success">로그인 성공!</string>
+    <string name="temp_main_description">임시 메인 화면입니다</string>
+    <string name="temp_logout">로그아웃</string>
+
+    <!-- Common -->
+    <string name="error_empty_email">이메일을 입력해주세요</string>
+    <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
+    <string name="error_empty_password">비밀번호를 입력해주세요</string>
+    <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
 </resources>
