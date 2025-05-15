@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 object HelpJobScreens {
     const val SIGN_IN_SCREEN = "sign_in"
     const val SIGN_UP_SCREEN = "sign_up"
+    const val NICKNAME_SETUP_SCREEN = "nickname_setup"
     const val ONBOARDING_SCREEN = "onboarding"
     const val MAIN_SCREEN = "main"
 }
@@ -28,6 +29,7 @@ object HelpJobScreens {
 object HelpJobDestinations {
     const val SIGN_IN_ROUTE = HelpJobScreens.SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = HelpJobScreens.SIGN_UP_SCREEN
+    const val NICKNAME_SETUP_ROUTE = HelpJobScreens.NICKNAME_SETUP_SCREEN
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
     const val MAIN_ROUTE = HelpJobScreens.MAIN_SCREEN
 }
@@ -45,6 +47,12 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSignUp() {
         navController.navigate(HelpJobDestinations.SIGN_UP_ROUTE)
+    }
+
+    fun navigateToNicknameSetup() {
+        navController.navigate(HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
+            popUpTo(HelpJobDestinations.SIGN_UP_ROUTE) { inclusive = true }
+        }
     }
 
     fun navigateToOnboarding() {

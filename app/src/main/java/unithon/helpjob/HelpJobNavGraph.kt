@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
 import unithon.helpjob.ui.main.TempScreen
@@ -38,10 +39,16 @@ fun HelpJobNavGraph(
         // 회원가입 화면
         composable(route = HelpJobDestinations.SIGN_UP_ROUTE) {
             SignUpScreen(
-                onNavigateToSignIn = {
-                    navActions.navigateToSignIn()
-                },
-                onNavigateToOnboarding = {
+                onNavigateToNicknameSetup = {
+                    navActions.navigateToNicknameSetup()
+                }
+            )
+        }
+
+        // 닉네임 설정 화면
+        composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
+            NicknameSetupScreen(
+                onNicknameSet = {
                     navActions.navigateToOnboarding()
                 }
             )
