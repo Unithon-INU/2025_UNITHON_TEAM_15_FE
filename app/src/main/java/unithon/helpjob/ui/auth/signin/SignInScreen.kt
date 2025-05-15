@@ -102,11 +102,10 @@ fun SignInScreen(
             Spacer(modifier = Modifier.height(9.dp))
 
             HelpJobTextField(
-                value = uiState.email,
-                onValueChange = viewModel::updateEmail,
+                value = uiState.password,
+                onValueChange = viewModel::updatePassword,
                 label = "",
-                isError = uiState.emailError,
-                errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
             )
 
