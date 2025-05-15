@@ -48,13 +48,21 @@ class DefaultAuthRepository @Inject constructor(
     }
 
     override suspend fun setNickname(nickname: String) {
-        val token = getToken() ?: throw Exception("토큰이 없습니다")
         val response = apiService.setNickname(
-            "Bearer $token",
             MemberNicknameReq(nickname)
         )
-        if (!response.isSuccessful) {
-            throw Exception(response.errorBody()?.string() ?: "닉네임 설정 실패")
+
+        if (response.isSuccessful) {
+            return
+        } else {
+            when (response.code()) {
+                409 -> throw NicknameDuplicateException()  // CONFLICT
+                401 -> throw UnauthorizedException()
+                else -> {
+                    val errorBody = response.errorBody()?.string()
+                    throw Exception(errorBody ?: "닉네임 설정 실패")
+                }
+            }
         }
     }
 
@@ -64,9 +72,7 @@ class DefaultAuthRepository @Inject constructor(
         visaType: String,
         industry: String
     ): TokenResponse {
-        val token = getToken() ?: throw Exception("토큰이 없습니다")
         val response = apiService.setProfile(
-            "Bearer $token",
             MemberProfileReq(language, languageLevel, visaType, industry)
         )
         if (response.isSuccessful) {

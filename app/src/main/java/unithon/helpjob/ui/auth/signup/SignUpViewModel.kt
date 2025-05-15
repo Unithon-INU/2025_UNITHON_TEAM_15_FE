@@ -1,4 +1,4 @@
-package unithon.helpjob.ui.auth.signin
+package unithon.helpjob.ui.auth.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,16 +10,16 @@ import unithon.helpjob.data.repository.AuthRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(
+class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
-    data class SignInUiState(
+    data class SignUpUiState(
         val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
         val userMessage: Int? = null,
-        val isSignInSuccessful: Boolean = false,
+        val isSignUpSuccessful: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
         val emailErrorMessage: Int? = null,
@@ -30,8 +30,8 @@ class SignInViewModel @Inject constructor(
                     android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
-    private val _uiState = MutableStateFlow(SignInUiState())
-    val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(SignUpUiState())
+    val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
     fun updateEmail(email: String) {
         _uiState.update {
@@ -53,7 +53,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signIn() {
+    fun signUp() {
         val currentState = uiState.value
 
         // 입력 검증
@@ -100,22 +100,25 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
-                authRepository.signIn(
+                authRepository.signUp(
                     email = currentState.email,
                     password = currentState.password
                 )
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        isSignInSuccessful = true
+                        isSignUpSuccessful = true
                     )
                 }
             } catch (e: Exception) {
+                val errorMessage = when {
+                    e.message?.contains("already exists") == true -> R.string.sign_up_email_exists
+                    else -> R.string.sign_up_failed
+                }
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        userMessage = R.string.sign_in_failed,
-                        passwordError = true
+                        userMessage = errorMessage
                     )
                 }
             }

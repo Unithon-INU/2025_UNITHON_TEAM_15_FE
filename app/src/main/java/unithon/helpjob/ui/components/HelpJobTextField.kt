@@ -3,6 +3,7 @@ package unithon.helpjob.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -41,7 +42,16 @@ fun HelpJobTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = null, // placeholder 제거
+            placeholder = if (placeholder.isNotBlank()) {
+                {
+                    Text(
+                        text = placeholder,
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            color = Grey300 // placeholder 색상
+                        )
+                    )
+                }
+            } else null,
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             isError = isError,
@@ -51,8 +61,9 @@ fun HelpJobTextField(
                 color = Grey700 // 입력값 텍스트 색상
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Grey200,
-                focusedBorderColor = Primary500,
+                unfocusedBorderColor = if (isError) Warning else Grey200,
+                focusedBorderColor = if (isError) Warning else Primary500,
+                errorBorderColor = Warning,
                 cursorColor = Primary500,
                 unfocusedContainerColor = Grey000,
                 focusedContainerColor = Grey000,
@@ -61,7 +72,7 @@ fun HelpJobTextField(
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(46.dp)
+                .heightIn(min = 48.dp)
         )
 
         if (isError && errorMessage != null) {
