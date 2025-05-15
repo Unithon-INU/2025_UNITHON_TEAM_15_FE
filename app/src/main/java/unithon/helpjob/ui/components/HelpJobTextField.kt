@@ -42,7 +42,16 @@ fun HelpJobTextField(
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = null, // placeholder 제거
+            placeholder = if (placeholder.isNotBlank()) {
+                {
+                    Text(
+                        text = placeholder,
+                        style = MaterialTheme.typography.titleSmall.copy(
+                            color = Grey300 // placeholder 색상
+                        )
+                    )
+                }
+            } else null,
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
             isError = isError,
