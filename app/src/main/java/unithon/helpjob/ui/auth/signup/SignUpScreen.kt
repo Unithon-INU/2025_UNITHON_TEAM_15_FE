@@ -20,8 +20,7 @@ import unithon.helpjob.ui.theme.*
 
 @Composable
 fun SignUpScreen(
-    onNavigateToSignIn: () -> Unit,
-    onNavigateToOnboarding: () -> Unit,
+    onNavigateToNicknameSetup: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -31,7 +30,7 @@ fun SignUpScreen(
     // 회원가입 성공시 네비게이션
     LaunchedEffect(uiState.isSignUpSuccessful) {
         if (uiState.isSignUpSuccessful) {
-            onNavigateToOnboarding()
+            onNavigateToNicknameSetup()
         }
     }
 
