@@ -49,7 +49,7 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
             NicknameSetupScreen(
                 onNicknameSet = {
-                    navActions.navigateToOnboarding()
+                    navActions.navigateToMain()
                 }
             )
         }
