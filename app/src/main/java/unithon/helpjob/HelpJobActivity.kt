@@ -22,20 +22,11 @@ class HelpJobActivity : ComponentActivity() {
         setContent {
             HelpJobTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    HelpJobNavGraph(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
