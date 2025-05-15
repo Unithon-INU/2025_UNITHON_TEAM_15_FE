@@ -25,6 +25,17 @@
     <string name="sign_up_failed">회원가입에 실패했습니다</string>
     <string name="sign_up_email_exists">이미 존재하는 이메일입니다</string>
 
+    <!-- Nickname Setup Screen -->
+    <string name="nickname_setup_title">OOO 에서 사용할\n닉네임을 설정해주세요</string>
+    <string name="nickname_placeholder">닉네임을 입력해주세요</string>
+    <string name="nickname_character_count">%1$d / 10</string>
+    <string name="nickname_duplicate_error">ⓘ 이미 사용 중인 닉네임이에요.</string>
+    <string name="nickname_complete_button">완료</string>
+    <string name="nickname_empty_error">닉네임을 입력해주세요</string>
+    <string name="nickname_too_short_error">닉네임은 2자 이상이어야 합니다</string>
+    <string name="nickname_too_long_error">닉네임은 10자 이하여야 합니다</string>
+    <string name="nickname_setup_failed">닉네임 설정에 실패했습니다</string>
+
     <!-- Common Error Messages -->
     <string name="error_empty_email">이메일을 입력해주세요</string>
     <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
