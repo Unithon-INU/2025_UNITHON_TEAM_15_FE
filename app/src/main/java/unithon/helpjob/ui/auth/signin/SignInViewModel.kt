@@ -19,8 +19,11 @@ class SignInViewModel @Inject constructor(
         val password: String = "",
         val isLoading: Boolean = false,
         val userMessage: Int? = null,
-        val isSignInSuccessful: Boolean = false,  // 네비게이션을 위한 플래그
-        val passwordError: Boolean = false  // 비밀번호 오류 상태
+        val isSignInSuccessful: Boolean = false,
+        val emailError: Boolean = false,
+        val passwordError: Boolean = false,
+        val emailErrorMessage: Int? = null,
+        val passwordErrorMessage: Int? = null
     ) {
         val isInputValid: Boolean
             get() = email.isNotBlank() && password.length >= 6 &&
@@ -31,22 +34,75 @@ class SignInViewModel @Inject constructor(
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
     fun updateEmail(email: String) {
-        _uiState.update { it.copy(email = email) }
+        _uiState.update {
+            it.copy(
+                email = email,
+                emailError = false,
+                emailErrorMessage = null
+            )
+        }
     }
 
     fun updatePassword(password: String) {
-        _uiState.update { it.copy(password = password) }
+        _uiState.update {
+            it.copy(
+                password = password,
+                passwordError = false,
+                passwordErrorMessage = null
+            )
+        }
     }
 
     fun signIn() {
-        if (!uiState.value.isInputValid) return
+        val currentState = uiState.value
+
+        // 입력 검증
+        var hasError = false
+
+        if (currentState.email.isBlank()) {
+            _uiState.update {
+                it.copy(
+                    emailError = true,
+                    emailErrorMessage = R.string.error_empty_email
+                )
+            }
+            hasError = true
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(currentState.email).matches()) {
+            _uiState.update {
+                it.copy(
+                    emailError = true,
+                    emailErrorMessage = R.string.error_invalid_email
+                )
+            }
+            hasError = true
+        }
+
+        if (currentState.password.isBlank()) {
+            _uiState.update {
+                it.copy(
+                    passwordError = true,
+                    passwordErrorMessage = R.string.error_empty_password
+                )
+            }
+            hasError = true
+        } else if (currentState.password.length < 6) {
+            _uiState.update {
+                it.copy(
+                    passwordError = true,
+                    passwordErrorMessage = R.string.error_short_password
+                )
+            }
+            hasError = true
+        }
+
+        if (hasError) return
 
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
                 authRepository.signIn(
-                    email = uiState.value.email,
-                    password = uiState.value.password
+                    email = currentState.email,
+                    password = currentState.password
                 )
                 _uiState.update {
                     it.copy(
