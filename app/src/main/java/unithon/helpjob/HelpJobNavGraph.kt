@@ -10,12 +10,13 @@ import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
 import unithon.helpjob.ui.main.TempScreen
+import unithon.helpjob.ui.onboarding.OnboardingScreen
 
 @Composable
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE
+    startDestination: String = HelpJobDestinations.ONBOARDING_ROUTE
 ) {
     val navActions = HelpJobNavigationActions(navController)
 
@@ -64,5 +65,12 @@ fun HelpJobNavGraph(
         }
 
         // TODO: Onboarding 화면 추가
+        composable(route = HelpJobDestinations.ONBOARDING_ROUTE) {
+            OnboardingScreen(
+                onOnboardingComplete = {
+                    navActions.navigateToMain()
+                }
+            )
+        }
     }
 }
