@@ -60,12 +60,9 @@
 
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">유니톤님의 한국어 능력을\n선택해 주세요</string>
-    <string name="onboarding_korean_level_setup_beginner_title">초급</string>
-    <string name="onboarding_korean_level_setup_beginner_description">간단한 인사와 일상 대화 가능</string>
-    <string name="onboarding_korean_level_setup_intermediate_title">중급</string>
-    <string name="onboarding_korean_level_setup_intermediate_description">업무 지시 이해 및 간단한 소통 가능</string>
-    <string name="onboarding_korean_level_setup_advanced_title">고급</string>
-    <string name="onboarding_korean_level_setup_advanced_description">자유로운 의사소통 가능</string>
+    <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
+    <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
+    <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
 
     <!-- Onboarding Screen(visa) -->
     <string name="onboarding_visa_setup_title">유니톤님의 비자 종류를\n선택해 주세요</string>
@@ -78,11 +75,11 @@
     <string name="onboarding_business_setup_title">유니톤님이 희망하는\n업종은 무엇인가요?</string>
     <string name="onboarding_business_setup_restaurant">음식점/카페</string>
     <string name="onboarding_business_setup_mart">편의점/마트</string>
-    <string name="onboarding_business_setup_logistics">물류/ 창고 작업</string>
-    <string name="onboarding_business_setup_office">사무보조/ 문서정리</string>
-    <string name="onboarding_business_setup_translation">통역/ 번역</string>
-    <string name="onboarding_business_setup_learn">과외/ 학습 보조</string>
-    <string name="onboarding_business_setup_event">행사/ 이벤트 스태프</string>
+    <string name="onboarding_business_setup_logistics">물류/창고 작업 보조</string>
+    <string name="onboarding_business_setup_office">사무보조/문서정리</string>
+    <string name="onboarding_business_setup_translation">통역/번역</string>
+    <string name="onboarding_business_setup_learn">과외/학습 보조</string>
+    <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
 
 
 </resources>
