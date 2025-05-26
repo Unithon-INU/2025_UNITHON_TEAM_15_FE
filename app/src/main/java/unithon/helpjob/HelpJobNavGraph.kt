@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
+import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.main.TempScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 
@@ -16,7 +17,7 @@ import unithon.helpjob.ui.onboarding.OnboardingScreen
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = HelpJobDestinations.ONBOARDING_ROUTE
+    startDestination: String = HelpJobDestinations.CALCULATOR
 ) {
     val navActions = HelpJobNavigationActions(navController)
 
@@ -70,6 +71,11 @@ fun HelpJobNavGraph(
                 onOnboardingComplete = {
                     navActions.navigateToMain()
                 }
+            )
+        }
+
+        composable(route = HelpJobDestinations.CALCULATOR) {
+            CalculatorScreen(
             )
         }
     }
