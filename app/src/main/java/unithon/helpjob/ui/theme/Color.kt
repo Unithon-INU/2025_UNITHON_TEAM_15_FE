@@ -14,12 +14,12 @@ val Grey600 = Color(0xFF505050)
 val Grey700 = Color(0xFF1D1D1D)
 
 // Main color
-val Primary500 = Color(0xFFFFBF00)  // 메인 색상
-val Primary400 = Color(0xFFFFCC33)
-val Primary300 = Color(0xFFFFD966)
-val Primary200 = Color(0xFFFFE599)
-val Primary100 = Color(0xFFFFF2CC)
-val Primary000 = Color(0xFFFFF9E5)
+val Primary600 = Color(0xFFFFBF00)  // 메인 색상
+val Primary500 = Color(0xFFFFCC33)
+val Primary400 = Color(0xFFFFD966)
+val Primary300 = Color(0xFFFFE599)
+val Primary200 = Color(0xFFFFF2CC)
+val Primary100 = Color(0xFFFFF9E5)
 
 // Sub color
 val Success = Color(0xFF04CFAB)
