@@ -16,7 +16,7 @@ import unithon.helpjob.ui.onboarding.OnboardingScreen
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = HelpJobDestinations.ONBOARDING_ROUTE
+    startDestination: String = BottomNavDestination.HOME.route
 ) {
     val navActions = HelpJobNavigationActions(navController)
 
@@ -72,5 +72,22 @@ fun HelpJobNavGraph(
                 }
             )
         }
+
+        composable(route = BottomNavDestination.HOME.route) {
+            TempScreen(onNavigateToSignIn = { /* 아무것도 안 함 */ })
+        }
+
+        composable(route = BottomNavDestination.CALCULATE.route) {
+            TempScreen(onNavigateToSignIn = { /* 아무것도 안 함 */ })
+        }
+
+        composable(route = BottomNavDestination.CONTENT.route) {
+            TempScreen(onNavigateToSignIn = { /* 아무것도 안 함 */ })
+        }
+
+        composable(route = BottomNavDestination.PROFILE.route) {
+            TempScreen(onNavigateToSignIn = { /* 아무것도 안 함 */ })
+        }
+
     }
 }
