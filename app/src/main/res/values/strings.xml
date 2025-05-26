@@ -84,5 +84,12 @@
     <string name="onboarding_business_setup_learn">과외/ 학습 보조</string>
     <string name="onboarding_business_setup_event">행사/ 이벤트 스태프</string>
 
+    <!-- Calculator Screen -->
+    <string name="calculator_title_per_hour">최저임금은 시간당</string>
+    <string name="calculator_title_minimum_wage">10,030원</string>
+    <string name="calculator_wage_label">시급 입력</string>
+    <string name="calculator_worktime_label">하루 근무시간</string>
+    <string name="calculator_workday_label">한달 근무일수</string>
+    <string name="calculator_calculate_salary">계산하기</string>
 
 </resources>
