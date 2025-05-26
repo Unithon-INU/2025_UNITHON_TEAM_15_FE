@@ -172,7 +172,7 @@ fun SignInScreen(
                     style = MaterialTheme.typography.bodySmall, // 15sp, Regular
                     color = Grey600
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(11.dp))
                 Text(
                     text = stringResource(id = R.string.sign_in_go_to_sign_up),
                     style = MaterialTheme.typography.titleSmall, // 14sp, Bold
