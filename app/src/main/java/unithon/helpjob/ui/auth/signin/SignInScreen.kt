@@ -30,7 +30,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
-import unithon.helpjob.ui.theme.*
+import unithon.helpjob.ui.theme.Grey300
+import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
+import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.Primary600
 
 @Composable
 fun SignInScreen(
@@ -168,11 +172,11 @@ fun SignInScreen(
                     style = MaterialTheme.typography.bodySmall, // 15sp, Regular
                     color = Grey600
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(11.dp))
                 Text(
                     text = stringResource(id = R.string.sign_in_go_to_sign_up),
                     style = MaterialTheme.typography.titleSmall, // 14sp, Bold
-                    color = Primary500,
+                    color = Primary600,
                     modifier = Modifier.clickable { onNavigateToSignUp() }
                 )
             }
