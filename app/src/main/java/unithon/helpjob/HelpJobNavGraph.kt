@@ -16,19 +16,19 @@ import unithon.helpjob.ui.onboarding.OnboardingScreen
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController), // 기본값 제공
-    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인부터 시작
+    navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
+    startDestination: String = BottomNavDestination.DEFAULT_TAB.route // 기본은 홈
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        // 인증 관련 화면들 (하단바 없음)
+        // 인증 플로우 (하단바 없음)
         composable(route = HelpJobDestinations.SIGN_IN_ROUTE) {
             SignInScreen(
                 onNavigateToSignUp = navActions::navigateToSignUp,
-                onNavigateToMain = navActions::navigateToHome // 일관성 있게 NavigationActions 사용
+                onNavigateToMain = navActions::navigateToHome
             )
         }
 
@@ -46,11 +46,11 @@ fun HelpJobNavGraph(
 
         composable(route = HelpJobDestinations.ONBOARDING_ROUTE) {
             OnboardingScreen(
-                onOnboardingComplete = navActions::navigateToHome // 일관성 있게 NavigationActions 사용
+                onOnboardingComplete = navActions::navigateToHome
             )
         }
 
-        // 메인 앱 화면들 (하단바 있음)
+        // 메인 앱 플로우 (하단바 있음) - enum에서 경로 가져옴
         composable(route = BottomNavDestination.HOME.route) {
             TempScreen(
                 onNavigateToSignIn = navActions::navigateToSignIn
