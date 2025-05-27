@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -48,6 +49,13 @@ fun OnboardingScreen(
     onOnboardingComplete: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.isOnboardingSuccess) {
+        if (uiState.isOnboardingSuccess) {
+            onOnboardingComplete()
+        }
+    }
+
     val languageList = listOf(
         OnboardingData(
             mainTitle = stringResource(R.string.onboarding_language_setup_korean)
@@ -249,10 +257,16 @@ fun OnboardingScreen(
                     }
                 },
                 onGetStarted = {
-                    onOnboardingComplete()
+                    viewModel.completeOnboarding()
                 },
                 isValid = isCurrentPageValid
             )
+        }
+
+        if (uiState.userProfileError && uiState.userProfileErrorMessage != null) {
+            LaunchedEffect(uiState.userProfileErrorMessage) {
+
+            }
         }
     }
 }

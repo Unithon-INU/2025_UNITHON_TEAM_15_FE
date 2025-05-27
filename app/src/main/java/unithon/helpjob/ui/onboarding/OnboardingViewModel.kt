@@ -1,15 +1,21 @@
 package unithon.helpjob.ui.onboarding
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import unithon.helpjob.R
+import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.UnauthorizedException
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     data class OnboardingUiState(
         val language: String = "",
@@ -100,6 +106,40 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun completeOnboarding() {
-        _uiState.value = _uiState.value.copy(isOnboardingSuccess = true)
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            try {
+                authRepository.setProfile(
+                    language = _uiState.value.language,
+                    languageLevel = _uiState.value.koreanLevel,
+                    visaType = _uiState.value.visa,
+                    industry = _uiState.value.businesses.joinToString(",")
+                )
+                _uiState.update {
+                    it.copy(
+                        language = "",
+                        koreanLevel = "",
+                        visa = "",
+                        businesses = emptyList(),
+                        isOnboardingSuccess = true,
+                        isLoading = false,  // 로딩 상태 해제
+                        userProfileError = false,  // 에러 상태 초기화
+                        userProfileErrorMessage = null  // 에러 메시지 초기화
+                    )
+                }
+
+            } catch (e: UnauthorizedException){
+                _uiState.update { it.copy(userProfileError = true, userProfileErrorMessage = R.string.unauthorized_message)}
+            } catch (e: Exception) {  // 다른 예외 처리 추가
+                _uiState.update {
+                    it.copy(
+                        userProfileError = true,
+                        userProfileErrorMessage = R.string.error,  // 일반적인 에러 메시지
+                        isLoading = false
+                    )
+                }
+            }
+
+        }
     }
 }

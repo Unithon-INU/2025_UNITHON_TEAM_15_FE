@@ -80,6 +80,8 @@
     <string name="onboarding_business_setup_translation">통역/번역</string>
     <string name="onboarding_business_setup_learn">과외/학습 보조</string>
     <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
+    <string name="unauthorized_message">인증 오류</string>
+    <string name="error">Error</string>
 
 
 </resources>
