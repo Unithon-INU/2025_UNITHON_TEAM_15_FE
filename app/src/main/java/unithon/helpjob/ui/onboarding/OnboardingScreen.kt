@@ -27,12 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
+import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.onboarding.components.AgreementSection
 import unithon.helpjob.ui.onboarding.components.OnboardingButton
 import unithon.helpjob.ui.theme.Grey000
@@ -56,16 +58,13 @@ fun OnboardingScreen(
     )
     val koreanLevelList = listOf(
         OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_beginner_title),
-            subTitle = stringResource(R.string.onboarding_korean_level_setup_beginner_description)
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik3),
         ),
         OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_intermediate_title),
-            subTitle = stringResource(R.string.onboarding_korean_level_setup_intermediate_description)
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik4_over),
         ),
         OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_advanced_title),
-            subTitle = stringResource(R.string.onboarding_korean_level_setup_advanced_description)
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_no_topik),
         ),
     )
     val visaList = listOf(
@@ -143,29 +142,6 @@ fun OnboardingScreen(
                 )
             }
         ),
-        //한국어 능력 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_korean_level_setup_title),
-            content = {
-                koreanLevelList.forEachIndexed { index, koreanLevel ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(62.dp)
-                            .fillMaxWidth(),
-                        mainTitle = koreanLevel.mainTitle,
-                        subTitle = koreanLevel.subTitle,
-                        onClick = {
-                            viewModel.updateKoreanLevel(koreanLevel.mainTitle)
-                        },
-                        contentPosition = Arrangement.Center,
-                        enabled = uiState.koreanLevel == koreanLevel.mainTitle,
-                    )
-                    if (index < koreanLevelList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
         //비자 선택
         OnboardingPage(
             title = stringResource(R.string.onboarding_visa_setup_title),
@@ -184,6 +160,29 @@ fun OnboardingScreen(
                         enabled = uiState.visa == visa.mainTitle,
                     )
                     if (index < visaList.size - 1) {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
+                }
+            }
+        ),
+        //한국어 능력 선택
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_korean_level_setup_title),
+            content = {
+                koreanLevelList.forEachIndexed { index, koreanLevel ->
+                    OnboardingButton(
+                        modifier = Modifier
+                            .height(62.dp)
+                            .fillMaxWidth(),
+                        mainTitle = koreanLevel.mainTitle,
+                        subTitle = koreanLevel.subTitle,
+                        onClick = {
+                            viewModel.updateKoreanLevel(koreanLevel.mainTitle)
+                        },
+                        contentPosition = Arrangement.Center,
+                        enabled = uiState.koreanLevel == koreanLevel.mainTitle,
+                    )
+                    if (index < koreanLevelList.size - 1) {
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
@@ -221,8 +220,8 @@ fun OnboardingScreen(
     val isCurrentPageValid = when (pagerState.currentPage) {
         0 -> uiState.inLanguageValid     // 언어 선택 페이지
         1 -> uiState.isFullAgreementValid    // 약관 동의 페이지
-        2 -> uiState.isKoreanLevelValid  // 한국어 능력 선택 페이지
-        3 -> uiState.isVisaValid         // 비자 선택 페이지
+        2 -> uiState.isVisaValid         // 비자 선택 페이지
+        3 -> uiState.isKoreanLevelValid  // 한국어 능력 선택 페이지
         4 -> uiState.isBusinessValid     // 업종 선택 페이지
         else -> false
     }
@@ -232,7 +231,6 @@ fun OnboardingScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         // 페이저
         HorizontalPager(
             state = pagerState,
@@ -299,25 +297,19 @@ fun OnboardingPage(
             Spacer(Modifier.height(39.dp))
             page.content()
         }
-        Button(
-            onClick = if (currentPage == pageCount - 1) onGetStarted else onNextPage,
+
+        HelpJobButton(
+            text = stringResource(R.string.onboarding_next_button),
+            onClick = {
+                if (currentPage == pageCount - 1) onGetStarted() else onNextPage()
+            },
             enabled = isValid,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Primary500,
-                contentColor = Grey000
-            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
                 .height(46.dp)
                 .align(Alignment.BottomCenter),
-            shape = RoundedCornerShape(10.dp),
-        ) {
-            Text(
-                text = stringResource(R.string.onboarding_next_button),
-                style = MaterialTheme.typography.titleMedium
-            )
-        }
+        )
     }
 }
 
@@ -350,5 +342,212 @@ fun CustomProgressIndicator(
                 .background(progressColor, shape = RoundedCornerShape(3.dp))
                 .clip(RoundedCornerShape(3.dp))
         )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun OnboardingPreview(){
+    val languageList = listOf(
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_language_setup_korean)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_language_setup_english)
+        )
+    )
+    val koreanLevelList = listOf(
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik3),
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik4_over),
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_korean_level_setup_no_topik),
+        ),
+    )
+    val visaList = listOf(
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_visa_setup_d2_title),
+            subTitle = stringResource(R.string.onboarding_visa_setup_d2_description)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_visa_setup_d4_title),
+            subTitle = stringResource(R.string.onboarding_visa_setup_d4_description)
+        ),
+    )
+    val businessList = listOf(
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_restaurant)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_mart)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_logistics)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_office)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_translation)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_learn)
+        ),
+        OnboardingData(
+            mainTitle = stringResource(R.string.onboarding_business_setup_event)
+        )
+    )
+
+
+    val pages = listOf(
+        //언어 선택
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_language_setup_title),
+            content = {
+                languageList.forEachIndexed { index, language ->
+                    OnboardingButton(
+                        modifier = Modifier
+                            .height(46.dp)
+                            .fillMaxWidth(),
+                        mainTitle = language.mainTitle,
+                        onClick = {
+                        },
+                        icon = R.drawable.ic_check,
+                        enabled = false
+                    )
+                    if (index < languageList.size - 1) {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
+                }
+            }
+        ),
+        //필수 약관 동의
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_agreement_setup_title),
+            content = {
+                AgreementSection(
+                    isAllChecked = true,
+                    isServiceChecked = true,
+                    isPrivacyChecked = true,
+                    isAgeChecked = true,
+                    onAllCheckedChange = {  },
+                    onServiceCheckedChange = {  },
+                    onPrivacyCheckedChange = {  },
+                    onAgeCheckedChange = {  },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        ),
+        //한국어 능력 선택
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_korean_level_setup_title),
+            content = {
+                koreanLevelList.forEachIndexed { index, koreanLevel ->
+                    OnboardingButton(
+                        modifier = Modifier
+                            .height(62.dp)
+                            .fillMaxWidth(),
+                        mainTitle = koreanLevel.mainTitle,
+                        subTitle = koreanLevel.subTitle,
+                        onClick = {
+                        },
+                        contentPosition = Arrangement.Center,
+                        enabled = true,
+                    )
+                    if (index < koreanLevelList.size - 1) {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
+                }
+            }
+        ),
+        //비자 선택
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_visa_setup_title),
+            content = {
+                visaList.forEachIndexed { index, visa ->
+                    OnboardingButton(
+                        modifier = Modifier
+                            .height(62.dp)
+                            .fillMaxWidth(),
+                        mainTitle = visa.mainTitle,
+                        subTitle = visa.subTitle,
+                        onClick = {
+                        },
+                        contentPosition = Arrangement.Center,
+                        enabled = true,
+                    )
+                    if (index < visaList.size - 1) {
+                        Spacer(modifier = Modifier.height(15.dp))
+                    }
+                }
+            }
+        ),
+        //업종 선택
+        OnboardingPage(
+            title = stringResource(R.string.onboarding_business_setup_title),
+            content = {
+                LazyColumn{
+                    itemsIndexed(businessList){ index, business->
+                        OnboardingButton(
+                            modifier = Modifier
+                                .height(46.dp)
+                                .fillMaxWidth(),
+                            mainTitle = business.mainTitle,
+                            onClick = {
+                            },
+                            enabled = false
+                        )
+                        if (index < businessList.size - 1) {
+                            Spacer(modifier = Modifier.height(15.dp))
+                        }
+                    }
+                }
+            }
+        )
+    )
+
+    val pagerState = rememberPagerState(pageCount = { pages.size })
+    val scope = rememberCoroutineScope()
+
+    // 현재 페이지에 따른 유효성 검사 결과 계산
+    val isCurrentPageValid = when (pagerState.currentPage) {
+        0 -> true    // 언어 선택 페이지
+        1 -> true    // 약관 동의 페이지
+        2 -> true  // 한국어 능력 선택 페이지
+        3 -> true         // 비자 선택 페이지
+        4 -> true     // 업종 선택 페이지
+        else -> false
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        // 페이저
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize(),
+            userScrollEnabled = false
+        ) { position ->
+            OnboardingPage(
+                page = pages[position],
+                pageCount = pages.size,
+                currentPage = position,
+                onNextPage = {
+                    if (position < pages.size - 1) {
+                        scope.launch {
+                            pagerState.animateScrollToPage(position + 1)
+                        }
+                    }
+                },
+                onGetStarted = {
+                },
+                isValid = isCurrentPageValid
+            )
+        }
     }
 }
