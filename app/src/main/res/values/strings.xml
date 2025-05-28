@@ -16,7 +16,9 @@
     <string name="hide_password">Hide password</string>
 
     <!-- SignIn Error Messages -->
-    <string name="sign_in_failed">ⓘ The password is wrong</string>
+    <string name="sign_in_email_not_found">ⓘ This mail has no information</string>
+    <string name="sign_in_password_wrong">ⓘ The password is wrong</string>
+    <string name="sign_in_failed">Login failed. Please try again.</string>
 
     <!-- SignUp Screen -->
     <string name="sign_up_title">Sign Up</string>

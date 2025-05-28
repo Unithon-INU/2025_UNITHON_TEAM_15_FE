@@ -13,16 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,11 +37,9 @@ fun SignInScreen(
     onNavigateToSignUp: () -> Unit,
     onNavigateToMain: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignInViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     // 로그인 성공시 네비게이션
     LaunchedEffect(uiState.isSignInSuccessful) {
@@ -78,13 +72,12 @@ fun SignInScreen(
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        // 🆕 필드별 에러 표시
         HelpJobTextField(
             value = uiState.email,
             onValueChange = viewModel::updateEmail,
             label = "",
             isError = uiState.emailError,
-            errorMessage = uiState.emailErrorMessage,
+            errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -105,7 +98,7 @@ fun SignInScreen(
             label = "",
             isPassword = true,
             isError = uiState.passwordError,
-            errorMessage = uiState.passwordErrorMessage,
+            errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -175,4 +168,3 @@ fun SignInScreen(
         }
     }
 }
-
