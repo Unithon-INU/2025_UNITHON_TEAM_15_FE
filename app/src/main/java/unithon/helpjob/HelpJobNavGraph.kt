@@ -17,7 +17,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = BottomNavDestination.DEFAULT_TAB.route // 기본은 홈
+    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
