@@ -26,3 +26,5 @@ val Success = Color(0xFF04CFAB)
 
 // Alert
 val Warning = Color(0xFFFF7F34)
+
+val borderColor = Color(0xFFADADAD)
