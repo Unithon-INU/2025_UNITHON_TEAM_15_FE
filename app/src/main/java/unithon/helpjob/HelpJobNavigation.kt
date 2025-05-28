@@ -1,8 +1,8 @@
 package unithon.helpjob
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
@@ -24,32 +24,27 @@ object HelpJobDestinations {
  * 하단바 관련 문제는 여기서만 확인하면 됨
  */
 enum class BottomNavDestination(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    @DrawableRes val icon: Int, // 하나의 아이콘만 사용, tint로 색상 변경
     @StringRes val iconTextId: Int,
-    val route: String,  // 직접 정의, 중복 제거
+    val route: String,
 ) {
     HOME(
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
+        icon = R.drawable.home2, // 실제 drawable 리소스로 변경 필요
         iconTextId = R.string.bottom_nav_home,
-        route = "home",  // 중복 제거
+        route = "home",
     ),
     CALCULATE(
-        selectedIcon = Icons.Filled.Person, // TODO: 계산기 아이콘
-        unselectedIcon = Icons.Outlined.Person,
+        icon = R.drawable.calculate, // 실제 drawable 리소스로 변경 필요
         iconTextId = R.string.bottom_nav_calculate,
         route = "calculate",
     ),
     CONTENT(
-        selectedIcon = Icons.Filled.Person, // TODO: 콘텐츠 아이콘
-        unselectedIcon = Icons.Outlined.Person,
+        icon = R.drawable.content, // 실제 drawable 리소스로 변경 필요
         iconTextId = R.string.bottom_nav_content,
         route = "content",
     ),
     PROFILE(
-        selectedIcon = Icons.Filled.Person,
-        unselectedIcon = Icons.Outlined.Person,
+        icon = R.drawable.profile, // 실제 drawable 리소스로 변경 필요
         iconTextId = R.string.bottom_nav_profile,
         route = "profile",
     );
