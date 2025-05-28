@@ -25,8 +25,8 @@ enum class BottomNavDestination(
     val route: String,
 ) {
     HOME(
-        selectedIcon = R.drawable.home_selected, // 선택된 상태 아이콘
-        unselectedIcon = R.drawable.home_unselected, // 선택되지 않은 상태 아이콘
+        selectedIcon = R.drawable.home_selected,
+        unselectedIcon = R.drawable.home_unselected,
         iconTextId = R.string.bottom_nav_home,
         route = "home",
     ),
@@ -92,27 +92,11 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         }
     }
 
-    // 하단바 탭 네비게이션 - 상태 유지하며 전환
-    fun navigateToHome() {
-        navigateToBottomTab(BottomNavDestination.HOME)
-    }
-
-    fun navigateToCalculate() {
-        navigateToBottomTab(BottomNavDestination.CALCULATE)
-    }
-
-    fun navigateToContent() {
-        navigateToBottomTab(BottomNavDestination.CONTENT)
-    }
-
-    fun navigateToProfile() {
-        navigateToBottomTab(BottomNavDestination.PROFILE)
-    }
-
     /**
-     * 하단바 탭 공통 네비게이션 로직
+     * 하단바 탭 네비게이션 - 통합된 함수로 중복 제거
+     * Now in Android의 navigateToTopLevelDestination 패턴 적용
      */
-    private fun navigateToBottomTab(destination: BottomNavDestination) {
+    fun navigateToBottomTab(destination: BottomNavDestination) {
         navController.navigate(destination.route) {
             popUpTo(navController.graph.startDestinationId) {
                 saveState = true
