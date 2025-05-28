@@ -82,13 +82,15 @@ fun HelpJobTextField(
             ),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = if (isError) Warning else Grey200,
-                focusedBorderColor = if (isError) Warning else Primary500,
+                focusedBorderColor = if (isError) Warning else Grey200,
                 errorBorderColor = Warning,
                 cursorColor = Primary500,
                 unfocusedContainerColor = Grey000,
                 focusedContainerColor = Grey000,
+                errorContainerColor = Grey000, // 에러 시 배경색 명시적 설정
                 unfocusedTextColor = Grey700,
-                focusedTextColor = Grey700
+                focusedTextColor = Grey700,
+                errorTextColor = Grey700 // 에러 시 텍스트 색상 명시적 설정
             ),
             // 🆕 비밀번호 토글 아이콘 추가
             trailingIcon = if (isPassword) {
