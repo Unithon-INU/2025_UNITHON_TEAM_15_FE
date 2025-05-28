@@ -18,7 +18,6 @@ class SignInViewModel @Inject constructor(
         val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
-        val userMessage: Int? = null,
         val isSignInSuccessful: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
@@ -33,12 +32,19 @@ class SignInViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
+    // 🆕 단발성 에러 이벤트 (시스템/애매한 에러용)
+    private val _errorEvents = MutableSharedFlow<Int>()
+    val errorEvents: SharedFlow<Int> = _errorEvents.asSharedFlow()
+
     fun updateEmail(email: String) {
         _uiState.update {
             it.copy(
                 email = email,
                 emailError = false,
-                emailErrorMessage = null
+                emailErrorMessage = null,
+                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                passwordError = false,
+                passwordErrorMessage = null
             )
         }
     }
@@ -48,7 +54,10 @@ class SignInViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordError = false,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                emailError = false,
+                emailErrorMessage = null
             )
         }
     }
@@ -56,7 +65,7 @@ class SignInViewModel @Inject constructor(
     fun signIn() {
         val currentState = uiState.value
 
-        // 입력 검증
+        // 입력 검증 - 각 필드별로 개별 에러 설정
         var hasError = false
 
         if (currentState.email.isBlank()) {
@@ -111,18 +120,11 @@ class SignInViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        userMessage = R.string.sign_in_failed,
-                        passwordError = true
-                    )
-                }
+                _uiState.update { it.copy(isLoading = false) }
+
+                // 🆕 로그인 실패는 어느 필드 문제인지 모르므로 → 스낵바
+                _errorEvents.emit(R.string.sign_in_failed)
             }
         }
-    }
-
-    fun userMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
     }
 }

@@ -11,6 +11,10 @@
     <string name="sign_in_no_account">아직 회원이 아니신가요?</string>
     <string name="sign_in_go_to_sign_up">회원가입</string>
 
+    <!-- Password Visibility -->
+    <string name="show_password">비밀번호 보기</string>
+    <string name="hide_password">비밀번호 숨기기</string>
+
     <!-- SignIn Error Messages -->
     <string name="sign_in_failed">로그인에 실패했습니다</string>
 

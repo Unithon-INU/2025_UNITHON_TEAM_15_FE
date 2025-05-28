@@ -8,8 +8,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,6 +26,7 @@ fun SignUpScreen(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     // 회원가입 성공시 네비게이션
     LaunchedEffect(uiState.isSignUpSuccessful) {
@@ -34,12 +35,11 @@ fun SignUpScreen(
         }
     }
 
-    // 에러 메시지 처리
-    uiState.userMessage?.let { message ->
-        val snackbarText = stringResource(message)
-        LaunchedEffect(snackbarHostState, viewModel, message, snackbarText) {
-            snackbarHostState.showSnackbar(snackbarText)
-            viewModel.userMessageShown()
+    // 🆕 SharedFlow로 단발성 에러 이벤트 처리 (네트워크 에러 등)
+    LaunchedEffect(Unit) {
+        viewModel.errorEvents.collect { messageResId ->
+            val message = context.getString(messageResId) // stringResource 대신 이걸로
+            snackbarHostState.showSnackbar(message)
         }
     }
 
@@ -54,7 +54,7 @@ fun SignUpScreen(
             // 제목
             Text(
                 text = stringResource(id = R.string.sign_up_title),
-                style = MaterialTheme.typography.headlineLarge, // 24sp, Bold
+                style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
 
@@ -63,7 +63,7 @@ fun SignUpScreen(
             // 부제목
             Text(
                 text = stringResource(id = R.string.sign_up_subtitle),
-                style = MaterialTheme.typography.titleMedium, // 16sp, Bold (Title1)
+                style = MaterialTheme.typography.titleMedium,
                 color = Grey500
             )
 
@@ -72,13 +72,13 @@ fun SignUpScreen(
             // 이메일 레이블
             Text(
                 text = stringResource(id = R.string.sign_up_email_label),
-                style = MaterialTheme.typography.titleSmall, // 14sp, Bold
+                style = MaterialTheme.typography.titleSmall,
                 color = Grey500
             )
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            // 이메일 입력 필드
+            // 🆕 필드별 에러 표시
             HelpJobTextField(
                 value = uiState.email,
                 onValueChange = viewModel::updateEmail,
@@ -94,19 +94,19 @@ fun SignUpScreen(
             // 비밀번호 레이블
             Text(
                 text = stringResource(id = R.string.sign_up_password_label),
-                style = MaterialTheme.typography.titleSmall, // 14sp, Bold
+                style = MaterialTheme.typography.titleSmall,
                 color = Grey500
             )
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            // 비밀번호 입력 필드
+            // 🆕 비밀번호 토글 + 필드별 에러 표시
             HelpJobTextField(
                 value = uiState.password,
                 onValueChange = viewModel::updatePassword,
                 label = "",
                 placeholder = stringResource(id = R.string.sign_up_password_hint),
-                visualTransformation = PasswordVisualTransformation(),
+                isPassword = true, // 🆕 비밀번호 필드로 설정
                 isError = uiState.passwordError,
                 errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
                 modifier = Modifier.fillMaxWidth()
@@ -126,7 +126,7 @@ fun SignUpScreen(
             )
         }
 
-        // SnackbarHost 추가
+        // 🆕 스낵바는 심각한 네트워크 오류 등을 위해 남겨둠
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)

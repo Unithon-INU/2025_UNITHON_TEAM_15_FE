@@ -18,7 +18,6 @@ class SignUpViewModel @Inject constructor(
         val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
-        val userMessage: Int? = null,
         val isSignUpSuccessful: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
@@ -33,12 +32,19 @@ class SignUpViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
+    // 🆕 단발성 에러 이벤트 (시스템 에러용)
+    private val _errorEvents = MutableSharedFlow<Int>()
+    val errorEvents: SharedFlow<Int> = _errorEvents.asSharedFlow()
+
     fun updateEmail(email: String) {
         _uiState.update {
             it.copy(
                 email = email,
                 emailError = false,
-                emailErrorMessage = null
+                emailErrorMessage = null,
+                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                passwordError = false,
+                passwordErrorMessage = null
             )
         }
     }
@@ -48,7 +54,10 @@ class SignUpViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordError = false,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                emailError = false,
+                emailErrorMessage = null
             )
         }
     }
@@ -56,7 +65,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp() {
         val currentState = uiState.value
 
-        // 입력 검증
+        // 입력 검증 - 각 필드별로 개별 에러 설정
         var hasError = false
 
         if (currentState.email.isBlank()) {
@@ -111,21 +120,24 @@ class SignUpViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                val errorMessage = when {
-                    e.message?.contains("already exists") == true -> R.string.sign_up_email_exists
-                    else -> R.string.sign_up_failed
-                }
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        userMessage = errorMessage
-                    )
+                _uiState.update { it.copy(isLoading = false) }
+
+                when {
+                    e.message?.contains("already exists") == true -> {
+                        // 🆕 이메일 중복은 이메일 필드와 1:1 매핑 → 필드별 표시
+                        _uiState.update {
+                            it.copy(
+                                emailError = true,
+                                emailErrorMessage = R.string.sign_up_email_exists
+                            )
+                        }
+                    }
+                    else -> {
+                        // 🆕 기타 시스템 에러 → 스낵바
+                        _errorEvents.emit(R.string.sign_up_failed)
+                    }
                 }
             }
         }
-    }
-
-    fun userMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
     }
 }

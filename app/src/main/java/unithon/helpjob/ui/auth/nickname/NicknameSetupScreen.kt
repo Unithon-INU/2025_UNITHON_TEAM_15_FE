@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun NicknameSetupScreen(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     // 닉네임 설정 성공시 네비게이션
     LaunchedEffect(uiState.isNicknameSet) {
@@ -34,12 +36,11 @@ fun NicknameSetupScreen(
         }
     }
 
-    // 에러 메시지 처리
-    uiState.userMessage?.let { message ->
-        val snackbarText = stringResource(message)
-        LaunchedEffect(snackbarHostState, viewModel, message, snackbarText) {
-            snackbarHostState.showSnackbar(snackbarText)
-            viewModel.userMessageShown()
+    // 🆕 SharedFlow로 단발성 에러 이벤트 처리 (네트워크 에러 등)
+    LaunchedEffect(Unit) {
+        viewModel.errorEvents.collect { messageResId ->
+            val message = context.getString(messageResId) // stringResource 대신 이걸로
+            snackbarHostState.showSnackbar(message)
         }
     }
 
@@ -54,7 +55,7 @@ fun NicknameSetupScreen(
             // 제목
             Text(
                 text = stringResource(id = R.string.nickname_setup_title),
-                style = MaterialTheme.typography.headlineLarge, // 24sp, Bold
+                style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
 
@@ -62,44 +63,30 @@ fun NicknameSetupScreen(
 
             // 닉네임 입력 필드
             Column {
+                // 🆕 필드별 에러 표시
                 HelpJobTextField(
                     value = uiState.nickname,
                     onValueChange = viewModel::updateNickname,
                     label = "",
                     placeholder = stringResource(id = R.string.nickname_placeholder),
                     isError = uiState.nicknameError,
+                    errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                // 에러 메시지와 글자 수 카운터를 위한 Row
+                // 🆕 글자 수 카운터 (Row 제거하고 단순화)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Top
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    // 에러 메시지 (있을 경우에만 표시)
-                    uiState.nicknameErrorMessage?.let { errorMessage ->
-                        if (uiState.nicknameError) {
-                            Text(
-                                text = stringResource(id = errorMessage),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = Warning,
-                                modifier = Modifier.weight(1f)
-                            )
-                        } else {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    } ?: Spacer(modifier = Modifier.weight(1f))
-
-                    // 글자 수 카운터 (항상 표시)
                     Text(
                         text = stringResource(
                             id = R.string.nickname_character_count,
                             uiState.nicknameLength
                         ),
-                        style = MaterialTheme.typography.labelMedium, // Body4
+                        style = MaterialTheme.typography.labelMedium,
                         color = Grey400,
                         textAlign = TextAlign.End
                     )
@@ -120,7 +107,7 @@ fun NicknameSetupScreen(
             )
         }
 
-        // SnackbarHost 추가
+        // 🆕 스낵바는 심각한 네트워크 오류 등을 위해 남겨둠
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.BottomCenter)

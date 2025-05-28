@@ -19,7 +19,6 @@ class NicknameSetupViewModel @Inject constructor(
         val nickname: String = "",
         val nicknameLength: Int = 0,
         val isLoading: Boolean = false,
-        val userMessage: Int? = null,
         val isNicknameSet: Boolean = false,
         val nicknameError: Boolean = false,
         val nicknameErrorMessage: Int? = null
@@ -30,6 +29,10 @@ class NicknameSetupViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NicknameSetupUiState())
     val uiState: StateFlow<NicknameSetupUiState> = _uiState.asStateFlow()
+
+    // 🆕 단발성 에러 이벤트를 위한 SharedFlow
+    private val _errorEvents = MutableSharedFlow<Int>()
+    val errorEvents: SharedFlow<Int> = _errorEvents.asSharedFlow()
 
     fun updateNickname(nickname: String) {
         if (nickname.length > 10) return  // 10자 제한
@@ -80,6 +83,7 @@ class NicknameSetupViewModel @Inject constructor(
                     )
                 }
             } catch (e: NicknameDuplicateException) {
+                // 🆕 닉네임 중복은 닉네임 필드와 1:1 매핑 → 필드별 표시
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -89,16 +93,11 @@ class NicknameSetupViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        userMessage = R.string.nickname_setup_failed
-                    )
+                    it.copy(isLoading = false)
                 }
+                // 🆕 네트워크 에러 등은 SharedFlow로 전송
+                _errorEvents.emit(R.string.nickname_setup_failed)
             }
         }
-    }
-
-    fun userMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
     }
 }
