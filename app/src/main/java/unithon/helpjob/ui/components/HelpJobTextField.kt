@@ -98,8 +98,8 @@ fun HelpJobTextField(
                     ) {
                         Icon(
                             painter = painterResource(
-                                id = if (passwordVisible) R.drawable.eyeoff
-                                else R.drawable.eyeon
+                                id = if (passwordVisible) R.drawable.eyeon
+                                else R.drawable.eyeoff
                             ),
                             contentDescription = if (passwordVisible) {
                                 stringResource(R.string.hide_password)

@@ -21,8 +21,8 @@ class SignInViewModel @Inject constructor(
         val isSignInSuccessful: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
-        val emailErrorMessage: Int? = null,
-        val passwordErrorMessage: Int? = null
+        val emailErrorMessage: String? = null,
+        val passwordErrorMessage: String? = null
     ) {
         val isInputValid: Boolean
             get() = email.isNotBlank() && password.length >= 6 &&
@@ -32,9 +32,7 @@ class SignInViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
-    // 🆕 단발성 에러 이벤트 (시스템/애매한 에러용)
-    private val _errorEvents = MutableSharedFlow<Int>()
-    val errorEvents: SharedFlow<Int> = _errorEvents.asSharedFlow()
+    // ✅ SharedFlow 완전 제거 - 모든 에러는 UiState로
 
     fun updateEmail(email: String) {
         _uiState.update {
@@ -42,7 +40,7 @@ class SignInViewModel @Inject constructor(
                 email = email,
                 emailError = false,
                 emailErrorMessage = null,
-                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                // 다른 필드 입력 시 서버 에러도 클리어
                 passwordError = false,
                 passwordErrorMessage = null
             )
@@ -55,7 +53,7 @@ class SignInViewModel @Inject constructor(
                 password = password,
                 passwordError = false,
                 passwordErrorMessage = null,
-                // 🆕 다른 필드 입력 시 서버 에러도 클리어
+                // 다른 필드 입력 시 서버 에러도 클리어
                 emailError = false,
                 emailErrorMessage = null
             )
@@ -65,14 +63,14 @@ class SignInViewModel @Inject constructor(
     fun signIn() {
         val currentState = uiState.value
 
-        // 입력 검증 - 각 필드별로 개별 에러 설정
+        // 클라이언트 validation
         var hasError = false
 
         if (currentState.email.isBlank()) {
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_empty_email
+                    emailErrorMessage = "이메일을 입력해주세요"
                 )
             }
             hasError = true
@@ -80,7 +78,7 @@ class SignInViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_invalid_email
+                    emailErrorMessage = "올바른 이메일 형식이 아닙니다"
                 )
             }
             hasError = true
@@ -90,7 +88,7 @@ class SignInViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = R.string.error_empty_password
+                    passwordErrorMessage = "비밀번호를 입력해주세요"
                 )
             }
             hasError = true
@@ -98,7 +96,7 @@ class SignInViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = R.string.error_short_password
+                    passwordErrorMessage = "비밀번호는 6자 이상이어야 합니다"
                 )
             }
             hasError = true
@@ -122,8 +120,38 @@ class SignInViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update { it.copy(isLoading = false) }
 
-                // 🆕 로그인 실패는 어느 필드 문제인지 모르므로 → 스낵바
-                _errorEvents.emit(R.string.sign_in_failed)
+                val serverMessage = e.message ?: "알 수 없는 오류가 발생했습니다"
+
+                when (serverMessage) {
+                    "해당 회원이 존재하지 않습니다." -> {
+                        _uiState.update {
+                            it.copy(
+                                emailError = true,
+                                emailErrorMessage = serverMessage
+                            )
+                        }
+                    }
+
+                    "비밀번호가 일치하지 않습니다." -> {
+                        _uiState.update {
+                            it.copy(
+                                passwordError = true,
+                                passwordErrorMessage = serverMessage
+                            )
+                        }
+                    }
+
+                    else -> {
+                        // ✅ 네트워크 에러 등도 적절한 필드에 표시
+                        // 보통 마지막 입력 필드 또는 일반적으로 비밀번호 필드에 표시
+                        _uiState.update {
+                            it.copy(
+                                passwordError = true,
+                                passwordErrorMessage = "로그인 중 오류가 발생했습니다. 다시 시도해주세요."
+                            )
+                        }
+                    }
+                }
             }
         }
     }
