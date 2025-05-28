@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,6 +20,7 @@ import unithon.helpjob.BottomNavDestination
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Primary600
+import unithon.helpjob.ui.theme.borderColor
 
 @Composable
 fun HelpJobBottomBar(
@@ -37,14 +37,9 @@ fun HelpJobBottomBar(
     NavigationBar(
         modifier = modifier
             .border(
-                width = 1.dp,
-                color = Grey300,
+                width = 0.5.dp,
+                color = borderColor,
                 shape = bottomBarShape
-            )
-            .shadow(
-                elevation = 5.dp,
-                spotColor = Color(0x26747474),
-                ambientColor = Color(0x26747474)
             )
             .background(color = Grey000, shape = bottomBarShape)
             .clip(bottomBarShape),
