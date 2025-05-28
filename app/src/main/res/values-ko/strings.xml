@@ -92,4 +92,9 @@
     <string name="bottom_nav_calculate">계산기</string>
     <string name="bottom_nav_content">콘텐츠</string>
     <string name="bottom_nav_profile">프로필</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">뒤로</string>
+    <string name="sign_up_top_bar_title">회원가입</string>
+    <string name="nickname_setup_top_bar_title">닉네임 설정</string>
 </resources>

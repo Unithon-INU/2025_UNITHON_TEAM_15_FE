@@ -2,9 +2,9 @@ package unithon.helpjob.ui.auth.nickname
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -14,11 +14,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.theme.*
 
 @Composable
 fun NicknameSetupScreen(
     onNicknameSet: () -> Unit,
+    onBack: () -> Unit, // 🆕 뒤로가기 추가
     modifier: Modifier = Modifier,
     viewModel: NicknameSetupViewModel = hiltViewModel()
 ) {
@@ -31,64 +33,75 @@ fun NicknameSetupScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-    ) {
-        Spacer(modifier = Modifier.height(80.dp))
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            HelpJobTopAppBar(
+                title = R.string.nickname_setup_top_bar_title,
+                onBack = onBack
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 20.dp),
+        ) {
+            Spacer(modifier = Modifier.height(40.dp)) // 🆕 상단바가 있어서 간격 조정
 
-        // 제목
-        Text(
-            text = stringResource(id = R.string.nickname_setup_title),
-            style = MaterialTheme.typography.headlineLarge,
-            color = Grey700
-        )
-
-        Spacer(modifier = Modifier.height(39.dp))
-
-        // 닉네임 입력 필드
-        Column {
-            HelpJobTextField(
-                value = uiState.nickname,
-                onValueChange = viewModel::updateNickname,
-                label = "",
-                placeholder = stringResource(id = R.string.nickname_placeholder),
-                isError = uiState.nicknameError,
-                errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
-                modifier = Modifier.fillMaxWidth()
+            // 제목
+            Text(
+                text = stringResource(id = R.string.nickname_setup_title),
+                style = MaterialTheme.typography.headlineLarge,
+                color = Grey700
             )
 
-            // 글자 수 카운터
-            Row(
+            Spacer(modifier = Modifier.height(39.dp))
+
+            // 닉네임 입력 필드
+            Column {
+                HelpJobTextField(
+                    value = uiState.nickname,
+                    onValueChange = viewModel::updateNickname,
+                    label = "",
+                    placeholder = stringResource(id = R.string.nickname_placeholder),
+                    isError = uiState.nicknameError,
+                    errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                // 글자 수 카운터
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = stringResource(
+                            id = R.string.nickname_character_count,
+                            uiState.nicknameLength
+                        ),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Grey400,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // 완료 버튼
+            HelpJobButton(
+                text = stringResource(id = R.string.nickname_complete_button),
+                onClick = viewModel::setNickname,
+                enabled = uiState.isInputValid,
+                isLoading = uiState.isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = stringResource(
-                        id = R.string.nickname_character_count,
-                        uiState.nicknameLength
-                    ),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Grey400,
-                    textAlign = TextAlign.End
-                )
-            }
+                    .padding(bottom = 20.dp)
+            )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        // 완료 버튼
-        HelpJobButton(
-            text = stringResource(id = R.string.nickname_complete_button),
-            onClick = viewModel::setNickname,
-            enabled = uiState.isInputValid,
-            isLoading = uiState.isLoading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 20.dp)
-        )
     }
 }

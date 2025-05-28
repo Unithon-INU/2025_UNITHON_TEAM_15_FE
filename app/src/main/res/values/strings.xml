@@ -92,4 +92,9 @@
     <string name="bottom_nav_calculate">Calculator</string>
     <string name="bottom_nav_content">Content</string>
     <string name="bottom_nav_profile">Profile</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">Back</string>
+    <string name="sign_up_top_bar_title">Sign Up</string>
+    <string name="nickname_setup_top_bar_title">Nickname</string>
 </resources>

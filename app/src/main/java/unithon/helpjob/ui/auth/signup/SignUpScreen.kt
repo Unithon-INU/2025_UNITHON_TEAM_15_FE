@@ -2,6 +2,7 @@ package unithon.helpjob.ui.auth.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -16,11 +17,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.theme.*
 
 @Composable
 fun SignUpScreen(
     onNavigateToNicknameSetup: () -> Unit,
+    onBack: () -> Unit, // 🆕 뒤로가기 추가
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -43,13 +46,23 @@ fun SignUpScreen(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    Scaffold(
+        modifier = modifier.fillMaxSize(),
+        topBar = {
+            HelpJobTopAppBar(
+                title = R.string.sign_up_top_bar_title,
+                onBack = onBack
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .padding(horizontal = 20.dp),
         ) {
-            Spacer(modifier = Modifier.height(80.dp))
+            Spacer(modifier = Modifier.height(40.dp)) // 🆕 상단바가 있어서 간격 조정
 
             // 제목
             Text(
@@ -125,11 +138,5 @@ fun SignUpScreen(
                     .padding(bottom = 20.dp)
             )
         }
-
-        // 🆕 스낵바는 심각한 네트워크 오류 등을 위해 남겨둠
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
     }
 }
