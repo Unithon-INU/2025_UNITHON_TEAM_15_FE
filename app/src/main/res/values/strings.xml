@@ -29,7 +29,21 @@
     <string name="sign_up_password_hint">Enter Password</string>
     <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
-    <string name="sign_up_email_exists">Email already exists</string>
+    <string name="sign_up_email_exists">ⓘ Email already in use</string>
+
+    <!-- 🆕 Email Verification -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="enter_verification_code">Enter the code</string>
+    <string name="verification_code_hint">Enter verification code</string>
+    <string name="verification_code_instruction">Enter the code from the email we sent you</string>
+    <string name="verification_code_expired">ⓘ Verification code has expired</string>
+    <string name="verification_code_invalid">ⓘ Invalid verification code</string>
+    <string name="email_send_failed">Failed to send verification email</string>
+    <string name="verification_failed">Verification failed</string>
+    <string name="email_verification_required">Email verification is required</string>
+    <string name="error_empty_verification_code">Please enter verification code</string>
 
     <!-- Nickname Setup Screen -->
     <string name="nickname_setup_title">Please set your nickname\nto use in HelpJob</string>

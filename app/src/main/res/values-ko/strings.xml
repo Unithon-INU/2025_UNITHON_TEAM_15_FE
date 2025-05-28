@@ -29,7 +29,21 @@
     <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
     <string name="sign_up_next_button">다음</string>
     <string name="sign_up_failed">회원가입에 실패했습니다</string>
-    <string name="sign_up_email_exists">이미 존재하는 이메일입니다</string>
+    <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
+
+    <!-- 🆕 이메일 인증 -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="enter_verification_code">인증번호 입력</string>
+    <string name="verification_code_hint">인증번호를 입력해주세요</string>
+    <string name="verification_code_instruction">이메일로 전송된 인증번호를 입력해주세요</string>
+    <string name="verification_code_expired">ⓘ 인증번호가 만료되었습니다</string>
+    <string name="verification_code_invalid">ⓘ 인증번호가 올바르지 않습니다</string>
+    <string name="email_send_failed">인증 이메일 전송에 실패했습니다</string>
+    <string name="verification_failed">인증에 실패했습니다</string>
+    <string name="email_verification_required">이메일 인증이 필요합니다</string>
+    <string name="error_empty_verification_code">인증번호를 입력해주세요</string>
 
     <!-- Nickname Setup Screen -->
     <string name="nickname_setup_title">OOO 에서 사용할\n닉네임을 설정해주세요</string>

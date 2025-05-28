@@ -5,10 +5,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import unithon.helpjob.R
-import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.EmailNotFoundException
+import unithon.helpjob.data.repository.WrongPasswordException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,8 +33,6 @@ class SignInViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
-
-    private val json = Json { ignoreUnknownKeys = true }
 
     fun updateEmail(email: String) {
         _uiState.update {
@@ -119,50 +117,26 @@ class SignInViewModel @Inject constructor(
                         isSignInSuccessful = true
                     )
                 }
-            } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false) }
-                handleSignInError(e)
-            }
-        }
-    }
-
-    private fun handleSignInError(exception: Exception) {
-        val errorMessage = exception.message ?: ""
-
-        // 서버 에러 응답 JSON 파싱 시도
-        val errorResponse = try {
-            if (errorMessage.startsWith("{")) {
-                json.decodeFromString<ErrorResponse>(errorMessage)
-            } else {
-                null
-            }
-        } catch (e: Exception) {
-            null
-        }
-
-        when (errorResponse?.code) {
-            "404-1" -> {
-                // 해당 회원이 존재하지 않습니다
+            } catch (e: EmailNotFoundException) {
                 _uiState.update {
                     it.copy(
+                        isLoading = false,
                         emailError = true,
                         emailErrorMessage = R.string.sign_in_email_not_found
                     )
                 }
-            }
-            "401-5" -> {
-                // 비밀번호가 일치하지 않습니다
+            } catch (e: WrongPasswordException) {
                 _uiState.update {
                     it.copy(
+                        isLoading = false,
                         passwordError = true,
                         passwordErrorMessage = R.string.sign_in_password_wrong
                     )
                 }
-            }
-            else -> {
-                // 기타 네트워크 에러 등 또는 JSON 파싱 실패
+            } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
+                        isLoading = false,
                         passwordError = true,
                         passwordErrorMessage = R.string.sign_in_failed
                     )

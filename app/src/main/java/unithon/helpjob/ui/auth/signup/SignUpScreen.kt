@@ -1,17 +1,23 @@
 package unithon.helpjob.ui.auth.signup
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
@@ -23,26 +29,16 @@ import unithon.helpjob.ui.theme.*
 @Composable
 fun SignUpScreen(
     onNavigateToNicknameSetup: () -> Unit,
-    onBack: () -> Unit, // 🆕 뒤로가기 추가
+    onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignUpViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     // 회원가입 성공시 네비게이션
     LaunchedEffect(uiState.isSignUpSuccessful) {
         if (uiState.isSignUpSuccessful) {
             onNavigateToNicknameSetup()
-        }
-    }
-
-    // 🆕 SharedFlow로 단발성 에러 이벤트 처리 (네트워크 에러 등)
-    LaunchedEffect(Unit) {
-        viewModel.errorEvents.collect { messageResId ->
-            val message = context.getString(messageResId) // stringResource 대신 이걸로
-            snackbarHostState.showSnackbar(message)
         }
     }
 
@@ -53,8 +49,7 @@ fun SignUpScreen(
                 title = R.string.sign_up_top_bar_title,
                 onBack = onBack
             )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -62,7 +57,7 @@ fun SignUpScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 20.dp),
         ) {
-            Spacer(modifier = Modifier.height(40.dp)) // 🆕 상단바가 있어서 간격 조정
+            Spacer(modifier = Modifier.height(40.dp))
 
             // 제목
             Text(
@@ -91,16 +86,145 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            // 🆕 필드별 에러 표시
-            HelpJobTextField(
-                value = uiState.email,
-                onValueChange = viewModel::updateEmail,
-                label = "",
-                placeholder = stringResource(id = R.string.sign_up_email_hint),
-                isError = uiState.emailError,
-                errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
-                modifier = Modifier.fillMaxWidth()
-            )
+            // 이메일 입력 필드 + send 버튼
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Top
+            ) {
+                HelpJobTextField(
+                    value = uiState.email,
+                    onValueChange = viewModel::updateEmail,
+                    label = "",
+                    placeholder = stringResource(id = R.string.sign_up_email_hint),
+                    isError = uiState.emailError,
+                    errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
+                    modifier = Modifier.weight(1f)
+                )
+
+                // send 버튼
+                Button(
+                    onClick = viewModel::sendEmailVerification,
+                    enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Primary500,
+                        contentColor = Grey000,
+                        disabledContainerColor = Grey200,
+                        disabledContentColor = Grey400
+                    ),
+                    modifier = Modifier
+                        .height(48.dp)
+                        .width(60.dp)
+                ) {
+                    if (uiState.isSendingEmail) {
+                        Text(
+                            text = "...",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Grey000
+                        )
+                    } else {
+                        Text(
+                            text = stringResource(R.string.send_button),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = if (uiState.isEmailValid && !uiState.isEmailSent) Grey000 else Grey400
+                        )
+                    }
+                }
+            }
+
+            // 이메일 전송 후 인증코드 입력 섹션
+            if (uiState.isEmailSent) {
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // 인증번호 안내 메시지 (기본으로 표시)
+                if (!uiState.verificationCodeError) {
+                    Text(
+                        text = stringResource(R.string.verification_code_instruction),
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            lineHeight = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.pretendard_medium)),
+                            fontWeight = FontWeight(500),
+                            color = Primary500,
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(9.dp))
+                }
+
+                // 인증코드 입력 필드 + verify 버튼 + Resend
+                Column {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        HelpJobTextField(
+                            value = uiState.verificationCode,
+                            onValueChange = viewModel::updateVerificationCode,
+                            label = "",
+                            placeholder = stringResource(id = R.string.verification_code_hint),
+                            isError = uiState.verificationCodeError,
+                            errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        // verify 버튼
+                        Button(
+                            onClick = viewModel::verifyEmailCode,
+                            enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Primary500,
+                                contentColor = Grey000,
+                                disabledContainerColor = Grey200,
+                                disabledContentColor = Grey400
+                            ),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .width(60.dp)
+                        ) {
+                            if (uiState.isVerifyingCode) {
+                                Text(
+                                    text = "...",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = Grey000
+                                )
+                            } else {
+                                Text(
+                                    text = stringResource(R.string.verify_button),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400
+                                )
+                            }
+                        }
+                    }
+
+                    // Resend 텍스트 (에러 상태이거나 코드가 만료된 경우 표시)
+                    if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == R.string.verification_code_expired) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End
+                        ) {
+                            TextButton(
+                                onClick = viewModel::resendEmailVerification,
+                                modifier = Modifier.padding(top = 8.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.resend_button),
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        lineHeight = 15.sp,
+                                        fontFamily = FontFamily(Font(R.font.pretendard_medium)),
+                                        fontWeight = FontWeight(500),
+                                        color = Warning,
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -113,13 +237,13 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            // 🆕 비밀번호 토글 + 필드별 에러 표시
+            // 비밀번호 입력 필드
             HelpJobTextField(
                 value = uiState.password,
                 onValueChange = viewModel::updatePassword,
                 label = "",
                 placeholder = stringResource(id = R.string.sign_up_password_hint),
-                isPassword = true, // 🆕 비밀번호 필드로 설정
+                isPassword = true,
                 isError = uiState.passwordError,
                 errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
                 modifier = Modifier.fillMaxWidth()
