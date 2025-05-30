@@ -89,7 +89,7 @@ fun SignUpScreen(
             // 이메일 입력 필드 + send 버튼
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.Top
             ) {
                 HelpJobTextField(
@@ -105,29 +105,40 @@ fun SignUpScreen(
                 // send 버튼
                 Button(
                     onClick = viewModel::sendEmailVerification,
-                    enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
+                    enabled = uiState.isEmailValid && !uiState.isSendingEmail,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Primary500,
-                        contentColor = Grey000,
+                        containerColor = if (uiState.isEmailValid && !uiState.isSendingEmail) Primary500 else Grey200,
+                        contentColor = if (uiState.isEmailValid && !uiState.isSendingEmail) Grey000 else Grey400,
                         disabledContainerColor = Grey200,
                         disabledContentColor = Grey400
                     ),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                     modifier = Modifier
-                        .height(48.dp)
-                        .width(60.dp)
+                        .width(71.dp)
+                        .height(46.dp)  // 스펙에 맞게 46dp로 변경
                 ) {
                     if (uiState.isSendingEmail) {
                         Text(
                             text = "...",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Grey000
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = PretendardFontFamily,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                            maxLines = 1
                         )
                     } else {
                         Text(
-                            text = stringResource(R.string.send_button),
-                            style = MaterialTheme.typography.titleSmall,
-                            color = if (uiState.isEmailValid && !uiState.isEmailSent) Grey000 else Grey400
+                            text = if (uiState.isEmailSent) "sent" else "send",
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                lineHeight = 20.sp,
+                                fontFamily = PretendardFontFamily,
+                                fontWeight = FontWeight.Bold,
+                            ),
+                            maxLines = 1
                         )
                     }
                 }
@@ -137,7 +148,7 @@ fun SignUpScreen(
             if (uiState.isEmailSent) {
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // 인증번호 안내 메시지 (기본으로 표시)
+                // 인증번호 안내 메시지
                 if (!uiState.verificationCodeError) {
                     Text(
                         text = stringResource(R.string.verification_code_instruction),
@@ -156,7 +167,7 @@ fun SignUpScreen(
                 Column {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.Top
                     ) {
                         HelpJobTextField(
@@ -175,32 +186,43 @@ fun SignUpScreen(
                             enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Primary500,
-                                contentColor = Grey000,
+                                containerColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Primary500 else Grey200,
+                                contentColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400,
                                 disabledContainerColor = Grey200,
                                 disabledContentColor = Grey400
                             ),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                             modifier = Modifier
-                                .height(48.dp)
-                                .width(60.dp)
+                                .width(80.dp)
+                                .height(46.dp)  // 스펙에 맞게 46dp로 변경
                         ) {
                             if (uiState.isVerifyingCode) {
                                 Text(
                                     text = "...",
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = Grey000
+                                    style = TextStyle(
+                                        fontSize = 16.sp,
+                                        lineHeight = 20.sp,
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Bold,
+                                    ),
+                                    maxLines = 1
                                 )
                             } else {
                                 Text(
-                                    text = stringResource(R.string.verify_button),
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400
+                                    text = "verify",
+                                    style = TextStyle(
+                                        fontSize = 16.sp,
+                                        lineHeight = 20.sp,
+                                        fontFamily = PretendardFontFamily,
+                                        fontWeight = FontWeight.Bold,
+                                    ),
+                                    maxLines = 1
                                 )
                             }
                         }
                     }
 
-                    // Resend 텍스트 (에러 상태이거나 코드가 만료된 경우 표시)
+                    // Resend 텍스트
                     if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == R.string.verification_code_expired) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -251,7 +273,7 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 🆕 비밀번호 확인 레이블
+            // 비밀번호 확인 레이블
             Text(
                 text = stringResource(id = R.string.sign_up_confirm_password_label),
                 style = MaterialTheme.typography.titleSmall,
@@ -260,7 +282,7 @@ fun SignUpScreen(
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            // 🆕 비밀번호 확인 입력 필드
+            // 비밀번호 확인 입력 필드
             HelpJobTextField(
                 value = uiState.confirmPassword,
                 onValueChange = viewModel::updateConfirmPassword,

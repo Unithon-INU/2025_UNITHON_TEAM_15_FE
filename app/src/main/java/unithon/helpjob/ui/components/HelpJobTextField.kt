@@ -2,7 +2,7 @@ package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,9 +21,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.theme.*
 
@@ -38,11 +41,10 @@ fun HelpJobTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     isError: Boolean = false,
     errorMessage: String? = null,
-    isPassword: Boolean = false // 🆕 비밀번호 필드 여부
+    isPassword: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
-    // 🆕 비밀번호 필드인 경우 visibility 상태에 따라 transformation 결정
     val actualVisualTransformation = if (isPassword) {
         if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
     } else {
@@ -66,7 +68,11 @@ fun HelpJobTextField(
                 {
                     Text(
                         text = placeholder,
-                        style = MaterialTheme.typography.titleSmall.copy(
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            lineHeight = 16.sp, // 17sp에서 16sp로 조정 (텍스트 짤림 방지)
+                            fontFamily = PretendardFontFamily,
+                            fontWeight = FontWeight.Bold,
                             color = Grey300
                         )
                     )
@@ -77,7 +83,11 @@ fun HelpJobTextField(
             isError = isError,
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
-            textStyle = MaterialTheme.typography.titleSmall.copy(
+            textStyle = TextStyle(
+                fontSize = 14.sp,
+                lineHeight = 16.sp, // 17sp에서 16sp로 조정 (텍스트 짤림 방지)
+                fontFamily = PretendardFontFamily,
+                fontWeight = FontWeight.Bold,
                 color = Grey700
             ),
             colors = OutlinedTextFieldDefaults.colors(
@@ -87,12 +97,11 @@ fun HelpJobTextField(
                 cursorColor = Primary500,
                 unfocusedContainerColor = Grey000,
                 focusedContainerColor = Grey000,
-                errorContainerColor = Grey000, // 에러 시 배경색 명시적 설정
+                errorContainerColor = Grey000,
                 unfocusedTextColor = Grey700,
                 focusedTextColor = Grey700,
-                errorTextColor = Grey700 // 에러 시 텍스트 색상 명시적 설정
+                errorTextColor = Grey700
             ),
-            // 🆕 비밀번호 토글 아이콘 추가
             trailingIcon = if (isPassword) {
                 {
                     IconButton(
@@ -116,10 +125,10 @@ fun HelpJobTextField(
             } else null,
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 48.dp)
+                .height(46.dp) // 정확한 스펙에 맞게 46dp로 고정
         )
 
-        // 🆕 에러 메시지 필드 아래 직접 표시
+        // 에러 메시지
         if (isError && errorMessage != null) {
             Text(
                 text = errorMessage,
