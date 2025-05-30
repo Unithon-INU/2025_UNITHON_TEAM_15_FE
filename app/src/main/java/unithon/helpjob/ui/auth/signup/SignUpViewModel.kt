@@ -20,6 +20,7 @@ class SignUpViewModel @Inject constructor(
     data class SignUpUiState(
         val email: String = "",
         val password: String = "",
+        val confirmPassword: String = "", // 🆕 비밀번호 확인 필드
         val verificationCode: String = "",
         val isLoading: Boolean = false,
         val isSignUpSuccessful: Boolean = false,
@@ -34,6 +35,10 @@ class SignUpViewModel @Inject constructor(
         val passwordError: Boolean = false,
         val passwordErrorMessage: Int? = null,
 
+        // 🆕 비밀번호 확인 관련 상태
+        val confirmPasswordError: Boolean = false,
+        val confirmPasswordErrorMessage: Int? = null,
+
         // 인증코드 관련 상태
         val verificationCodeError: Boolean = false,
         val verificationCodeErrorMessage: Int? = null,
@@ -46,8 +51,12 @@ class SignUpViewModel @Inject constructor(
         val isPasswordValid: Boolean
             get() = password.length >= 6
 
+        // 🆕 비밀번호 일치 확인
+        val isPasswordMatching: Boolean
+            get() = password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword
+
         val isInputValid: Boolean
-            get() = isEmailValid && isPasswordValid && isCodeVerified
+            get() = isEmailValid && isPasswordValid && isPasswordMatching && isCodeVerified // 🆕 비밀번호 일치 조건 추가
     }
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -74,8 +83,43 @@ class SignUpViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordError = false,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                // 🆕 비밀번호 변경 시 확인 필드 에러도 재검증
+                confirmPasswordError = false,
+                confirmPasswordErrorMessage = null
             )
+        }
+        // 🆕 비밀번호 변경 시 확인 필드 검증
+        validatePasswordMatch()
+    }
+
+    // 🆕 비밀번호 확인 필드 업데이트
+    fun updateConfirmPassword(confirmPassword: String) {
+        _uiState.update {
+            it.copy(
+                confirmPassword = confirmPassword,
+                confirmPasswordError = false,
+                confirmPasswordErrorMessage = null
+            )
+        }
+        // 🆕 비밀번호 확인 변경 시 일치 여부 검증
+        validatePasswordMatch()
+    }
+
+    // 🆕 비밀번호 일치 검증 함수
+    private fun validatePasswordMatch() {
+        val currentState = _uiState.value
+
+        // 둘 다 입력된 상태에서만 검증
+        if (currentState.password.isNotBlank() && currentState.confirmPassword.isNotBlank()) {
+            if (currentState.password != currentState.confirmPassword) {
+                _uiState.update {
+                    it.copy(
+                        confirmPasswordError = true,
+                        confirmPasswordErrorMessage = R.string.error_password_mismatch
+                    )
+                }
+            }
         }
     }
 
@@ -228,6 +272,17 @@ class SignUpViewModel @Inject constructor(
             hasError = true
         }
 
+        // 🆕 비밀번호 일치 검증
+        if (!currentState.isPasswordMatching) {
+            _uiState.update {
+                it.copy(
+                    confirmPasswordError = true,
+                    confirmPasswordErrorMessage = R.string.error_password_mismatch
+                )
+            }
+            hasError = true
+        }
+
         if (!currentState.isCodeVerified) {
             _uiState.update {
                 it.copy(
@@ -257,8 +312,8 @@ class SignUpViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        passwordError = true,
-                        passwordErrorMessage = R.string.sign_up_failed
+                        confirmPasswordError = true, // 🆕 마지막 필드에 에러 표시
+                        confirmPasswordErrorMessage = R.string.sign_up_failed
                     )
                 }
             }

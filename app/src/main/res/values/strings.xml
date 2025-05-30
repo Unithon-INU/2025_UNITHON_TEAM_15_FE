@@ -27,6 +27,8 @@
     <string name="sign_up_email_hint">Enter Address</string>
     <string name="sign_up_password_label">Password</string>
     <string name="sign_up_password_hint">Enter Password</string>
+    <string name="sign_up_confirm_password_label">Confirm Password</string>
+    <string name="sign_up_confirm_password_hint">Re-enter Password</string>
     <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
     <string name="sign_up_email_exists">ⓘ Email already in use</string>
@@ -61,6 +63,7 @@
     <string name="error_invalid_email">Invalid email format</string>
     <string name="error_empty_password">Please enter your password</string>
     <string name="error_short_password">Password must be at least 6 characters</string>
+    <string name="error_password_mismatch">ⓘ Passwords do not match</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Next</string>

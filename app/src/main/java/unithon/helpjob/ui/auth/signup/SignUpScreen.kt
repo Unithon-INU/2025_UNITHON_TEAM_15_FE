@@ -249,6 +249,29 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // 🆕 비밀번호 확인 레이블
+            Text(
+                text = stringResource(id = R.string.sign_up_confirm_password_label),
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey500
+            )
+
+            Spacer(modifier = Modifier.height(9.dp))
+
+            // 🆕 비밀번호 확인 입력 필드
+            HelpJobTextField(
+                value = uiState.confirmPassword,
+                onValueChange = viewModel::updateConfirmPassword,
+                label = "",
+                placeholder = stringResource(id = R.string.sign_up_confirm_password_hint),
+                isPassword = true,
+                isError = uiState.confirmPasswordError,
+                errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(id = it) },
+                modifier = Modifier.fillMaxWidth()
+            )
+
             Spacer(modifier = Modifier.weight(1f))
 
             // 다음 버튼

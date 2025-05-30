@@ -27,6 +27,8 @@
     <string name="sign_up_email_hint">이메일을 입력해주세요</string>
     <string name="sign_up_password_label">비밀번호</string>
     <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_up_confirm_password_label">비밀번호 확인</string>
+    <string name="sign_up_confirm_password_hint">비밀번호를 다시 입력해주세요</string>
     <string name="sign_up_next_button">다음</string>
     <string name="sign_up_failed">회원가입에 실패했습니다</string>
     <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
@@ -61,6 +63,7 @@
     <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
     <string name="error_empty_password">비밀번호를 입력해주세요</string>
     <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
+    <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">다음</string>
