@@ -7,27 +7,58 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.EmailAlreadyInUseException
+import unithon.helpjob.data.repository.EmailCodeExpiredException
+import unithon.helpjob.data.repository.EmailVerificationFailedException
+import unithon.helpjob.data.repository.SignUpData
+import unithon.helpjob.data.repository.SignUpDataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val signUpDataRepository: SignUpDataRepository // 🆕 추가
 ) : ViewModel() {
 
     data class SignUpUiState(
         val email: String = "",
         val password: String = "",
+        val confirmPassword: String = "",
+        val verificationCode: String = "",
         val isLoading: Boolean = false,
-        val userMessage: Int? = null,
         val isSignUpSuccessful: Boolean = false,
+
+        // 이메일 관련 상태
         val emailError: Boolean = false,
-        val passwordError: Boolean = false,
         val emailErrorMessage: Int? = null,
-        val passwordErrorMessage: Int? = null
+        val isEmailSent: Boolean = false,
+        val isSendingEmail: Boolean = false,
+
+        // 비밀번호 관련 상태
+        val passwordError: Boolean = false,
+        val passwordErrorMessage: Int? = null,
+
+        // 비밀번호 확인 관련 상태
+        val confirmPasswordError: Boolean = false,
+        val confirmPasswordErrorMessage: Int? = null,
+
+        // 인증코드 관련 상태
+        val verificationCodeError: Boolean = false,
+        val verificationCodeErrorMessage: Int? = null,
+        val isVerifyingCode: Boolean = false,
+        val isCodeVerified: Boolean = false
     ) {
+        val isEmailValid: Boolean
+            get() = email.isNotBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+        val isPasswordValid: Boolean
+            get() = password.length >= 6
+
+        val isPasswordMatching: Boolean
+            get() = password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword
+
         val isInputValid: Boolean
-            get() = email.isNotBlank() && password.length >= 6 &&
-                    android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            get() = isEmailValid && isPasswordValid && isPasswordMatching && isCodeVerified
     }
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -38,7 +69,13 @@ class SignUpViewModel @Inject constructor(
             it.copy(
                 email = email,
                 emailError = false,
-                emailErrorMessage = null
+                emailErrorMessage = null,
+                // 이메일이 변경되면 인증 상태 초기화
+                isEmailSent = false,
+                isCodeVerified = false,
+                verificationCode = "",
+                verificationCodeError = false,
+                verificationCodeErrorMessage = null
             )
         }
     }
@@ -48,16 +85,52 @@ class SignUpViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordError = false,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                confirmPasswordError = false,
+                confirmPasswordErrorMessage = null
+            )
+        }
+        validatePasswordMatch()
+    }
+
+    fun updateConfirmPassword(confirmPassword: String) {
+        _uiState.update {
+            it.copy(
+                confirmPassword = confirmPassword,
+                confirmPasswordError = false,
+                confirmPasswordErrorMessage = null
+            )
+        }
+        validatePasswordMatch()
+    }
+
+    private fun validatePasswordMatch() {
+        val currentState = _uiState.value
+
+        if (currentState.password.isNotBlank() && currentState.confirmPassword.isNotBlank()) {
+            if (currentState.password != currentState.confirmPassword) {
+                _uiState.update {
+                    it.copy(
+                        confirmPasswordError = true,
+                        confirmPasswordErrorMessage = R.string.error_password_mismatch
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateVerificationCode(code: String) {
+        _uiState.update {
+            it.copy(
+                verificationCode = code,
+                verificationCodeError = false,
+                verificationCodeErrorMessage = null
             )
         }
     }
 
-    fun signUp() {
+    fun sendEmailVerification() {
         val currentState = uiState.value
-
-        // 입력 검증
-        var hasError = false
 
         if (currentState.email.isBlank()) {
             _uiState.update {
@@ -66,8 +139,116 @@ class SignUpViewModel @Inject constructor(
                     emailErrorMessage = R.string.error_empty_email
                 )
             }
-            hasError = true
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(currentState.email).matches()) {
+            return
+        }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(currentState.email).matches()) {
+            _uiState.update {
+                it.copy(
+                    emailError = true,
+                    emailErrorMessage = R.string.error_invalid_email
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isSendingEmail = true) }
+            try {
+                authRepository.sendEmailVerification(currentState.email)
+                _uiState.update {
+                    it.copy(
+                        isSendingEmail = false,
+                        isEmailSent = true,
+                        emailError = false,
+                        emailErrorMessage = null
+                    )
+                }
+            } catch (e: EmailAlreadyInUseException) {
+                _uiState.update {
+                    it.copy(
+                        isSendingEmail = false,
+                        emailError = true,
+                        emailErrorMessage = R.string.sign_up_email_exists
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isSendingEmail = false,
+                        emailError = true,
+                        emailErrorMessage = R.string.email_send_failed
+                    )
+                }
+            }
+        }
+    }
+
+    fun verifyEmailCode() {
+        val currentState = uiState.value
+
+        if (currentState.verificationCode.isBlank()) {
+            _uiState.update {
+                it.copy(
+                    verificationCodeError = true,
+                    verificationCodeErrorMessage = R.string.error_empty_verification_code
+                )
+            }
+            return
+        }
+
+        viewModelScope.launch {
+            _uiState.update { it.copy(isVerifyingCode = true) }
+            try {
+                authRepository.verifyEmailCode(currentState.email, currentState.verificationCode)
+                _uiState.update {
+                    it.copy(
+                        isVerifyingCode = false,
+                        isCodeVerified = true,
+                        verificationCodeError = false,
+                        verificationCodeErrorMessage = null
+                    )
+                }
+            } catch (e: EmailCodeExpiredException) {
+                _uiState.update {
+                    it.copy(
+                        isVerifyingCode = false,
+                        verificationCodeError = true,
+                        verificationCodeErrorMessage = R.string.verification_code_expired
+                    )
+                }
+            } catch (e: EmailVerificationFailedException) {
+                _uiState.update {
+                    it.copy(
+                        isVerifyingCode = false,
+                        verificationCodeError = true,
+                        verificationCodeErrorMessage = R.string.verification_code_invalid
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isVerifyingCode = false,
+                        verificationCodeError = true,
+                        verificationCodeErrorMessage = R.string.verification_failed
+                    )
+                }
+            }
+        }
+    }
+
+    fun resendEmailVerification() {
+        sendEmailVerification()
+    }
+
+    // 🔄 핵심 변경: 기존 signUp() → proceedToNickname()로 변경
+    fun proceedToNickname() {
+        val currentState = uiState.value
+
+        // 최종 입력 검증
+        var hasError = false
+
+        if (!currentState.isEmailValid) {
             _uiState.update {
                 it.copy(
                     emailError = true,
@@ -77,15 +258,7 @@ class SignUpViewModel @Inject constructor(
             hasError = true
         }
 
-        if (currentState.password.isBlank()) {
-            _uiState.update {
-                it.copy(
-                    passwordError = true,
-                    passwordErrorMessage = R.string.error_empty_password
-                )
-            }
-            hasError = true
-        } else if (currentState.password.length < 6) {
+        if (!currentState.isPasswordValid) {
             _uiState.update {
                 it.copy(
                     passwordError = true,
@@ -95,37 +268,38 @@ class SignUpViewModel @Inject constructor(
             hasError = true
         }
 
+        if (!currentState.isPasswordMatching) {
+            _uiState.update {
+                it.copy(
+                    confirmPasswordError = true,
+                    confirmPasswordErrorMessage = R.string.error_password_mismatch
+                )
+            }
+            hasError = true
+        }
+
+        if (!currentState.isCodeVerified) {
+            _uiState.update {
+                it.copy(
+                    verificationCodeError = true,
+                    verificationCodeErrorMessage = R.string.email_verification_required
+                )
+            }
+            return
+        }
+
         if (hasError) return
 
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            try {
-                authRepository.signUp(
-                    email = currentState.email,
-                    password = currentState.password
-                )
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isSignUpSuccessful = true
-                    )
-                }
-            } catch (e: Exception) {
-                val errorMessage = when {
-                    e.message?.contains("already exists") == true -> R.string.sign_up_email_exists
-                    else -> R.string.sign_up_failed
-                }
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        userMessage = errorMessage
-                    )
-                }
-            }
-        }
-    }
+        // 🆕 API 호출 대신 데이터만 저장
+        val signUpData = SignUpData(
+            email = currentState.email,
+            password = currentState.password
+        )
 
-    fun userMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
+        signUpDataRepository.saveSignUpData(signUpData)
+
+        _uiState.update {
+            it.copy(isSignUpSuccessful = true)
+        }
     }
 }

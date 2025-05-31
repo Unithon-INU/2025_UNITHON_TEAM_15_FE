@@ -3,31 +3,53 @@
 
     <!-- SignIn Screen -->
     <string name="sign_in_welcome_title">Welcome!\n%s will help you</string>
-    <string name="sign_in_welcome_title_default">Welcome!\nHelpJob will help you</string>
-    <string name="sign_in_email_label">Email</string>
+    <string name="sign_in_welcome_title_default">Welcome!\nPlease enter your account</string>
+    <string name="sign_in_email_label">Email Address</string>
     <string name="sign_in_password_label">Password</string>
-    <string name="sign_in_button">Sign In</string>
-    <string name="sign_in_or_divider">Or</string>
-    <string name="sign_in_no_account">Don\'t have an account yet?</string>
+    <string name="sign_in_button">Login</string>
+    <string name="sign_in_or_divider">or</string>
+    <string name="sign_in_no_account">Are you not a member yet?</string>
     <string name="sign_in_go_to_sign_up">Sign Up</string>
 
+    <!-- Password Visibility -->
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+
     <!-- SignIn Error Messages -->
-    <string name="sign_in_failed">Sign in failed</string>
+    <string name="sign_in_email_not_found">ⓘ This mail has no information</string>
+    <string name="sign_in_password_wrong">ⓘ The password is wrong</string>
+    <string name="sign_in_failed">Login failed. Please try again.</string>
 
     <!-- SignUp Screen -->
     <string name="sign_up_title">Sign Up</string>
-    <string name="sign_up_subtitle">Please enter your basic information!</string>
-    <string name="sign_up_email_label">Email</string>
-    <string name="sign_up_email_hint">Please enter your email</string>
+    <string name="sign_up_subtitle">Please enter\nyour email and password</string>
+    <string name="sign_up_email_label">Email Address</string>
+    <string name="sign_up_email_hint">Enter Address</string>
     <string name="sign_up_password_label">Password</string>
-    <string name="sign_up_password_hint">Please enter your password</string>
-    <string name="sign_up_next_button">Next</string>
+    <string name="sign_up_password_hint">Enter Password</string>
+    <string name="sign_up_confirm_password_label">Confirm Password</string>
+    <string name="sign_up_confirm_password_hint">Re-enter Password</string>
+    <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
-    <string name="sign_up_email_exists">Email already exists</string>
+    <string name="sign_up_email_exists">ⓘ Email already in use</string>
+
+    <!-- 🆕 Email Verification -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="enter_verification_code">Enter the code</string>
+    <string name="verification_code_hint">Enter verification code</string>
+    <string name="verification_code_instruction">Enter the code from the email we sent you</string>
+    <string name="verification_code_expired">ⓘ Verification code has expired</string>
+    <string name="verification_code_invalid">ⓘ Invalid verification code</string>
+    <string name="email_send_failed">Failed to send verification email</string>
+    <string name="verification_failed">Verification failed</string>
+    <string name="email_verification_required">Email verification is required</string>
+    <string name="error_empty_verification_code">Please enter verification code</string>
 
     <!-- Nickname Setup Screen -->
     <string name="nickname_setup_title">Please set your nickname\nto use in HelpJob</string>
-    <string name="nickname_placeholder">Please enter your nickname</string>
+    <string name="nickname_placeholder">Enter nickname</string>
     <string name="nickname_character_count">%1$d / 10</string>
     <string name="nickname_duplicate_error">ⓘ This nickname is already in use.</string>
     <string name="nickname_complete_button">Complete</string>
@@ -41,6 +63,7 @@
     <string name="error_invalid_email">Invalid email format</string>
     <string name="error_empty_password">Please enter your password</string>
     <string name="error_short_password">Password must be at least 6 characters</string>
+    <string name="error_password_mismatch">ⓘ Passwords do not match</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Next</string>
@@ -86,4 +109,9 @@
     <string name="bottom_nav_calculate">Calculator</string>
     <string name="bottom_nav_content">Content</string>
     <string name="bottom_nav_profile">Profile</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">Back</string>
+    <string name="sign_up_top_bar_title">Sign Up</string>
+    <string name="nickname_setup_top_bar_title">Nickname</string>
 </resources>

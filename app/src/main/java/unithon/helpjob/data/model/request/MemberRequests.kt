@@ -36,3 +36,18 @@ data class MemberProfileReq(
     @SerialName("industry")
     val industry: String
 )
+
+// 🆕 이메일 인증 관련 요청 모델들
+@Serializable
+data class EmailSendReq(
+    @SerialName("email")
+    val email: String
+)
+
+@Serializable
+data class EmailVerifyCodeReq(
+    @SerialName("email")
+    val email: String,
+    @SerialName("code")
+    val code: String
+)

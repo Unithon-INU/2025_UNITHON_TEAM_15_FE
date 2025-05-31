@@ -25,7 +25,9 @@ class AuthInterceptor @Inject constructor(
         // 토큰이 필요없는 API들 (로그인, 회원가입 등)
         val noAuthEndpoints = listOf(
             "/api/member/sign-in",
-            "/api/member/sign-up"
+            "/api/member/sign-up",
+            "/api/email/send",
+            "/api/email/verify"
         )
 
         if (noAuthEndpoints.any { request.url.encodedPath.contains(it) }) {

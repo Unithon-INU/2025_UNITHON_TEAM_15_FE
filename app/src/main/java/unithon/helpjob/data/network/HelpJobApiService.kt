@@ -27,4 +27,15 @@ interface HelpJobApiService {
     suspend fun setProfile(
         @Body request: MemberProfileReq
     ): Response<TokenResponse>
+
+    // 🆕 이메일 인증 관련 API
+    @POST(ApiConstants.EMAIL_SEND)
+    suspend fun sendEmailVerification(
+        @Body request: EmailSendReq
+    ): Response<Unit>
+
+    @POST(ApiConstants.EMAIL_VERIFY)
+    suspend fun verifyEmailCode(
+        @Body request: EmailVerifyCodeReq
+    ): Response<Unit>
 }
