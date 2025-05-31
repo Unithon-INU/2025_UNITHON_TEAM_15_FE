@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.auth.signup
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -7,7 +8,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,8 +57,6 @@ fun SignUpScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 20.dp),
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
-
             // 제목
             Text(
                 text = stringResource(id = R.string.sign_up_title),
@@ -102,7 +100,7 @@ fun SignUpScreen(
                     modifier = Modifier.weight(1f)
                 )
 
-                // send 버튼 (수정된 부분)
+                // send 버튼
                 Button(
                     onClick = viewModel::sendEmailVerification,
                     enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
@@ -116,7 +114,7 @@ fun SignUpScreen(
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                     modifier = Modifier
                         .width(71.dp)
-                        .height(46.dp)  // 스펙에 맞게 46dp로 변경
+                        .height(46.dp)
                 ) {
                     if (uiState.isSendingEmail) {
                         Text(
@@ -148,8 +146,95 @@ fun SignUpScreen(
             if (uiState.isEmailSent) {
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // 인증번호 안내 메시지
+                // 인증코드 입력 필드 + verify 버튼
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.Top
+                ) {
+                    // 인증코드 텍스트필드 (내부에 Resend 포함)
+                    Box(modifier = Modifier.weight(1f)) {
+                        HelpJobTextField(
+                            value = uiState.verificationCode,
+                            onValueChange = viewModel::updateVerificationCode,
+                            label = "",
+                            placeholder = stringResource(id = R.string.verification_code_hint),
+                            isError = uiState.verificationCodeError,
+                            errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        // Resend 텍스트를 텍스트필드 내부 오른쪽에 배치
+                        if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == R.string.verification_code_expired) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.resend_button),
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        lineHeight = 15.sp,
+                                        fontFamily = FontFamily(Font(R.font.pretendard_medium)),
+                                        fontWeight = FontWeight(500),
+                                        color = Warning,
+                                    ),
+                                    modifier = Modifier
+                                        .padding(end = 18.dp)
+                                        .clickable { viewModel.resendEmailVerification() }
+                                )
+                            }
+                        }
+                    }
+
+                    // verify 버튼
+                    Button(
+                        onClick = viewModel::verifyEmailCode,
+                        enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Primary500 else Grey200,
+                            contentColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400,
+                            disabledContainerColor = Grey200,
+                            disabledContentColor = Grey400
+                        ),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(46.dp)
+                    ) {
+                        if (uiState.isVerifyingCode) {
+                            Text(
+                                text = "...",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    lineHeight = 20.sp,
+                                    fontFamily = PretendardFontFamily,
+                                    fontWeight = FontWeight.Bold,
+                                ),
+                                maxLines = 1
+                            )
+                        } else {
+                            Text(
+                                text = "verify",
+                                style = TextStyle(
+                                    fontSize = 16.sp,
+                                    lineHeight = 20.sp,
+                                    fontFamily = PretendardFontFamily,
+                                    fontWeight = FontWeight.Bold,
+                                ),
+                                maxLines = 1
+                            )
+                        }
+                    }
+                }
+
+                // 인증번호 안내 메시지 (정상 상태일 때만)
                 if (!uiState.verificationCodeError) {
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = stringResource(R.string.verification_code_instruction),
                         style = TextStyle(
@@ -160,95 +245,10 @@ fun SignUpScreen(
                             color = Primary500,
                         )
                     )
-                    Spacer(modifier = Modifier.height(9.dp))
-                }
-
-                // 인증코드 입력 필드 + verify 버튼 + Resend
-                Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        HelpJobTextField(
-                            value = uiState.verificationCode,
-                            onValueChange = viewModel::updateVerificationCode,
-                            label = "",
-                            placeholder = stringResource(id = R.string.verification_code_hint),
-                            isError = uiState.verificationCodeError,
-                            errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        // verify 버튼
-                        Button(
-                            onClick = viewModel::verifyEmailCode,
-                            enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Primary500 else Grey200,
-                                contentColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400,
-                                disabledContainerColor = Grey200,
-                                disabledContentColor = Grey400
-                            ),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
-                            modifier = Modifier
-                                .width(80.dp)
-                                .height(46.dp)  // 스펙에 맞게 46dp로 변경
-                        ) {
-                            if (uiState.isVerifyingCode) {
-                                Text(
-                                    text = "...",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp,
-                                        fontFamily = PretendardFontFamily,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
-                                    maxLines = 1
-                                )
-                            } else {
-                                Text(
-                                    text = "verify",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp,
-                                        fontFamily = PretendardFontFamily,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
-                                    maxLines = 1
-                                )
-                            }
-                        }
-                    }
-
-                    // Resend 텍스트
-                    if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == R.string.verification_code_expired) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            TextButton(
-                                onClick = viewModel::resendEmailVerification,
-                                modifier = Modifier.padding(top = 8.dp)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.resend_button),
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        lineHeight = 15.sp,
-                                        fontFamily = FontFamily(Font(R.font.pretendard_medium)),
-                                        fontWeight = FontWeight(500),
-                                        color = Warning,
-                                    )
-                                )
-                            }
-                        }
-                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(46.dp))
 
             // 비밀번호 레이블
             Text(
@@ -271,7 +271,7 @@ fun SignUpScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             // 비밀번호 확인 레이블
             Text(
@@ -302,9 +302,7 @@ fun SignUpScreen(
                 onClick = viewModel::proceedToNickname,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
