@@ -70,7 +70,7 @@ fun HelpJobTextField(
                         text = placeholder,
                         style = TextStyle(
                             fontSize = 14.sp,
-                            lineHeight = 16.sp, // 17sp에서 16sp로 조정 (텍스트 짤림 방지)
+                            lineHeight = 17.sp,
                             fontFamily = PretendardFontFamily,
                             fontWeight = FontWeight.Bold,
                             color = Grey300
@@ -85,7 +85,7 @@ fun HelpJobTextField(
             shape = RoundedCornerShape(10.dp),
             textStyle = TextStyle(
                 fontSize = 14.sp,
-                lineHeight = 16.sp, // 17sp에서 16sp로 조정 (텍스트 짤림 방지)
+                lineHeight = 17.sp,
                 fontFamily = PretendardFontFamily,
                 fontWeight = FontWeight.Bold,
                 color = Grey700
@@ -125,7 +125,7 @@ fun HelpJobTextField(
             } else null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(46.dp) // 정확한 스펙에 맞게 46dp로 고정
+                .height(48.dp)
         )
 
         // 에러 메시지

@@ -299,7 +299,7 @@ fun SignUpScreen(
             // 다음 버튼
             HelpJobButton(
                 text = stringResource(id = R.string.sign_up_next_button),
-                onClick = viewModel::signUp,
+                onClick = viewModel::proceedToNickname,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
                 modifier = Modifier

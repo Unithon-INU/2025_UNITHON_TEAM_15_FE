@@ -10,17 +10,20 @@ import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
 import unithon.helpjob.data.repository.EmailVerificationFailedException
+import unithon.helpjob.data.repository.SignUpData
+import unithon.helpjob.data.repository.SignUpDataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val signUpDataRepository: SignUpDataRepository // 🆕 추가
 ) : ViewModel() {
 
     data class SignUpUiState(
         val email: String = "",
         val password: String = "",
-        val confirmPassword: String = "", // 🆕 비밀번호 확인 필드
+        val confirmPassword: String = "",
         val verificationCode: String = "",
         val isLoading: Boolean = false,
         val isSignUpSuccessful: Boolean = false,
@@ -35,7 +38,7 @@ class SignUpViewModel @Inject constructor(
         val passwordError: Boolean = false,
         val passwordErrorMessage: Int? = null,
 
-        // 🆕 비밀번호 확인 관련 상태
+        // 비밀번호 확인 관련 상태
         val confirmPasswordError: Boolean = false,
         val confirmPasswordErrorMessage: Int? = null,
 
@@ -51,12 +54,11 @@ class SignUpViewModel @Inject constructor(
         val isPasswordValid: Boolean
             get() = password.length >= 6
 
-        // 🆕 비밀번호 일치 확인
         val isPasswordMatching: Boolean
             get() = password.isNotBlank() && confirmPassword.isNotBlank() && password == confirmPassword
 
         val isInputValid: Boolean
-            get() = isEmailValid && isPasswordValid && isPasswordMatching && isCodeVerified // 🆕 비밀번호 일치 조건 추가
+            get() = isEmailValid && isPasswordValid && isPasswordMatching && isCodeVerified
     }
 
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -84,16 +86,13 @@ class SignUpViewModel @Inject constructor(
                 password = password,
                 passwordError = false,
                 passwordErrorMessage = null,
-                // 🆕 비밀번호 변경 시 확인 필드 에러도 재검증
                 confirmPasswordError = false,
                 confirmPasswordErrorMessage = null
             )
         }
-        // 🆕 비밀번호 변경 시 확인 필드 검증
         validatePasswordMatch()
     }
 
-    // 🆕 비밀번호 확인 필드 업데이트
     fun updateConfirmPassword(confirmPassword: String) {
         _uiState.update {
             it.copy(
@@ -102,15 +101,12 @@ class SignUpViewModel @Inject constructor(
                 confirmPasswordErrorMessage = null
             )
         }
-        // 🆕 비밀번호 확인 변경 시 일치 여부 검증
         validatePasswordMatch()
     }
 
-    // 🆕 비밀번호 일치 검증 함수
     private fun validatePasswordMatch() {
         val currentState = _uiState.value
 
-        // 둘 다 입력된 상태에서만 검증
         if (currentState.password.isNotBlank() && currentState.confirmPassword.isNotBlank()) {
             if (currentState.password != currentState.confirmPassword) {
                 _uiState.update {
@@ -136,7 +132,6 @@ class SignUpViewModel @Inject constructor(
     fun sendEmailVerification() {
         val currentState = uiState.value
 
-        // 이메일 유효성 검사
         if (currentState.email.isBlank()) {
             _uiState.update {
                 it.copy(
@@ -246,7 +241,8 @@ class SignUpViewModel @Inject constructor(
         sendEmailVerification()
     }
 
-    fun signUp() {
+    // 🔄 핵심 변경: 기존 signUp() → proceedToNickname()로 변경
+    fun proceedToNickname() {
         val currentState = uiState.value
 
         // 최종 입력 검증
@@ -272,7 +268,6 @@ class SignUpViewModel @Inject constructor(
             hasError = true
         }
 
-        // 🆕 비밀번호 일치 검증
         if (!currentState.isPasswordMatching) {
             _uiState.update {
                 it.copy(
@@ -295,28 +290,16 @@ class SignUpViewModel @Inject constructor(
 
         if (hasError) return
 
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            try {
-                authRepository.signUp(
-                    email = currentState.email,
-                    password = currentState.password
-                )
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        isSignUpSuccessful = true
-                    )
-                }
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        confirmPasswordError = true, // 🆕 마지막 필드에 에러 표시
-                        confirmPasswordErrorMessage = R.string.sign_up_failed
-                    )
-                }
-            }
+        // 🆕 API 호출 대신 데이터만 저장
+        val signUpData = SignUpData(
+            email = currentState.email,
+            password = currentState.password
+        )
+
+        signUpDataRepository.saveSignUpData(signUpData)
+
+        _uiState.update {
+            it.copy(isSignUpSuccessful = true)
         }
     }
 }

@@ -8,11 +8,13 @@ import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
+import unithon.helpjob.data.repository.SignUpDataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class NicknameSetupViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val signUpDataRepository: SignUpDataRepository // 🆕 추가
 ) : ViewModel() {
 
     data class NicknameSetupUiState(
@@ -30,12 +32,12 @@ class NicknameSetupViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(NicknameSetupUiState())
     val uiState: StateFlow<NicknameSetupUiState> = _uiState.asStateFlow()
 
-    // 🆕 단발성 에러 이벤트를 위한 SharedFlow
+    // 단발성 에러 이벤트를 위한 SharedFlow
     private val _errorEvents = MutableSharedFlow<Int>()
     val errorEvents: SharedFlow<Int> = _errorEvents.asSharedFlow()
 
     fun updateNickname(nickname: String) {
-        if (nickname.length > 10) return  // 10자 제한
+        if (nickname.length > 10) return
 
         _uiState.update {
             it.copy(
@@ -47,6 +49,7 @@ class NicknameSetupViewModel @Inject constructor(
         }
     }
 
+    // 🔄 핵심 변경: 배치 처리 로직 추가
     fun setNickname() {
         val currentState = uiState.value
 
@@ -75,7 +78,27 @@ class NicknameSetupViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
+                // 🆕 1. 저장된 회원가입 데이터 가져오기
+                val signUpData = signUpDataRepository.getSignUpData()
+
+                if (signUpData == null) {
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            nicknameError = true,
+                            nicknameErrorMessage = R.string.nickname_setup_failed
+                        )
+                    }
+                    return@launch
+                }
+
+                // 🆕 2. 회원가입 + 닉네임 설정 배치 처리
+                authRepository.signUp(signUpData.email, signUpData.password)
                 authRepository.setNickname(currentState.nickname)
+
+                // 🆕 3. 임시 데이터 정리
+                signUpDataRepository.clearSignUpData()
+
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -83,7 +106,6 @@ class NicknameSetupViewModel @Inject constructor(
                     )
                 }
             } catch (e: NicknameDuplicateException) {
-                // 🆕 닉네임 중복은 닉네임 필드와 1:1 매핑 → 필드별 표시
                 _uiState.update {
                     it.copy(
                         isLoading = false,
@@ -95,7 +117,6 @@ class NicknameSetupViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(isLoading = false)
                 }
-                // 🆕 네트워크 에러 등은 SharedFlow로 전송
                 _errorEvents.emit(R.string.nickname_setup_failed)
             }
         }
