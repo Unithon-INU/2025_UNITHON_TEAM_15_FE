@@ -102,14 +102,14 @@ fun SignUpScreen(
                     modifier = Modifier.weight(1f)
                 )
 
-                // send 버튼
+                // send 버튼 (수정된 부분)
                 Button(
                     onClick = viewModel::sendEmailVerification,
-                    enabled = uiState.isEmailValid && !uiState.isSendingEmail,
+                    enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (uiState.isEmailValid && !uiState.isSendingEmail) Primary500 else Grey200,
-                        contentColor = if (uiState.isEmailValid && !uiState.isSendingEmail) Grey000 else Grey400,
+                        containerColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Primary500 else Grey200,
+                        contentColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Grey000 else Grey400,
                         disabledContainerColor = Grey200,
                         disabledContentColor = Grey400
                     ),
