@@ -104,6 +104,7 @@ class DefaultAuthRepository @Inject constructor(
         } else {
             when (response.code()) {
                 403 -> throw UnauthorizedException()
+                else -> {
                     val errorBody = response.errorBody()?.string()
                     throw Exception(errorBody ?: "프로필 설정 실패")
                 }
