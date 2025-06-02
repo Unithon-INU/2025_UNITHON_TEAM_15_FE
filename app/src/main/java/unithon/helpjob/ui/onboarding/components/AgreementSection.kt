@@ -51,7 +51,7 @@ fun AgreementSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(46.dp),
-            mainTitle = "전체동의",
+            mainTitle = stringResource(R.string.onboarding_agreement_setup_full_agreement),
             onClick = { onAllCheckedChange(!isAllChecked) },
             icon = R.drawable.ic_check,
             iconMainSpacer = 16.dp,
@@ -126,7 +126,7 @@ fun AgreementItem(
         }
 
         Text(
-            text = "더보기",
+            text = stringResource(R.string.onboarding_agreement_setup_more),
             modifier = Modifier
                 .clickable { onViewDetail() }
                 .padding(horizontal = 8.dp),
