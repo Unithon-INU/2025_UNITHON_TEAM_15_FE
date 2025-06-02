@@ -11,12 +11,13 @@ interface AuthRepository {
     @Throws(NicknameDuplicateException::class)
     suspend fun setNickname(nickname: String)
 
+    @Throws(UnauthorizedException::class)
     suspend fun setProfile(
         language: String,
         languageLevel: String,
         visaType: String,
         industry: String
-    ): TokenResponse
+    )
 
     // 🆕 이메일 인증 관련 메서드
     @Throws(EmailAlreadyInUseException::class)
