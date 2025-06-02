@@ -28,7 +28,7 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.SIGN_IN_ROUTE) {
             SignInScreen(
                 onNavigateToSignUp = navActions::navigateToSignUp,
-                onNavigateToMain = { navActions.navigateToBottomTab(BottomNavDestination.HOME) }
+                onNavigateToOnboarding = { navActions.navigateToOnboarding() }
             )
         }
 
