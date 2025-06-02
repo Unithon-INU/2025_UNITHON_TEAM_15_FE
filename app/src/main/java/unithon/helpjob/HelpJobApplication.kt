@@ -32,7 +32,8 @@ class HelpJobApplication : Application() {
     private fun initializeLanguage() {
         applicationScope.launch {
             try {
-                val savedLanguage = languageRepository.getLanguage()
+                val savedLanguage = languageRepository.getCurrentLanguage()
+                Timber.d("savedLanguage: ${savedLanguage.code}")
                 // 저장된 언어가 있으면 적용
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(savedLanguage.code)
