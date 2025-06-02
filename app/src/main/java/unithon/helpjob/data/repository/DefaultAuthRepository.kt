@@ -10,6 +10,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 import unithon.helpjob.data.model.request.*
 import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.model.response.TokenResponse
@@ -92,17 +93,22 @@ class DefaultAuthRepository @Inject constructor(
         languageLevel: String,
         visaType: String,
         industry: String
-    ): TokenResponse {
+    ) {
+
+        Timber.d("MemberProfileReq ${MemberProfileReq(language, languageLevel, visaType, industry)}")
         val response = apiService.setProfile(
             MemberProfileReq(language, languageLevel, visaType, industry)
         )
         if (response.isSuccessful) {
-            response.body()?.let { tokenResponse ->
-                saveToken(tokenResponse.token)
-                return tokenResponse
+            return
+        } else {
+            when (response.code()) {
+                403 -> throw UnauthorizedException()
+                    val errorBody = response.errorBody()?.string()
+                    throw Exception(errorBody ?: "프로필 설정 실패")
+                }
             }
         }
-        throw Exception(response.errorBody()?.string() ?: "프로필 설정 실패")
     }
 
     // 🆕 이메일 인증 관련 구현
