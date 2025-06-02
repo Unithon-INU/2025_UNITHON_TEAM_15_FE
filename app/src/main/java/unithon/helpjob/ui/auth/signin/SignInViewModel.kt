@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.EmailNotFoundException
+import unithon.helpjob.data.repository.WrongPasswordException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +20,6 @@ class SignInViewModel @Inject constructor(
         val email: String = "",
         val password: String = "",
         val isLoading: Boolean = false,
-        val userMessage: Int? = null,
         val isSignInSuccessful: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
@@ -38,7 +39,10 @@ class SignInViewModel @Inject constructor(
             it.copy(
                 email = email,
                 emailError = false,
-                emailErrorMessage = null
+                emailErrorMessage = null,
+                // 다른 필드 입력 시 서버 에러도 클리어
+                passwordError = false,
+                passwordErrorMessage = null
             )
         }
     }
@@ -48,7 +52,10 @@ class SignInViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordError = false,
-                passwordErrorMessage = null
+                passwordErrorMessage = null,
+                // 다른 필드 입력 시 서버 에러도 클리어
+                emailError = false,
+                emailErrorMessage = null
             )
         }
     }
@@ -56,7 +63,7 @@ class SignInViewModel @Inject constructor(
     fun signIn() {
         val currentState = uiState.value
 
-        // 입력 검증
+        // 클라이언트 validation
         var hasError = false
 
         if (currentState.email.isBlank()) {
@@ -110,19 +117,31 @@ class SignInViewModel @Inject constructor(
                         isSignInSuccessful = true
                     )
                 }
+            } catch (e: EmailNotFoundException) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        emailError = true,
+                        emailErrorMessage = R.string.sign_in_email_not_found
+                    )
+                }
+            } catch (e: WrongPasswordException) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        passwordError = true,
+                        passwordErrorMessage = R.string.sign_in_password_wrong
+                    )
+                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        userMessage = R.string.sign_in_failed,
-                        passwordError = true
+                        passwordError = true,
+                        passwordErrorMessage = R.string.sign_in_failed
                     )
                 }
             }
         }
-    }
-
-    fun userMessageShown() {
-        _uiState.update { it.copy(userMessage = null) }
     }
 }

@@ -34,13 +34,15 @@ fun HelpJobNavGraph(
 
         composable(route = HelpJobDestinations.SIGN_UP_ROUTE) {
             SignUpScreen(
-                onNavigateToNicknameSetup = navActions::navigateToNicknameSetup
+                onNavigateToNicknameSetup = navActions::navigateToNicknameSetup,
+                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
             )
         }
 
         composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
             NicknameSetupScreen(
-                onNicknameSet = navActions::navigateToOnboarding
+                onNicknameSet = navActions::navigateToOnboarding,
+                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
             )
         }
 

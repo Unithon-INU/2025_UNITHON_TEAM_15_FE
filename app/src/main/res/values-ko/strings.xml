@@ -11,8 +11,14 @@
     <string name="sign_in_no_account">아직 회원이 아니신가요?</string>
     <string name="sign_in_go_to_sign_up">회원가입</string>
 
+    <!-- Password Visibility -->
+    <string name="show_password">비밀번호 보기</string>
+    <string name="hide_password">비밀번호 숨기기</string>
+
     <!-- SignIn Error Messages -->
-    <string name="sign_in_failed">로그인에 실패했습니다</string>
+    <string name="sign_in_email_not_found">ⓘ 해당 회원이 존재하지 않습니다.</string>
+    <string name="sign_in_password_wrong">ⓘ 비밀번호가 일치하지 않습니다.</string>
+    <string name="sign_in_failed">로그인에 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- SignUp Screen -->
     <string name="sign_up_title">회원가입</string>
@@ -21,9 +27,25 @@
     <string name="sign_up_email_hint">이메일을 입력해주세요</string>
     <string name="sign_up_password_label">비밀번호</string>
     <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_up_confirm_password_label">비밀번호 확인</string>
+    <string name="sign_up_confirm_password_hint">비밀번호를 다시 입력해주세요</string>
     <string name="sign_up_next_button">다음</string>
     <string name="sign_up_failed">회원가입에 실패했습니다</string>
-    <string name="sign_up_email_exists">이미 존재하는 이메일입니다</string>
+    <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
+
+    <!-- 🆕 이메일 인증 -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="enter_verification_code">인증번호 입력</string>
+    <string name="verification_code_hint">인증번호를 입력해주세요</string>
+    <string name="verification_code_instruction">이메일로 전송된 인증번호를 입력해주세요</string>
+    <string name="verification_code_expired">ⓘ 인증번호가 만료되었습니다</string>
+    <string name="verification_code_invalid">ⓘ 인증번호가 올바르지 않습니다</string>
+    <string name="email_send_failed">인증 이메일 전송에 실패했습니다</string>
+    <string name="verification_failed">인증에 실패했습니다</string>
+    <string name="email_verification_required">이메일 인증이 필요합니다</string>
+    <string name="error_empty_verification_code">인증번호를 입력해주세요</string>
 
     <!-- Nickname Setup Screen -->
     <string name="nickname_setup_title">OOO 에서 사용할\n닉네임을 설정해주세요</string>
@@ -41,6 +63,7 @@
     <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
     <string name="error_empty_password">비밀번호를 입력해주세요</string>
     <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
+    <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">다음</string>
@@ -86,4 +109,9 @@
     <string name="bottom_nav_calculate">계산기</string>
     <string name="bottom_nav_content">콘텐츠</string>
     <string name="bottom_nav_profile">프로필</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">뒤로</string>
+    <string name="sign_up_top_bar_title">회원가입</string>
+    <string name="nickname_setup_top_bar_title">닉네임 설정</string>
 </resources>
