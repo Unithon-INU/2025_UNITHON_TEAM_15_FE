@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.components
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +20,8 @@ fun HelpJobButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    isLoading: Boolean = false
+    isLoading: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(vertical = 13.dp)
 ) {
     Button(
         onClick = onClick,
@@ -31,7 +33,8 @@ fun HelpJobButton(
             contentColor = Grey000,
             disabledContainerColor = Grey200,
             disabledContentColor = Grey400
-        )
+        ),
+        contentPadding = contentPadding
     ) {
         if (isLoading) {
             CircularProgressIndicator(
