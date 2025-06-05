@@ -18,7 +18,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
+    startDestination: String = BottomNavDestination.CALCULATE.route // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
@@ -61,8 +61,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = BottomNavDestination.CALCULATE.route) {
-            TempScreen(
-                onNavigateToSignIn = navActions::navigateToSignIn
+            CalculatorScreen(
             )
         }
 
@@ -75,11 +74,6 @@ fun HelpJobNavGraph(
         composable(route = BottomNavDestination.PROFILE.route) {
             TempScreen(
                 onNavigateToSignIn = navActions::navigateToSignIn
-            )
-        }
-
-        composable(route = HelpJobDestinations.CALCULATOR) {
-            CalculatorScreen(
             )
         }
     }
