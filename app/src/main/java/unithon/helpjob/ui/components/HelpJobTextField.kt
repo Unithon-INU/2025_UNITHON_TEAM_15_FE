@@ -53,7 +53,8 @@ fun HelpJobTextField(
     isError: Boolean = false,
     errorMessage: String? = null,
     labelTextFieldSpace: Dp = 8.dp,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    isWon: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -134,6 +135,14 @@ fun HelpJobTextField(
                             modifier = Modifier.size(20.dp)
                         )
                     }
+                }
+            } else if (isWon) {
+                {
+                    Text(
+                        text = stringResource(R.string.calculator_won),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey600
+                    )
                 }
             } else null,
             modifier = Modifier
