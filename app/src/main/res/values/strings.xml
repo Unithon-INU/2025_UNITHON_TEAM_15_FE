@@ -64,7 +64,7 @@
     <string name="error_empty_password">Please enter your password</string>
     <string name="error_short_password">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
-
+    <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Next</string>
 
@@ -105,12 +105,15 @@
     <string name="onboarding_business_setup_event">Event/Event Staff</string>
 
     <!-- Calculator Screen -->
-    <string name="calculator_title_per_hour">최저임금은 시간당</string>
-    <string name="calculator_title_minimum_wage">10,030원</string>
-    <string name="calculator_wage_label">시급 입력</string>
-    <string name="calculator_worktime_label">하루 근무시간</string>
-    <string name="calculator_workday_label">한달 근무일수</string>
-    <string name="calculator_calculate_salary">계산하기</string>
+    <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
+    <string name="calculator_wage_label">Enter hourly wage</string>
+    <string name="calculator_work_time_label">Daily work hours</string>
+    <string name="calculator_weekly_work_time_label">Weekly work hours</string>
+    <string name="calculator_wage_example">ex) 10,030</string>
+    <string name="calculator_select_time">Select time</string>
+    <string name="calculator_calculate_salary">Calculate</string>
+    <string name="calculator_2025">2025 Standard</string>
+    <string name="calculator_won">won</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
