@@ -68,7 +68,7 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         val workTime = _uiState.value.selectedWorkTime ?: 0f
         val workDayCount = _uiState.value.selectedWorkDayCount ?: 0
 
-        // 월급 계산: 시급 * 일일 근무시간 * 주간 근무일수 
+        // 월급 계산: 시급 * 일일 근무시간 * 주간 근무일수
         val monthlySalary = (wage * workTime * workDayCount).toInt()
 
         _uiState.update {
