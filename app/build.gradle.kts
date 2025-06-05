@@ -99,6 +99,9 @@ dependencies {
     // DataStore
     implementation(libs.androidx.dataStore.core)
     implementation(libs.androidx.dataStore.preferences)
+
+    // 다국어 지원
+    implementation(libs.androidx.appcompat)
     
     // Jetpack Compose
     val composeBom = platform(libs.androidx.compose.bom)

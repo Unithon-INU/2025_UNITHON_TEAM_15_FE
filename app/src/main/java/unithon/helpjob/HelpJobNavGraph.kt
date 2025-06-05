@@ -17,60 +17,64 @@ import unithon.helpjob.ui.onboarding.OnboardingScreen
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = HelpJobDestinations.CALCULATOR
+    navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
+    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
 ) {
-    val navActions = HelpJobNavigationActions(navController)
-
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        // 로그인 화면
+        // 인증 플로우 (하단바 없음)
         composable(route = HelpJobDestinations.SIGN_IN_ROUTE) {
             SignInScreen(
-                onNavigateToSignUp = {
-                    navActions.navigateToSignUp()
-                },
-                onNavigateToMain = {
-                    navActions.navigateToMain()
-                }
+                onNavigateToSignUp = navActions::navigateToSignUp,
+                onNavigateToMain = { navActions.navigateToBottomTab(BottomNavDestination.HOME) }
             )
         }
 
-        // 회원가입 화면
         composable(route = HelpJobDestinations.SIGN_UP_ROUTE) {
             SignUpScreen(
-                onNavigateToNicknameSetup = {
-                    navActions.navigateToNicknameSetup()
-                }
+                onNavigateToNicknameSetup = navActions::navigateToNicknameSetup,
+                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
             )
         }
 
-        // 닉네임 설정 화면
         composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
             NicknameSetupScreen(
-                onNicknameSet = {
-                    navActions.navigateToMain()
-                }
+                onNicknameSet = navActions::navigateToOnboarding,
+                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
             )
         }
 
-        // 임시 메인 화면
-        composable(route = HelpJobDestinations.MAIN_ROUTE) {
-            TempScreen(
-                onNavigateToSignIn = {
-                    navActions.navigateToSignIn()
-                }
-            )
-        }
-
-        // TODO: Onboarding 화면 추가
         composable(route = HelpJobDestinations.ONBOARDING_ROUTE) {
             OnboardingScreen(
-                onOnboardingComplete = {
-                    navActions.navigateToMain()
-                }
+                onOnboardingComplete = { navActions.navigateToBottomTab(BottomNavDestination.HOME) }
+            )
+        }
+
+        // 메인 앱 플로우 (하단바 있음) - enum에서 경로 가져옴
+        composable(route = BottomNavDestination.HOME.route) {
+            TempScreen(
+                onNavigateToSignIn = navActions::navigateToSignIn
+            )
+        }
+
+        composable(route = BottomNavDestination.CALCULATE.route) {
+            TempScreen(
+                onNavigateToSignIn = navActions::navigateToSignIn
+            )
+        }
+
+        composable(route = BottomNavDestination.CONTENT.route) {
+            TempScreen(
+                onNavigateToSignIn = navActions::navigateToSignIn
+            )
+        }
+
+        composable(route = BottomNavDestination.PROFILE.route) {
+            TempScreen(
+                onNavigateToSignIn = navActions::navigateToSignIn
             )
         }
 

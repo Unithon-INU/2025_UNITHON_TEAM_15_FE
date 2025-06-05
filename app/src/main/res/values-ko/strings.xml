@@ -1,0 +1,117 @@
+<resources>
+    <string name="app_name">HelpJob</string>
+
+    <!-- SignIn Screen -->
+    <string name="sign_in_welcome_title">환영해요!\n%s이 도와드릴게요</string>
+    <string name="sign_in_welcome_title_default">환영해요!\nOOO이 도와드릴게요</string>
+    <string name="sign_in_email_label">이메일</string>
+    <string name="sign_in_password_label">비밀번호</string>
+    <string name="sign_in_button">로그인</string>
+    <string name="sign_in_or_divider">또는</string>
+    <string name="sign_in_no_account">아직 회원이 아니신가요?</string>
+    <string name="sign_in_go_to_sign_up">회원가입</string>
+
+    <!-- Password Visibility -->
+    <string name="show_password">비밀번호 보기</string>
+    <string name="hide_password">비밀번호 숨기기</string>
+
+    <!-- SignIn Error Messages -->
+    <string name="sign_in_email_not_found">ⓘ 해당 회원이 존재하지 않습니다.</string>
+    <string name="sign_in_password_wrong">ⓘ 비밀번호가 일치하지 않습니다.</string>
+    <string name="sign_in_failed">로그인에 실패했습니다. 다시 시도해주세요.</string>
+
+    <!-- SignUp Screen -->
+    <string name="sign_up_title">회원가입</string>
+    <string name="sign_up_subtitle">간단한 정보를 입력해주세요!</string>
+    <string name="sign_up_email_label">이메일</string>
+    <string name="sign_up_email_hint">이메일을 입력해주세요</string>
+    <string name="sign_up_password_label">비밀번호</string>
+    <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_up_confirm_password_label">비밀번호 확인</string>
+    <string name="sign_up_confirm_password_hint">비밀번호를 다시 입력해주세요</string>
+    <string name="sign_up_next_button">다음</string>
+    <string name="sign_up_failed">회원가입에 실패했습니다</string>
+    <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
+
+    <!-- 🆕 이메일 인증 -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="enter_verification_code">인증번호 입력</string>
+    <string name="verification_code_hint">인증번호를 입력해주세요</string>
+    <string name="verification_code_instruction">이메일로 전송된 인증번호를 입력해주세요</string>
+    <string name="verification_code_expired">ⓘ 인증번호가 만료되었습니다</string>
+    <string name="verification_code_invalid">ⓘ 인증번호가 올바르지 않습니다</string>
+    <string name="email_send_failed">인증 이메일 전송에 실패했습니다</string>
+    <string name="verification_failed">인증에 실패했습니다</string>
+    <string name="email_verification_required">이메일 인증이 필요합니다</string>
+    <string name="error_empty_verification_code">인증번호를 입력해주세요</string>
+
+    <!-- Nickname Setup Screen -->
+    <string name="nickname_setup_title">OOO 에서 사용할\n닉네임을 설정해주세요</string>
+    <string name="nickname_placeholder">닉네임을 입력해주세요</string>
+    <string name="nickname_character_count">%1$d / 10</string>
+    <string name="nickname_duplicate_error">ⓘ 이미 사용 중인 닉네임이에요.</string>
+    <string name="nickname_complete_button">완료</string>
+    <string name="nickname_empty_error">닉네임을 입력해주세요</string>
+    <string name="nickname_too_short_error">닉네임은 2자 이상이어야 합니다</string>
+    <string name="nickname_too_long_error">닉네임은 10자 이하여야 합니다</string>
+    <string name="nickname_setup_failed">닉네임 설정에 실패했습니다</string>
+
+    <!-- Common Error Messages -->
+    <string name="error_empty_email">이메일을 입력해주세요</string>
+    <string name="error_invalid_email">올바른 이메일 형식이 아닙니다</string>
+    <string name="error_empty_password">비밀번호를 입력해주세요</string>
+    <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
+    <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_next_button">다음</string>
+
+    <!-- Onboarding Screen(Language) -->
+    <string name="onboarding_language_setup_title">OOO에서 사용할\n언어를 선택해 주세요</string>
+    <string name="onboarding_language_setup_korean">한국어</string>
+    <string name="onboarding_language_setup_english">English</string>
+
+    <!-- Onboarding Screen(Agreement) -->
+    <string name="onboarding_agreement_setup_title">OOO 이용을 위해\n필수 약관에 동의해 주세요</string>
+    <string name="onboarding_agreement_setup_full_agreement">전체동의</string>
+    <string name="onboarding_agreement_setup_service_agreement">(필수) 서비스 이용약관 동의</string>
+    <string name="onboarding_agreement_setup_info_agreement">(필수) 개인정보 수집·이용 동의</string>
+    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 14세 이상입니다.</string>
+    <string name="onboarding_agreement_setup_more">더보기</string>
+
+    <!-- Onboarding Screen(korean level) -->
+    <string name="onboarding_korean_level_setup_title">유니톤님의 한국어 능력을\n선택해 주세요</string>
+    <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
+    <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
+    <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
+
+    <!-- Onboarding Screen(visa) -->
+    <string name="onboarding_visa_setup_title">유니톤님의 비자 종류를\n선택해 주세요</string>
+    <string name="onboarding_visa_setup_d2_title">D-2</string>
+    <string name="onboarding_visa_setup_d2_description">유학 비자</string>
+    <string name="onboarding_visa_setup_d4_title">D-4</string>
+    <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
+
+    <!-- Onboarding Screen(business) -->
+    <string name="onboarding_business_setup_title">유니톤님이 희망하는\n업종은 무엇인가요?</string>
+    <string name="onboarding_business_setup_restaurant">음식점/카페</string>
+    <string name="onboarding_business_setup_mart">편의점/마트</string>
+    <string name="onboarding_business_setup_logistics">물류/창고 작업 보조</string>
+    <string name="onboarding_business_setup_office">사무보조/문서정리</string>
+    <string name="onboarding_business_setup_translation">통역/번역</string>
+    <string name="onboarding_business_setup_learn">과외/학습 보조</string>
+    <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
+
+    <!-- Bottom Bar -->
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_calculate">계산기</string>
+    <string name="bottom_nav_content">콘텐츠</string>
+    <string name="bottom_nav_profile">프로필</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">뒤로</string>
+    <string name="sign_up_top_bar_title">회원가입</string>
+    <string name="nickname_setup_top_bar_title">닉네임 설정</string>
+</resources>

@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary100
+import unithon.helpjob.ui.theme.Primary300
 import unithon.helpjob.ui.theme.Primary500
 
 @Composable
@@ -40,8 +42,8 @@ fun OnboardingButton(
     subTitleFontStyle: TextStyle = MaterialTheme.typography.labelMedium,
     disableBackgroundColor: Color = Grey100,
     disableColor: Color = Grey500,
-    ableBackgroundColor: Color = Primary100,
-    ableColor: Color = Primary500,
+    ableBackgroundColor: Color = Primary300,
+    ableColor: Color = Grey600,
     iconMainSpacer: Dp = 10.dp,
     mainSubSpacer: Dp = 1.dp,
     contentPosition: Arrangement.Horizontal = Arrangement.Center,
