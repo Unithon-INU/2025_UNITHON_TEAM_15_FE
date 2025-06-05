@@ -64,45 +64,48 @@
     <string name="error_empty_password">Please enter your password</string>
     <string name="error_short_password">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
+    <string name="error_authentication_required">Authentication required. Please log in again.</string>
 
     <!-- Onboarding Screen -->
-    <string name="onboarding_next_button">Next</string>
+    <string name="onboarding_next_button">Continue</string>
+    <string name="onboarding_done_button">Done</string>
+    <string name="onboarding_error_message">Error occurred during onboarding setup. Please try again.</string>
 
     <!-- Onboarding Screen(Language) -->
-    <string name="onboarding_language_setup_title">Please select the language\nto use in HelpJob</string>
+    <string name="onboarding_language_setup_title">Select the language\nyou want to use</string>
     <string name="onboarding_language_setup_korean">한국어</string>
     <string name="onboarding_language_setup_english">English</string>
 
     <!-- Onboarding Screen(Agreement) -->
-    <string name="onboarding_agreement_setup_title">Please agree to the required terms\nto use HelpJob</string>
+    <string name="onboarding_agreement_setup_title">Please agree to the\nrequired terms and conditions</string>
     <string name="onboarding_agreement_setup_full_agreement">Agree to all</string>
-    <string name="onboarding_agreement_setup_service_agreement">(Required) Service Terms Agreement</string>
-    <string name="onboarding_agreement_setup_info_agreement">(Required) Privacy Policy Agreement</string>
-    <string name="onboarding_agreement_setup_age_agreement">(Required) I am over 14 years old</string>
-    <string name="onboarding_agreement_setup_more">View Details</string>
+    <string name="onboarding_agreement_setup_service_agreement">(Required) Agree to the\nTerms of Service</string>
+    <string name="onboarding_agreement_setup_info_agreement">(Required) Agree to the collection\nand use of personal information</string>
+    <string name="onboarding_agreement_setup_age_agreement">(Required) I am over 18 years old.</string>
+    <string name="onboarding_agreement_setup_more">details</string>
+
+    <!-- Onboarding Screen(visa) -->
+    <string name="onboarding_visa_setup_title">Please choose\nyour visa type</string>
+    <string name="onboarding_visa_setup_d2_title">D-2</string>
+    <string name="onboarding_visa_setup_d2_description">A visa to study abroad</string>
+    <string name="onboarding_visa_setup_d4_title">D-4</string>
+    <string name="onboarding_visa_setup_d4_description">A general training visa</string>
 
     <!-- Onboarding Screen(korean level) -->
-    <string name="onboarding_korean_level_setup_title">Please select your\nKorean language proficiency</string>
+    <string name="onboarding_korean_level_setup_title">Please select\nyour topic rating</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK Level 3</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK Level 4 or higher</string>
     <string name="onboarding_korean_level_setup_no_topik">No TOPIK certification</string>
 
-    <!-- Onboarding Screen(visa) -->
-    <string name="onboarding_visa_setup_title">Please select your\nvisa type</string>
-    <string name="onboarding_visa_setup_d2_title">D-2</string>
-    <string name="onboarding_visa_setup_d2_description">Student Visa</string>
-    <string name="onboarding_visa_setup_d4_title">D-4</string>
-    <string name="onboarding_visa_setup_d4_description">General Training Visa</string>
-
     <!-- Onboarding Screen(business) -->
-    <string name="onboarding_business_setup_title">What industry are you\ninterested in working in?</string>
+    <string name="onboarding_business_setup_title">What kind of\nbusiness do you want?</string>
     <string name="onboarding_business_setup_restaurant">Restaurant/Cafe</string>
     <string name="onboarding_business_setup_mart">Convenience Store/Mart</string>
-    <string name="onboarding_business_setup_logistics">Logistics/Warehouse Assistant</string>
-    <string name="onboarding_business_setup_office">Office Assistant/Documentation</string>
-    <string name="onboarding_business_setup_translation">Interpretation/Translation</string>
-    <string name="onboarding_business_setup_learn">Tutoring/Learning Assistant</string>
-    <string name="onboarding_business_setup_event">Event/Event Staff</string>
+    <string name="onboarding_business_setup_logistics">Logistics / Warehouse Assistant</string>
+    <string name="onboarding_business_setup_office">Office Assistant</string>
+    <string name="onboarding_business_setup_translation">Interpretation / Translation</string>
+    <string name="onboarding_business_setup_learn">Tutoring / Learning Assistant</string>
+    <string name="onboarding_business_setup_event">Event Staff / Promotional Support</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
@@ -114,4 +117,6 @@
     <string name="back_button">Back</string>
     <string name="sign_up_top_bar_title">Sign Up</string>
     <string name="nickname_setup_top_bar_title">Nickname</string>
+    <string name="onboarding_top_bar_title">Information</string>
+
 </resources>
