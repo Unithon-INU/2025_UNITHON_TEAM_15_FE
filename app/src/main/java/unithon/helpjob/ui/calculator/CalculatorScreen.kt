@@ -33,8 +33,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.Primary300
+import unithon.helpjob.ui.theme.Primary200
+import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.util.CurrencyVisualTransformation
 
@@ -45,6 +47,7 @@ fun CalculatorScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -53,80 +56,85 @@ fun CalculatorScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .imePadding()
+                .padding(horizontal = 20.dp)
                 .verticalScroll(scrollState)
                 .align(Alignment.TopCenter)
         ) {
-            Spacer(Modifier.height(124.dp))
+            Spacer(Modifier.height(39.dp))
             MinimumWageCard(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(54.dp))
+            Spacer(Modifier.height(26.dp))
+
+            // 시급 입력
             HelpJobTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
+                modifier = Modifier.fillMaxWidth(),
                 value = uiState.wage,
                 onValueChange = viewModel::updateWage,
                 label = stringResource(R.string.calculator_wage_label),
-                placeholder = "",
+                placeholder = stringResource(R.string.calculator_wage_example),
                 visualTransformation = CurrencyVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-                isError = false,
-                errorMessage = null,
-                labelTextFieldSpace = 9.dp
-            )
-            Spacer(Modifier.height(20.dp))
-            HelpJobTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
-                value = uiState.workTime,
-                onValueChange = viewModel::updateWorkTime,
-                label = stringResource(R.string.calculator_worktime_label),
-                placeholder = "",
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-                isError = false,
-                errorMessage = null,
-                labelTextFieldSpace = 9.dp
-            )
-            Spacer(Modifier.height(20.dp))
-            HelpJobTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 25.dp),
-                value = uiState.workDayCount,
-                onValueChange = viewModel::updateWorkDayCount,
-                label = stringResource(R.string.calculator_workday_label),
-                placeholder = "",
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Number
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        focusManager.clearFocus() // 포커스 해제
+                        focusManager.clearFocus()
                     }
                 ),
-                isError = false,
-                errorMessage = null,
-                labelTextFieldSpace = 9.dp
+                isError = uiState.isLowerThanMinimumWage,
+                errorMessage = stringResource(R.string.error_lower_than_minimun_wage),
+                labelTextFieldSpace = 9.dp,
+                isWon = true
             )
+
+            if (!uiState.isLowerThanMinimumWage){
+                Spacer(Modifier.height(12.dp))
+            }
+
+            Spacer(Modifier.height(15.dp))
+
+            // 일일 근무시간 드롭다운
+            HelpJobDropdown(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.calculator_work_time_label),
+                selectedItem = uiState.selectedWorkTime,
+                items = viewModel.workTimeOptions,
+                onItemSelected = viewModel::updateSelectedWorkTime,
+                itemToString = viewModel::workTimeToString,
+                placeholder = stringResource(R.string.calculator_select_time),
+                labelTextFieldSpace = 9.dp,
+                isUpward = false
+            )
+            Spacer(Modifier.height(27.dp))
+
+            // 주간 근무일수 드롭다운
+            HelpJobDropdown(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.calculator_weekly_work_time_label),
+                selectedItem = uiState.selectedWorkDayCount,
+                items = viewModel.workDayOptions,
+                onItemSelected = viewModel::updateSelectedWorkDayCount,
+                itemToString = viewModel::workDayToString,
+                placeholder = stringResource(R.string.calculator_select_time),
+                labelTextFieldSpace = 9.dp,
+                isUpward = true
+            )
+
+            // 버튼을 위한 여백
+            Spacer(Modifier.height(100.dp))
         }
+
         HelpJobButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(start = 20.dp, end = 20.dp)
-                .fillMaxWidth()
-                .padding(bottom = 54.dp),
+                .padding(
+                    start = 20.dp,
+                    end = 20.dp,
+                    bottom = 20.dp
+                )
+                .fillMaxWidth(),
             text = stringResource(R.string.calculator_calculate_salary),
             onClick = {
                 viewModel.calculateSalary()
@@ -134,7 +142,6 @@ fun CalculatorScreen(
             enabled = uiState.isWorkTimeInputValid && uiState.isWorkDayCountInputValid && uiState.isWageInputValid,
         )
     }
-
 }
 
 @Composable
@@ -144,25 +151,38 @@ private fun MinimumWageCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = Primary300
+            containerColor = Primary400
         ),
         shape = RoundedCornerShape(10.dp)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 20.dp, horizontal = 23.dp)
+                .padding(
+                    vertical = 20.dp,
+                    horizontal = 23.dp
+                )
         ) {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = Primary200
+                ),
+                shape = RoundedCornerShape(10.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.calculator_2025),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        color = Grey600
+                    ),
+                    modifier = Modifier
+                        .padding(vertical = 7.dp, horizontal = 13.dp)
+                )
+            }
+            Spacer(Modifier.height(9.dp))
             Text(
                 text = stringResource(R.string.calculator_title_per_hour),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     color = Grey600
-                )
-            )
-            Text(
-                text = stringResource(R.string.calculator_title_minimum_wage),
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    color = Warning
                 )
             )
         }
