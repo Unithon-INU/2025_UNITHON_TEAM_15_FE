@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
+import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.main.TempScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 
@@ -17,7 +18,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
+    startDestination: String = BottomNavDestination.CALCULATE.route // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
@@ -60,8 +61,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = BottomNavDestination.CALCULATE.route) {
-            TempScreen(
-                onNavigateToSignIn = navActions::navigateToSignIn
+            CalculatorScreen(
             )
         }
 

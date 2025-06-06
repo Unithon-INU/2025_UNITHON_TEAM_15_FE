@@ -2,10 +2,12 @@ package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +27,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import unithon.helpjob.ui.theme.Grey000
+import unithon.helpjob.ui.theme.Grey200
+import unithon.helpjob.ui.theme.Grey300
+import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.Primary500
+import unithon.helpjob.ui.theme.Warning
 import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.theme.*
@@ -39,9 +49,12 @@ fun HelpJobTextField(
     placeholder: String = "",
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     isError: Boolean = false,
     errorMessage: String? = null,
-    isPassword: Boolean = false
+    labelTextFieldSpace: Dp = 8.dp,
+    isPassword: Boolean = false,
+    isWon: Boolean = false
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -57,7 +70,7 @@ fun HelpJobTextField(
                 text = label,
                 style = MaterialTheme.typography.titleSmall,
                 color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
+                modifier = Modifier.padding(bottom = labelTextFieldSpace)
             )
         }
 
@@ -80,6 +93,7 @@ fun HelpJobTextField(
             } else null,
             visualTransformation = actualVisualTransformation,
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             isError = isError,
             singleLine = true,
             shape = RoundedCornerShape(10.dp),
@@ -121,6 +135,14 @@ fun HelpJobTextField(
                             modifier = Modifier.size(20.dp)
                         )
                     }
+                }
+            } else if (isWon) {
+                {
+                    Text(
+                        text = stringResource(R.string.calculator_won),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey600
+                    )
                 }
             } else null,
             modifier = Modifier

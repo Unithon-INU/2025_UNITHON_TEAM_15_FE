@@ -64,6 +64,7 @@
     <string name="error_empty_password">비밀번호를 입력해주세요</string>
     <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
     <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
+    <string name="error_lower_than_minimun_wage">ⓘ 최저 시급보다 낮은 금액이에요 </string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">다음</string>
@@ -103,6 +104,18 @@
     <string name="onboarding_business_setup_translation">통역/번역</string>
     <string name="onboarding_business_setup_learn">과외/학습 보조</string>
     <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
+
+    <!-- Calculator Screen -->
+    <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
+    <string name="calculator_wage_label">시급 입력</string>
+    <string name="calculator_work_time_label">일일 근무 시간</string>
+    <string name="calculator_weekly_work_time_label">일주 근무 시간</string>
+    <string name="calculator_wage_example">예) 10,030</string>
+    <string name="calculator_select_time">시간선택</string>
+    <string name="calculator_calculate_salary">계산하기</string>
+    <string name="calculator_2025">2025 기준</string>
+    <string name="calculator_won">원</string>
+
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">홈</string>
