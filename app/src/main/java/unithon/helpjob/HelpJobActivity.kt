@@ -53,7 +53,7 @@ fun HelpJobApp() {
         HelpJobNavGraph(
             navController = navController,
             navActions = navActions,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding(), top = innerPadding.calculateTopPadding())
         )
     }
 }

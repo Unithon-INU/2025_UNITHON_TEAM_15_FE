@@ -65,6 +65,7 @@
     <string name="error_short_password">Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
     <string name="error_authentication_required">Authentication required. Please log in again.</string>
+    <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
@@ -106,6 +107,17 @@
     <string name="onboarding_business_setup_translation">Interpretation / Translation</string>
     <string name="onboarding_business_setup_learn">Tutoring / Learning Assistant</string>
     <string name="onboarding_business_setup_event">Event Staff / Promotional Support</string>
+
+    <!-- Calculator Screen -->
+    <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
+    <string name="calculator_wage_label">Enter hourly wage</string>
+    <string name="calculator_work_time_label">Daily work hours</string>
+    <string name="calculator_weekly_work_time_label">Weekly work hours</string>
+    <string name="calculator_wage_example">ex) 10,030</string>
+    <string name="calculator_select_time">Select time</string>
+    <string name="calculator_calculate_salary">Calculate</string>
+    <string name="calculator_2025">2025 Standard</string>
+    <string name="calculator_won">won</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
