@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,34 +17,34 @@ import javax.inject.Singleton
 
 @Singleton
 class LanguageRepository @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val appLocaleManager: AppLocaleManager
 ) {
 
-    private val languageKey = stringPreferencesKey("app_language")
-
-    suspend fun getLanguage(): AppLanguage {
-        return context.dataStore.data
-            .map { preferences ->
-                val savedCode = preferences[languageKey]
-                if (savedCode != null) {
-                    AppLanguage.fromCode(savedCode)
-                } else {
-                    throw NoSuchElementException("No saved language preference")
-                }
-            }
-            .firstOrNull() ?: throw NoSuchElementException("No saved language preference")
-    }
-
     suspend fun setLanguage(language: AppLanguage) {
-        context.dataStore.edit { preferences ->
-            preferences[languageKey] = language.code
+        Timber.d("🌐 언어 설정 시작: ${language.displayName} (${language.code})")
+
+        try {
+            appLocaleManager.changeLanguage(language.code)
+
+            Timber.d("✅ 언어 설정 완료: ${language.code}")
+        } catch (e: Exception) {
+            Timber.e(e, "❌ 언어 설정 실패: ${language.code}")
         }
-        applyLanguage(language)
     }
 
-    private fun applyLanguage(language: AppLanguage) {
-        AppCompatDelegate.setApplicationLocales(
-            LocaleListCompat.forLanguageTags(language.code)
-        )
+    fun getCurrentLanguage(): AppLanguage {
+        return appLocaleManager.getCurrentLanguage()
     }
+
+//    private fun applyLanguage(language: AppLanguage) {
+//        try {
+//            AppCompatDelegate.setApplicationLocales(
+//                LocaleListCompat.forLanguageTags(language.code)
+//            )
+//            Timber.d("언어 적용 성공: ${language.code}")
+//        } catch (e: Exception) {
+//            Timber.e(e, "언어 적용 실패: ${language.code}")
+//        }
+//    }
 }

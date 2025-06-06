@@ -64,10 +64,13 @@
     <string name="error_empty_password">비밀번호를 입력해주세요</string>
     <string name="error_short_password">비밀번호는 6자 이상이어야 합니다</string>
     <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
+    <string name="error_authentication_required">인증이 필요합니다. 다시 로그인해주세요.</string>
     <string name="error_lower_than_minimun_wage">ⓘ 최저 시급보다 낮은 금액이에요 </string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">다음</string>
+    <string name="onboarding_done_button">완료</string>
+    <string name="onboarding_error_message">온보딩 설정에 실패했습니다</string>
 
     <!-- Onboarding Screen(Language) -->
     <string name="onboarding_language_setup_title">OOO에서 사용할\n언어를 선택해 주세요</string>
@@ -82,18 +85,18 @@
     <string name="onboarding_agreement_setup_age_agreement">(필수) 만 14세 이상입니다.</string>
     <string name="onboarding_agreement_setup_more">더보기</string>
 
-    <!-- Onboarding Screen(korean level) -->
-    <string name="onboarding_korean_level_setup_title">유니톤님의 한국어 능력을\n선택해 주세요</string>
-    <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
-    <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
-    <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
-
     <!-- Onboarding Screen(visa) -->
     <string name="onboarding_visa_setup_title">유니톤님의 비자 종류를\n선택해 주세요</string>
     <string name="onboarding_visa_setup_d2_title">D-2</string>
     <string name="onboarding_visa_setup_d2_description">유학 비자</string>
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
+
+    <!-- Onboarding Screen(korean level) -->
+    <string name="onboarding_korean_level_setup_title">유니톤님의 한국어 능력을\n선택해 주세요</string>
+    <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
+    <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
+    <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
 
     <!-- Onboarding Screen(business) -->
     <string name="onboarding_business_setup_title">유니톤님이 희망하는\n업종은 무엇인가요?</string>
@@ -127,4 +130,6 @@
     <string name="back_button">뒤로</string>
     <string name="sign_up_top_bar_title">회원가입</string>
     <string name="nickname_setup_top_bar_title">닉네임 설정</string>
+    <string name="onboarding_top_bar_title">이용정보</string>
+
 </resources>

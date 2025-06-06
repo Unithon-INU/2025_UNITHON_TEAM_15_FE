@@ -35,7 +35,7 @@ import unithon.helpjob.ui.theme.Primary600
 @Composable
 fun SignInScreen(
     onNavigateToSignUp: () -> Unit,
-    onNavigateToMain: () -> Unit,
+    onNavigateToOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
@@ -44,7 +44,7 @@ fun SignInScreen(
     // 로그인 성공시 네비게이션
     LaunchedEffect(uiState.isSignInSuccessful) {
         if (uiState.isSignInSuccessful) {
-            onNavigateToMain()
+            onNavigateToOnboarding()
         }
     }
 
