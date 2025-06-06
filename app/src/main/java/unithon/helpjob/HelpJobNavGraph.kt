@@ -3,14 +3,18 @@ package unithon.helpjob
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
 import unithon.helpjob.ui.calculator.CalculatorScreen
+import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.TempScreen
+import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 
 @Composable
@@ -18,7 +22,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = BottomNavDestination.CALCULATE.route // 로그인 작업 위해
+    startDestination: String = BottomNavDestination.HOME.route // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
@@ -55,8 +59,26 @@ fun HelpJobNavGraph(
 
         // 메인 앱 플로우 (하단바 있음) - enum에서 경로 가져옴
         composable(route = BottomNavDestination.HOME.route) {
-            TempScreen(
-                onNavigateToSignIn = navActions::navigateToSignIn
+            HomeScreen(
+                onNavigateToStepDetail = {
+                    navActions.navigateToStepDetail(it)
+                }
+            )
+        }
+
+        composable(
+            route = HelpJobDestinations.STEP_DETAIL_ROUTE,
+            arguments = listOf(
+                navArgument("stepId") {
+                    type = NavType.IntType
+                    defaultValue = 1 // 기본값 설정
+                }
+            )
+        ) { backStackEntry ->
+            val stepId = backStackEntry.arguments?.getInt("stepId") ?: 1
+            StepDetailScreen(
+                stepId = stepId,
+                onBackClick = {navController.popBackStack()}
             )
         }
 
