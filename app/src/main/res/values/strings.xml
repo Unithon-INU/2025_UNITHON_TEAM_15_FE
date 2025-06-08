@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HelpJob</string>
+    <string name="app_name">CHECKMATE</string>
 
     <!-- SignIn Screen -->
     <string name="sign_in_welcome_title">Welcome!\n%s will help you</string>
