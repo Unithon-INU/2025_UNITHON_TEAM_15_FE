@@ -14,6 +14,7 @@ object HelpJobScreens {
     const val ONBOARDING_SCREEN = "onboarding"
     const val MAIN_SCREEN = "main"
     const val CALCULATOR = "calculator"
+    const val STEP_DETAIL_SCREEN = "step_detail"
 }
 
 /**
@@ -35,6 +36,7 @@ object HelpJobDestinations {
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
     const val MAIN_ROUTE = HelpJobScreens.MAIN_SCREEN
     const val CALCULATOR = HelpJobScreens.CALCULATOR
+    const val STEP_DETAIL_ROUTE = "step_detail/{stepId}"
 }
 
 /**
@@ -133,5 +135,9 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         navController.navigate(HelpJobDestinations.CALCULATOR) {
             popUpTo(navController.graph.startDestinationId) { inclusive = true }
         }
+    }
+
+    fun navigateToStepDetail(stepId: Int) {
+        navController.navigate("step_detail/$stepId")
     }
 }
