@@ -22,7 +22,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = BottomNavDestination.HOME.route // 로그인 작업 위해
+    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
