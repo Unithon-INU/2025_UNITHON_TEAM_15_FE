@@ -1,6 +1,7 @@
-// data/model/Industry.kt
+// data/model/Business.kt
 package unithon.helpjob.data.model
 
+import android.content.Context
 import androidx.annotation.StringRes
 import unithon.helpjob.R
 
@@ -42,9 +43,23 @@ enum class Business(
         apiValue = "행사/이벤트스태프"
     );
 
+    /**
+     * Context로 현재 언어에 맞는 표시 이름 반환
+     */
+    fun getDisplayName(context: Context): String {
+        return context.getString(displayNameResId)
+    }
+
     companion object {
         /**
-         * UI에서 선택한 텍스트를 기반으로 Industry 찾기
+         * API 값(한글)을 기반으로 Business 찾기
+         */
+        fun fromApiValue(apiValue: String): Business? {
+            return entries.find { it.apiValue == apiValue }
+        }
+
+        /**
+         * UI에서 선택한 텍스트를 기반으로 Business 찾기
          */
         fun fromDisplayText(displayText: String): Business? {
             return when {
@@ -71,7 +86,7 @@ enum class Business(
         }
 
         /**
-         * 모든 Industry 목록을 API 값으로 변환
+         * 모든 Business 목록을 API 값으로 변환
          */
         fun toApiValues(businesses: List<Business>): String {
             return businesses.joinToString(",") { it.apiValue }
