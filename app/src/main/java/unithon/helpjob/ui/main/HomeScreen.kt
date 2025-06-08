@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,12 @@ import unithon.helpjob.ui.theme.Primary300
 import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Primary600
 import unithon.helpjob.util.noRippleClickable
+
+data class HomeInfoResponse(
+    val steps: List<Step>,
+    val nickname: String,
+    val progress: Float,
+)
 
 data class Step(
     val step: Int,

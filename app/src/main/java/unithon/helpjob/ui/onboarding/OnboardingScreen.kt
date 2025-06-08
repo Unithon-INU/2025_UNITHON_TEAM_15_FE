@@ -1,8 +1,5 @@
 package unithon.helpjob.ui.onboarding
 
-import android.os.Handler
-import android.os.Looper
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +15,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -44,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import unithon.helpjob.R
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
@@ -52,7 +46,6 @@ import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.onboarding.components.AgreementSection
 import unithon.helpjob.ui.onboarding.components.OnboardingButton
-import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Primary500

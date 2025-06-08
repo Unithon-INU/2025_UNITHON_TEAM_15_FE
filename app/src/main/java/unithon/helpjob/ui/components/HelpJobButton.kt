@@ -12,7 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.ui.theme.*
+import unithon.helpjob.ui.theme.Grey000
+import unithon.helpjob.ui.theme.Grey200
+import unithon.helpjob.ui.theme.Grey400
+import unithon.helpjob.ui.theme.Primary500
 
 @Composable
 fun HelpJobButton(

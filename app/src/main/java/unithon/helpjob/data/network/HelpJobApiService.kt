@@ -3,7 +3,12 @@ package unithon.helpjob.data.network
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
-import unithon.helpjob.data.model.request.*
+import unithon.helpjob.data.model.request.EmailSendReq
+import unithon.helpjob.data.model.request.EmailVerifyCodeReq
+import unithon.helpjob.data.model.request.MemberNicknameReq
+import unithon.helpjob.data.model.request.MemberProfileReq
+import unithon.helpjob.data.model.request.MemberSignInReq
+import unithon.helpjob.data.model.request.MemberSignUpReq
 import unithon.helpjob.data.model.response.TokenResponse
 
 interface HelpJobApiService {

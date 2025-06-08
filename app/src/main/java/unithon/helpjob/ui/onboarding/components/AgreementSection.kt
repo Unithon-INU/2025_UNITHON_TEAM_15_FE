@@ -1,7 +1,5 @@
 package unithon.helpjob.ui.onboarding.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,9 +23,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
-import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
-import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Primary500
 
 @Composable

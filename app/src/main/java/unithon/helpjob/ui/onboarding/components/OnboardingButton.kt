@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -28,9 +27,7 @@ import androidx.compose.ui.unit.dp
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.Primary100
 import unithon.helpjob.ui.theme.Primary300
-import unithon.helpjob.ui.theme.Primary500
 
 @Composable
 fun OnboardingButton(

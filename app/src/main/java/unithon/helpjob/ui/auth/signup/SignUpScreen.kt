@@ -1,14 +1,26 @@
 package unithon.helpjob.ui.auth.signup
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,7 +36,14 @@ import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.components.HelpJobTopAppBar
-import unithon.helpjob.ui.theme.*
+import unithon.helpjob.ui.theme.Grey000
+import unithon.helpjob.ui.theme.Grey200
+import unithon.helpjob.ui.theme.Grey400
+import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.PretendardFontFamily
+import unithon.helpjob.ui.theme.Primary500
+import unithon.helpjob.ui.theme.Warning
 
 @Composable
 fun SignUpScreen(

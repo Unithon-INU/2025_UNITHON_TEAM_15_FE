@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import unithon.helpjob.data.model.Business
-import unithon.helpjob.ui.onboarding.OnboardingViewModel.OnboardingUiState
 import javax.inject.Inject
 
 @HiltViewModel

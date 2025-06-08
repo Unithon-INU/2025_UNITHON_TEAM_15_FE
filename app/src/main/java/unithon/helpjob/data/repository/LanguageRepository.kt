@@ -1,13 +1,7 @@
 package unithon.helpjob.data.repository
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import javax.inject.Inject

@@ -17,9 +17,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.ui.theme.Grey000
-import unithon.helpjob.ui.theme.Grey300
-import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Primary600
 
 @Composable

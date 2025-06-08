@@ -2,7 +2,6 @@ package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -30,16 +29,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import unithon.helpjob.R
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey300
+import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Warning
-import androidx.compose.ui.unit.sp
-import unithon.helpjob.R
-import unithon.helpjob.ui.theme.*
 
 @Composable
 fun HelpJobTextField(

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,12 +31,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
-import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.components.HelpJobDropdown
+import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary200
 import unithon.helpjob.ui.theme.Primary400
-import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.util.CurrencyVisualTransformation
 
 @Composable
