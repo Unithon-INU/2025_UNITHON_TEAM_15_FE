@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -42,10 +43,11 @@ import unithon.helpjob.ui.theme.*
 
 @Composable
 fun HelpJobTextField(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier,
+    labelColor: Color = Grey500,
     placeholder: String = "",
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -69,7 +71,7 @@ fun HelpJobTextField(
             Text(
                 text = label,
                 style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
+                color = labelColor,
                 modifier = Modifier.padding(bottom = labelTextFieldSpace)
             )
         }
