@@ -12,6 +12,8 @@ import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
 import unithon.helpjob.ui.calculator.CalculatorScreen
+import unithon.helpjob.ui.document.DocumentScreen
+import unithon.helpjob.ui.main.Document
 import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.TempScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
@@ -88,8 +90,8 @@ fun HelpJobNavGraph(
         }
 
         composable(route = BottomNavDestination.CONTENT.route) {
-            TempScreen(
-                onNavigateToSignIn = navActions::navigateToSignIn
+            DocumentScreen(
+
             )
         }
 

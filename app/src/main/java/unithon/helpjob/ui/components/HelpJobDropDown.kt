@@ -59,6 +59,7 @@ fun <T> HelpJobDropdown(
     itemToString: (T) -> String,
     placeholder: String = "",
     labelTextFieldSpace: Dp = 8.dp,
+    trailingText: String? = null,
     isUpward: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -67,13 +68,17 @@ fun <T> HelpJobDropdown(
 
     Column(modifier = modifier) {
         // Label
-        Text(
-            text = label,
-            style = MaterialTheme.typography.titleSmall,
-            color = Grey500
-        )
 
-        Spacer(modifier = Modifier.height(labelTextFieldSpace))
+        if (label.isNotEmpty()){
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey500
+            )
+
+            Spacer(modifier = Modifier.height(labelTextFieldSpace))
+        }
+
 
         // Dropdown Box
         Box {
@@ -101,19 +106,32 @@ fun <T> HelpJobDropdown(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    // 📍 수정된 부분: 빈 문자열일 때도 placeholder 표시
+                    val displayText = selectedItem?.let { item ->
+                        val itemString = itemToString(item)
+                        if (itemString.isBlank()) placeholder else itemString
+                    } ?: placeholder
+
                     Text(
-                        text = selectedItem?.let(itemToString) ?: placeholder,
+                        text = displayText,
                         style = MaterialTheme.typography.titleSmall,
-                        color = Grey600,
+                        color = if (displayText == placeholder) Grey400 else Grey600, // placeholder일 때 다른 색상
                         modifier = Modifier.weight(1f)
                     )
-
-                    Icon(
-                        imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = Grey600,
-                        modifier = Modifier.size(24.dp)
-                    )
+                    if (trailingText != null){
+                        Text(
+                            text = trailingText,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Grey600
+                        )
+                    } else {
+                        Icon(
+                            imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            contentDescription = null,
+                            tint = Grey600,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
 
