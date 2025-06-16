@@ -139,6 +139,14 @@
 
     <!-- DocumentScreen(BasicInfo2) -->
     <string name="document_basic_info_2_semester_label">Completed Semesters</string>
+    <string name="semester_1_1">1st Year 1st Semester</string>
+    <string name="semester_1_2">1st Year 2nd Semester</string>
+    <string name="semester_2_1">2nd Year 1st Semester</string>
+    <string name="semester_2_2">2nd Year 2nd Semester</string>
+    <string name="semester_3_1">3rd Year 1st Semester</string>
+    <string name="semester_3_2">3rd Year 2nd Semester</string>
+    <string name="semester_4_1">4th Year 1st Semester</string>
+    <string name="semester_4_2">4th Year 2nd Semester</string>
     <string name="document_basic_info_2_semester_placeholder">Select</string>
     <string name="document_basic_info_2_phone_number_label">Phone Number</string>
     <string name="document_basic_info_2_phone_number_placeholder">e.g.) 010-1234-5678</string>
@@ -185,6 +193,13 @@
     <string name="document_workplace_info_4_work_start_time_placeholder">Select</string>
     <string name="document_workplace_info_4_work_end_time_label">End Time</string>
     <string name="document_workplace_info_4_work_end_time_placeholder">Select</string>
+    <string name="workday_monday">Mon</string>
+    <string name="workday_tuesday">Tue</string>
+    <string name="workday_wednesday">Wed</string>
+    <string name="workday_thursday">Thu</string>
+    <string name="workday_friday">Fri</string>
+    <string name="workday_saturday">Sat</string>
+    <string name="workday_sunday">Sun</string>
 
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">Almost done!\nIs your email address correct?</string>

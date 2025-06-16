@@ -17,10 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
@@ -35,8 +37,8 @@ fun WorkplaceInfo4Screen(
     modifier: Modifier = Modifier,
     step: Int,
     title: String,
-    workDayValue: List<String>,
-    onWorkDayValueChange: (String) -> Unit,
+    workDayValue: List<WorkDay>, // 🆕 WorkDay enum 리스트 사용
+    onWorkDayValueChange: (WorkDay) -> Unit, // 🆕 WorkDay enum 콜백
     workStartTimeValue: String,
     onWorkStartTimeValueChange: (String) -> Unit,
     workEndTimeValue: String,
@@ -44,6 +46,8 @@ fun WorkplaceInfo4Screen(
     enabled: Boolean,
     onNext: () -> Unit
 ){
+    val context = LocalContext.current
+
     DocumentInfoScreen(
         modifier = modifier,
         step = step,
@@ -51,12 +55,9 @@ fun WorkplaceInfo4Screen(
         enabled = enabled,
         onNext = onNext
     ) {
-        val day1List = listOf(
-            "월", "화", "수", "목"
-        )
-        val day2List = listOf(
-            "금", "토", "일", ""
-        )
+        // 🆕 WorkDay enum의 companion object 사용
+        val day1List = WorkDay.firstRowDays
+        val day2List = WorkDay.secondRowDays + null // 빈 공간을 위해 null 추가
 
         val timeList = (0..23).flatMap { hour ->
             listOf("00", "30").map { minute ->
@@ -73,81 +74,41 @@ fun WorkplaceInfo4Screen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
+                    // 첫 번째 줄 (월~목)
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        day1List.forEach { day ->
-                            Card(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .noRippleClickable {
-                                        onWorkDayValueChange(day)
-                                    },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = if (workDayValue.contains(day)) Primary300 else Grey200,
-                                    contentColor = if (workDayValue.contains(day)) Grey600 else Grey400,
-                                )
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(vertical = 13.dp),
-                                    horizontalArrangement = Arrangement.Center,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = day,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        modifier = Modifier
-                                    )
-                                }
-                            }
+                        day1List.forEach { workDay ->
+                            WorkDayCard(
+                                modifier = Modifier.weight(1f),
+                                workDay = workDay,
+                                isSelected = workDayValue.contains(workDay),
+                                onClick = { onWorkDayValueChange(workDay) },
+                                context = context
+                            )
                         }
                     }
                     Spacer(Modifier.height(9.dp))
+                    // 두 번째 줄 (금~일 + 빈 공간)
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        day2List.forEach { day ->
-                            Card(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .noRippleClickable {
-                                        onWorkDayValueChange(day)
-                                    },
-                                shape = RoundedCornerShape(10.dp),
-                                colors = CardDefaults.cardColors(
-                                    containerColor = if (day.isBlank()) {
-                                        Color.Transparent
-                                    } else {
-                                        if (workDayValue.contains(day)) Primary300  else Grey200
-                                    },
-                                    contentColor = if (workDayValue.contains(day)) Grey600 else Grey400,
+                        day2List.forEach { workDay ->
+                            if (workDay != null) {
+                                WorkDayCard(
+                                    modifier = Modifier.weight(1f),
+                                    workDay = workDay,
+                                    isSelected = workDayValue.contains(workDay),
+                                    onClick = { onWorkDayValueChange(workDay) },
+                                    context = context
                                 )
-                            ) {
-                                if (day.isNotBlank()){
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(vertical = 13.dp),
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            text = day,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            modifier = Modifier
-                                        )
-                                    }
-                                }
+                            } else {
+                                // 빈 공간
+                                Spacer(modifier = Modifier.weight(1f))
                             }
                         }
                     }
@@ -156,8 +117,7 @@ fun WorkplaceInfo4Screen(
 
             Spacer(Modifier.height(29.dp))
             HelpJobDropdown(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 label = stringResource(R.string.document_workplace_info_4_work_start_time_label),
                 selectedItem = workStartTimeValue,
                 items = timeList,
@@ -168,8 +128,7 @@ fun WorkplaceInfo4Screen(
             )
             Spacer(Modifier.height(29.dp))
             HelpJobDropdown(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 label = stringResource(R.string.document_workplace_info_4_work_end_time_label),
                 selectedItem = workEndTimeValue,
                 items = timeList,
@@ -182,21 +141,50 @@ fun WorkplaceInfo4Screen(
     }
 }
 
+// 🆕 재사용 가능한 WorkDay 카드 컴포넌트
+@Composable
+private fun WorkDayCard(
+    modifier: Modifier = Modifier,
+    workDay: WorkDay,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    context: android.content.Context
+) {
+    Card(
+        modifier = modifier.noRippleClickable { onClick() },
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected) Primary300 else Grey200,
+            contentColor = if (isSelected) Grey600 else Grey400,
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 13.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = workDay.getDisplayName(context), // 🆕 현재 언어에 맞는 요일 표시
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun WorkplaceInfo4Preview(
-
-){
+fun WorkplaceInfo4Preview(){
     HelpJobTheme {
         WorkplaceInfo4Screen (
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             step = 2,
             title = "취업 예정 근무처 정보를\n입력해주세요",
             enabled = false,
             onNext = {},
-            workDayValue = listOf(),
-            onWorkDayValueChange = {},
+            workDayValue = listOf(WorkDay.MONDAY, WorkDay.FRIDAY), // 🆕 enum 사용
+            onWorkDayValueChange = {}, // 🆕 enum 콜백
             workStartTimeValue = "",
             onWorkStartTimeValueChange = {},
             workEndTimeValue = "",
