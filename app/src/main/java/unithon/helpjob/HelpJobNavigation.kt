@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
  * Navigation 관련 화면들의 이름
  */
 object HelpJobScreens {
+    const val SPLASH_SCREEN = "splash"
     const val SIGN_IN_SCREEN = "sign_in"
     const val SIGN_UP_SCREEN = "sign_up"
     const val NICKNAME_SETUP_SCREEN = "nickname_setup"
@@ -31,6 +32,7 @@ object HelpJobScreens {
  * Destinations (라우트 정의)
  */
 object HelpJobDestinations {
+    const val SPLASH_ROUTE = HelpJobScreens.SPLASH_SCREEN
     const val SIGN_IN_ROUTE = HelpJobScreens.SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = HelpJobScreens.SIGN_UP_SCREEN
     const val NICKNAME_SETUP_ROUTE = HelpJobScreens.NICKNAME_SETUP_SCREEN
