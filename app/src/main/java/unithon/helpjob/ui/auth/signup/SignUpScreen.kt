@@ -73,7 +73,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(top = paddingValues.calculateTopPadding())
                 .padding(top = 19.dp, start = 20.dp, end = 20.dp),
         ) {
             // 제목
@@ -312,7 +312,9 @@ fun SignUpScreen(
                 onClick = viewModel::proceedToNickname,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
             )
         }
     }
