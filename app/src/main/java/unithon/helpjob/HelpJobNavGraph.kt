@@ -18,19 +18,24 @@ import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.TempScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
+import unithon.helpjob.ui.splash.SplashScreen
 
 @Composable
 fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE // 로그인 작업 위해
+    startDestination: String = HelpJobDestinations.SPLASH_ROUTE // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
+        composable(route = HelpJobDestinations.SPLASH_ROUTE) {
+            SplashScreen(navActions = navActions)
+        }
+
         // 인증 플로우 (하단바 없음)
         composable(route = HelpJobDestinations.SIGN_IN_ROUTE) {
             SignInScreen(
