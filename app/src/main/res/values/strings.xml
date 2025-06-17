@@ -2,8 +2,8 @@
     <string name="app_name">CHECKMATE</string>
 
     <!-- SignIn Screen -->
-    <string name="sign_in_welcome_title">Welcome!\n%s will help you</string>
-    <string name="sign_in_welcome_title_default">Welcome!\nPlease enter your account</string>
+    <string name="sign_in_welcome_main">Welcome!</string>
+    <string name="sign_in_welcome_sub">Please enter your account</string>
     <string name="sign_in_email_label">Email Address</string>
     <string name="sign_in_password_label">Password</string>
     <string name="sign_in_button">Login</string>

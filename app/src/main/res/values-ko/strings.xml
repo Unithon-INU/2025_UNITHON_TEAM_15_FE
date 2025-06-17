@@ -2,8 +2,8 @@
     <string name="app_name">CHECKMATE</string>
 
     <!-- SignIn Screen -->
-    <string name="sign_in_welcome_title">환영해요!\n%s이 도와드릴게요</string>
-    <string name="sign_in_welcome_title_default">환영해요!\nOOO이 도와드릴게요</string>
+    <string name="sign_in_welcome_main">환영해요!</string>
+    <string name="sign_in_welcome_sub">OOO이 도와드릴게요</string>
     <string name="sign_in_email_label">이메일</string>
     <string name="sign_in_password_label">비밀번호</string>
     <string name="sign_in_button">로그인</string>

@@ -54,10 +54,15 @@ fun SignInScreen(
             .padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        // 제목
         Text(
-            text = stringResource(id = R.string.sign_in_welcome_title_default),
-            style = MaterialTheme.typography.headlineLarge,
+            text = stringResource(id = R.string.sign_in_welcome_main),
+            style = MaterialTheme.typography.headlineLarge, // Headline1 - 24sp, Bold
+            color = Grey700
+        )
+
+        Text(
+            text = stringResource(id = R.string.sign_in_welcome_sub),
+            style = MaterialTheme.typography.headlineMedium, // Headline2 - 20sp, Bold
             color = Grey700
         )
 
