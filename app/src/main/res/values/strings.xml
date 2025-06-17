@@ -32,6 +32,9 @@
     <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
     <string name="sign_up_email_exists">ⓘ Email already in use</string>
+    <string name="signup_success_title">You\'re in!</string>
+    <string name="signup_success_subtitle">Are you ready to prepare together?</string>
+    <string name="signup_success_go_to_login">Go to Login</string>
 
     <!-- 🆕 Email Verification -->
     <string name="send_button">send</string>

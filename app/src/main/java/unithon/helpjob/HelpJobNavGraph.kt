@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
+import unithon.helpjob.ui.auth.signup.SignUpSuccessScreen
 import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.document.DocumentScreen
 import unithon.helpjob.ui.main.HomeScreen
@@ -23,7 +24,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = HelpJobDestinations.SIGN_IN_ROUTE // 로그인 작업 위해
+    startDestination: String = HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE // 로그인 작업 위해
 ) {
     NavHost(
         navController = navController,
@@ -47,8 +48,14 @@ fun HelpJobNavGraph(
 
         composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
             NicknameSetupScreen(
-                onNicknameSet = navActions::navigateToOnboarding,
+                onNicknameSet = navActions::navigateToSignUpSuccess,
                 onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
+            )
+        }
+
+        composable(route = HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE) {
+            SignUpSuccessScreen(
+                onGoToLogin = navActions::navigateToSignIn
             )
         }
 

@@ -32,6 +32,9 @@
     <string name="sign_up_next_button">다음</string>
     <string name="sign_up_failed">회원가입에 실패했습니다</string>
     <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
+    <string name="signup_success_title">가입 완료!</string>
+    <string name="signup_success_subtitle">함께 준비할 준비가 되셨나요?</string>
+    <string name="signup_success_go_to_login">로그인하러 가기</string>
 
     <!-- 🆕 이메일 인증 -->
     <string name="send_button">send</string>
