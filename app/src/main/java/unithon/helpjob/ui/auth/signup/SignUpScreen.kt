@@ -74,22 +74,13 @@ fun SignUpScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 20.dp),
+                .padding(top = 19.dp, start = 20.dp, end = 20.dp),
         ) {
             // 제목
             Text(
-                text = stringResource(id = R.string.sign_up_title),
+                text = stringResource(id = R.string.sign_up_subtitle),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // 부제목
-            Text(
-                text = stringResource(id = R.string.sign_up_subtitle),
-                style = MaterialTheme.typography.titleMedium,
-                color = Grey500
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -267,7 +258,7 @@ fun SignUpScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(46.dp))
+            Spacer(modifier = Modifier.height(15.dp))
 
             // 비밀번호 레이블
             Text(
