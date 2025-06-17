@@ -48,8 +48,8 @@
     <string name="error_empty_verification_code">인증번호를 입력해주세요</string>
 
     <!-- Nickname Setup Screen -->
-    <string name="nickname_setup_title">OOO 에서 사용할\n닉네임을 설정해주세요</string>
-    <string name="nickname_placeholder">닉네임을 입력해주세요</string>
+    <string name="nickname_setup_title">닉네임을\n입력해주세요</string>
+    <string name="nickname_placeholder">닉네임 입력</string>
     <string name="nickname_character_count">%1$d / 10</string>
     <string name="nickname_duplicate_error">ⓘ 이미 사용 중인 닉네임이에요.</string>
     <string name="nickname_complete_button">완료</string>
@@ -205,7 +205,7 @@
     <!-- Top App Bar -->
     <string name="back_button">뒤로</string>
     <string name="sign_up_top_bar_title">회원가입</string>
-    <string name="nickname_setup_top_bar_title">닉네임 설정</string>
+    <string name="nickname_setup_top_bar_title">회원가입</string>
     <string name="onboarding_top_bar_title">이용정보</string>
     <string name="document_top_bar_title">서류작성</string>
 

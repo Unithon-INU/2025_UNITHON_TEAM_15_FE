@@ -48,7 +48,7 @@
     <string name="error_empty_verification_code">Please enter verification code</string>
 
     <!-- Nickname Setup Screen -->
-    <string name="nickname_setup_title">Please set your nickname\nto use in HelpJob</string>
+    <string name="nickname_setup_title">Please enter\nyour nickname</string>
     <string name="nickname_placeholder">Enter nickname</string>
     <string name="nickname_character_count">%1$d / 10</string>
     <string name="nickname_duplicate_error">ⓘ This nickname is already in use.</string>
@@ -203,7 +203,7 @@
     <!-- Top App Bar -->
     <string name="back_button">Back</string>
     <string name="sign_up_top_bar_title">Sign Up</string>
-    <string name="nickname_setup_top_bar_title">Nickname</string>
+    <string name="nickname_setup_top_bar_title">Sign Up</string>
     <string name="onboarding_top_bar_title">Information</string>
     <string name="document_top_bar_title">Document</string>
 
