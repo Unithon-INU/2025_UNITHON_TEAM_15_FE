@@ -1,5 +1,6 @@
 package unithon.helpjob.data.repository
 
+import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TokenResponse
 
 interface AuthRepository {
@@ -14,10 +15,13 @@ interface AuthRepository {
     @Throws(UnauthorizedException::class)
     suspend fun setProfile(
         language: String,
-        languageLevel: String,
+        topikLevel: String,
         visaType: String,
         industry: String
     )
+
+    @Throws(UnauthorizedException::class)
+    suspend fun getMemberProfile(): MemberProfileGetRes
 
     // 🆕 이메일 인증 관련 메서드
     @Throws(EmailAlreadyInUseException::class)

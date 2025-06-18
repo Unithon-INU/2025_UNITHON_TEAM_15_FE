@@ -14,10 +14,11 @@ import timber.log.Timber
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
-import unithon.helpjob.data.model.request.MemberProfileReq
+import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
 import unithon.helpjob.data.model.response.ErrorResponse
+import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TokenResponse
 import unithon.helpjob.data.network.HelpJobApiService
 import javax.inject.Inject
@@ -95,14 +96,14 @@ class DefaultAuthRepository @Inject constructor(
 
     override suspend fun setProfile(
         language: String,
-        languageLevel: String,
+        topikLevel: String,
         visaType: String,
         industry: String
     ) {
 
-        Timber.d("MemberProfileReq ${MemberProfileReq(language, languageLevel, visaType, industry)}")
+        Timber.d("MemberProfileReq ${MemberProfileSetReq(language, topikLevel, visaType, industry)}")
         val response = apiService.setProfile(
-            MemberProfileReq(language, languageLevel, visaType, industry)
+            MemberProfileSetReq(language, topikLevel, visaType, industry)
         )
         if (response.isSuccessful) {
             return
@@ -113,6 +114,24 @@ class DefaultAuthRepository @Inject constructor(
                     val errorBody = response.errorBody()?.string()
                     throw Exception(errorBody ?: "프로필 설정 실패")
                 }
+            }
+        }
+    }
+
+    override suspend fun getMemberProfile(): MemberProfileGetRes {
+        val response = apiService.getMemberProfile()
+
+        if (response.isSuccessful) {
+            response.body()?.let { profileResponse ->
+                return profileResponse
+            }
+        }
+
+        when (response.code()) {
+            401 -> throw UnauthorizedException()
+            else -> {
+                val errorBody = response.errorBody()?.string()
+                throw Exception(errorBody ?: "프로필 조회 실패")
             }
         }
     }

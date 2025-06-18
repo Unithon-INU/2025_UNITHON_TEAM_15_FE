@@ -8,9 +8,11 @@ import androidx.navigation.NavHostController
  * Navigation 관련 화면들의 이름
  */
 object HelpJobScreens {
+    const val SPLASH_SCREEN = "splash"
     const val SIGN_IN_SCREEN = "sign_in"
     const val SIGN_UP_SCREEN = "sign_up"
     const val NICKNAME_SETUP_SCREEN = "nickname_setup"
+    const val SIGN_UP_SUCCESS_SCREEN  = "signup_success"
     const val ONBOARDING_SCREEN = "onboarding"
     const val MAIN_SCREEN = "main"
     const val CALCULATOR = "calculator"
@@ -30,9 +32,11 @@ object HelpJobScreens {
  * Destinations (라우트 정의)
  */
 object HelpJobDestinations {
+    const val SPLASH_ROUTE = HelpJobScreens.SPLASH_SCREEN
     const val SIGN_IN_ROUTE = HelpJobScreens.SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = HelpJobScreens.SIGN_UP_SCREEN
     const val NICKNAME_SETUP_ROUTE = HelpJobScreens.NICKNAME_SETUP_SCREEN
+    const val SIGN_UP_SUCCESS_ROUTE  = HelpJobScreens.SIGN_UP_SUCCESS_SCREEN
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
     const val MAIN_ROUTE = HelpJobScreens.MAIN_SCREEN
     const val CALCULATOR = HelpJobScreens.CALCULATOR
@@ -111,6 +115,12 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         }
     }
 
+    fun navigateToSignUpSuccess() {
+        navController.navigate(HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE) {
+            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+        }
+    }
+
     fun navigateToOnboarding() {
         navController.navigate(HelpJobDestinations.ONBOARDING_ROUTE) {
             popUpTo(HelpJobDestinations.NICKNAME_SETUP_ROUTE) { inclusive = true }
@@ -118,22 +128,30 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
     }
 
     /**
-     * 하단바 탭 네비게이션 - 통합된 함수로 중복 제거
-     * Now in Android의 navigateToTopLevelDestination 패턴 적용
+     * 스플래시에서 메인 앱으로 최초 진입
+     * - 스플래시 완전 제거 (inclusive = true)
+     */
+    fun navigateToMainFromSplash() {
+        navController.navigate(BottomNavDestination.HOME.route) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true  // 스플래시 완전 제거
+            }
+            launchSingleTop = true
+        }
+    }
+
+    /**
+     * 하단바 탭 네비게이션 (온보딩, 탭 간 이동용)
+     * - 홈을 백스택 베이스로 유지
+     * - 어떤 탭에서든 뒤로가기 → 홈으로 이동
      */
     fun navigateToBottomTab(destination: BottomNavDestination) {
         navController.navigate(destination.route) {
-            popUpTo(navController.graph.startDestinationId) {
+            popUpTo(BottomNavDestination.HOME.route) {
                 saveState = true
             }
             launchSingleTop = true
             restoreState = true
-        }
-    }
-
-    fun navigateToCalculator() {
-        navController.navigate(HelpJobDestinations.CALCULATOR) {
-            popUpTo(navController.graph.startDestinationId) { inclusive = true }
         }
     }
 

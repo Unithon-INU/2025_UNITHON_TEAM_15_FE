@@ -55,11 +55,9 @@ fun NicknameSetupScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp),
+                .padding(top = paddingValues.calculateTopPadding())
+                .padding(top = 19.dp, start = 20.dp, end = 20.dp),
         ) {
-            Spacer(modifier = Modifier.height(40.dp)) // 🆕 상단바가 있어서 간격 조정
-
             // 제목
             Text(
                 text = stringResource(id = R.string.nickname_setup_title),

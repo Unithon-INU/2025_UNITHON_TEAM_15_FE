@@ -2,8 +2,8 @@
     <string name="app_name">CHECKMATE</string>
 
     <!-- SignIn Screen -->
-    <string name="sign_in_welcome_title">Welcome!\n%s will help you</string>
-    <string name="sign_in_welcome_title_default">Welcome!\nPlease enter your account</string>
+    <string name="sign_in_welcome_main">Welcome!</string>
+    <string name="sign_in_welcome_sub">Please enter your account</string>
     <string name="sign_in_email_label">Email Address</string>
     <string name="sign_in_password_label">Password</string>
     <string name="sign_in_button">Login</string>
@@ -32,6 +32,9 @@
     <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
     <string name="sign_up_email_exists">ⓘ Email already in use</string>
+    <string name="signup_success_title">You\'re in!</string>
+    <string name="signup_success_subtitle">Are you ready to prepare together?</string>
+    <string name="signup_success_go_to_login">Go to Login</string>
 
     <!-- 🆕 Email Verification -->
     <string name="send_button">send</string>
@@ -48,7 +51,7 @@
     <string name="error_empty_verification_code">Please enter verification code</string>
 
     <!-- Nickname Setup Screen -->
-    <string name="nickname_setup_title">Please set your nickname\nto use in HelpJob</string>
+    <string name="nickname_setup_title">Please enter\nyour nickname</string>
     <string name="nickname_placeholder">Enter nickname</string>
     <string name="nickname_character_count">%1$d / 10</string>
     <string name="nickname_duplicate_error">ⓘ This nickname is already in use.</string>
@@ -203,7 +206,7 @@
     <!-- Top App Bar -->
     <string name="back_button">Back</string>
     <string name="sign_up_top_bar_title">Sign Up</string>
-    <string name="nickname_setup_top_bar_title">Nickname</string>
+    <string name="nickname_setup_top_bar_title">Sign Up</string>
     <string name="onboarding_top_bar_title">Information</string>
     <string name="document_top_bar_title">Document</string>
 
