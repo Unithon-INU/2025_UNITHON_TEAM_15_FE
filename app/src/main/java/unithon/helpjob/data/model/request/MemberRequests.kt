@@ -26,13 +26,13 @@ data class MemberNicknameReq(
 )
 
 @Serializable
-data class MemberProfileReq(
+data class MemberProfileSetReq(
     @SerialName("language")
     val language: String,
-    @SerialName("languageLevel")
-    val languageLevel: String,
     @SerialName("visaType")
     val visaType: String,
+    @SerialName("topikLevel")
+    val topikLevel: String,
     @SerialName("industry")
     val industry: String
 )

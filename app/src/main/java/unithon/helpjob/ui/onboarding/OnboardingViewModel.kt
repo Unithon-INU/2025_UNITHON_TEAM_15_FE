@@ -174,7 +174,7 @@ class OnboardingViewModel @Inject constructor(
             try {
                 authRepository.setProfile(
                     language = _uiState.value.language,
-                    languageLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
+                    topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
                     visaType = _uiState.value.visa,
                     industry = Business.toApiValues(_uiState.value.selectedBusinesses)
                 )
