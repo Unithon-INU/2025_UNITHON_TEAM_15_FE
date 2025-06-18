@@ -111,6 +111,9 @@
     <string name="onboarding_business_setup_learn">과외/학습 보조</string>
     <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
 
+    <!-- Home Screen -->
+    <string name="welcome_message">반가워요 %1$s님\n함께 목표를 달성해요!</string>
+
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
     <string name="calculator_wage_label">시급 입력</string>

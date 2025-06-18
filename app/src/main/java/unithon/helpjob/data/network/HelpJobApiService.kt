@@ -4,13 +4,18 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
+import unithon.helpjob.data.model.request.UpdateChecklistRequest
+import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.MemberProfileGetRes
+import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.TokenResponse
 
 interface HelpJobApiService {
@@ -48,4 +53,17 @@ interface HelpJobApiService {
     suspend fun verifyEmailCode(
         @Body request: EmailVerifyCodeReq
     ): Response<Unit>
+
+    @PUT(ApiConstants.UPDATE_CHECKLIST)
+    suspend fun updateChecklist(
+        @Body request: UpdateChecklistRequest
+    ): Response<Unit>
+
+    @GET(ApiConstants.GET_HOME_INFO)
+    suspend fun getHomeInfo() : Response<HomeInfoResponse>
+
+    @GET(ApiConstants.GET_TIPS)
+    suspend fun getTips(
+        @Query("checkStep") checkStep: String
+    ) : Response<List<TipResponseItem>>
 }

@@ -11,4 +11,7 @@ object ApiConstants {
     const val GET_PROFILE = "api/member/me/profile"
     const val EMAIL_SEND = "api/email/send"
     const val EMAIL_VERIFY = "api/email/verify"
+    const val UPDATE_CHECKLIST = "api/employment"
+    const val GET_HOME_INFO = "api/employment/home"
+    const val GET_TIPS = "api/employment/tips"
 }

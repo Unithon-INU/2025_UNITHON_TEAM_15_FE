@@ -53,13 +53,13 @@ fun DottedProgressBar(
     val density = LocalDensity.current
     val progressPercentage = (progress * 100).toInt()
 
-    Box(modifier = modifier.height(if (showPercentage && progress > 0) height + 40.dp else height)) {
+    Box(modifier = modifier.height(if (showPercentage) height + 40.dp else height)) {
         // 배경 진행바 (showPercentage가 true면 아래쪽에 위치)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(height)
-                .offset(y = if (showPercentage && progress > 0) 30.dp else 0.dp)
+                .offset(y = if (showPercentage) 30.dp else 0.dp)
                 .clip(RoundedCornerShape(cornerRadius))
                 .background(backgroundColor)
         ) {
@@ -78,7 +78,7 @@ fun DottedProgressBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(height)
-                    .offset(y = if (showPercentage && progress > 0) 30.dp else 0.dp)
+                    .offset(y = if (showPercentage) 30.dp else 0.dp)
             ) {
                 val barHeight = size.height
                 val barWidth = size.width
@@ -99,23 +99,39 @@ fun DottedProgressBar(
             }
         }
 
-        // 현재 진행률 끝 부분에 퍼센티지 물풍선 표시
-        if (showPercentage && progress > 0) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(progress) // 진행된 부분만큼만 차지
-                    .height(30.dp)
-            ) {
+        // 현재 진행률에 따른 퍼센티지 물풍선 표시
+        if (showPercentage) {
+            if (progress == 0f) {
+                // 0%일 때는 진행바 시작점에 위치
                 Box(
                     modifier = Modifier
-                        .align(Alignment.CenterEnd) // 오른쪽 끝에 배치
-                        .offset(x = 20.dp) // 물풍선 너비의 절반만큼 오른쪽으로 이동
+                        .height(30.dp)
+                        .offset(x = (-15).dp) // 물풍선이 진행바 시작점에 중앙 정렬되도록
                 ) {
                     PercentageBubble(
                         percentage = progressPercentage,
                         backgroundColor = percentageBubbleColor,
                         textColor = percentageTextColor
                     )
+                }
+            } else {
+                // 1% 이상일 때는 진행된 부분의 끝에 위치
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(progress) // 진행된 부분만큼만 차지
+                        .height(30.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd) // 오른쪽 끝에 배치
+                            .offset(x = 20.dp) // 물풍선 너비의 절반만큼 오른쪽으로 이동
+                    ) {
+                        PercentageBubble(
+                            percentage = progressPercentage,
+                            backgroundColor = percentageBubbleColor,
+                            textColor = percentageTextColor
+                        )
+                    }
                 }
             }
         }
@@ -203,7 +219,7 @@ fun DottedProgressBarPreview() {
                 color = Grey600
             )
             DottedProgressBar(
-                progress = 0.45f,
+                progress = 1f,
                 modifier = Modifier.fillMaxWidth(),
                 showPercentage = true
             )
@@ -215,7 +231,7 @@ fun DottedProgressBarPreview() {
                 color = Grey600
             )
             DottedProgressBar(
-                progress = 0.3f,
+                progress = 0f,
                 modifier = Modifier.fillMaxWidth(),
                 showTicks = true
             )

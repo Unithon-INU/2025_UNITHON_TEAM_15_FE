@@ -28,10 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
+import unithon.helpjob.data.model.request.Steps
+import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.ui.components.DottedProgressBar
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.theme.Grey300
@@ -43,40 +46,11 @@ import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Primary600
 import unithon.helpjob.util.noRippleClickable
 
-data class HomeInfoResponse(
-    val steps: List<Step>,
-    val nickname: String,
-    val progress: Float,
-)
 
-data class Step(
-    val step: Int,
-    val title: String,
-    val subTitle: String,
-    val submissionDocument: List<Document>,
-    val precautions: List<String>,
-    val tips: List<Tip>
-)
-
-data class Document(
-    val title: String,
-    val isSuccess: Boolean
-)
-
-data class Tip(
-    val title: String,
-    val content: List<TipDetail>
-)
-
-data class TipDetail(
-    val title: String,
-    val content: String?,
-    val warning: String?
-)
 
 @Composable
 fun HomeScreen(
-    onNavigateToStepDetail: (Int) -> Unit, // 🔄 stepId를 받도록 변경
+    onNavigateToStepDetail: () -> Unit, // 🔄 stepId를 받도록 변경
     viewmodel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
@@ -102,7 +76,7 @@ fun HomeScreen(
 
             // 환영인사
             Text(
-                text = "반가워요 유니톤님\n함께 목표를 달성해요!",
+                text = stringResource(R.string.welcome_message, uiState.nickname),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Grey600
             )
@@ -113,7 +87,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 DottedProgressBar(
-                    progress = 0.7f,
+                    progress = uiState.progressPercentage,
                     modifier = Modifier.fillMaxWidth(),
                     showTicks = true,
                     showPercentage = true
@@ -129,10 +103,12 @@ fun HomeScreen(
                 pageSpacing = 0.dp
             ) { page ->
                 StepCard(
-                    step = uiState.steps[page],
+                    step = Steps.valueOf(uiState.steps[page].checkStep).uiStep ,
+                    title = uiState.steps[page].stepInfoRes.title,
+                    subTitle = uiState.steps[page].stepInfoRes.subtitle,
                     onClick = {
-                        // 🔄 ViewModel에 저장하지 않고 바로 stepId 전달
-                        onNavigateToStepDetail(uiState.steps[page].step)
+                        viewmodel.selectStep(uiState.steps[page])
+                        onNavigateToStepDetail()
                     }
                 )
             }
@@ -195,7 +171,7 @@ fun HomeScreen(
 
                 if (uiState.selectedCategory == "제출 서류") {
                     // 제출 서류 목록 표시
-                    selectedStep.submissionDocument.forEach { document ->
+                    selectedStep.documentInfoRes.forEach { document ->
                         DocumentItem(
                             document = document,
                             onCheckedChange = {}
@@ -204,7 +180,7 @@ fun HomeScreen(
                     }
                 } else {
                     // 유의사항 목록 표시
-                    selectedStep.precautions.forEach { precaution ->
+                    selectedStep.stepInfoRes.precautions.forEach { precaution ->
                         PrecautionItem(
                             modifier = Modifier.fillMaxWidth(),
                             precaution = precaution
@@ -221,7 +197,9 @@ fun HomeScreen(
 
 @Composable
 fun StepCard(
-    step: Step,
+    step: String,
+    title: String,
+    subTitle: String,
     onClick: () -> Unit
 ) {
     Card(
@@ -258,20 +236,20 @@ fun StepCard(
                                 vertical = 7.dp,
                                 horizontal = 17.dp
                             ),
-                        text = "Step ${step.step}",
+                        text = step,
                         style = MaterialTheme.typography.bodyLarge,
                         color = Grey600
                     )
                 }
                 Spacer(Modifier.height(9.dp))
                 Text(
-                    text = step.title,
+                    text = title,
                     style = MaterialTheme.typography.headlineMedium,
                     color = Grey600
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    text = step.subTitle,
+                    text = subTitle,
                     style = MaterialTheme.typography.labelMedium,
                     color = Grey600
                 )
@@ -286,11 +264,11 @@ fun StepCard(
 }
 
 @Composable
-fun DocumentItem(document: Document, onCheckedChange: (Boolean) -> Unit) {
+fun DocumentItem(document: DocumentInfoRes, onCheckedChange: (Boolean) -> Unit) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = if (document.isSuccess) Primary300 else Primary100
+            containerColor = if (document.isChecked) Primary300 else Primary100
         )
     ) {
         Row(
@@ -303,7 +281,7 @@ fun DocumentItem(document: Document, onCheckedChange: (Boolean) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             HelpJobCheckbox(
-                checked = document.isSuccess,
+                checked = document.isChecked,
                 onCheckedChange = onCheckedChange
             )
             Spacer(Modifier.width(12.dp))
