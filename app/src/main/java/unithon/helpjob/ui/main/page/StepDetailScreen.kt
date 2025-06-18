@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.main.page
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,11 +44,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
+import unithon.helpjob.data.model.response.EmploymentCheckRes
+import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.main.HomeViewModel
-import unithon.helpjob.ui.main.Step
-import unithon.helpjob.ui.main.Tip
-import unithon.helpjob.ui.main.TipDetail
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
@@ -60,46 +60,44 @@ import unithon.helpjob.util.noRippleClickable
 
 @Composable
 fun StepDetailScreen(
-    stepId: Int, // 🆕 Navigation argument로 받은 stepId
     onBackClick: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // 🆕 stepId로 해당 Step 찾기
-    val selectedStep = remember(
-        stepId,
-        uiState.steps
-    ) {
-        viewModel.getStepById(stepId)
-    }
+    val selectedStep = uiState.selectedStep
+    val tips = uiState.tips
 
-    // 1. 데이터 로딩 중
-    if (uiState.steps.isEmpty()) {
-        LoadingScreen(onBackClick = onBackClick)
-        return
-    }
+    when {
+        // 1. 데이터 로딩 중 (steps가 비어있음)
+        uiState.steps.isEmpty() -> {
+            LoadingScreen(onBackClick = onBackClick)
+        }
 
-    // 2. 해당 stepId의 Step이 없는 경우
-    if (selectedStep == null) {
-        ErrorScreen(
-            message = "요청하신 단계를 찾을 수 없습니다.\n(Step ID: $stepId)",
-            onBackClick = onBackClick
-        )
-        return
-    }
+        // 2. selectedStep이 null인 경우 (잘못된 접근)
+        selectedStep == null -> {
+            ErrorScreen(
+                message = "요청하신 단계를 찾을 수 없습니다.",
+                onBackClick = onBackClick
+            )
+        }
 
-    // 3. 정상적인 경우 - 이 시점에서 selectedStep은 확실히 null이 아님
-    StepDetailContent(
-        step = selectedStep,
-        onBackClick = onBackClick
-    )
+        // 3. 정상적인 경우
+        else -> {
+            StepDetailContent(
+                step = selectedStep,
+                tips = tips,
+                onBackClick = onBackClick
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StepDetailContent(
-    step: Step,
+    step: EmploymentCheckRes,
+    tips: List<TipResponseItem>,
     onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -141,8 +139,8 @@ private fun StepDetailContent(
             Spacer(Modifier.height(24.dp))
 
             // Tips 섹션
-            if (step.tips.isNotEmpty()) {
-                TipsSection(tips = step.tips)
+            if (tips.isNotEmpty()) {
+                TipsSection(tips = tips)
             } else {
                 EmptyTipsSection()
             }
@@ -258,7 +256,7 @@ private fun ErrorScreen(
 }
 
 @Composable
-private fun TipsSection(tips: List<Tip>) {
+private fun TipsSection(tips: List<TipResponseItem>) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -336,7 +334,7 @@ private fun EmptyTipsSection() {
 }
 
 @Composable
-fun StepDetailCard(step: Step) {
+fun StepDetailCard(step: EmploymentCheckRes) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
@@ -363,20 +361,20 @@ fun StepDetailCard(step: Step) {
                         vertical = 7.dp,
                         horizontal = 17.dp
                     ),
-                    text = "Step ${step.step}",
+                    text = step.checkStep,
                     style = MaterialTheme.typography.bodyLarge,
                     color = Grey600
                 )
             }
             Spacer(Modifier.height(12.dp))
             Text(
-                text = step.title,
+                text = step.stepInfoRes.title,
                 style = MaterialTheme.typography.headlineMedium,
                 color = Grey600
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = step.subTitle,
+                text = step.stepInfoRes.subtitle,
                 style = MaterialTheme.typography.labelMedium,
                 color = Grey600
             )
@@ -387,7 +385,7 @@ fun StepDetailCard(step: Step) {
 @Composable
 fun ExpandableTipItem(
     number: Int,
-    tip: Tip
+    tip: TipResponseItem
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Column {
@@ -430,7 +428,7 @@ fun ExpandableTipItem(
             }
         }
         // 확장된 내용
-        if (isExpanded && tip.content.isNotEmpty()) {
+        if (isExpanded) {
             Spacer(Modifier.height(9.dp))
             Card(
                 shape = RoundedCornerShape(10.dp),
@@ -445,14 +443,10 @@ fun ExpandableTipItem(
                             vertical = 22.dp,
                         )
                 ) {
-                    tip.content.forEachIndexed { index, tipDetail ->
-                        if (tipDetail.title.isNotEmpty() || tipDetail.content?.isNotEmpty() == true) {
-                            TipDetailItem(modifier = Modifier.fillMaxWidth(),tipDetail = tipDetail)
-                            if (index != tip.content.size - 1){
-                                Spacer(Modifier.height(27.dp))
-                            }
-                        }
-                    }
+                    TipDetailItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        tipDetail = tip
+                    )
                 }
             }
         }
@@ -462,47 +456,91 @@ fun ExpandableTipItem(
 }
 
 @Composable
-fun TipDetailItem(modifier: Modifier = Modifier,tipDetail: TipDetail) {
+fun TipDetailItem(modifier: Modifier = Modifier, tipDetail: TipResponseItem) {
     Column(
         modifier = modifier
     ) {
-        if (tipDetail.title.isNotEmpty()) {
-            Row(
-                verticalAlignment = Alignment.Top
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.dot),
-                    contentDescription = "점",
-                    modifier = Modifier
-                        .padding(top = 5.dp )
-                )
-                Spacer(Modifier.width(5.dp))
-                Column {
-                    Text(
-                        text = "${tipDetail.title}",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Grey600
+        // itemTitle과 itemContent가 모두 비어있지 않은 경우
+        if (tipDetail.itemTitle.isNotEmpty() && tipDetail.itemContent.isNotEmpty()) {
+            // itemTitle과 itemContent를 매칭해서 표시
+            val maxItems = maxOf(tipDetail.itemTitle.size, tipDetail.itemContent.size)
+
+            for (i in 0 until maxItems) {
+                if (i > 0) {
+                    Spacer(Modifier.height(27.dp))
+                }
+
+                Row(
+                    verticalAlignment = Alignment.Top
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.dot),
+                        contentDescription = "점",
                     )
-                    tipDetail.content?.let { content ->
-                        if (content.isNotEmpty()) {
-                            Spacer(Modifier.height(9.dp))
+                    Spacer(Modifier.width(5.dp))
+                    Column {
+                        // itemTitle이 있는 경우 표시
+                        if (i < tipDetail.itemTitle.size && tipDetail.itemTitle[i].isNotEmpty()) {
                             Text(
-                                text = content,
+                                text = tipDetail.itemTitle[i],
+                                style = MaterialTheme.typography.titleSmall,
+                                color = Grey600
+                            )
+                            if (i < tipDetail.itemContent.size && tipDetail.itemContent[i].isNotEmpty()) {
+                                Spacer(Modifier.height(9.dp))
+                            }
+                        }
+
+                        // itemContent가 있는 경우 표시
+                        if (i < tipDetail.itemContent.size && tipDetail.itemContent[i].isNotEmpty()) {
+                            Text(
+                                text = tipDetail.itemContent[i],
                                 style = MaterialTheme.typography.titleSmall,
                                 color = Grey600
                             )
                         }
                     }
+                }
+            }
+        }
+        // itemTitle은 비어있고 itemContent만 있는 경우
+        else if (tipDetail.itemContent.isNotEmpty()) {
+            tipDetail.itemContent.forEachIndexed { index, content ->
+                if (index > 0) {
+                    Spacer(Modifier.height(16.dp))
+                }
 
-                    tipDetail.warning?.let { warning ->
-                        Spacer(Modifier.height(9.dp))
+                if (content.isNotEmpty()) {
+                    Row(
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.dot),
+                            contentDescription = "점",
+                            modifier = Modifier.padding(top = 5.dp)
+                        )
+                        Spacer(Modifier.width(5.dp))
                         Text(
-                            text = warning,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Warning
+                            text = content,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Grey600
                         )
                     }
                 }
+            }
+        }
+
+        // warning이 있는 경우 표시
+        tipDetail.warning?.let { warning ->
+            if (warning.isNotEmpty()) {
+                if (tipDetail.itemTitle.isNotEmpty() || tipDetail.itemContent.isNotEmpty()) {
+                    Spacer(Modifier.height(16.dp))
+                }
+                Text(
+                    text = warning,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Warning
+                )
             }
         }
     }
