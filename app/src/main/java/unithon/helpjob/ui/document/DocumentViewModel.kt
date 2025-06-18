@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import unithon.helpjob.data.model.Semester
+import unithon.helpjob.data.model.WorkDay
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +33,9 @@ class DocumentViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(major = input)
     }
 
-    fun updateSemester(input: String) {
-        _uiState.value = _uiState.value.copy(semester = input)
+    // Semester enum 사용
+    fun updateSemester(semester: Semester) {
+        _uiState.value = _uiState.value.copy(semester = semester)
     }
 
     fun updatePhoneNumber(input: String) {
@@ -110,7 +113,8 @@ class DocumentViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(workEndDay = numbersOnly)
     }
 
-    fun updateWorkDay(selectedDay: String) {
+    // 🆕 WorkDay enum 사용
+    fun updateWorkDay(selectedDay: WorkDay) {
         _uiState.update { currentState ->
             if (currentState.workDay.contains(selectedDay)) {
                 // 이미 있으면 제거
@@ -121,7 +125,6 @@ class DocumentViewModel @Inject constructor(
             }
         }
     }
-
 
     fun updateWorkStartTime(input: String) {
         _uiState.value = _uiState.value.copy(workStartTime = input)
@@ -140,7 +143,16 @@ class DocumentViewModel @Inject constructor(
     fun submitDocument() {
         // 서류 제출 로직
         if (_uiState.value.isAllValid) {
-            // 제출 처리
+            // 서버 전송 시 API 값 사용
+            val semesterApiValue = _uiState.value.semester?.apiValue ?: ""
+            val workDayApiValue = WorkDay.toApiValues(_uiState.value.workDay)
+
+            // TODO: 서버 API 호출
+            // MemberDocumentRequest(
+            //     semester = semesterApiValue,
+            //     workDays = workDayApiValue,
+            //     ...
+            // )
         }
     }
 
@@ -148,7 +160,7 @@ class DocumentViewModel @Inject constructor(
         val name: String = "",
         val foreignerNumber: String = "", // 숫자만 저장 (예: "1234567890123")
         val major: String = "",
-        val semester: String = "",
+        val semester: Semester? = null, // 🆕 Semester enum 사용
         val phoneNumber: String = "", // 숫자만 저장 (예: "01012345678")
         val emailAddress: String = "",
         val companyName: String = "",
@@ -164,7 +176,7 @@ class DocumentViewModel @Inject constructor(
         val workEndYear: String = "",
         val workEndMonth: String = "",
         val workEndDay: String = "",
-        val workDay: List<String> = emptyList(),
+        val workDay: List<WorkDay> = emptyList(), // 🆕 WorkDay enum 리스트 사용
         val workStartTime: String = "",
         val workEndTime: String = "",
     ) {
@@ -179,7 +191,7 @@ class DocumentViewModel @Inject constructor(
             get() = major.isNotBlank()
 
         val isSemesterValid: Boolean
-            get() = semester.isNotBlank()
+            get() = semester != null // 🆕 enum이 선택되었는지 확인
 
         val isPhoneNumberValid: Boolean
             get() = phoneNumber.matches(Regex("^010\\d{8}$")) // 010으로 시작하는 11자리
@@ -233,7 +245,7 @@ class DocumentViewModel @Inject constructor(
                     workEndDay.toIntOrNull()?.let { it in 1..31 } == true
 
         val isWorkDayValid: Boolean
-            get() = workDay.isNotEmpty()
+            get() = workDay.isNotEmpty() // 🆕 enum 리스트가 비어있지 않은지 확인
 
         val isWorkStartTimeValid: Boolean
             get() = workStartTime.isNotBlank()

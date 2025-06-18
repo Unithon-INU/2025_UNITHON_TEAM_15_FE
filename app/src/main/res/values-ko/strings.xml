@@ -142,6 +142,14 @@
 
     <!-- DocumentScreen(BasicInfo2) -->
     <string name="document_basic_info_2_semester_label">이수학기</string>
+    <string name="semester_1_1">1학년 1학기</string>
+    <string name="semester_1_2">1학년 2학기</string>
+    <string name="semester_2_1">2학년 1학기</string>
+    <string name="semester_2_2">2학년 2학기</string>
+    <string name="semester_3_1">3학년 1학기</string>
+    <string name="semester_3_2">3학년 2학기</string>
+    <string name="semester_4_1">4학년 1학기</string>
+    <string name="semester_4_2">4학년 2학기</string>
     <string name="document_basic_info_2_semester_placeholder">선택</string>
     <string name="document_basic_info_2_phone_number_label">전화번호</string>
     <string name="document_basic_info_2_phone_number_placeholder">예) 010-1234-5678</string>
@@ -188,6 +196,13 @@
     <string name="document_workplace_info_4_work_start_time_placeholder">선택</string>
     <string name="document_workplace_info_4_work_end_time_label">종료 시간</string>
     <string name="document_workplace_info_4_work_end_time_placeholder">선택</string>
+    <string name="workday_monday">월</string>
+    <string name="workday_tuesday">화</string>
+    <string name="workday_wednesday">수</string>
+    <string name="workday_thursday">목</string>
+    <string name="workday_friday">금</string>
+    <string name="workday_saturday">토</string>
+    <string name="workday_sunday">일</string>
 
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">마지막이에요!\n입력한 이메일 주소가 맞나요?</string>
