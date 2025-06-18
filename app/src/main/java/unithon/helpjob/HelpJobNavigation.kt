@@ -3,6 +3,7 @@ package unithon.helpjob
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.navigation.NavHostController
+import unithon.helpjob.HelpJobDestinations.STEP_DETAIL_ROUTE
 
 /**
  * Navigation 관련 화면들의 이름
@@ -40,7 +41,7 @@ object HelpJobDestinations {
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
     const val MAIN_ROUTE = HelpJobScreens.MAIN_SCREEN
     const val CALCULATOR = HelpJobScreens.CALCULATOR
-    const val STEP_DETAIL_ROUTE = "step_detail/{stepId}"
+    const val STEP_DETAIL_ROUTE = "step_detail"
 }
 
 /**
@@ -155,7 +156,7 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         }
     }
 
-    fun navigateToStepDetail(stepId: Int) {
-        navController.navigate("step_detail/$stepId")
+    fun navigateToStepDetail() {
+        navController.navigate(STEP_DETAIL_ROUTE)
     }
 }

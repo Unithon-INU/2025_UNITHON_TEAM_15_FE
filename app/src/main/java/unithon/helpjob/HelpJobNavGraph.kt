@@ -1,7 +1,9 @@
 package unithon.helpjob
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,6 +17,7 @@ import unithon.helpjob.ui.auth.signup.SignUpSuccessScreen
 import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.document.DocumentScreen
 import unithon.helpjob.ui.main.HomeScreen
+import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.main.TempScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
@@ -74,24 +77,24 @@ fun HelpJobNavGraph(
         composable(route = BottomNavDestination.HOME.route) {
             HomeScreen(
                 onNavigateToStepDetail = {
-                    navActions.navigateToStepDetail(it)
+                    navActions.navigateToStepDetail()
                 }
             )
         }
 
-        composable(
-            route = HelpJobDestinations.STEP_DETAIL_ROUTE,
-            arguments = listOf(
-                navArgument("stepId") {
-                    type = NavType.IntType
-                    defaultValue = 1 // 기본값 설정
-                }
-            )
-        ) { backStackEntry ->
-            val stepId = backStackEntry.arguments?.getInt("stepId") ?: 1
+        composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) { backStackEntry ->
+            // HOME 화면의 ViewModel을 가져와서 공유
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(BottomNavDestination.HOME.route)
+            }
+            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+
             StepDetailScreen(
-                stepId = stepId,
-                onBackClick = {navController.popBackStack()}
+                onBackClick = {
+                    homeViewModel.clearSelectedStep()
+                    navController.popBackStack()
+                },
+                viewModel = homeViewModel // 공유된 ViewModel 전달
             )
         }
 

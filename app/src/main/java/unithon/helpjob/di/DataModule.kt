@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.DefaultAuthRepository
+import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
+import unithon.helpjob.data.repository.EmploymentCheckRepository
 import javax.inject.Singleton
 
 @Module
@@ -17,4 +19,10 @@ abstract class DataModule {
     abstract fun bindAuthRepository(
         defaultAuthRepository: DefaultAuthRepository
     ): AuthRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindEmploymentCheckRepository(
+        defaultEmploymentCheckRepository: DefaultEmploymentCheckRepository
+    ): EmploymentCheckRepository
 }
