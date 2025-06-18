@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import unithon.helpjob.BottomNavDestination
 import unithon.helpjob.HelpJobNavigationActions
 import unithon.helpjob.R
 import unithon.helpjob.ui.theme.Primary500
@@ -28,7 +27,7 @@ fun SplashScreen(
         when (uiState.navigationTarget) {
             NavigationTarget.Login -> navActions.navigateToSignIn()
             NavigationTarget.Onboarding -> navActions.navigateToOnboarding()
-            NavigationTarget.Main -> navActions.navigateToBottomTab(BottomNavDestination.HOME)
+            NavigationTarget.Main -> navActions.navigateToMainFromSplash()
             null -> {} // 로딩 중
         }
     }

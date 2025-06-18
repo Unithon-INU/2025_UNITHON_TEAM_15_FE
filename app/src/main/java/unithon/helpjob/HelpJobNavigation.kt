@@ -128,22 +128,30 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
     }
 
     /**
-     * 하단바 탭 네비게이션 - 통합된 함수로 중복 제거
-     * Now in Android의 navigateToTopLevelDestination 패턴 적용
+     * 스플래시에서 메인 앱으로 최초 진입
+     * - 스플래시 완전 제거 (inclusive = true)
+     */
+    fun navigateToMainFromSplash() {
+        navController.navigate(BottomNavDestination.HOME.route) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true  // 스플래시 완전 제거
+            }
+            launchSingleTop = true
+        }
+    }
+
+    /**
+     * 하단바 탭 네비게이션 (온보딩, 탭 간 이동용)
+     * - 홈을 백스택 베이스로 유지
+     * - 어떤 탭에서든 뒤로가기 → 홈으로 이동
      */
     fun navigateToBottomTab(destination: BottomNavDestination) {
         navController.navigate(destination.route) {
-            popUpTo(navController.graph.startDestinationId) {
+            popUpTo(BottomNavDestination.HOME.route) {
                 saveState = true
             }
             launchSingleTop = true
             restoreState = true
-        }
-    }
-
-    fun navigateToCalculator() {
-        navController.navigate(HelpJobDestinations.CALCULATOR) {
-            popUpTo(navController.graph.startDestinationId) { inclusive = true }
         }
     }
 
