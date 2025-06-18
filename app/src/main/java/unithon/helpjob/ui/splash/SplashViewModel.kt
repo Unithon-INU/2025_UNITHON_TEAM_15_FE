@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.repository.AuthRepository
 import javax.inject.Inject
 
@@ -34,9 +35,19 @@ class SplashViewModel @Inject constructor(
 
                 when {
                     token == null -> NavigationTarget.Login
-                    // TODO: 온보딩 완료 여부 체크 로직 추가 필요
-                    // !hasCompletedOnboarding -> NavigationTarget.Onboarding
-                    else -> NavigationTarget.Main
+                    else -> {
+                        try {
+                            val profile = authRepository.getMemberProfile()
+                            if (isOnboardingCompleted(profile)) {
+                                NavigationTarget.Main
+                            } else {
+                                NavigationTarget.Onboarding
+                            }
+                        } catch (e: Exception) {
+                            // 네트워크 에러나 인증 에러의 경우 로그인으로
+                            NavigationTarget.Login
+                        }
+                    }
                 }
             }
 
@@ -46,6 +57,13 @@ class SplashViewModel @Inject constructor(
 
             _uiState.value = _uiState.value.copy(navigationTarget = target)
         }
+    }
+
+    private fun isOnboardingCompleted(profile: MemberProfileGetRes): Boolean {
+        return profile.language.isNotEmpty() &&
+                profile.visaType.isNotEmpty() &&
+                profile.topikLevel.isNotEmpty() &&
+                profile.industry.isNotEmpty()
     }
 }
 

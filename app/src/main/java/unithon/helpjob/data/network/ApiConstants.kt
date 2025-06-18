@@ -8,6 +8,7 @@ object ApiConstants {
     const val SIGN_UP = "api/member/sign-up"
     const val SET_NICKNAME = "api/member/me/nickname"
     const val SET_PROFILE = "api/member/me/profile"
+    const val GET_PROFILE = "api/member/me/profile"
     const val EMAIL_SEND = "api/email/send"
     const val EMAIL_VERIFY = "api/email/verify"
 }

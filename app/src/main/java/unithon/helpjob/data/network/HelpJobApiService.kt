@@ -2,6 +2,7 @@ package unithon.helpjob.data.network
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
@@ -9,6 +10,7 @@ import unithon.helpjob.data.model.request.MemberNicknameReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
+import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TokenResponse
 
 interface HelpJobApiService {
@@ -32,6 +34,9 @@ interface HelpJobApiService {
     suspend fun setProfile(
         @Body request: MemberProfileSetReq
     ): Response<TokenResponse>
+
+    @GET(ApiConstants.GET_PROFILE)
+    suspend fun getMemberProfile(): Response<MemberProfileGetRes>
 
     // 🆕 이메일 인증 관련 API
     @POST(ApiConstants.EMAIL_SEND)
