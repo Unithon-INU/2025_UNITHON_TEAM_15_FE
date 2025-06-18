@@ -70,6 +70,9 @@
     <string name="error_authentication_required">Authentication required. Please log in again.</string>
     <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
 
+    <!-- Home Screen -->
+    <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
+
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
     <string name="onboarding_done_button">Done</string>
