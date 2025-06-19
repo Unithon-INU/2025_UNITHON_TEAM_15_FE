@@ -27,7 +27,7 @@ fun SplashScreen(
         when (uiState.navigationTarget) {
             NavigationTarget.Login -> navActions.navigateToSignIn()
             NavigationTarget.Onboarding -> navActions.navigateToOnboarding()
-            NavigationTarget.Main -> navActions.navigateToMainFromSplash()
+            NavigationTarget.Main -> navActions.navigateToAppHome()
             null -> {} // 로딩 중
         }
     }

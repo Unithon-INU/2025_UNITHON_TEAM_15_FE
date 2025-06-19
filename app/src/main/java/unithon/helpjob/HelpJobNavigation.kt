@@ -129,13 +129,22 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
     }
 
     /**
-     * 스플래시에서 메인 앱으로 최초 진입
-     * - 스플래시 완전 제거 (inclusive = true)
+     * 🆕 메인 앱으로 진입 (백스택 전체 제거)
+     *
+     * 사용 상황:
+     * - 스플래시 화면에서 앱 최초 진입
+     * - 온보딩 완료 후 메인 앱 진입
+     * - 기타 초기화 완료 후 메인 앱 진입
+     *
+     * 효과:
+     * - 모든 이전 화면들을 백스택에서 완전 제거
+     * - 홈이 새로운 백스택의 루트가 됨
+     * - 뒤로가기 시 앱 종료
      */
-    fun navigateToMainFromSplash() {
+    fun navigateToAppHome() {
         navController.navigate(BottomNavDestination.HOME.route) {
-            popUpTo(navController.graph.startDestinationId) {
-                inclusive = true  // 스플래시 완전 제거
+            popUpTo(0) {
+                inclusive = true  // 모든 이전 화면 완전 제거
             }
             launchSingleTop = true
         }

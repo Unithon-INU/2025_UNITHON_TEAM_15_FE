@@ -27,8 +27,6 @@ data class EmploymentCheckRes(
 
 @Serializable
 data class DocumentInfoRes(
-    @SerialName("checked")
-    val checked: Boolean,
     @SerialName("isChecked")
     val isChecked: Boolean,
     @SerialName("submissionIdx")
