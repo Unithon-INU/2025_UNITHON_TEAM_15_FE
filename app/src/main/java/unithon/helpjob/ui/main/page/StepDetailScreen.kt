@@ -451,8 +451,6 @@ fun ExpandableTipItem(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -460,16 +458,14 @@ fun TipDetailItem(modifier: Modifier = Modifier, tipDetail: TipResponseItem) {
     Column(
         modifier = modifier
     ) {
-        // itemTitle과 itemContent가 모두 비어있지 않은 경우
-        if (tipDetail.itemTitle.isNotEmpty() && tipDetail.itemContent.isNotEmpty()) {
-            // itemTitle과 itemContent를 매칭해서 표시
-            val maxItems = maxOf(tipDetail.itemTitle.size, tipDetail.itemContent.size)
-
-            for (i in 0 until maxItems) {
-                if (i > 0) {
-                    Spacer(Modifier.height(27.dp))
+        // tipInfoDetailRes 리스트가 비어있지 않은 경우
+        if (tipDetail.tipInfoDetailRes.isNotEmpty()) {
+            tipDetail.tipInfoDetailRes.forEachIndexed { index, tipInfoDetail ->
+                if (index > 0) {
+                    Spacer(Modifier.height(16.dp))
                 }
 
+                // 각 tipInfoDetail 아이템 표시
                 Row(
                     verticalAlignment = Alignment.Top
                 ) {
@@ -480,68 +476,52 @@ fun TipDetailItem(modifier: Modifier = Modifier, tipDetail: TipResponseItem) {
                     Spacer(Modifier.width(5.dp))
                     Column {
                         // itemTitle이 있는 경우 표시
-                        if (i < tipDetail.itemTitle.size && tipDetail.itemTitle[i].isNotEmpty()) {
-                            Text(
-                                text = tipDetail.itemTitle[i],
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Grey600
-                            )
-                            if (i < tipDetail.itemContent.size && tipDetail.itemContent[i].isNotEmpty()) {
-                                Spacer(Modifier.height(9.dp))
+                        tipInfoDetail.itemTitle?.let { title ->
+                            if (title.isNotEmpty()) {
+                                Text(
+                                    text = title,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = Grey600
+                                )
+                                // itemContent도 있으면 간격 추가
+                                if (!tipInfoDetail.itemContent.isNullOrEmpty()) {
+                                    Spacer(Modifier.height(9.dp))
+                                }
                             }
                         }
 
                         // itemContent가 있는 경우 표시
-                        if (i < tipDetail.itemContent.size && tipDetail.itemContent[i].isNotEmpty()) {
-                            Text(
-                                text = tipDetail.itemContent[i],
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Grey600
-                            )
+                        tipInfoDetail.itemContent?.let { content ->
+                            if (content.isNotEmpty()) {
+                                Text(
+                                    text = content,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = Grey600
+                                )
+                            }
+                        }
+
+                        // warning이 있는 경우 표시
+                        tipInfoDetail.warning?.let { warning ->
+                            if (warning.isNotEmpty()) {
+                                Spacer(Modifier.height(9.dp))
+                                Text(
+                                    text = warning,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Warning
+                                )
+                            }
                         }
                     }
                 }
             }
-        }
-        // itemTitle은 비어있고 itemContent만 있는 경우
-        else if (tipDetail.itemContent.isNotEmpty()) {
-            tipDetail.itemContent.forEachIndexed { index, content ->
-                if (index > 0) {
-                    Spacer(Modifier.height(16.dp))
-                }
-
-                if (content.isNotEmpty()) {
-                    Row(
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.dot),
-                            contentDescription = "점",
-                            modifier = Modifier.padding(top = 5.dp)
-                        )
-                        Spacer(Modifier.width(5.dp))
-                        Text(
-                            text = content,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = Grey600
-                        )
-                    }
-                }
-            }
-        }
-
-        // warning이 있는 경우 표시
-        tipDetail.warning?.let { warning ->
-            if (warning.isNotEmpty()) {
-                if (tipDetail.itemTitle.isNotEmpty() || tipDetail.itemContent.isNotEmpty()) {
-                    Spacer(Modifier.height(16.dp))
-                }
-                Text(
-                    text = warning,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Warning
-                )
-            }
+        } else {
+            // tipInfoDetailRes가 비어있는 경우 안내 메시지
+            Text(
+                text = "이 항목에 대한 상세 정보가 아직 준비되지 않았습니다.",
+                style = MaterialTheme.typography.bodySmall,
+                color = Grey400
+            )
         }
     }
 }
