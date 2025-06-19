@@ -11,21 +11,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -50,7 +58,9 @@ fun DottedProgressBar(
     percentageBubbleColor: Color = Primary400,
     percentageTextColor: Color = Warning
 ) {
+    val bubbleWidth = remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+
     val progressPercentage = (progress * 100).toInt()
 
     Box(modifier = modifier.height(if (showPercentage) height + 40.dp else height)) {
@@ -118,13 +128,18 @@ fun DottedProgressBar(
                 // 1% 이상일 때는 진행된 부분의 끝에 위치
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(progress) // 진행된 부분만큼만 차지
+                        .fillMaxWidth() // progress 제거
                         .height(30.dp)
                 ) {
                     Box(
                         modifier = Modifier
-                            .align(Alignment.CenterEnd) // 오른쪽 끝에 배치
-                            .offset(x = 20.dp) // 물풍선 너비의 절반만큼 오른쪽으로 이동
+                            .wrapContentSize()
+                            .onSizeChanged { size ->
+                                bubbleWidth.value = with(density) { size.width.toDp() }
+                            }
+                            .offset(
+                                x = (LocalConfiguration.current.screenWidthDp.dp - 40.dp) * progress - (bubbleWidth.value / 2)
+                            )
                     ) {
                         PercentageBubble(
                             percentage = progressPercentage,
@@ -148,18 +163,20 @@ private fun PercentageBubble(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .wrapContentSize()
     ) {
         // 물풍선 몸체
         Card(
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(containerColor = backgroundColor),
+            modifier = Modifier
         ) {
             Text(
                 text = "${percentage}%",
                 style = MaterialTheme.typography.titleSmall.copy(
                 ),
                 color = textColor,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
+                modifier = Modifier.padding(horizontal = 7.dp, vertical = 2.5.dp),
             )
         }
 
@@ -206,7 +223,7 @@ fun DottedProgressBarPreview() {
                 color = Grey600
             )
             DottedProgressBar(
-                progress = 0.7f,
+                progress = 0.1f,
                 modifier = Modifier.fillMaxWidth(),
                 showTicks = true,
                 showPercentage = true
@@ -231,7 +248,7 @@ fun DottedProgressBarPreview() {
                 color = Grey600
             )
             DottedProgressBar(
-                progress = 0f,
+                progress = 0.1f,
                 modifier = Modifier.fillMaxWidth(),
                 showTicks = true
             )
