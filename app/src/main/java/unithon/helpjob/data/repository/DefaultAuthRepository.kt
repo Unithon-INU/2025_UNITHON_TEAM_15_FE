@@ -203,4 +203,17 @@ class DefaultAuthRepository @Inject constructor(
             preferences.remove(tokenKey)
         }
     }
+
+    // 🆕 온보딩 완료 여부 체크 구현
+    override suspend fun isOnboardingCompleted(): Boolean {
+        return try {
+            val profile = getMemberProfile()
+            profile.language.isNotEmpty() &&
+                    profile.visaType.isNotEmpty() &&
+                    profile.topikLevel.isNotEmpty() &&
+                    profile.industry.isNotEmpty()
+        } catch (e: Exception) {
+            false // 프로필 조회 실패 시 온보딩 미완료로 처리
+        }
+    }
 }

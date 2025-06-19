@@ -24,6 +24,7 @@ class SignInViewModel @Inject constructor(
         val password: String = "",
         val isLoading: Boolean = false,
         val isSignInSuccessful: Boolean = false,
+        val shouldGoToHome: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
         val emailErrorMessage: Int? = null,
@@ -110,14 +111,20 @@ class SignInViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             try {
+                // 로그인
                 authRepository.signIn(
                     email = currentState.email,
                     password = currentState.password
                 )
+
+                // 🆕 온보딩 완료 여부 체크
+                val isCompleted = authRepository.isOnboardingCompleted()
+
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        isSignInSuccessful = true
+                        isSignInSuccessful = !isCompleted, // 온보딩 미완료면 온보딩으로
+                        shouldGoToHome = isCompleted // 온보딩 완료면 홈으로
                     )
                 }
             } catch (e: EmailNotFoundException) {
