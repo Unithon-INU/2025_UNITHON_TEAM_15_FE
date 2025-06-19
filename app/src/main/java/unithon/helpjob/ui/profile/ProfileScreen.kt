@@ -1,4 +1,4 @@
-package unithon.helpjob.ui.main
+package unithon.helpjob.ui.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,13 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey700
 
 @Composable
-fun TempScreen(
-    onNavigateToSignIn: () -> Unit,
-    modifier: Modifier = Modifier
+fun ProfileScreen(
+    onLogout: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     Column(
         modifier = modifier
@@ -47,7 +49,10 @@ fun TempScreen(
         // 로그아웃 버튼
         HelpJobButton(
             text = "로그아웃",
-            onClick = { onNavigateToSignIn() },
+            onClick = {
+                viewModel.logout() // ViewModel에서 토큰 클리어
+                onLogout() // UI에서 네비게이션 처리
+            },
             modifier = Modifier.fillMaxWidth()
         )
     }

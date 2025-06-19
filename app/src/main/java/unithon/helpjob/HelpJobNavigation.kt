@@ -150,6 +150,13 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         }
     }
 
+    fun navigateToSignInAfterLogout() {
+        navController.navigate(HelpJobDestinations.SIGN_IN_ROUTE) {
+            popUpTo(0) { inclusive = true }
+            launchSingleTop = true
+        }
+    }
+
     /**
      * 하단바 탭 네비게이션 (온보딩, 탭 간 이동용)
      * - 홈을 백스택 베이스로 유지
