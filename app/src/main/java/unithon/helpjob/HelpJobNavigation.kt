@@ -143,7 +143,7 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
      */
     fun navigateToAppHome() {
         navController.navigate(BottomNavDestination.HOME.route) {
-            popUpTo(navController.graph.startDestinationId) {
+            popUpTo(0) {
                 inclusive = true  // 모든 이전 화면 완전 제거
             }
             launchSingleTop = true
