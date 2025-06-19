@@ -3,9 +3,11 @@
 
     <!-- SignIn Screen -->
     <string name="sign_in_welcome_main">환영해요!</string>
-    <string name="sign_in_welcome_sub">OOO이 도와드릴게요</string>
+    <string name="sign_in_welcome_sub">계정을 입력해주세요</string>
     <string name="sign_in_email_label">이메일</string>
+    <string name="sign_in_email_hint">이메일을 입력해주세요</string>
     <string name="sign_in_password_label">비밀번호</string>
+    <string name="sign_in_password_hint">비밀번호를 입력해주세요</string>
     <string name="sign_in_button">로그인</string>
     <string name="sign_in_or_divider">또는</string>
     <string name="sign_in_no_account">아직 회원이 아니신가요?</string>

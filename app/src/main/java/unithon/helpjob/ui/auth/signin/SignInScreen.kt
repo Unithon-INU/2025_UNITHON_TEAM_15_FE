@@ -89,6 +89,7 @@ fun SignInScreen(
             value = uiState.email,
             onValueChange = viewModel::updateEmail,
             label = "",
+            placeholder = stringResource(id = R.string.sign_in_email_hint),
             isError = uiState.emailError,
             errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
             modifier = Modifier.fillMaxWidth()
@@ -109,6 +110,7 @@ fun SignInScreen(
             value = uiState.password,
             onValueChange = viewModel::updatePassword,
             label = "",
+            placeholder = stringResource(id = R.string.sign_in_password_hint),
             isPassword = true,
             isError = uiState.passwordError,
             errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
