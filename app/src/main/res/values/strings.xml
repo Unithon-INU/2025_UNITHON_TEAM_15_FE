@@ -5,7 +5,9 @@
     <string name="sign_in_welcome_main">Welcome!</string>
     <string name="sign_in_welcome_sub">Please enter your account</string>
     <string name="sign_in_email_label">Email Address</string>
+    <string name="sign_in_email_hint">Enter Address</string>
     <string name="sign_in_password_label">Password</string>
+    <string name="sign_in_password_hint">Enter Password</string>
     <string name="sign_in_button">Login</string>
     <string name="sign_in_or_divider">or</string>
     <string name="sign_in_no_account">Are you not a member yet?</string>

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -88,7 +91,12 @@ fun SignInScreen(
         HelpJobTextField(
             value = uiState.email,
             onValueChange = viewModel::updateEmail,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             label = "",
+            placeholder = stringResource(id = R.string.sign_in_email_hint),
             isError = uiState.emailError,
             errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
             modifier = Modifier.fillMaxWidth()
@@ -109,6 +117,7 @@ fun SignInScreen(
             value = uiState.password,
             onValueChange = viewModel::updatePassword,
             label = "",
+            placeholder = stringResource(id = R.string.sign_in_password_hint),
             isPassword = true,
             isError = uiState.passwordError,
             errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
