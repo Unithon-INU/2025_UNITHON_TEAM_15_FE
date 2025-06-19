@@ -113,6 +113,12 @@
 
     <!-- Home Screen -->
     <string name="welcome_message">반가워요 %1$s님\n함께 목표를 달성해요!</string>
+    <string name="category_documents">제출 서류</string>
+    <string name="category_precautions">유의사항</string>
+    <string name="step_warning_dialog_title">잊으신 서류는 없나요?</string>
+    <string name="step_warning_dialog_message">전단계를 완료하지 않아도 진행할 수 있어요.\n이전 단계에서 잊으신 서류는 없는지 확인해주세요.</string>
+    <string name="step_warning_dialog_cancel">취소</string>
+    <string name="step_warning_dialog_continue">계속 진행</string>
 
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>

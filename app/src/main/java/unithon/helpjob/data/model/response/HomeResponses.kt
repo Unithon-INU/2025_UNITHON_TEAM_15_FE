@@ -4,6 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class UpdateEmploymentCheckResponse(
+    @SerialName("progress")
+    val progress: Int
+)
+
+@Serializable
 data class HomeInfoResponse(
     @SerialName("employmentCheckRes")
     val employmentCheckRes: List<EmploymentCheckRes>,
@@ -45,19 +51,23 @@ data class StepInfoRes(
     val title: String
 )
 
+@Serializable
+class TipResponse : ArrayList<TipResponseItem>()
 
 @Serializable
 data class TipResponseItem(
+    @SerialName("tipInfoDetailRes")
+    val tipInfoDetailRes: List<TipInfoDetailRes>,
     @SerialName("title")
-    val title: String,
-    @SerialName("itemTitle")
-    val itemTitle: List<String>,
-    @SerialName("itemContent")
-    val itemContent: List<String>,
-    @SerialName("warning")
-    val warning: String?
+    val title: String
 )
 
-// HomeResponses.kt에서 TipResponse 클래스 삭제
-// class TipResponse : ArrayList<TipResponseItem>() <- 이 줄 삭제
-
+@Serializable
+data class TipInfoDetailRes(
+    @SerialName("itemContent")
+    val itemContent: String? = null,
+    @SerialName("itemTitle")
+    val itemTitle: String? = null,
+    @SerialName("warning")
+    val warning: String? = null
+)

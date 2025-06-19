@@ -37,6 +37,7 @@ import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.ui.components.DottedProgressBar
 import unithon.helpjob.ui.components.HelpJobCheckbox
+import unithon.helpjob.ui.main.components.StepProgressWarningDialog
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary100
@@ -46,11 +47,9 @@ import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Primary600
 import unithon.helpjob.util.noRippleClickable
 
-
-
 @Composable
 fun HomeScreen(
-    onNavigateToStepDetail: () -> Unit, // 🔄 stepId를 받도록 변경
+    onNavigateToStepDetail: () -> Unit,
     viewmodel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
@@ -114,54 +113,22 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(28.dp))
 
-            // 카테고리 (제출 서류, 유의사항)
+            // 카테고리 (제출 서류, 유의사항) - stringResource 사용
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .noRippleClickable {
-                            viewmodel.selectCategory("제출 서류")
-                        },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "제출 서류",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = if (uiState.selectedCategory == "제출 서류") Primary600 else Grey300
-                    )
-                    Spacer(Modifier.height(11.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(2.dp)
-                            .background(color = if (uiState.selectedCategory == "제출 서류") Primary600 else Grey300)
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .noRippleClickable {
-                            viewmodel.selectCategory("유의사항")
-                        },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "유의사항",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = if (uiState.selectedCategory == "유의사항") Primary600 else Grey300
-                    )
-                    Spacer(Modifier.height(11.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(2.dp)
-                            .background(color = if (uiState.selectedCategory == "유의사항") Primary600 else Grey300)
-                    )
-                }
+                CategoryTab(
+                    text = stringResource(R.string.category_documents),
+                    isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
+                    onClick = { viewmodel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
+                    modifier = Modifier.weight(1f)
+                )
+                CategoryTab(
+                    text = stringResource(R.string.category_precautions),
+                    isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
+                    onClick = { viewmodel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
+                    modifier = Modifier.weight(1f)
+                )
             }
             Spacer(Modifier.height(31.dp))
 
@@ -169,29 +136,73 @@ fun HomeScreen(
             if (uiState.steps.isNotEmpty() && selectedStepIndex < uiState.steps.size) {
                 val selectedStep = uiState.steps[selectedStepIndex]
 
-                if (uiState.selectedCategory == "제출 서류") {
-                    // 제출 서류 목록 표시
-                    selectedStep.documentInfoRes.forEach { document ->
-                        DocumentItem(
-                            document = document,
-                            onCheckedChange = {}
-                        )
-                        Spacer(Modifier.height(9.dp))
+                when (uiState.selectedCategory) {
+                    HomeViewModel.Category.DOCUMENTS -> {
+                        // 제출 서류 목록 표시
+                        selectedStep.documentInfoRes.forEach { document ->
+                            DocumentItem(
+                                document = document,
+                                onCheckedChange = { isChecked ->
+                                    viewmodel.onDocumentCheckChanged(
+                                        document = document,
+                                        stepCheckStep = selectedStep.checkStep,
+                                        isChecked = isChecked
+                                    )
+                                }
+                            )
+                            Spacer(Modifier.height(9.dp))
+                        }
                     }
-                } else {
-                    // 유의사항 목록 표시
-                    selectedStep.stepInfoRes.precautions.forEach { precaution ->
-                        PrecautionItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            precaution = precaution
-                        )
-                        Spacer(Modifier.height(8.dp))
+                    HomeViewModel.Category.PRECAUTIONS -> {
+                        // 유의사항 목록 표시
+                        selectedStep.stepInfoRes.precautions.forEach { precaution ->
+                            PrecautionItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                precaution = precaution
+                            )
+                            Spacer(Modifier.height(8.dp))
+                        }
                     }
                 }
             }
 
             Spacer(Modifier.height(100.dp))
         }
+
+        // 경고 다이얼로그
+        if (uiState.showStepWarningDialog) {
+            StepProgressWarningDialog(
+                onDismiss = { viewmodel.dismissStepWarningDialog() },
+                onContinue = { viewmodel.continueWithCheck() }
+            )
+        }
+    }
+}
+
+@Composable
+fun CategoryTab(
+    text: String,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.noRippleClickable { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            color = if (isSelected) Primary600 else Grey300
+        )
+        Spacer(Modifier.height(11.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(2.dp)
+                .background(color = if (isSelected) Primary600 else Grey300)
+        )
     }
 }
 
@@ -256,7 +267,7 @@ fun StepCard(
             }
             Icon(
                 painter = painterResource(R.drawable.arrow_forward),
-                contentDescription = "",
+                contentDescription = null,
                 tint = Color.Unspecified
             )
         }
@@ -319,7 +330,7 @@ fun PrecautionItem(
             Icon(
                 painter = painterResource(R.drawable.exclamation_mark),
                 tint = Color.Unspecified,
-                contentDescription = "느낌표"
+                contentDescription = null
             )
             Spacer(Modifier.width(10.dp))
             Text(

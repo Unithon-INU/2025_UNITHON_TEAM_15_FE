@@ -12,11 +12,12 @@ import unithon.helpjob.data.model.request.MemberNicknameReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
-import unithon.helpjob.data.model.request.UpdateChecklistRequest
+import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.TokenResponse
+import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 
 interface HelpJobApiService {
 
@@ -56,8 +57,8 @@ interface HelpJobApiService {
 
     @PUT(ApiConstants.UPDATE_CHECKLIST)
     suspend fun updateChecklist(
-        @Body request: UpdateChecklistRequest
-    ): Response<Unit>
+        @Body request: UpdateEmploymentCheckRequest
+    ): Response<UpdateEmploymentCheckResponse>
 
     @GET(ApiConstants.GET_HOME_INFO)
     suspend fun getHomeInfo() : Response<HomeInfoResponse>

@@ -72,6 +72,12 @@
 
     <!-- Home Screen -->
     <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
+    <string name="category_documents">Required Documents</string>
+    <string name="category_precautions">Precautions</string>
+    <string name="step_warning_dialog_title">Are there any documents\nyou forgot?</string>
+    <string name="step_warning_dialog_message">You can proceed without\ncompleting the previous step.\nPlease check if there are any documents you forgot in the previous step.</string>
+    <string name="step_warning_dialog_cancel">Cancel</string>
+    <string name="step_warning_dialog_continue">Continue</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
