@@ -34,4 +34,7 @@ interface AuthRepository {
     suspend fun saveToken(token: String)
     suspend fun getToken(): String?
     suspend fun clearToken()
+
+    // 🆕 온보딩 완료 여부 체크
+    suspend fun isOnboardingCompleted(): Boolean
 }

@@ -5,11 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
@@ -18,7 +16,7 @@ import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.document.DocumentScreen
 import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.HomeViewModel
-import unithon.helpjob.ui.main.TempScreen
+import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 import unithon.helpjob.ui.splash.SplashScreen
@@ -43,7 +41,8 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.SIGN_IN_ROUTE) {
             SignInScreen(
                 onNavigateToSignUp = navActions::navigateToSignUp,
-                onNavigateToOnboarding = { navActions.navigateToOnboarding() }
+                onNavigateToOnboarding = navActions::navigateToOnboarding,
+                onNavigateToHome = navActions::navigateToAppHome
             )
         }
 
@@ -110,8 +109,8 @@ fun HelpJobNavGraph(
         }
 
         composable(route = BottomNavDestination.PROFILE.route) {
-            TempScreen(
-                onNavigateToSignIn = navActions::navigateToSignIn
+            ProfileScreen(
+                onLogout = navActions::navigateToSignInAfterLogout
             )
         }
     }

@@ -36,6 +36,7 @@ import unithon.helpjob.ui.theme.Primary600
 fun SignInScreen(
     onNavigateToSignUp: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
+    onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
@@ -45,6 +46,13 @@ fun SignInScreen(
     LaunchedEffect(uiState.isSignInSuccessful) {
         if (uiState.isSignInSuccessful) {
             onNavigateToOnboarding()
+        }
+    }
+
+    // 🆕 홈으로 네비게이션
+    LaunchedEffect(uiState.shouldGoToHome) {
+        if (uiState.shouldGoToHome) {
+            onNavigateToHome()
         }
     }
 

@@ -36,16 +36,10 @@ class SplashViewModel @Inject constructor(
                 when {
                     token == null -> NavigationTarget.Login
                     else -> {
-                        try {
-                            val profile = authRepository.getMemberProfile()
-                            if (isOnboardingCompleted(profile)) {
-                                NavigationTarget.Main
-                            } else {
-                                NavigationTarget.Onboarding
-                            }
-                        } catch (e: Exception) {
-                            // 네트워크 에러나 인증 에러의 경우 로그인으로
-                            NavigationTarget.Login
+                        if (authRepository.isOnboardingCompleted()) {
+                            NavigationTarget.Main
+                        } else {
+                            NavigationTarget.Onboarding
                         }
                     }
                 }
@@ -54,16 +48,8 @@ class SplashViewModel @Inject constructor(
             // 둘 다 완료되면 분기
             minSplashTime.await()
             val target = appStateCheck.await()
-
             _uiState.value = _uiState.value.copy(navigationTarget = target)
         }
-    }
-
-    private fun isOnboardingCompleted(profile: MemberProfileGetRes): Boolean {
-        return profile.language.isNotEmpty() &&
-                profile.visaType.isNotEmpty() &&
-                profile.topikLevel.isNotEmpty() &&
-                profile.industry.isNotEmpty()
     }
 }
 
