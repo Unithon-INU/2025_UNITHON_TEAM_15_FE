@@ -1,9 +1,10 @@
 package unithon.helpjob.data.repository
 
 import unithon.helpjob.data.model.request.Steps
-import unithon.helpjob.data.model.request.UpdateChecklistRequest
+import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.TipResponseItem
+import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 import unithon.helpjob.data.network.HelpJobApiService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,12 +13,15 @@ import javax.inject.Singleton
 class DefaultEmploymentCheckRepository @Inject constructor(
     private val apiService: HelpJobApiService,
 ): EmploymentCheckRepository {
-    override suspend fun updateChecklist(request: UpdateChecklistRequest): Unit {
+    override suspend fun updateChecklist(request: UpdateEmploymentCheckRequest): UpdateEmploymentCheckResponse {
         val response = apiService.updateChecklist(request)
 
         if (response.isSuccessful){
-            return
+            response.body()?.let { progress ->
+                return progress
+            }
         }
+        throw Exception(response.errorBody()?.string() ?: "체크리스트 업데이트 실패")
     }
 
     override suspend fun getHomeInfo(): HomeInfoResponse {
