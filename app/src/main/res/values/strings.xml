@@ -238,7 +238,7 @@
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_calculate">Calculator</string>
-    <string name="bottom_nav_content">Content</string>
+    <string name="bottom_nav_content">Document</string>
     <string name="bottom_nav_profile">Profile</string>
 
     <!-- Top App Bar -->
