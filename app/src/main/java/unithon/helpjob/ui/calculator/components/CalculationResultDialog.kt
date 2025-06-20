@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -74,9 +73,9 @@ fun CalculationResultDialog(
                     containerColor = Grey000
                 ),
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 39.dp)
                     .fillMaxWidth()
-                    .clickable { onDismiss() } // 전체 카드 클릭으로 닫기
+                    .clickable { onDismiss() }
             ) {
                 Column(
                     modifier = Modifier
@@ -84,7 +83,7 @@ fun CalculationResultDialog(
                         .padding(horizontal = 31.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(Modifier.height(23.dp))
+                    Spacer(Modifier.height(37.dp))
 
                     // 완료 이미지
                     Image(
@@ -93,93 +92,102 @@ fun CalculationResultDialog(
                         modifier = Modifier.size(97.dp)
                     )
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(24.dp))
 
                     // 근로시간 (양끝 정렬)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = stringResource(R.string.calculator_result_work_hours_label),
-                            style = MaterialTheme.typography.bodyLarge, // Body1
-                            color = Grey600 // 0xFF505050
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Grey600
                         )
-                        Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
                                 text = "${result.workHours}",
-                                style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp), // Headline2
-                                color = Grey700 // 0xFF1D1D1D
+                                style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp),
+                                color = Grey700
                             )
                             Text(
                                 text = " ${stringResource(R.string.calculator_result_hours_unit)}",
-                                style = MaterialTheme.typography.bodyLarge, // Body1
-                                color = Grey600 // 0xFF505050
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Grey600
                             )
                         }
                     }
 
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.height(13.dp))
 
-                    // 주휴수당 (양끝 정렬)
+                    // 주휴수당 (조건부 로직)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = stringResource(R.string.calculator_result_weekly_allowance_label),
-                            style = MaterialTheme.typography.bodyLarge, // Body1
-                            color = Grey600 // 0xFF505050
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Grey600
                         )
                         if (result.includesWeeklyAllowance) {
-                            Row {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Text(
                                     text = NumberFormat.getNumberInstance(Locale.KOREA).format(result.weeklyAllowanceHours),
-                                    style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp), // Headline2
-                                    color = Grey700 // 0xFF1D1D1D
+                                    style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp),
+                                    color = Grey700
                                 )
                                 Text(
                                     text = " ${stringResource(R.string.calculator_result_included)}",
-                                    style = MaterialTheme.typography.bodyLarge, // Body1
-                                    color = Grey600 // 0xFF505050
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = Grey600
                                 )
                             }
                         } else {
                             Text(
                                 text = stringResource(R.string.calculator_result_not_included),
-                                style = MaterialTheme.typography.bodyLarge, // Body1
-                                color = Grey600 // 0xFF505050
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Grey600
                             )
                         }
                     }
 
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(13.dp))
 
                     // 예상 월급 (양끝 정렬)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
                             text = stringResource(R.string.calculator_result_expected_salary_label),
-                            style = MaterialTheme.typography.bodyLarge, // Body1
-                            color = Grey600 // 0xFF505050
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Grey600
                         )
-                        Row {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
                                 text = NumberFormat.getNumberInstance(Locale.KOREA).format(result.totalAmount),
-                                style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp), // Headline2
-                                color = Grey700 // 0xFF1D1D1D
+                                style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp),
+                                color = Grey700
                             )
                             Text(
                                 text = " ${stringResource(R.string.calculator_result_won_unit)}",
-                                style = MaterialTheme.typography.bodyLarge, // Body1
-                                color = Grey600 // 0xFF505050
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = Grey600
                             )
                         }
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(13.dp))
 
                     // 주휴수당 조건 설명 (아이콘 + 텍스트)
                     Row(
@@ -191,12 +199,12 @@ fun CalculationResultDialog(
                                 painter = painterResource(R.drawable.calculate_check),
                                 contentDescription = null,
                                 tint = Blue500,
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(13.dp)
                             )
-                            Spacer(Modifier.width(6.dp))
+                            Spacer(Modifier.width(5.8.dp))
                             Text(
                                 text = stringResource(R.string.calculator_result_weekly_allowance_condition_met),
-                                style = MaterialTheme.typography.labelMedium, // Body4
+                                style = MaterialTheme.typography.labelMedium,
                                 color = Blue500
                             )
                         } else {
@@ -204,45 +212,49 @@ fun CalculationResultDialog(
                                 painter = painterResource(R.drawable.calculate_exclamation),
                                 contentDescription = null,
                                 tint = Warning,
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.height(15.dp)
                             )
-                            Spacer(Modifier.width(6.dp))
+                            Spacer(Modifier.width(5.dp))
                             Text(
                                 text = stringResource(R.string.calculator_result_weekly_allowance_condition_not_met),
-                                style = MaterialTheme.typography.labelMedium, // Body4
-                                color = Warning // 0xFFFF7F34
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Warning
                             )
                         }
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(38.dp))
 
                     // 면책 조항 (Grey100 박스)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(
-                                color = Grey100, // 0xFFF6F6F6
+                                color = Grey100,
                                 shape = RoundedCornerShape(size = 5.dp)
                             )
                             .padding(start = 25.dp, top = 15.dp, end = 25.dp, bottom = 15.dp)
                     ) {
                         Text(
                             text = stringResource(R.string.calculator_result_disclaimer),
-                            style = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center), // Body4
-                            color = Grey500, // 0xFF7C7C7C
+                            style = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center),
+                            color = Grey500,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
 
-                    Spacer(Modifier.height(19.dp))
+                    Spacer(Modifier.height(22.dp))
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF,
+    locale = "ko"
+)
 @Composable
 fun CalculationResultDialogWithWeeklyAllowancePreview() {
     HelpJobTheme {
@@ -258,7 +270,11 @@ fun CalculationResultDialogWithWeeklyAllowancePreview() {
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF,
+    locale = "ko"
+)
 @Composable
 fun CalculationResultDialogWithoutWeeklyAllowancePreview() {
     HelpJobTheme {

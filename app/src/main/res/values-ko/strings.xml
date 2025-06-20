@@ -141,7 +141,7 @@
     <string name="calculator_result_won_unit">원</string>
     <string name="calculator_result_included">포함</string>
     <string name="calculator_result_not_included">미포함</string>
-    <string name="calculator_result_weekly_allowance_condition_met">주휴수당 지급 조건을 만족시 근로기준법에 따라 지급됩니다</string>
+    <string name="calculator_result_weekly_allowance_condition_met">주휴수당 지급 조건인 15시간 근무에 해당</string>
     <string name="calculator_result_weekly_allowance_condition_not_met">주휴수당 지급 조건인 15시간 근무에 미달</string>
     <string name="calculator_result_disclaimer">복리후생비 및 시간외 근로수당 등은 \n반영되지 않은 금액이며 규정에 따라 \n주휴수당도 다르기 때문에 실제 \n주급/월급과는 차이가 있습니다.</string>
 
