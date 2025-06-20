@@ -133,6 +133,18 @@
     <string name="calculator_2025">2025 Standard</string>
     <string name="calculator_won">won</string>
 
+    <!-- Calculator Result Dialog -->
+    <string name="calculator_result_work_hours_label">Work Hours</string>
+    <string name="calculator_result_weekly_allowance_label">Weekly Allowance</string>
+    <string name="calculator_result_expected_salary_label">Expected Salary</string>
+    <string name="calculator_result_hours_unit">hours</string>
+    <string name="calculator_result_won_unit">KRW</string>
+    <string name="calculator_result_included">Included</string>
+    <string name="calculator_result_not_included">Not Included</string>
+    <string name="calculator_result_weekly_allowance_condition_met">Weekly allowance will be paid according to Labor Standards Act if conditions are met</string>
+    <string name="calculator_result_weekly_allowance_condition_not_met">Does not meet the 15-hour work requirement for weekly allowance</string>
+    <string name="calculator_result_disclaimer">This amount does not reflect welfare benefits, \novertimes pay, etc. Actual weekly/monthly \nsalary may differ as weekly allowance \nvaries according to regulations.</string>
+
     <!-- Document Screen(Onboarding) -->
     <string name="document_onboarding_next">Next</string>
     <string name="document_onboarding_title">CheckMate will help you \nwith easy and fast \ndocument creation!</string>

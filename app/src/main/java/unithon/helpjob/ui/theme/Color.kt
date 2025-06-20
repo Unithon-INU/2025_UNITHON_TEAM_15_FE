@@ -28,3 +28,5 @@ val Success = Color(0xFF04CFAB)
 val Warning = Color(0xFFFF7F34)
 
 val borderColor = Color(0xFFADADAD)
+
+val Blue500 = Color(0xFF5398FF)
