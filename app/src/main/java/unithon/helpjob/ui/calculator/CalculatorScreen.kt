@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
+import unithon.helpjob.ui.calculator.components.CalculationResultDialog
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.components.HelpJobTextField
@@ -138,6 +139,13 @@ fun CalculatorScreen(
                 viewModel.calculateSalary()
             },
             enabled = uiState.isWorkTimeInputValid && uiState.isWorkDayCountInputValid && uiState.isWageInputValid,
+        )
+    }
+
+    if (uiState.showResultDialog) {
+        CalculationResultDialog(
+            result = uiState.calculationResult,
+            onDismiss = { viewModel.dismissResultDialog() }
         )
     }
 }

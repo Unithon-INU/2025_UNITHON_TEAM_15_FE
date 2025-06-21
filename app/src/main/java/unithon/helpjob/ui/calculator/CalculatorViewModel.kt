@@ -1,12 +1,12 @@
 package unithon.helpjob.ui.calculator
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import unithon.helpjob.ui.calculator.components.CalculationResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +16,9 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         val wage: String = "",
         val selectedWorkTime: Float? = null, // 선택된 일일 근무시간 (시간 단위)
         val selectedWorkDayCount: Int? = null, // 선택된 주간 근무일수
-        val salary: String = ""
+        val salary: String = "",
+        val calculationResult: CalculationResult? = null,
+        val showResultDialog: Boolean = false
     ) {
         val isWageInputValid: Boolean
             get() = wage.isNotBlank() && wage.all { it.isDigit() }
@@ -68,13 +70,38 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         val workTime = _uiState.value.selectedWorkTime ?: 0f
         val workDayCount = _uiState.value.selectedWorkDayCount ?: 0
 
-        // 월급 계산: 시급 * 일일 근무시간 * 주간 근무일수
-        val monthlySalary = (wage * workTime * workDayCount).toInt()
+        val weeklyWorkHours = workTime * workDayCount
+        val includesWeeklyAllowance = weeklyWorkHours >= 15f
+
+
+        val (monthlySalary, weeklyAllowanceAmount) = if (includesWeeklyAllowance) {
+            // 15시간 이상: 실제 입력값 기반 계산
+            val weeklyAllowanceAmount = (workTime * wage).toInt() // 1일 평균 근무시간 × 시급
+            val basicMonthlySalary = (weeklyWorkHours * 4 * wage).toInt() // 기본 월급
+            val totalMonthlySalary = basicMonthlySalary + (weeklyAllowanceAmount * 4) // 주휴수당 4주분 추가
+
+            Pair(totalMonthlySalary, weeklyAllowanceAmount)
+        } else {
+            // 15시간 미만: 실제근무시간 × 4주
+            val salary = (wage * weeklyWorkHours * 4).toInt()
+            Pair(salary, 0)
+        }
+
+        // CalculationResult 객체 생성 (기존 구조 그대로 사용)
+        val calculationResult = CalculationResult(
+            workHours = weeklyWorkHours.toInt(),
+            weeklyAllowanceHours = weeklyAllowanceAmount, // 기존 필드명 유지, 금액 저장
+            totalAmount = monthlySalary,
+            includesWeeklyAllowance = includesWeeklyAllowance
+        )
 
         _uiState.update {
-            it.copy(salary = monthlySalary.toString())
+            it.copy(
+                salary = monthlySalary.toString(),
+                calculationResult = calculationResult,
+                showResultDialog = true
+            )
         }
-        Log.d("calculateSalary", "월급: $monthlySalary 원")
     }
 
     // 시간을 문자열로 변환하는 함수
@@ -91,5 +118,11 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     // 일수를 문자열로 변환하는 함수
     fun workDayToString(days: Int): String {
         return "${days}일"
+    }
+
+    fun dismissResultDialog() {
+        _uiState.update {
+            it.copy(showResultDialog = false)
+        }
     }
 }

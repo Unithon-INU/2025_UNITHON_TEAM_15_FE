@@ -133,6 +133,19 @@
     <string name="calculator_2025">2025 기준</string>
     <string name="calculator_won">원</string>
 
+    <!-- Calculator Result Dialog -->
+    <string name="calculator_result_work_hours_label">근로시간</string>
+    <string name="calculator_result_weekly_allowance_label">주휴수당</string>
+    <string name="calculator_result_expected_salary_label">예상 월급</string>
+    <string name="calculator_result_hours_unit">시간</string>
+    <string name="calculator_result_won_unit">원</string>
+    <string name="calculator_result_included">포함</string>
+    <string name="calculator_result_not_included">미포함</string>
+    <string name="calculator_result_weekly_allowance_condition_met">주휴수당 지급 조건인 15시간 근무에 해당</string>
+    <string name="calculator_result_weekly_allowance_condition_not_met">주휴수당 지급 조건인 15시간 근무에 미달</string>
+    <string name="calculator_result_disclaimer">복리후생비 및 시간외 근로수당 등은 \n반영되지 않은 금액이며 규정에 따라 \n주휴수당도 다르기 때문에 실제 \n주급/월급과는 차이가 있습니다.</string>
+
+
     <!-- Document Screen(Onboarding) -->
     <string name="document_onboarding_next">다음</string>
     <string name="document_onboarding_title">체크메이트가 \n쉽고 빠른 서류 작성을 \n도와드릴게요!</string>
