@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.calculator
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -74,22 +73,24 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         val weeklyWorkHours = workTime * workDayCount
         val includesWeeklyAllowance = weeklyWorkHours >= 15f
 
-        // 주휴수당 계산 로직
+
         val (monthlySalary, weeklyAllowanceAmount) = if (includesWeeklyAllowance) {
-            // 15시간 이상: 기본급(10시간×4주) + 주휴수당(10시간분)
-            val basicSalary = wage * 10 * 4
-            val allowance = wage * 10
-            Pair(basicSalary + allowance, allowance)
+            // 15시간 이상: 실제 입력값 기반 계산
+            val weeklyAllowanceAmount = (workTime * wage).toInt() // 1일 평균 근무시간 × 시급
+            val basicMonthlySalary = (weeklyWorkHours * 4 * wage).toInt() // 기본 월급
+            val totalMonthlySalary = basicMonthlySalary + (weeklyAllowanceAmount * 4) // 주휴수당 4주분 추가
+
+            Pair(totalMonthlySalary, weeklyAllowanceAmount)
         } else {
             // 15시간 미만: 실제근무시간 × 4주
             val salary = (wage * weeklyWorkHours * 4).toInt()
             Pair(salary, 0)
         }
 
-        // CalculationResult 객체 생성
+        // CalculationResult 객체 생성 (기존 구조 그대로 사용)
         val calculationResult = CalculationResult(
             workHours = weeklyWorkHours.toInt(),
-            weeklyAllowanceHours = weeklyAllowanceAmount,
+            weeklyAllowanceHours = weeklyAllowanceAmount, // 기존 필드명 유지, 금액 저장
             totalAmount = monthlySalary,
             includesWeeklyAllowance = includesWeeklyAllowance
         )
