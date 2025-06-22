@@ -9,12 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
-import unithon.helpjob.data.repository.EmploymentCheckRepository
 import javax.inject.Inject
 
 data class ProfileUiState(
-    val nickname: String? = null,
-    val email: String? = null,
     val visaType: String? = null,
     val topikLevel: String? = null,
     val industry: String? = null,
@@ -24,8 +21,7 @@ data class ProfileUiState(
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val employmentCheckRepository: EmploymentCheckRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
@@ -39,15 +35,9 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
-                // 1. 닉네임, 이메일 가져오기
-                val homeInfo = employmentCheckRepository.getHomeInfo()
-
-                // 2. 온보딩 정보 가져오기
                 val memberProfile = authRepository.getMemberProfile()
 
                 _uiState.value = _uiState.value.copy(
-                    nickname = homeInfo.nickname,
-//                    email = homeInfo.email,
                     visaType = memberProfile.visaType,
                     topikLevel = memberProfile.topikLevel,
                     industry = memberProfile.industry,
@@ -56,6 +46,10 @@ class ProfileViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 Timber.e(e, "프로필 로딩 실패")
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = null
+                )
             }
         }
     }

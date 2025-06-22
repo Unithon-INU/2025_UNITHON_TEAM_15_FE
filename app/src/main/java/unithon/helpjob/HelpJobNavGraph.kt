@@ -26,7 +26,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
-    startDestination: String = HelpJobDestinations.SPLASH_ROUTE // 로그인 작업 위해
+    startDestination: String = HelpJobDestinations.SPLASH_ROUTE
 ) {
     NavHost(
         navController = navController,
@@ -49,14 +49,14 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.SIGN_UP_ROUTE) {
             SignUpScreen(
                 onNavigateToNicknameSetup = navActions::navigateToNicknameSetup,
-                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
+                onBack = { navController.popBackStack() }
             )
         }
 
         composable(route = HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
             NicknameSetupScreen(
                 onNicknameSet = navActions::navigateToSignUpSuccess,
-                onBack = { navController.popBackStack() } // 🆕 뒤로가기 추가
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -72,7 +72,7 @@ fun HelpJobNavGraph(
             )
         }
 
-        // 메인 앱 플로우 (하단바 있음) - enum에서 경로 가져옴
+        // 메인 앱 플로우 (하단바 있음)
         composable(route = BottomNavDestination.HOME.route) {
             HomeScreen(
                 onNavigateToStepDetail = {
@@ -82,7 +82,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) { backStackEntry ->
-            // HOME 화면의 ViewModel을 가져와서 공유
+            // HOME 화면의 ViewModel을 가져와서 공유 (기존과 동일)
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry(BottomNavDestination.HOME.route)
             }
@@ -93,24 +93,39 @@ fun HelpJobNavGraph(
                     homeViewModel.clearSelectedStep()
                     navController.popBackStack()
                 },
-                viewModel = homeViewModel // 공유된 ViewModel 전달
+                viewModel = homeViewModel
             )
         }
 
         composable(route = BottomNavDestination.CALCULATE.route) {
-            CalculatorScreen(
-            )
+            CalculatorScreen()
         }
 
         composable(route = BottomNavDestination.CONTENT.route) {
-            DocumentScreen(
-
-            )
+            DocumentScreen()
         }
 
-        composable(route = BottomNavDestination.PROFILE.route) {
+        composable(route = BottomNavDestination.PROFILE.route) { backStackEntry ->
+            // HOME 화면의 ViewModel을 가져와서 공유 (StepDetailScreen과 동일한 패턴)
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(BottomNavDestination.HOME.route)
+            }
+            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+
             ProfileScreen(
-                onNavigateToSettings = navActions::navigateToSignInAfterLogout
+                onNavigateToSettings = navActions::navigateToSignInAfterLogout,
+                onNavigateToHomeWithStep = { stepId ->
+                    // 직접 HomeViewModel 조작 후 이동
+                    val targetStep = homeViewModel.uiState.value.steps.find { it.checkStep == stepId }
+                    targetStep?.let { step ->
+                        homeViewModel.selectStep(step)
+                    }
+                    navController.navigate(BottomNavDestination.HOME.route) {
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                homeViewModel = homeViewModel
             )
         }
     }

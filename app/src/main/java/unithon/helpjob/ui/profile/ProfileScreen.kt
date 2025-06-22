@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import unithon.helpjob.R
+import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
+import unithon.helpjob.ui.theme.Blue500
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
@@ -35,16 +39,30 @@ import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.PretendardFontFamily
+import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.headline2
 import unithon.helpjob.ui.theme.title2
 
+/**
+ * 누락된 서류 정보를 담는 데이터 클래스
+ */
+data class UncheckedDocument(
+    val stepTitle: String,
+    val documentTitle: String,
+    val checkStep: String,
+    val submissionIdx: Int
+)
+
 @Composable
 fun ProfileScreen(
     onNavigateToSettings: () -> Unit = {},
+    onNavigateToHomeWithStep: (String) -> Unit = {},
+    homeViewModel: HomeViewModel,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val homeUiState by homeViewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -59,11 +77,11 @@ fun ProfileScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .padding(top = 6.dp, start = 20.dp, end = 20.dp)
         ) {
-            // 인사말 - 22sp Bold 커스텀 스타일
+            // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
             Text(
                 text = stringResource(
                     id = R.string.profile_greeting,
-                    uiState.nickname ?: stringResource(R.string.profile_nickname_default)
+                    homeUiState.nickname.ifEmpty { stringResource(R.string.profile_nickname_default) }
                 ),
                 style = TextStyle(
                     fontSize = 22.sp,
@@ -76,13 +94,13 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 이메일 정보 Row - 양끝 정렬
+            // 이메일 정보 Row - 양끝 정렬 (기존과 동일)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = uiState.email ?: stringResource(R.string.profile_email_default),
+                    text = stringResource(R.string.profile_email_default),
                     style = MaterialTheme.typography.bodyLarge, // 15sp Bold
                     color = Grey500
                 )
@@ -96,6 +114,7 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(24.dp))
 
+            // 사용자 정보 카드 (기존과 동일)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -144,6 +163,7 @@ fun ProfileScreen(
 
             Spacer(Modifier.height(39.dp))
 
+            // 내 서류 관리 타이틀 (기존과 동일)
             Text(
                 text = stringResource(id = R.string.profile_documents_title),
                 style = MaterialTheme.typography.headline2, // 15sp Bold
@@ -151,10 +171,117 @@ fun ProfileScreen(
             )
             Spacer(Modifier.height(5.dp))
 
+            // 🆕 서류 관리 섹션만 추가
+            DocumentManagementSection(
+                homeUiState = homeUiState,
+                onDocumentClick = { document ->
+                    onNavigateToHomeWithStep(document.checkStep)
+                }
+            )
         }
     }
 }
 
+/**
+ * 🆕 서류 관리 섹션 컴포넌트
+ */
+@Composable
+private fun DocumentManagementSection(
+    homeUiState: HomeViewModel.HomeUiState,
+    onDocumentClick: (UncheckedDocument) -> Unit
+) {
+    // HomeUiState에서 실시간으로 누락된 서류 계산
+    val uncheckedDocuments = remember(homeUiState.steps) {
+        homeUiState.steps.flatMap { step ->
+            step.documentInfoRes
+                .filter { !it.isChecked }
+                .map { document ->
+                    UncheckedDocument(
+                        stepTitle = step.stepInfoRes.title,
+                        documentTitle = document.title,
+                        checkStep = step.checkStep,
+                        submissionIdx = document.submissionIdx
+                    )
+                }
+        }
+    }
+
+    Column {
+        if (uncheckedDocuments.isEmpty()) {
+            // 모든 서류 완료 시
+            Text(
+                text = stringResource(id = R.string.profile_documents_all_completed),
+                style = MaterialTheme.typography.body4,
+                color = Blue500
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            // 완료 상태 표시 박스
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Grey100, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.profile_documents_no_unchecked),
+                    style = MaterialTheme.typography.body4,
+                    color = Grey600
+                )
+            }
+        } else {
+            // 누락된 서류가 있는 경우
+            Text(
+                text = stringResource(
+                    id = R.string.profile_documents_unchecked_count,
+                    uncheckedDocuments.size
+                ),
+                style = MaterialTheme.typography.body4,
+                color = Warning
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            uncheckedDocuments.forEach { document ->
+                UncheckedDocumentItem(
+                    document = document,
+                    onClick = { onDocumentClick(document) }
+                )
+                Spacer(Modifier.height(4.dp))
+            }
+        }
+    }
+}
+
+/**
+ * 🆕 누락된 서류 아이템 컴포넌트
+ */
+@Composable
+private fun UncheckedDocumentItem(
+    document: UncheckedDocument,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .background(Grey100, RoundedCornerShape(8.dp))
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        Text(
+            text = stringResource(
+                id = R.string.profile_document_item_format,
+                document.stepTitle,
+                document.documentTitle
+            ),
+            style = MaterialTheme.typography.body4,
+            color = Grey600
+        )
+    }
+}
+
+// 기존 ProfileInfoColumn 컴포넌트 (완전히 동일)
 @Composable
 private fun ProfileInfoColumn(
     label: String,
