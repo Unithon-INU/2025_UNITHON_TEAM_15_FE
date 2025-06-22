@@ -239,13 +239,15 @@
 
     <!-- Profile Screen -->
     <string name="profile_greeting">안녕하세요 \n%1$s님</string>
+    <string name="profile_nickname_default">유니톤</string>
+    <string name="profile_email_default">temp@naver.com</string>
     <string name="profile_email_signup_type">이메일 가입</string>
     <string name="profile_visa_type">비자 종류</string>
-    <string name="profile_visa_default">D-2</string>
+    <string name="profile_visa_default">D-?</string>
     <string name="profile_korean_level">한국어 능력</string>
-    <string name="profile_korean_default">TOPIK 3급</string>
+    <string name="profile_korean_default">TOPIK ?급</string>
     <string name="profile_preferred_job">희망 업종</string>
-    <string name="profile_job_default">음식점/카페</string>
+    <string name="profile_job_default">임시</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">홈</string>

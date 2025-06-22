@@ -58,7 +58,7 @@ fun ProfileScreen(
             Text(
                 text = stringResource(
                     id = R.string.profile_greeting,
-                    uiState.nickname ?: "유니톤"
+                    uiState.nickname ?: stringResource(R.string.profile_nickname_default)
                 ),
                 style = TextStyle(
                     fontSize = 22.sp,
@@ -77,7 +77,7 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = uiState.email ?: "temp@naver.com",
+                    text = uiState.email ?: stringResource(R.string.profile_email_default),
                     style = MaterialTheme.typography.bodyLarge, // 15sp Bold
                     color = Grey500
                 )

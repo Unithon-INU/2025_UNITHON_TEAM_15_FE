@@ -238,6 +238,8 @@
 
     <!-- Profile Screen -->
     <string name="profile_greeting">Hello\n%1$s</string>
+    <string name="profile_nickname_default">Unithon</string>
+    <string name="profile_email_default">temp@naver.com</string>
     <string name="profile_email_signup_type">Email Signup</string>
     <string name="profile_visa_type">Visa Type</string>
     <string name="profile_visa_default">D-2</string>
