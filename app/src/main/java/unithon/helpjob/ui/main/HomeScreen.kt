@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +57,15 @@ fun HomeScreen(
 
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
+
+    LaunchedEffect(uiState.selectedStep) {
+        uiState.selectedStep?.let { selectedStep ->
+            val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
+            if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
+                pagerState.animateScrollToPage(targetIndex)
+            }
+        }
+    }
 
     // 현재 선택된 스텝은 pagerState.currentPage로 자동 관리
     val selectedStepIndex = pagerState.currentPage

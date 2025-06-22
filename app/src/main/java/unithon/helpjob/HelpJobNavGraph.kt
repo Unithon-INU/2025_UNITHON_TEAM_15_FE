@@ -122,7 +122,7 @@ fun HelpJobNavGraph(
                     }
                     navController.navigate(BottomNavDestination.HOME.route) {
                         launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                 },
                 homeViewModel = homeViewModel
