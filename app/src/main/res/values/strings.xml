@@ -247,6 +247,7 @@
     <string name="nickname_setup_top_bar_title">Sign Up</string>
     <string name="onboarding_top_bar_title">Information</string>
     <string name="document_top_bar_title">Document</string>
+    <string name="settings_button">Setting</string>
 
 
 </resources>
