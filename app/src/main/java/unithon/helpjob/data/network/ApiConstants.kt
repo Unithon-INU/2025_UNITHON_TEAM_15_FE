@@ -14,4 +14,5 @@ object ApiConstants {
     const val UPDATE_CHECKLIST = "api/employment"
     const val GET_HOME_INFO = "api/employment/home"
     const val GET_TIPS = "api/employment/tips"
+    const val POST_CERTIFICATION = "api/cert"
 }
