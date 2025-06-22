@@ -15,8 +15,11 @@ import javax.inject.Inject
 data class ProfileUiState(
     val nickname: String? = null,
     val email: String? = null,
+    val visaType: String? = null,
+    val koreanLevel: String? = null,
+    val preferredJob: String? = null,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: Int? = null
 )
 
 @HiltViewModel
@@ -36,15 +39,22 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
-                val homeInfo = employmentCheckRepository.getHomeInfo() // 닉네임, 이메일 가져오기
+                // 1. 닉네임, 이메일 가져오기
+                val homeInfo = employmentCheckRepository.getHomeInfo()
+
+                // 2. 온보딩 정보 가져오기
+                val memberProfile = authRepository.getMemberProfile()
+
                 _uiState.value = _uiState.value.copy(
                     nickname = homeInfo.nickname,
                     email = homeInfo.email,
+                    visaType = memberProfile.visaType,
+                    koreanLevel = memberProfile.topikLevel,
                     isLoading = false,
                     errorMessage = null
                 )
             } catch (e: Exception) {
-                // 에러 시 기본값 설정
+                Timber.e(e, "프로필 로딩 실패")
             }
         }
     }

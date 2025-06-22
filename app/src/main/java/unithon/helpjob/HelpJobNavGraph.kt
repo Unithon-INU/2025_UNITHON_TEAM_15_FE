@@ -110,7 +110,7 @@ fun HelpJobNavGraph(
 
         composable(route = BottomNavDestination.PROFILE.route) {
             ProfileScreen(
-                onLogout = navActions::navigateToSignInAfterLogout
+                onNavigateToSettings = navActions::navigateToSignInAfterLogout
             )
         }
     }

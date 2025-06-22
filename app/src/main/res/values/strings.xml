@@ -237,8 +237,14 @@
     <string name="document_finish_button">Complete</string>
 
     <!-- Profile Screen -->
-    <string name="profile_greeting">Hello \n%1$s!</string>
+    <string name="profile_greeting">Hello\n%1$s</string>
     <string name="profile_email_signup_type">Email Signup</string>
+    <string name="profile_visa_type">Visa Type</string>
+    <string name="profile_visa_default">D-2</string>
+    <string name="profile_korean_level">Korean Level</string>
+    <string name="profile_korean_default">TOPIK Level 3</string>
+    <string name="profile_preferred_job">Preferred Job</string>
+    <string name="profile_job_default">Restaurant/Cafe</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
