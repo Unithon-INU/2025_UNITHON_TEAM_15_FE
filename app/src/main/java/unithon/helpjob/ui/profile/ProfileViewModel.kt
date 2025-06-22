@@ -16,8 +16,8 @@ data class ProfileUiState(
     val nickname: String? = null,
     val email: String? = null,
     val visaType: String? = null,
-    val koreanLevel: String? = null,
-    val preferredJob: String? = null,
+    val topikLevel: String? = null,
+    val industry: String? = null,
     val isLoading: Boolean = false,
     val errorMessage: Int? = null
 )
@@ -47,9 +47,10 @@ class ProfileViewModel @Inject constructor(
 
                 _uiState.value = _uiState.value.copy(
                     nickname = homeInfo.nickname,
-                    email = homeInfo.email,
+//                    email = homeInfo.email,
                     visaType = memberProfile.visaType,
-                    koreanLevel = memberProfile.topikLevel,
+                    topikLevel = memberProfile.topikLevel,
+                    industry = memberProfile.industry,
                     isLoading = false,
                     errorMessage = null
                 )

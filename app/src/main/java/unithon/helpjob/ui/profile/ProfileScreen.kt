@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -125,7 +124,7 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_korean_level),
-                        value = uiState.koreanLevel ?: stringResource(id = R.string.profile_korean_default),
+                        value = uiState.topikLevel ?: stringResource(id = R.string.profile_korean_default),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -137,7 +136,7 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_preferred_job),
-                        value = uiState.preferredJob ?: stringResource(id = R.string.profile_job_default),
+                        value = uiState.industry ?: stringResource(id = R.string.profile_job_default),
                         modifier = Modifier.weight(1f)
                     )
                 }
