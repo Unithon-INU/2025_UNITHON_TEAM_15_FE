@@ -3,8 +3,8 @@ package unithon.helpjob.data.network
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Query
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
@@ -55,7 +55,7 @@ interface HelpJobApiService {
         @Body request: EmailVerifyCodeReq
     ): Response<Unit>
 
-    @PUT(ApiConstants.UPDATE_CHECKLIST)
+    @PATCH(ApiConstants.UPDATE_CHECKLIST)
     suspend fun updateChecklist(
         @Body request: UpdateEmploymentCheckRequest
     ): Response<UpdateEmploymentCheckResponse>
