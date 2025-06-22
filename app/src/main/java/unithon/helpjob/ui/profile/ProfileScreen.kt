@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,10 +30,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import unithon.helpjob.R
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
 import unithon.helpjob.ui.theme.Grey100
+import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.PretendardFontFamily
+import unithon.helpjob.ui.theme.body4
+import unithon.helpjob.ui.theme.headline2
+import unithon.helpjob.ui.theme.title2
 
 @Composable
 fun ProfileScreen(
@@ -89,7 +95,7 @@ fun ProfileScreen(
                 )
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(24.dp))
 
             Box(
                 modifier = Modifier
@@ -98,7 +104,7 @@ fun ProfileScreen(
                         color = Grey100,
                         shape = RoundedCornerShape(size = 10.dp)
                     )
-                    .padding(20.dp)
+                    .padding(11.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -112,9 +118,9 @@ fun ProfileScreen(
                     )
 
                     VerticalDivider(
-                        modifier = Modifier.height(40.dp),
+                        modifier = Modifier.height(71.dp),
                         thickness = 1.dp,
-                        color = Grey400
+                        color = Grey300
                     )
 
                     ProfileInfoColumn(
@@ -124,9 +130,9 @@ fun ProfileScreen(
                     )
 
                     VerticalDivider(
-                        modifier = Modifier.height(40.dp),
+                        modifier = Modifier.height(71.dp),
                         thickness = 1.dp,
-                        color = Grey400
+                        color = Grey300
                     )
 
                     ProfileInfoColumn(
@@ -136,6 +142,15 @@ fun ProfileScreen(
                     )
                 }
             }
+
+            Spacer(Modifier.height(39.dp))
+
+            Text(
+                text = stringResource(id = R.string.profile_documents_title),
+                style = MaterialTheme.typography.headline2, // 15sp Bold
+                color = Grey700
+            )
+            Spacer(Modifier.height(5.dp))
 
         }
     }
@@ -153,16 +168,16 @@ private fun ProfileInfoColumn(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodySmall, // 12sp
-            color = Grey500
+            style = MaterialTheme.typography.body4,
+            color = Grey600
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyLarge, // 15sp Bold
-            color = Grey700
+            style = MaterialTheme.typography.title2,
+            color = Grey600
         )
     }
 }

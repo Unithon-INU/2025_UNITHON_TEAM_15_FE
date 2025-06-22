@@ -248,6 +248,9 @@
     <string name="profile_korean_default">TOPIK ?급</string>
     <string name="profile_preferred_job">희망 업종</string>
     <string name="profile_job_default">임시</string>
+    <string name="profile_documents_title">내 서류 관리</string>
+    <string name="profile_documents_unchecked_count">현재 %1$d가지 서류를 체크하지 않았어요</string>
+
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">홈</string>

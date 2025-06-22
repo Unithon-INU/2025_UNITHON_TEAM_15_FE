@@ -247,6 +247,8 @@
     <string name="profile_korean_default">TOPIK Level 3</string>
     <string name="profile_preferred_job">Preferred Job</string>
     <string name="profile_job_default">Restaurant/Cafe</string>
+    <string name="profile_documents_title">Document Management</string>
+    <string name="profile_documents_unchecked_count">%1$d documents need to be checked</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
