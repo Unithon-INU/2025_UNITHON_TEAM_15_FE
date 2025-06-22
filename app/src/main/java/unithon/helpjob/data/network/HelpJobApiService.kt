@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
+import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
@@ -67,4 +68,9 @@ interface HelpJobApiService {
     suspend fun getTips(
         @Query("checkStep") checkStep: String
     ) : Response<List<TipResponseItem>>
+
+    @POST(ApiConstants.POST_CERTIFICATION)
+    suspend fun postCertification(
+        @Body documentRequest: DocumentRequest
+    ) : Response<Unit>
 }
