@@ -18,7 +18,9 @@ data class HomeInfoResponse(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("progress")
-    val progress: Int
+    val progress: Int,
+    @SerialName("email")
+    val email: String
 )
 
 @Serializable

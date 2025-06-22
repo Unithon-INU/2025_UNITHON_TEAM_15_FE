@@ -235,6 +235,11 @@
     <string name="document_finish_title">Document sent\nsuccessfully!</string>
     <string name="document_finish_description">Please check your mailbox</string>
     <string name="document_finish_button">Complete</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_greeting">Hello \n%1$s!</string>
+    <string name="profile_email_signup_type">Email Signup</string>
+
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_calculate">Calculator</string>
