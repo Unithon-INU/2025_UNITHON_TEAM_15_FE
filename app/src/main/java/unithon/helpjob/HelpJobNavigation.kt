@@ -17,6 +17,7 @@ object HelpJobScreens {
     const val ONBOARDING_SCREEN = "onboarding"
     const val STEP_DETAIL_SCREEN = "step_detail"
     const val SETTING_SCREEN = "setting"
+    const val LANGUAGE_SETTING_SCREEN = "language_setting"
 }
 
 /**
@@ -31,6 +32,7 @@ object HelpJobDestinations {
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
     const val STEP_DETAIL_ROUTE = HelpJobScreens.STEP_DETAIL_SCREEN
     const val SETTING_ROUTE = HelpJobScreens.SETTING_SCREEN
+    const val LANGUAGE_SETTING_ROUTE = HelpJobScreens.LANGUAGE_SETTING_SCREEN
 }
 
 /**
@@ -119,6 +121,10 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSettings() {
         navController.navigate(HelpJobDestinations.SETTING_ROUTE)
+    }
+
+    fun navigateToLanguageSetting() {
+        navController.navigate(HelpJobDestinations.LANGUAGE_SETTING_ROUTE)
     }
 
     /**

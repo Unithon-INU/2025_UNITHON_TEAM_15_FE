@@ -21,6 +21,7 @@ import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
+import unithon.helpjob.ui.setting.LanguageSettingScreen
 import unithon.helpjob.ui.setting.SettingScreen
 import unithon.helpjob.ui.splash.SplashScreen
 
@@ -141,14 +142,19 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.SETTING_ROUTE) {
             SettingScreen(
                 onBack = { navController.popBackStack() },
-                onLanguageSettingClick = {
-                    // TODO: 언어 설정 화면 구현 시 연결
-                },
+                onLanguageSettingClick = navActions::navigateToLanguageSetting,
                 onResetProgressClick = {
                     // TODO: 다이얼로그 표시 로직 구현 시 연결
                 },
                 onLogoutClick = navActions::navigateToSignInAfterLogout,
             )
+        }
+
+        composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) {
+            LanguageSettingScreen(
+                onBack = { navController.popBackStack() }
+            )
+
         }
     }
 }

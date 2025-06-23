@@ -52,7 +52,7 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun <T> HelpJobDropdown(
     modifier: Modifier = Modifier,
-    label: String,
+    label: String = "",
     selectedItem: T?,
     items: List<T>,
     onItemSelected: (T) -> Unit,
