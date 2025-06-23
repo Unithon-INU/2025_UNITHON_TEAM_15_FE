@@ -8,10 +8,11 @@ import javax.inject.Singleton
 
 @Singleton
 class DefaultDocumentRepository @Inject constructor(
-    private val apiService: HelpJobApiService
+    private val apiService: HelpJobApiService,
+    private val languageRepository: LanguageRepository
 ) : DocumentRepository{
     override suspend fun postCertification(documentRequest: DocumentRequest) {
-        val response = apiService.postCertification(documentRequest = documentRequest)
+        val response = apiService.postCertification(language = languageRepository.getCurrentLanguage().code,documentRequest = documentRequest)
 
         if (response.isSuccessful) {
             return

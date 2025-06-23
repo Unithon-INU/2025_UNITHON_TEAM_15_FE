@@ -3,6 +3,7 @@ package unithon.helpjob.data.network
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -62,7 +63,9 @@ interface HelpJobApiService {
     ): Response<UpdateEmploymentCheckResponse>
 
     @GET(ApiConstants.GET_HOME_INFO)
-    suspend fun getHomeInfo() : Response<HomeInfoResponse>
+    suspend fun getHomeInfo(
+        @Header ("Accept-Language") language: String
+    ) : Response<HomeInfoResponse>
 
     @GET(ApiConstants.GET_TIPS)
     suspend fun getTips(
@@ -71,6 +74,7 @@ interface HelpJobApiService {
 
     @POST(ApiConstants.POST_CERTIFICATION)
     suspend fun postCertification(
+        @Header ("Accept-Language") language: String,
         @Body documentRequest: DocumentRequest
     ) : Response<Unit>
 }
