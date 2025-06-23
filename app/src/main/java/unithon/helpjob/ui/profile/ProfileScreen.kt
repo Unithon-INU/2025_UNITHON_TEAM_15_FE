@@ -352,11 +352,7 @@ private fun UncheckedDocumentItem(
         contentAlignment = Alignment.CenterStart
     ) {
         Text(
-            text = stringResource(
-                id = R.string.profile_document_item_format,
-                document.stepTitle,
-                document.documentTitle
-            ),
+            text = document.documentTitle,
             style = MaterialTheme.typography.body4,
             color = Grey600,
             maxLines = 2, // 2줄까지 허용
