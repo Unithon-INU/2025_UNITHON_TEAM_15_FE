@@ -3,8 +3,11 @@ package unithon.helpjob.ui.document
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,6 +30,14 @@ class DocumentViewModel @Inject constructor(
 
     private val _isSubmitting = MutableStateFlow(false)
     val isSubmitting: StateFlow<Boolean> = _isSubmitting.asStateFlow()
+
+    // 🆕 Snackbar용 에러 이벤트 - SharedFlow 사용
+    private val _errorEvent = MutableSharedFlow<String>()
+    val errorEvent: SharedFlow<String> = _errorEvent.asSharedFlow()
+
+    // 🆕 성공 이벤트도 SharedFlow로
+    private val _successEvent = MutableSharedFlow<Unit>()
+    val successEvent: SharedFlow<Unit> = _successEvent.asSharedFlow()
 
     // ... 기존 업데이트 함수들은 그대로 유지 ...
 
@@ -219,12 +230,38 @@ class DocumentViewModel @Inject constructor(
         }
     }
 
-    // 🆕 서류 제출 함수 구현
+    // 서류 제출 함수 구현
     fun submitDocument() {
         val currentState = _uiState.value
 
+        // 기본 유효성 검사
         if (!currentState.isAllValid) {
-            Timber.w("Document validation failed")
+            viewModelScope.launch {
+                _errorEvent.emit("입력 정보를 다시 확인해주세요.")
+            }
+            return
+        }
+
+        // 추가 검사: 외국인등록번호 길이
+        if (currentState.foreignerNumber.filter { it.isDigit() }.length != 13) {
+            viewModelScope.launch {
+                _errorEvent.emit("외국인등록번호는 13자리여야 합니다.")
+            }
+            return
+        }
+
+        // 추가 검사: 날짜 유효성
+        if (!isValidDate(currentState.workStartYear, currentState.workStartMonth, currentState.workStartDay)) {
+            viewModelScope.launch {
+                _errorEvent.emit("근무 시작일이 올바르지 않습니다.")
+            }
+            return
+        }
+
+        if (!isValidDate(currentState.workEndYear, currentState.workEndMonth, currentState.workEndDay)) {
+            viewModelScope.launch {
+                _errorEvent.emit("근무 종료일이 올바르지 않습니다.")
+            }
             return
         }
 
@@ -233,23 +270,60 @@ class DocumentViewModel @Inject constructor(
                 _isSubmitting.value = true
 
                 val documentRequest = createDocumentRequest(currentState)
-                Timber.d("Document data : ${documentRequest}")
+                Timber.d("Document data : $documentRequest")
 
                 documentRepository.postCertification(documentRequest)
 
                 Timber.d("Document submitted successfully")
-                // 성공 시 UI 상태 초기화 또는 성공 화면으로 이동
+                _successEvent.emit(Unit) // 성공 이벤트 발생
 
             } catch (e: Exception) {
                 Timber.e(e, "Failed to submit document")
-                // 에러 처리 - 사용자에게 에러 메시지 표시
+
+                val errorMessage = when {
+                    e.message?.contains("400") == true -> "입력 정보가 올바르지 않습니다."
+                    e.message?.contains("401") == true -> "인증이 필요합니다."
+                    e.message?.contains("403") == true -> "권한이 없습니다."
+                    e.message?.contains("500") == true -> "서버 오류가 발생했습니다."
+                    e.message?.contains("network") == true -> "네트워크 연결을 확인해주세요."
+                    else -> "서류 제출 중 오류가 발생했습니다. 다시 시도해주세요."
+                }
+
+                _errorEvent.emit(errorMessage) // 에러 이벤트 발생
+
             } finally {
                 _isSubmitting.value = false
             }
         }
     }
 
-    // 🆕 DocumentRequest 생성 함수
+    // 날짜 유효성 검사 함수들
+    private fun isValidDate(year: String, month: String, day: String): Boolean {
+        return try {
+            val yearInt = year.toInt()
+            val monthInt = month.toInt()
+            val dayInt = day.toInt()
+
+            if (monthInt !in 1..12) return false
+
+            val daysInMonth = when (monthInt) {
+                1, 3, 5, 7, 8, 10, 12 -> 31
+                4, 6, 9, 11 -> 30
+                2 -> if (isLeapYear(yearInt)) 29 else 28
+                else -> return false
+            }
+
+            dayInt in 1..daysInMonth
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun isLeapYear(year: Int): Boolean {
+        return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
+    }
+
+    // DocumentRequest 생성 함수
     private fun createDocumentRequest(state: DocumentUiState): DocumentRequest {
         return DocumentRequest(
             name = state.name,
@@ -271,7 +345,7 @@ class DocumentViewModel @Inject constructor(
         )
     }
 
-    // 🆕 포맷팅 헬퍼 함수들
+    // 포맷팅 헬퍼 함수들
     private fun formatForeignerNumber(number: String): String {
         // 1234567890123 -> 123456-1234567
         return if (number.length == 13) {
@@ -322,7 +396,7 @@ class DocumentViewModel @Inject constructor(
         } else time
     }
 
-    // 🆕 평일 근무시간 생성
+    // 평일 근무시간 생성
     private fun createWeekdayWorkTimes(state: DocumentUiState): List<WeekdayWorkTime> {
         val weekdays = listOf(WorkDay.MONDAY, WorkDay.TUESDAY, WorkDay.WEDNESDAY, WorkDay.THURSDAY, WorkDay.FRIDAY)
         val selectedWeekdays = state.workDays.filter { it in weekdays }
@@ -347,7 +421,7 @@ class DocumentViewModel @Inject constructor(
         }
     }
 
-    // 🆕 주말 근무시간 생성
+    // 주말 근무시간 생성
     private fun createWeekendWorkTimes(state: DocumentUiState): List<WeekendWorkTime> {
         val weekends = listOf(WorkDay.SATURDAY, WorkDay.SUNDAY)
         val selectedWeekends = state.workDays.filter { it in weekends }
