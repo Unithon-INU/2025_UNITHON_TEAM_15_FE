@@ -60,7 +60,7 @@ fun HomeScreen(
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
 
-    // 🔥 핵심 수정 1: selectedStep에 따라 Pager 동기화
+    // 핵심 수정 1: selectedStep에 따라 Pager 동기화 (기존 유지)
     LaunchedEffect(uiState.selectedStep) {
         uiState.selectedStep?.let { selectedStep ->
             val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
@@ -70,7 +70,7 @@ fun HomeScreen(
         }
     }
 
-    // 🔥 핵심 수정 2: Pager 스와이프 시 ViewModel 동기화
+    // 핵심 수정 2: Pager 스와이프 시 ViewModel 동기화 (기존 유지)
     LaunchedEffect(pagerState.currentPage) {
         if (uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size) {
             val currentStep = uiState.steps[pagerState.currentPage]
@@ -80,15 +80,10 @@ fun HomeScreen(
         }
     }
 
-    // 🔥 핵심 수정 3: 표시할 step 결정 로직 개선
-    val displayStep = when {
-        // 1순위: ViewModel의 selectedStep 사용 (Profile에서 온 경우)
-        uiState.selectedStep != null -> uiState.selectedStep
-        // 2순위: Pager 위치 기반 (사용자가 직접 스와이프한 경우)
-        uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size ->
-            uiState.steps[pagerState.currentPage]
-        else -> null
-    }
+    // ✅ 핵심 수정 3: displayStep 로직 개선 - 항상 최신 데이터 사용
+    val displayStep = if (uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size) {
+        uiState.steps[pagerState.currentPage]  // 항상 현재 페이지의 최신 데이터 사용
+    } else null
 
     val scrollState = rememberScrollState()
 
