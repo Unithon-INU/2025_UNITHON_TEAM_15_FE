@@ -1,22 +1,34 @@
 package unithon.helpjob.ui.document
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
+import unithon.helpjob.data.model.request.DocumentRequest
+import unithon.helpjob.data.model.request.WeekdayWorkTime
+import unithon.helpjob.data.model.request.WeekendWorkTime
+import unithon.helpjob.data.repository.DocumentRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class DocumentViewModel @Inject constructor(
-
+    private val documentRepository: DocumentRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow(DocumentUiState())
     val uiState: StateFlow<DocumentUiState> = _uiState.asStateFlow()
+
+    private val _isSubmitting = MutableStateFlow(false)
+    val isSubmitting: StateFlow<Boolean> = _isSubmitting.asStateFlow()
+
+    // ... 기존 업데이트 함수들은 그대로 유지 ...
 
     // 기본 정보 입력 함수들 (VisualTransformation 사용으로 숫자만 저장)
     fun updateName(input: String) {
@@ -24,7 +36,6 @@ class DocumentViewModel @Inject constructor(
     }
 
     fun updateForeignerNumber(input: String) {
-        // 숫자만 추출해서 저장 (VisualTransformation이 포맷팅 처리)
         val numbersOnly = input.filter { it.isDigit() }.take(13)
         _uiState.value = _uiState.value.copy(foreignerNumber = numbersOnly)
     }
@@ -33,13 +44,11 @@ class DocumentViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(major = input)
     }
 
-    // Semester enum 사용
     fun updateSemester(semester: Semester) {
         _uiState.value = _uiState.value.copy(semester = semester)
     }
 
     fun updatePhoneNumber(input: String) {
-        // 숫자만 추출해서 저장 (VisualTransformation이 포맷팅 처리)
         val numbersOnly = input.filter { it.isDigit() }.take(11)
         _uiState.value = _uiState.value.copy(phoneNumber = numbersOnly)
     }
@@ -54,7 +63,6 @@ class DocumentViewModel @Inject constructor(
     }
 
     fun updateBusinessRegisterNumber(input: String) {
-        // 숫자만 추출해서 저장 (VisualTransformation이 포맷팅 처리)
         val numbersOnly = input.filter { it.isDigit() }.take(10)
         _uiState.value = _uiState.value.copy(businessRegisterNumber = numbersOnly)
     }
@@ -72,7 +80,6 @@ class DocumentViewModel @Inject constructor(
     }
 
     fun updateEmployerPhoneNumber(input: String) {
-        // 숫자만 추출해서 저장 (VisualTransformation이 포맷팅 처리)
         val numbersOnly = input.filter { it.isDigit() }.take(11)
         _uiState.value = _uiState.value.copy(employerPhoneNumber = numbersOnly)
     }
@@ -113,25 +120,97 @@ class DocumentViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(workEndDay = numbersOnly)
     }
 
-    // 🆕 WorkDay enum 사용
     fun updateWorkDay(selectedDay: WorkDay) {
         _uiState.update { currentState ->
-            if (currentState.workDay.contains(selectedDay)) {
-                // 이미 있으면 제거
-                currentState.copy(workDay = currentState.workDay - selectedDay)
+            if (currentState.workDays.contains(selectedDay)) {
+                val newTimes = currentState.workDayTimes.toMutableMap()
+                newTimes.remove(selectedDay)
+                currentState.copy(
+                    workDays = currentState.workDays - selectedDay,
+                    workDayTimes = newTimes,
+                    isAllDaysSelected = false
+                )
             } else {
-                // 없으면 추가
-                currentState.copy(workDay = currentState.workDay + selectedDay)
+                currentState.copy(
+                    workDays = currentState.workDays + selectedDay,
+                    isAllDaysSelected = false
+                )
             }
         }
     }
 
-    fun updateWorkStartTime(input: String) {
-        _uiState.value = _uiState.value.copy(workStartTime = input)
+    fun toggleAllDays() {
+        _uiState.update { currentState ->
+            if (currentState.isAllDaysSelected) {
+                currentState.copy(
+                    isAllDaysSelected = false,
+                    workDays = emptyList(),
+                    workDayTimes = emptyMap()
+                )
+            } else {
+                currentState.copy(
+                    isAllDaysSelected = true,
+                    workDays = WorkDay.entries
+                )
+            }
+        }
     }
 
-    fun updateWorkEndTime(input: String) {
-        _uiState.value = _uiState.value.copy(workEndTime = input)
+    fun updateWorkDayStartTime(workDay: WorkDay, startTime: String) {
+        _uiState.update { currentState ->
+            val currentTimes = currentState.workDayTimes[workDay] ?: WorkDayTime()
+            val newTimes = currentState.workDayTimes.toMutableMap()
+            newTimes[workDay] = currentTimes.copy(startTime = startTime)
+
+            if (currentState.isSameTimeForAll) {
+                currentState.workDays.forEach { day ->
+                    val dayTimes = newTimes[day] ?: WorkDayTime()
+                    newTimes[day] = dayTimes.copy(startTime = startTime)
+                }
+            }
+
+            currentState.copy(workDayTimes = newTimes)
+        }
+    }
+
+    fun updateWorkDayEndTime(workDay: WorkDay, endTime: String) {
+        _uiState.update { currentState ->
+            val currentTimes = currentState.workDayTimes[workDay] ?: WorkDayTime()
+            val newTimes = currentState.workDayTimes.toMutableMap()
+            newTimes[workDay] = currentTimes.copy(endTime = endTime)
+
+            if (currentState.isSameTimeForAll) {
+                currentState.workDays.forEach { day ->
+                    val dayTimes = newTimes[day] ?: WorkDayTime()
+                    newTimes[day] = dayTimes.copy(endTime = endTime)
+                }
+            }
+
+            currentState.copy(workDayTimes = newTimes)
+        }
+    }
+
+    fun toggleSameTimeForAll() {
+        _uiState.update { currentState ->
+            val newIsSameTimeForAll = !currentState.isSameTimeForAll
+
+            if (newIsSameTimeForAll && currentState.workDays.isNotEmpty()) {
+                val firstDay = currentState.workDays.first()
+                val firstDayTime = currentState.workDayTimes[firstDay] ?: WorkDayTime()
+                val newTimes = currentState.workDayTimes.toMutableMap()
+
+                currentState.workDays.forEach { day ->
+                    newTimes[day] = firstDayTime.copy()
+                }
+
+                currentState.copy(
+                    isSameTimeForAll = newIsSameTimeForAll,
+                    workDayTimes = newTimes
+                )
+            } else {
+                currentState.copy(isSameTimeForAll = newIsSameTimeForAll)
+            }
+        }
     }
 
     fun resetUiState(){
@@ -140,35 +219,178 @@ class DocumentViewModel @Inject constructor(
         }
     }
 
+    // 🆕 서류 제출 함수 구현
     fun submitDocument() {
-        // 서류 제출 로직
-        if (_uiState.value.isAllValid) {
-            // 서버 전송 시 API 값 사용
-            val semesterApiValue = _uiState.value.semester?.apiValue ?: ""
-            val workDayApiValue = WorkDay.toApiValues(_uiState.value.workDay)
+        val currentState = _uiState.value
 
-            // TODO: 서버 API 호출
-            // MemberDocumentRequest(
-            //     semester = semesterApiValue,
-            //     workDays = workDayApiValue,
-            //     ...
-            // )
+        if (!currentState.isAllValid) {
+            Timber.w("Document validation failed")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                _isSubmitting.value = true
+
+                val documentRequest = createDocumentRequest(currentState)
+                Timber.d("Document data : ${documentRequest}")
+
+                documentRepository.postCertification(documentRequest)
+
+                Timber.d("Document submitted successfully")
+                // 성공 시 UI 상태 초기화 또는 성공 화면으로 이동
+
+            } catch (e: Exception) {
+                Timber.e(e, "Failed to submit document")
+                // 에러 처리 - 사용자에게 에러 메시지 표시
+            } finally {
+                _isSubmitting.value = false
+            }
         }
     }
 
+    // 🆕 DocumentRequest 생성 함수
+    private fun createDocumentRequest(state: DocumentUiState): DocumentRequest {
+        return DocumentRequest(
+            name = state.name,
+            regNum = formatForeignerNumber(state.foreignerNumber),
+            major = state.major,
+            phoneNum = formatPhoneNumber(state.phoneNumber),
+            email = state.emailAddress,
+            semester = state.semester?.apiValue ?: "",
+            companyName = state.companyName,
+            bizRegNum = formatBusinessNumber(state.businessRegisterNumber),
+            industry = state.categoryOfBusiness,
+            address = state.addressOfCompany,
+            companyPhoneNum = formatPhoneNumber(state.employerPhoneNumber),
+            workingStartDate = formatDate(state.workStartYear, state.workStartMonth, state.workStartDay),
+            workingEndDate = formatDate(state.workEndYear, state.workEndMonth, state.workEndDay),
+            hourlyWage = formatHourlyWage(state.hourlyWage),
+            weekdayWorkTimes = createWeekdayWorkTimes(state),
+            weekendWorkTimes = createWeekendWorkTimes(state)
+        )
+    }
+
+    // 🆕 포맷팅 헬퍼 함수들
+    private fun formatForeignerNumber(number: String): String {
+        // 1234567890123 -> 123456-1234567
+        return if (number.length == 13) {
+            "${number.substring(0, 6)}-${number.substring(6)}"
+        } else number
+    }
+
+    private fun formatPhoneNumber(number: String): String {
+        // 01012345678 -> 010-1234-5678
+        return when {
+            number.startsWith("010") && number.length == 11 -> {
+                "${number.substring(0, 3)}-${number.substring(3, 7)}-${number.substring(7)}"
+            }
+            number.startsWith("0") && number.length == 10 -> {
+                "${number.substring(0, 3)}-${number.substring(3, 6)}-${number.substring(6)}"
+            }
+            number.startsWith("0") && number.length == 11 -> {
+                "${number.substring(0, 3)}-${number.substring(3, 7)}-${number.substring(7)}"
+            }
+            else -> number
+        }
+    }
+
+    private fun formatBusinessNumber(number: String): String {
+        // 1234567890 -> 123-12-12345
+        return if (number.length == 10) {
+            "${number.substring(0, 3)}-${number.substring(3, 5)}-${number.substring(5)}"
+        } else number
+    }
+
+    private fun formatDate(year: String, month: String, day: String): String {
+        // 2025, 6, 21 -> 2025-06-21
+        val paddedMonth = month.padStart(2, '0')
+        val paddedDay = day.padStart(2, '0')
+        return "$year-$paddedMonth-$paddedDay"
+    }
+
+    private fun formatHourlyWage(wage: String): String {
+        // 10030 -> 10,030원
+        val number = wage.toLongOrNull() ?: 0L
+        return "${String.format("%,d", number)}원"
+    }
+
+    private fun formatTime(time: String): String {
+        // 18:00 -> 18:00:00
+        return if (time.contains(":") && time.split(":").size == 2) {
+            "$time:00"
+        } else time
+    }
+
+    // 🆕 평일 근무시간 생성
+    private fun createWeekdayWorkTimes(state: DocumentUiState): List<WeekdayWorkTime> {
+        val weekdays = listOf(WorkDay.MONDAY, WorkDay.TUESDAY, WorkDay.WEDNESDAY, WorkDay.THURSDAY, WorkDay.FRIDAY)
+        val selectedWeekdays = state.workDays.filter { it in weekdays }
+
+        if (selectedWeekdays.isEmpty()) return emptyList()
+
+        // 같은 시간대별로 그룹화
+        val timeGroups = selectedWeekdays.groupBy { workDay ->
+            val dayTime = state.workDayTimes[workDay] ?: WorkDayTime()
+            "${dayTime.startTime}_${dayTime.endTime}"
+        }
+
+        return timeGroups.map { (_, workDaysGroup) ->
+            val firstDay = workDaysGroup.first()
+            val dayTime = state.workDayTimes[firstDay] ?: WorkDayTime()
+
+            WeekdayWorkTime(
+                workingStartTime = formatTime(dayTime.startTime),
+                workingEndTime = formatTime(dayTime.endTime),
+                day = workDaysGroup.map { it.apiValue }
+            )
+        }
+    }
+
+    // 🆕 주말 근무시간 생성
+    private fun createWeekendWorkTimes(state: DocumentUiState): List<WeekendWorkTime> {
+        val weekends = listOf(WorkDay.SATURDAY, WorkDay.SUNDAY)
+        val selectedWeekends = state.workDays.filter { it in weekends }
+
+        if (selectedWeekends.isEmpty()) return emptyList()
+
+        // 같은 시간대별로 그룹화
+        val timeGroups = selectedWeekends.groupBy { workDay ->
+            val dayTime = state.workDayTimes[workDay] ?: WorkDayTime()
+            "${dayTime.startTime}_${dayTime.endTime}"
+        }
+
+        return timeGroups.map { (_, workDaysGroup) ->
+            val firstDay = workDaysGroup.first()
+            val dayTime = state.workDayTimes[firstDay] ?: WorkDayTime()
+
+            WeekendWorkTime(
+                workingStartTime = formatTime(dayTime.startTime),
+                workingEndTime = formatTime(dayTime.endTime),
+                day = workDaysGroup.map { it.apiValue }
+            )
+        }
+    }
+
+    // 요일별 시간 정보를 저장하는 데이터 클래스
+    data class WorkDayTime(
+        val startTime: String = "",
+        val endTime: String = ""
+    )
+
     data class DocumentUiState(
         val name: String = "",
-        val foreignerNumber: String = "", // 숫자만 저장 (예: "1234567890123")
+        val foreignerNumber: String = "",
         val major: String = "",
-        val semester: Semester? = null, // 🆕 Semester enum 사용
-        val phoneNumber: String = "", // 숫자만 저장 (예: "01012345678")
+        val semester: Semester? = null,
+        val phoneNumber: String = "",
         val emailAddress: String = "",
         val companyName: String = "",
-        val businessRegisterNumber: String = "", // 숫자만 저장 (예: "1234567890")
+        val businessRegisterNumber: String = "",
         val categoryOfBusiness: String = "",
         val addressOfCompany: String = "",
         val employerName: String = "",
-        val employerPhoneNumber: String = "", // 숫자만 저장 (예: "01012345678")
+        val employerPhoneNumber: String = "",
         val hourlyWage: String = "",
         val workStartYear: String = "",
         val workStartMonth: String = "",
@@ -176,35 +398,40 @@ class DocumentViewModel @Inject constructor(
         val workEndYear: String = "",
         val workEndMonth: String = "",
         val workEndDay: String = "",
-        val workDay: List<WorkDay> = emptyList(), // 🆕 WorkDay enum 리스트 사용
+        val workDays: List<WorkDay> = emptyList(),
+        val workDayTimes: Map<WorkDay, WorkDayTime> = emptyMap(),
+        val isAllDaysSelected: Boolean = false,
+        val isSameTimeForAll: Boolean = false,
+        @Deprecated("Use workDayTimes instead")
         val workStartTime: String = "",
+        @Deprecated("Use workDayTimes instead")
         val workEndTime: String = "",
     ) {
-        // 기본 정보 유효성 검사 (숫자만 체크하도록 수정)
+        // ... 기존 유효성 검사 함수들은 그대로 유지 ...
+
         val isNameValid: Boolean
             get() = name.isNotBlank()
 
         val isForeignerNumberValid: Boolean
-            get() = foreignerNumber.matches(Regex("^\\d{13}$")) // 숫자 13자리
+            get() = foreignerNumber.matches(Regex("^\\d{13}$"))
 
         val isMajorValid: Boolean
             get() = major.isNotBlank()
 
         val isSemesterValid: Boolean
-            get() = semester != null // 🆕 enum이 선택되었는지 확인
+            get() = semester != null
 
         val isPhoneNumberValid: Boolean
-            get() = phoneNumber.matches(Regex("^010\\d{8}$")) // 010으로 시작하는 11자리
+            get() = phoneNumber.matches(Regex("^010\\d{8}$"))
 
         val isEmailAddressValid: Boolean
             get() = emailAddress.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"))
 
-        // 회사 정보 유효성 검사 (숫자만 체크하도록 수정)
         val isCompanyNameValid: Boolean
             get() = companyName.isNotBlank()
 
         val isBusinessRegisterNumberValid: Boolean
-            get() = businessRegisterNumber.matches(Regex("^\\d{10}$")) // 숫자 10자리
+            get() = businessRegisterNumber.matches(Regex("^\\d{10}$"))
 
         val isCategoryOfBusinessValid: Boolean
             get() = categoryOfBusiness.isNotBlank()
@@ -216,9 +443,8 @@ class DocumentViewModel @Inject constructor(
             get() = employerName.isNotBlank()
 
         val isEmployerPhoneNumberValid: Boolean
-            get() = employerPhoneNumber.matches(Regex("^0\\d{9,10}$")) // 0으로 시작하는 10-11자리
+            get() = employerPhoneNumber.matches(Regex("^0\\d{9,10}$"))
 
-        // 근무 조건 유효성 검사
         val isHourlyWageValid: Boolean
             get() = hourlyWage.matches(Regex("^\\d+$")) && hourlyWage.isNotBlank()
 
@@ -245,15 +471,14 @@ class DocumentViewModel @Inject constructor(
                     workEndDay.toIntOrNull()?.let { it in 1..31 } == true
 
         val isWorkDayValid: Boolean
-            get() = workDay.isNotEmpty() // 🆕 enum 리스트가 비어있지 않은지 확인
+            get() = workDays.isNotEmpty()
 
-        val isWorkStartTimeValid: Boolean
-            get() = workStartTime.isNotBlank()
+        val isWorkTimeValid: Boolean
+            get() = workDays.all { workDay ->
+                val dayTime = workDayTimes[workDay]
+                dayTime != null && dayTime.startTime.isNotBlank() && dayTime.endTime.isNotBlank()
+            }
 
-        val isWorkEndTimeValid: Boolean
-            get() = workEndTime.isNotBlank()
-
-        // 단계별 유효성 검사
         val isBasicInfo1Valid: Boolean
             get() = isNameValid && isForeignerNumberValid && isMajorValid
 
@@ -273,7 +498,7 @@ class DocumentViewModel @Inject constructor(
                     isWorkEndDayValid
 
         val isWorkplaceInfo4Valid: Boolean
-            get() = isWorkDayValid && isWorkStartTimeValid && isWorkEndTimeValid
+            get() = isWorkDayValid && isWorkTimeValid
 
         val isAllValid: Boolean
             get() = isBasicInfo1Valid && isBasicInfo2Valid && isWorkplaceInfo1Valid &&

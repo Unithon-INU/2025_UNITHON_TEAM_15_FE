@@ -194,15 +194,22 @@ fun DocumentScreen(
         DocumentPage(
             content = {
                 WorkplaceInfo4Screen(
-                    modifier =Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     step = 2,
                     title = stringResource(R.string.document_step_2_title),
-                    workDayValue = uiState.workDay,
-                    onWorkDayValueChange = {viewModel.updateWorkDay(it)},
-                    workStartTimeValue = uiState.workStartTime,
-                    onWorkStartTimeValueChange = {viewModel.updateWorkStartTime(it)},
-                    workEndTimeValue = uiState.workEndTime,
-                    onWorkEndTimeValueChange = {viewModel.updateWorkEndTime(it)},
+                    workDays = uiState.workDays,
+                    onWorkDayChange = { workDay -> viewModel.updateWorkDay(workDay) },
+                    workDayTimes = uiState.workDayTimes,
+                    onWorkDayStartTimeChange = { workDay, time ->
+                        viewModel.updateWorkDayStartTime(workDay, time)
+                    },
+                    onWorkDayEndTimeChange = { workDay, time ->
+                        viewModel.updateWorkDayEndTime(workDay, time)
+                    },
+                    isAllDaysSelected = uiState.isAllDaysSelected,
+                    onToggleAllDays = { viewModel.toggleAllDays() },
+                    isSameTimeForAll = uiState.isSameTimeForAll,
+                    onToggleSameTimeForAll = { viewModel.toggleSameTimeForAll() },
                     enabled = uiState.isWorkplaceInfo4Valid,
                     onNext = {
                         scope.launch {
@@ -221,8 +228,11 @@ fun DocumentScreen(
                     emailAddressValueChange = {viewModel.updateEmailAddress(it)},
                     enabled = uiState.isAllValid,
                     onNext = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(9)
+                        if (uiState.isAllValid) {
+                            viewModel.submitDocument()
+                            scope.launch {
+                                pagerState.animateScrollToPage(9)
+                            }
                         }
                     }
                 )
