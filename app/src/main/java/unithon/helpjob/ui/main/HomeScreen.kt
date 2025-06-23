@@ -60,22 +60,14 @@ fun HomeScreen(
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
 
-    // 핵심 수정 1: selectedStep에 따라 Pager 동기화 (기존 유지)
+    // 🔥 핵심 수정: LaunchedEffect 순서 변경 + 조건 강화
+
+    // 1. selectedStep 변경 시 pager 동기화 (우선순위 높음)
     LaunchedEffect(uiState.selectedStep) {
         uiState.selectedStep?.let { selectedStep ->
             val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
             if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
                 pagerState.scrollToPage(targetIndex)
-            }
-        }
-    }
-
-    // 핵심 수정 2: Pager 스와이프 시 ViewModel 동기화 (기존 유지)
-    LaunchedEffect(pagerState.currentPage) {
-        if (uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size) {
-            val currentStep = uiState.steps[pagerState.currentPage]
-            if (uiState.selectedStep?.checkStep != currentStep.checkStep) {
-                viewmodel.selectStep(currentStep)
             }
         }
     }
@@ -157,7 +149,7 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(31.dp))
 
-            // 🔥 핵심 수정 4: displayStep 기반으로 UI 표시 (기존 컴포넌트 그대로 사용)
+            //  displayStep 기반으로 UI 표시 (기존 컴포넌트 그대로 사용)
             displayStep?.let { step ->
                 when (uiState.selectedCategory) {
                     HomeViewModel.Category.DOCUMENTS -> {
@@ -165,6 +157,7 @@ fun HomeScreen(
                         step.documentInfoRes.forEach { document ->
                             DocumentItem(
                                 document = document,
+                                enabled = !uiState.isUpdating,
                                 onCheckedChange = { isChecked ->
                                     viewmodel.onDocumentCheckChanged(
                                         document = document,
@@ -298,7 +291,11 @@ fun StepCard(
 }
 
 @Composable
-fun DocumentItem(document: DocumentInfoRes, onCheckedChange: (Boolean) -> Unit) {
+fun DocumentItem(
+    document: DocumentInfoRes,
+    enabled: Boolean = true,
+    onCheckedChange: (Boolean) -> Unit
+) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
@@ -316,6 +313,7 @@ fun DocumentItem(document: DocumentInfoRes, onCheckedChange: (Boolean) -> Unit) 
         ) {
             HelpJobCheckbox(
                 checked = document.isChecked,
+                enabled = enabled,
                 onCheckedChange = onCheckedChange
             )
             Spacer(Modifier.width(12.dp))
