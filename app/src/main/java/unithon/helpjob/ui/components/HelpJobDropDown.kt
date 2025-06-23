@@ -60,7 +60,8 @@ fun <T> HelpJobDropdown(
     placeholder: String = "",
     labelTextFieldSpace: Dp = 8.dp,
     trailingText: String? = null,
-    isUpward: Boolean = false
+    isUpward: Boolean = false,
+    showScrollbar: Boolean = true // 🆕 스크롤바 표시 여부 파라미터
 ) {
     var expanded by remember { mutableStateOf(false) }
     var rowSize by remember { mutableStateOf(Size.Zero) }
@@ -68,7 +69,6 @@ fun <T> HelpJobDropdown(
 
     Column(modifier = modifier) {
         // Label
-
         if (label.isNotEmpty()){
             Text(
                 text = label,
@@ -78,7 +78,6 @@ fun <T> HelpJobDropdown(
 
             Spacer(modifier = Modifier.height(labelTextFieldSpace))
         }
-
 
         // Dropdown Box
         Box {
@@ -176,8 +175,8 @@ fun <T> HelpJobDropdown(
                 }
             }
 
-            // Custom Scrollbar
-            if (expanded && items.size > 5) {
+            // 🆕 Custom Scrollbar - showScrollbar 파라미터로 제어
+            if (expanded && items.size > 5 && showScrollbar) {
                 val scrollbarOffset = with(LocalDensity.current) {
                     IntOffset(
                         x = (rowSize.width.toDp() + (-10.dp)).toPx().toInt(),

@@ -6,13 +6,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -33,9 +41,30 @@ fun DocumentScreen(
     viewModel: DocumentViewModel = hiltViewModel()
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isSubmitting by viewModel.isSubmitting.collectAsStateWithLifecycle()
 
     val pagerState = rememberPagerState(pageCount = { 10 })
     val scope = rememberCoroutineScope()
+
+    // 🆕 SnackbarHost 설정
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // 🆕 에러 이벤트 처리 - Snackbar 표시
+    LaunchedEffect(Unit) {
+        viewModel.errorEvent.collect { errorMessage ->
+            snackbarHostState.showSnackbar(
+                message = errorMessage,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+
+    // 🆕 성공 이벤트 처리 - 완료 화면으로 이동
+    LaunchedEffect(Unit) {
+        viewModel.successEvent.collect {
+            pagerState.animateScrollToPage(9) // 완료 화면으로 이동
+        }
+    }
 
     val pages = listOf(
         // 온보딩1
@@ -194,15 +223,22 @@ fun DocumentScreen(
         DocumentPage(
             content = {
                 WorkplaceInfo4Screen(
-                    modifier =Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     step = 2,
                     title = stringResource(R.string.document_step_2_title),
-                    workDayValue = uiState.workDay,
-                    onWorkDayValueChange = {viewModel.updateWorkDay(it)},
-                    workStartTimeValue = uiState.workStartTime,
-                    onWorkStartTimeValueChange = {viewModel.updateWorkStartTime(it)},
-                    workEndTimeValue = uiState.workEndTime,
-                    onWorkEndTimeValueChange = {viewModel.updateWorkEndTime(it)},
+                    workDays = uiState.workDays,
+                    onWorkDayChange = { workDay -> viewModel.updateWorkDay(workDay) },
+                    workDayTimes = uiState.workDayTimes,
+                    onWorkDayStartTimeChange = { workDay, time ->
+                        viewModel.updateWorkDayStartTime(workDay, time)
+                    },
+                    onWorkDayEndTimeChange = { workDay, time ->
+                        viewModel.updateWorkDayEndTime(workDay, time)
+                    },
+                    isAllDaysSelected = uiState.isAllDaysSelected,
+                    onToggleAllDays = { viewModel.toggleAllDays() },
+                    isSameTimeForAll = uiState.isSameTimeForAll,
+                    onToggleSameTimeForAll = { viewModel.toggleSameTimeForAll() },
                     enabled = uiState.isWorkplaceInfo4Valid,
                     onNext = {
                         scope.launch {
@@ -212,17 +248,18 @@ fun DocumentScreen(
                 )
             }
         ),
-        // 이메일 재확인
+        // 이메일 재확인 (🆕 수정: 페이지 이동 로직 제거)
         DocumentPage(
             content = {
                 EmailCheckScreen(
-                    modifier =Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     emailAddressValue = uiState.emailAddress,
-                    emailAddressValueChange = {viewModel.updateEmailAddress(it)},
+                    emailAddressValueChange = { viewModel.updateEmailAddress(it) },
                     enabled = uiState.isAllValid,
+                    isSubmitting = isSubmitting, // 🆕 로딩 상태 전달
                     onNext = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(9)
+                        if (uiState.isAllValid) {
+                            viewModel.submitDocument() // 🆕 제출만 수행, 페이지 이동은 successEvent에서 처리
                         }
                     }
                 )
@@ -232,14 +269,13 @@ fun DocumentScreen(
         DocumentPage(
             content = {
                 FinishScreen(
-                    modifier =Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     onNext = {
                         viewModel.resetUiState()
                         scope.launch {
                             pagerState.animateScrollToPage(0)
                         }
                     }
-
                 )
             }
         ),
@@ -261,6 +297,20 @@ fun DocumentScreen(
                 )
             }
         },
+        // 🆕 SnackbarHost 추가
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                snackbar = { snackbarData ->
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                }
+            )
+        }
     ) { innerPadding ->
         Box(
             modifier = Modifier

@@ -15,35 +15,35 @@ enum class Semester(
 ) {
     FIRST_YEAR_FIRST(
         displayNameResId = R.string.semester_1_1,
-        apiValue = "1학년 1학기"
+        apiValue = "1학기"
     ),
     FIRST_YEAR_SECOND(
         displayNameResId = R.string.semester_1_2,
-        apiValue = "1학년 2학기"
+        apiValue = "2학기"
     ),
     SECOND_YEAR_FIRST(
         displayNameResId = R.string.semester_2_1,
-        apiValue = "2학년 1학기"
+        apiValue = "3학기"
     ),
     SECOND_YEAR_SECOND(
         displayNameResId = R.string.semester_2_2,
-        apiValue = "2학년 2학기"
+        apiValue = "4학기"
     ),
     THIRD_YEAR_FIRST(
         displayNameResId = R.string.semester_3_1,
-        apiValue = "3학년 1학기"
+        apiValue = "5학기"
     ),
     THIRD_YEAR_SECOND(
         displayNameResId = R.string.semester_3_2,
-        apiValue = "3학년 2학기"
+        apiValue = "6학기"
     ),
     FOURTH_YEAR_FIRST(
         displayNameResId = R.string.semester_4_1,
-        apiValue = "4학년 1학기"
+        apiValue = "7학기"
     ),
     FOURTH_YEAR_SECOND(
         displayNameResId = R.string.semester_4_2,
-        apiValue = "4학년 2학기"
+        apiValue = "8학기"
     );
 
     /**
