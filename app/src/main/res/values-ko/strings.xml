@@ -215,11 +215,13 @@
     <string name="document_workplace_info_3_work_end_day_trailing_text">일</string>
 
     <!-- DocumentScreen(WorkplaceInfo4) -->
-    <string name="document_workplace_info_4_work_start_day_list_label">근무 시작일</string>
-    <string name="document_workplace_info_4_work_start_time_label">시작 시간</string>
-    <string name="document_workplace_info_4_work_start_time_placeholder">선택</string>
-    <string name="document_workplace_info_4_work_end_time_label">종료 시간</string>
-    <string name="document_workplace_info_4_work_end_time_placeholder">선택</string>
+    <string name="document_workplace_info_4_work_days_label">주간 근무 요일</string>
+    <string name="document_workplace_info_4_everyday">매일</string>
+    <string name="document_workplace_info_4_work_time_label">시작/종료 시간</string>
+    <string name="document_workplace_info_4_same_time">시간 모두 같음</string>
+    <string name="document_workplace_info_4_start_time_placeholder">예) 01</string>
+    <string name="document_workplace_info_4_end_time_placeholder">예) 05</string>
+    <string name="document_workplace_info_4_time_unit">시/분</string>
     <string name="workday_monday">월</string>
     <string name="workday_tuesday">화</string>
     <string name="workday_wednesday">수</string>
