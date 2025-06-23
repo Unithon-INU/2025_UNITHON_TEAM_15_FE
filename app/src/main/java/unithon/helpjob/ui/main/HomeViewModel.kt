@@ -29,6 +29,7 @@ class HomeViewModel @Inject constructor(
 
     data class HomeUiState(
         val nickname: String = "",
+        val email: String = "",
         val memberCheckStep: Steps = Steps.STEP1,
         val steps : List<EmploymentCheckRes> = emptyList(),
         val tips : List<TipResponseItem> = emptyList(),
@@ -224,6 +225,7 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         steps = response.employmentCheckRes,
                         nickname = response.nickname,
+                        email = response.email,
                         progressPercentage = response.progress / 100f,
                         memberCheckStep = Steps.valueOf(response.memberCheckStep),
                         isLoading = false

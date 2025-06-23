@@ -100,8 +100,8 @@ fun ProfileScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = stringResource(R.string.profile_email_default),
-                    style = MaterialTheme.typography.bodyLarge, // 15sp Bold
+                    text = homeUiState.email.ifEmpty { stringResource(R.string.profile_email_default) },
+                    style = MaterialTheme.typography.bodyLarge,
                     color = Grey500
                 )
 
