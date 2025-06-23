@@ -248,10 +248,19 @@
     <string name="profile_preferred_job">Preferred Job</string>
     <string name="profile_job_default">Restaurant/Cafe</string>
 
-    <!-- Profile Document Management -->
-    <string name="profile_documents_title">Document Management</string>
-    <string name="profile_documents_unchecked_count">%1$d documents need to be checked</string>
-    <string name="profile_documents_all_completed">All documents ready!</string>
+    <!-- Profile Document Management - Separated strings -->
+    <string name="profile_documents_title">My Documents</string>
+
+    <!-- For when there are missing documents -->
+    <string name="profile_documents_current">Currently</string>
+    <string name="profile_documents_count_format">%1$d documents</string>
+    <string name="profile_documents_not_checked"> are not checked</string>
+
+    <!-- For when all documents are completed -->
+    <string name="profile_documents_all">All documents</string>
+    <string name="profile_documents_completed"> are ready!</string>
+
+    <!-- Others -->
     <string name="profile_documents_no_unchecked">No missing documents</string>
     <string name="profile_document_item_format">%1$s · %2$s</string>
 

@@ -249,10 +249,19 @@
     <string name="profile_preferred_job">희망 업종</string>
     <string name="profile_job_default">임시</string>
 
-    <!-- Profile Document Management -->
+    <!-- Profile Document Management - 분리된 문자열들 -->
     <string name="profile_documents_title">내 서류 관리</string>
-    <string name="profile_documents_unchecked_count">현재 %1$d가지 서류를 체크하지 않았어요</string>
-    <string name="profile_documents_all_completed">모든 서류를 준비했어요!</string>
+
+    <!-- 누락 서류가 있을 때 사용할 분리된 문자열들 -->
+    <string name="profile_documents_current">현재</string>
+    <string name="profile_documents_count_format">%1$d가지 서류</string>
+    <string name="profile_documents_not_checked">를 체크하지 않았어요</string>
+
+    <!-- 모든 서류 완료 시 사용할 분리된 문자열들 -->
+    <string name="profile_documents_all">모든 서류</string>
+    <string name="profile_documents_completed">를 준비했어요!</string>
+
+    <!-- 기타 -->
     <string name="profile_documents_no_unchecked">누락된 서류가 없어요</string>
     <string name="profile_document_item_format">%1$s · %2$s</string>
 

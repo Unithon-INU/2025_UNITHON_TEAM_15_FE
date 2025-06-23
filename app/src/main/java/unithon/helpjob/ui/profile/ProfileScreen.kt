@@ -23,8 +23,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +43,7 @@ import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.ui.theme.body2
 import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.headline2
 import unithon.helpjob.ui.theme.title2
@@ -208,11 +212,36 @@ private fun DocumentManagementSection(
 
     Column {
         if (uncheckedDocuments.isEmpty()) {
-            // 모든 서류 완료 시
+            // 모든 서류 완료 시 - "모든 서류"만 Blue500, "를 준비했어요!"는 Grey500
+            val allDocumentsText = buildAnnotatedString {
+                // "모든 서류" 부분 - Blue500
+                withStyle(
+                    style = SpanStyle(
+                        color = Blue500,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = MaterialTheme.typography.body2.fontWeight,
+                        fontFamily = MaterialTheme.typography.body2.fontFamily
+                    )
+                ) {
+                    append(stringResource(id = R.string.profile_documents_all))
+                }
+
+                // "를 준비했어요!" 부분 - Grey500
+                withStyle(
+                    style = SpanStyle(
+                        color = Grey500,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = MaterialTheme.typography.body2.fontWeight,
+                        fontFamily = MaterialTheme.typography.body2.fontFamily
+                    )
+                ) {
+                    append(stringResource(id = R.string.profile_documents_completed))
+                }
+            }
+
             Text(
-                text = stringResource(id = R.string.profile_documents_all_completed),
-                style = MaterialTheme.typography.body4,
-                color = Blue500
+                text = allDocumentsText,
+                style = MaterialTheme.typography.body2
             )
 
             Spacer(Modifier.height(12.dp))
@@ -226,19 +255,59 @@ private fun DocumentManagementSection(
             ) {
                 Text(
                     text = stringResource(id = R.string.profile_documents_no_unchecked),
-                    style = MaterialTheme.typography.body4,
+                    style = MaterialTheme.typography.body2,
                     color = Grey600
                 )
             }
         } else {
-            // 누락된 서류가 있는 경우
+            // 누락된 서류가 있는 경우 - "%d가지 서류"만 Warning, 나머지는 Grey500
+            val uncheckedCountText = buildAnnotatedString {
+                // "현재 " 부분 - Grey500
+                withStyle(
+                    style = SpanStyle(
+                        color = Grey500,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = MaterialTheme.typography.body2.fontWeight,
+                        fontFamily = MaterialTheme.typography.body2.fontFamily
+                    )
+                ) {
+                    append(stringResource(id = R.string.profile_documents_current))
+                    append(" ")
+                }
+
+                // "%d가지 서류" 부분 - Warning (Alert 색상)
+                withStyle(
+                    style = SpanStyle(
+                        color = Warning,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = MaterialTheme.typography.body2.fontWeight,
+                        fontFamily = MaterialTheme.typography.body2.fontFamily
+                    )
+                ) {
+                    append(
+                        stringResource(
+                            id = R.string.profile_documents_count_format,
+                            uncheckedDocuments.size
+                        )
+                    )
+                }
+
+                // "를 체크하지 않았어요" 부분 - Grey500
+                withStyle(
+                    style = SpanStyle(
+                        color = Grey500,
+                        fontSize = MaterialTheme.typography.body2.fontSize,
+                        fontWeight = MaterialTheme.typography.body2.fontWeight,
+                        fontFamily = MaterialTheme.typography.body2.fontFamily
+                    )
+                ) {
+                    append(stringResource(id = R.string.profile_documents_not_checked))
+                }
+            }
+
             Text(
-                text = stringResource(
-                    id = R.string.profile_documents_unchecked_count,
-                    uncheckedDocuments.size
-                ),
-                style = MaterialTheme.typography.body4,
-                color = Warning
+                text = uncheckedCountText,
+                style = MaterialTheme.typography.body2
             )
 
             Spacer(Modifier.height(12.dp))
