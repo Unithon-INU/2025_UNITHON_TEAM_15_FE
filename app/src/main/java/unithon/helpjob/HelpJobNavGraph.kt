@@ -19,6 +19,7 @@ import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
+import unithon.helpjob.ui.setting.SettingScreen
 import unithon.helpjob.ui.splash.SplashScreen
 
 @Composable
@@ -113,7 +114,7 @@ fun HelpJobNavGraph(
             val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
 
             ProfileScreen(
-                onNavigateToSettings = navActions::navigateToSignInAfterLogout,
+                onNavigateToSettings = navActions::navigateToSettings,
                 onNavigateToHomeWithStep = { stepId ->
                     val targetStep = homeViewModel.uiState.value.steps.find { it.checkStep == stepId }
                     targetStep?.let { step ->
@@ -128,6 +129,19 @@ fun HelpJobNavGraph(
                     }
                 },
                 homeViewModel = homeViewModel
+            )
+        }
+
+        composable(route = HelpJobDestinations.SETTING_ROUTE) {
+            SettingScreen(
+                onBack = { navController.popBackStack() },
+                onLanguageSettingClick = {
+                    // TODO: 언어 설정 화면 구현 시 연결
+                },
+                onResetProgressClick = {
+                    // TODO: 다이얼로그 표시 로직 구현 시 연결
+                },
+                onLogoutClick = navActions::navigateToSignInAfterLogout,
             )
         }
     }

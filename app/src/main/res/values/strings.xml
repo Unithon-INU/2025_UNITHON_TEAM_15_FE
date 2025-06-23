@@ -255,6 +255,20 @@
     <string name="profile_documents_no_unchecked">No missing documents</string>
     <string name="profile_document_item_format">%1$s · %2$s</string>
 
+    <!-- Setting Screen -->
+    <string name="setting_top_bar_title">Settings</string>
+    <string name="setting_section_config">Settings</string>
+    <string name="setting_section_info">Information</string>
+    <string name="setting_section_account">Account</string>
+    <string name="setting_app_language">App Language</string>
+    <string name="setting_reset_progress">Reset Progress</string>
+    <string name="setting_community_guidelines">Community Guidelines</string>
+    <string name="setting_privacy_policy">Privacy Policy</string>
+    <string name="setting_inquiry">Inquiry</string>
+    <string name="setting_logout">Logout</string>
+    <string name="setting_withdrawal">Account Deletion</string>
+    <string name="setting_app_version">App Version 1.0.0</string>
+
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_calculate">Calculator</string>

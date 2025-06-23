@@ -15,19 +15,9 @@ object HelpJobScreens {
     const val NICKNAME_SETUP_SCREEN = "nickname_setup"
     const val SIGN_UP_SUCCESS_SCREEN  = "signup_success"
     const val ONBOARDING_SCREEN = "onboarding"
-    const val MAIN_SCREEN = "main"
-    const val CALCULATOR = "calculator"
     const val STEP_DETAIL_SCREEN = "step_detail"
+    const val SETTING_SCREEN = "setting"
 }
-
-/**
- * Navigation에서 사용되는 모든 인자들의 키 값을 정의
- * - Path Parameter: 필수 인자 (예: /user/{userId})
- * - Query Parameter: 선택적 인자 (예: ?userMessage={userMessage})
- */
-//object HelpJobDestinationsArgs {
-//    const val USER_ID_ARG = "userId"
-//}
 
 /**
  * Destinations (라우트 정의)
@@ -39,9 +29,8 @@ object HelpJobDestinations {
     const val NICKNAME_SETUP_ROUTE = HelpJobScreens.NICKNAME_SETUP_SCREEN
     const val SIGN_UP_SUCCESS_ROUTE  = HelpJobScreens.SIGN_UP_SUCCESS_SCREEN
     const val ONBOARDING_ROUTE = HelpJobScreens.ONBOARDING_SCREEN
-    const val MAIN_ROUTE = HelpJobScreens.MAIN_SCREEN
-    const val CALCULATOR = HelpJobScreens.CALCULATOR
-    const val STEP_DETAIL_ROUTE = "step_detail"
+    const val STEP_DETAIL_ROUTE = HelpJobScreens.STEP_DETAIL_SCREEN
+    const val SETTING_ROUTE = HelpJobScreens.SETTING_SCREEN
 }
 
 /**
@@ -126,6 +115,10 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
         navController.navigate(HelpJobDestinations.ONBOARDING_ROUTE) {
             popUpTo(HelpJobDestinations.NICKNAME_SETUP_ROUTE) { inclusive = true }
         }
+    }
+
+    fun navigateToSettings() {
+        navController.navigate(HelpJobDestinations.SETTING_ROUTE)
     }
 
     /**
