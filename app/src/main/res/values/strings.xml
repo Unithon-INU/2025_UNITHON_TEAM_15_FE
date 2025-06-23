@@ -122,6 +122,16 @@
     <string name="onboarding_business_setup_learn">Tutoring / Learning Assistant</string>
     <string name="onboarding_business_setup_event">Event Staff / Promotional Support</string>
 
+    <!-- Calculator Time/Day Format Strings -->
+    <string name="calculator_hours_format_singular">%d hour</string>
+    <string name="calculator_hours_format_plural">%d hours</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%d hour %d minute</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%d hour %d minutes</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%d hours %d minute</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%d hours %d minutes</string>
+    <string name="calculator_days_format_singular">%d day</string>
+    <string name="calculator_days_format_plural">%d days</string>
+
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
     <string name="calculator_wage_label">Enter hourly wage</string>
