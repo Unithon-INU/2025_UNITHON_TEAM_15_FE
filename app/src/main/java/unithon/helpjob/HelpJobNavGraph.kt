@@ -115,7 +115,6 @@ fun HelpJobNavGraph(
             ProfileScreen(
                 onNavigateToSettings = navActions::navigateToSignInAfterLogout,
                 onNavigateToHomeWithStep = { stepId ->
-                    // 직접 HomeViewModel 조작 후 이동
                     val targetStep = homeViewModel.uiState.value.steps.find { it.checkStep == stepId }
                     targetStep?.let { step ->
                         homeViewModel.selectStep(step)
@@ -123,6 +122,10 @@ fun HelpJobNavGraph(
                     navController.navigate(BottomNavDestination.HOME.route) {
                         launchSingleTop = true
                         restoreState = false
+                        // 🔥 핵심: Profile을 백스택에서 완전 제거
+                        popUpTo(BottomNavDestination.PROFILE.route) {
+                            inclusive = true  // Profile도 제거
+                        }
                     }
                 },
                 homeViewModel = homeViewModel

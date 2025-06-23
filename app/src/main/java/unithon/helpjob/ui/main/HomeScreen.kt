@@ -48,6 +48,8 @@ import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Primary600
 import unithon.helpjob.util.noRippleClickable
 
+// HomeScreen.kt - 핵심 로직만 수정 (기존 컴포넌트는 그대로)
+
 @Composable
 fun HomeScreen(
     onNavigateToStepDetail: () -> Unit,
@@ -58,17 +60,35 @@ fun HomeScreen(
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
 
+    // 🔥 핵심 수정 1: selectedStep에 따라 Pager 동기화
     LaunchedEffect(uiState.selectedStep) {
         uiState.selectedStep?.let { selectedStep ->
             val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
             if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
-                pagerState.animateScrollToPage(targetIndex)
+                pagerState.scrollToPage(targetIndex)
             }
         }
     }
 
-    // 현재 선택된 스텝은 pagerState.currentPage로 자동 관리
-    val selectedStepIndex = pagerState.currentPage
+    // 🔥 핵심 수정 2: Pager 스와이프 시 ViewModel 동기화
+    LaunchedEffect(pagerState.currentPage) {
+        if (uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size) {
+            val currentStep = uiState.steps[pagerState.currentPage]
+            if (uiState.selectedStep?.checkStep != currentStep.checkStep) {
+                viewmodel.selectStep(currentStep)
+            }
+        }
+    }
+
+    // 🔥 핵심 수정 3: 표시할 step 결정 로직 개선
+    val displayStep = when {
+        // 1순위: ViewModel의 selectedStep 사용 (Profile에서 온 경우)
+        uiState.selectedStep != null -> uiState.selectedStep
+        // 2순위: Pager 위치 기반 (사용자가 직접 스와이프한 경우)
+        uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size ->
+            uiState.steps[pagerState.currentPage]
+        else -> null
+    }
 
     val scrollState = rememberScrollState()
 
@@ -112,7 +132,7 @@ fun HomeScreen(
                 pageSpacing = 0.dp
             ) { page ->
                 StepCard(
-                    step = Steps.valueOf(uiState.steps[page].checkStep).uiStep ,
+                    step = Steps.valueOf(uiState.steps[page].checkStep).uiStep,
                     title = uiState.steps[page].stepInfoRes.title,
                     subTitle = uiState.steps[page].stepInfoRes.subtitle,
                     onClick = {
@@ -142,20 +162,18 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(31.dp))
 
-            // 선택된 스텝의 내용 표시
-            if (uiState.steps.isNotEmpty() && selectedStepIndex < uiState.steps.size) {
-                val selectedStep = uiState.steps[selectedStepIndex]
-
+            // 🔥 핵심 수정 4: displayStep 기반으로 UI 표시 (기존 컴포넌트 그대로 사용)
+            displayStep?.let { step ->
                 when (uiState.selectedCategory) {
                     HomeViewModel.Category.DOCUMENTS -> {
-                        // 제출 서류 목록 표시
-                        selectedStep.documentInfoRes.forEach { document ->
+                        // 제출 서류 목록 표시 (기존 DocumentItem 그대로 사용)
+                        step.documentInfoRes.forEach { document ->
                             DocumentItem(
                                 document = document,
                                 onCheckedChange = { isChecked ->
                                     viewmodel.onDocumentCheckChanged(
                                         document = document,
-                                        stepCheckStep = selectedStep.checkStep,
+                                        stepCheckStep = step.checkStep,
                                         isChecked = isChecked
                                     )
                                 }
@@ -164,8 +182,8 @@ fun HomeScreen(
                         }
                     }
                     HomeViewModel.Category.PRECAUTIONS -> {
-                        // 유의사항 목록 표시
-                        selectedStep.stepInfoRes.precautions.forEach { precaution ->
+                        // 유의사항 목록 표시 (기존 PrecautionItem 그대로 사용)
+                        step.stepInfoRes.precautions.forEach { precaution ->
                             PrecautionItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 precaution = precaution
