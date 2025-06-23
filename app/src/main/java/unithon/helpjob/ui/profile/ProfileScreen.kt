@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -140,7 +139,8 @@ fun ProfileScreen(
                 ) {
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_visa_type),
-                        value = uiState.visaType ?: stringResource(id = R.string.profile_visa_default),
+                        value = uiState.visaType
+                            ?: stringResource(id = R.string.profile_visa_default),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -152,7 +152,8 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_korean_level),
-                        value = uiState.topikLevel ?: stringResource(id = R.string.profile_korean_default),
+                        value = uiState.topikLevel
+                            ?: stringResource(id = R.string.profile_korean_default),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -164,7 +165,8 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_preferred_job),
-                        value = uiState.industry ?: stringResource(id = R.string.profile_job_default),
+                        value = uiState.industry
+                            ?: stringResource(id = R.string.profile_job_default),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -249,20 +251,24 @@ private fun DocumentManagementSection(
                 style = MaterialTheme.typography.body2
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(68.dp))
 
             // 완료 상태 표시 박스
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Grey100, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(id = R.string.profile_documents_no_unchecked),
-                    style = MaterialTheme.typography.body2,
-                    color = Grey600
-                )
+                Box(
+                    modifier = Modifier
+                        .background(Grey100, RoundedCornerShape(10.dp))
+                        .padding(horizontal = 28.dp, vertical = 15.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.profile_documents_no_unchecked),
+                        style = MaterialTheme.typography.body2,
+                        color = Grey500
+                    )
+                }
             }
         } else {
             // 누락된 서류가 있는 경우 - "%d가지 서류"만 Warning, 나머지는 Grey500

@@ -261,7 +261,7 @@
     <string name="profile_documents_completed"> are ready!</string>
 
     <!-- Others -->
-    <string name="profile_documents_no_unchecked">No missing documents</string>
+    <string name="profile_documents_no_unchecked">No missing documents.</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">Settings</string>

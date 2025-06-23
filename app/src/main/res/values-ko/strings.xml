@@ -262,7 +262,7 @@
     <string name="profile_documents_completed">를 준비했어요!</string>
 
     <!-- 기타 -->
-    <string name="profile_documents_no_unchecked">누락된 서류가 없어요</string>
+    <string name="profile_documents_no_unchecked">누락된 서류가 없어요.</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">설정</string>
