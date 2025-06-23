@@ -28,11 +28,11 @@ fun EmailCheckScreen(
     emailAddressValue: String,
     emailAddressValueChange: (String) -> Unit,
     enabled: Boolean,
+    isSubmitting: Boolean = false, // 🆕 로딩 상태 파라미터 추가
     onNext: () -> Unit,
 ){
     Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp),
+        modifier = modifier.padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -54,10 +54,12 @@ fun EmailCheckScreen(
                 label = stringResource(R.string.document_email_check_label)
             )
         }
+
         HelpJobButton(
-            text = stringResource(R.string.document_onboarding_next),
+            text = if (isSubmitting) "loading..." else stringResource(R.string.document_onboarding_next), // 🆕 로딩 상태에 따른 텍스트 변경
             onClick = onNext,
-            enabled = enabled,
+            enabled = enabled && !isSubmitting, // 🆕 로딩 중에는 버튼 비활성화
+            isLoading = isSubmitting, // 🆕 로딩 인디케이터 표시
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
@@ -67,14 +69,27 @@ fun EmailCheckScreen(
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-fun EmailCheckPreview(
-
-){
+fun EmailCheckPreview(){
     HelpJobTheme {
         EmailCheckScreen(
-            modifier = Modifier
-                .fillMaxSize(),
-            enabled = false,
+            modifier = Modifier.fillMaxSize(),
+            enabled = true,
+            isSubmitting = false, // 🆕 Preview에 추가
+            onNext = {},
+            emailAddressValue = "ladonna.gregory@example.com",
+            emailAddressValueChange = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun EmailCheckLoadingPreview(){
+    HelpJobTheme {
+        EmailCheckScreen(
+            modifier = Modifier.fillMaxSize(),
+            enabled = true,
+            isSubmitting = true, // 🆕 로딩 상태 Preview
             onNext = {},
             emailAddressValue = "ladonna.gregory@example.com",
             emailAddressValueChange = {},
