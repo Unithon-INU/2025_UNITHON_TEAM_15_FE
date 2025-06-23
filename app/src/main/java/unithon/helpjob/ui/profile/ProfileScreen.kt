@@ -315,13 +315,13 @@ private fun DocumentManagementSection(
                 style = MaterialTheme.typography.body2
             )
 
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(24.dp))
 
             // 🆕 LazyVerticalGrid로 2열 그리드 적용
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(uncheckedDocuments) { document ->
@@ -345,19 +345,17 @@ private fun UncheckedDocumentItem(
 ) {
     Box(
         modifier = Modifier
-            .aspectRatio(1.8f) // 가로:세로 비율 1.8:1로 일관된 카드 크기 유지
             .clickable { onClick() }
-            .background(Grey100, RoundedCornerShape(8.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp), // 좁은 너비에 맞게 패딩 조정
-        contentAlignment = Alignment.CenterStart
+            .background(Grey100, RoundedCornerShape(10.dp))
+            .padding(vertical = 15.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = document.documentTitle,
-            style = MaterialTheme.typography.body4,
+            style = MaterialTheme.typography.title2,
             color = Grey600,
             maxLines = 2, // 2줄까지 허용
             overflow = TextOverflow.Ellipsis, // 긴 텍스트는 ... 처리
-            lineHeight = MaterialTheme.typography.body4.lineHeight // 줄 간격 유지
         )
     }
 }
