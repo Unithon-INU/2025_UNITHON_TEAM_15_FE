@@ -122,6 +122,16 @@
     <string name="step_warning_dialog_cancel">취소</string>
     <string name="step_warning_dialog_continue">계속 진행</string>
 
+    <!-- English plural forms (not used in Korean but needed for compilation) -->
+    <string name="calculator_hours_format_singular">%d시간</string>
+    <string name="calculator_hours_format_plural">%d시간</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%d시간 %d분</string>
+    <string name="calculator_days_format_singular">%d일</string>
+    <string name="calculator_days_format_plural">%d일</string>
+
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
     <string name="calculator_wage_label">시급 입력</string>

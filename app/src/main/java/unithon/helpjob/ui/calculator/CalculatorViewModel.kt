@@ -1,16 +1,24 @@
 package unithon.helpjob.ui.calculator
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import unithon.helpjob.R
+import unithon.helpjob.data.model.AppLanguage
+import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.ui.calculator.components.CalculationResult
 import javax.inject.Inject
 
 @HiltViewModel
-class CalculatorViewModel @Inject constructor() : ViewModel() {
+class CalculatorViewModel @Inject constructor(
+    private val languageRepository: LanguageRepository,
+    @ApplicationContext private val context: Context
+) : ViewModel() {
 
     data class CalculatorUiState(
         val wage: String = "",
@@ -104,25 +112,60 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    // 시간을 문자열로 변환하는 함수
-    fun workTimeToString(time: Float): String {
-        val hours = time.toInt()
-        val minutes = ((time - hours) * 60).toInt()
-        return if (minutes == 0) {
-            "${hours}시간"
-        } else {
-            "${hours}시간 ${minutes}분"
-        }
-    }
-
-    // 일수를 문자열로 변환하는 함수
-    fun workDayToString(days: Int): String {
-        return "${days}일"
-    }
-
     fun dismissResultDialog() {
         _uiState.update {
             it.copy(showResultDialog = false)
+        }
+    }
+
+    // 시간을 문자열로 변환하는 함수 (다국어 지원)
+    fun workTimeToString(time: Float): String {
+        val hours = time.toInt()
+        val minutes = ((time - hours) * 60).toInt()
+        val currentLanguage = languageRepository.getCurrentLanguage()
+        val isEnglish = currentLanguage == AppLanguage.ENGLISH
+
+        return if (minutes == 0) {
+            if (isEnglish) {
+                if (hours == 1) {
+                    context.getString(R.string.calculator_hours_format_singular, hours)
+                } else {
+                    context.getString(R.string.calculator_hours_format_plural, hours)
+                }
+            } else {
+                context.getString(R.string.calculator_hours_format_singular, hours)
+            }
+        } else {
+            if (isEnglish) {
+                when {
+                    hours == 1 && minutes == 1 ->
+                        context.getString(R.string.calculator_hours_minutes_format_singular_singular, hours, minutes)
+                    hours == 1 && minutes > 1 ->
+                        context.getString(R.string.calculator_hours_minutes_format_singular_plural, hours, minutes)
+                    hours > 1 && minutes == 1 ->
+                        context.getString(R.string.calculator_hours_minutes_format_plural_singular, hours, minutes)
+                    else ->
+                        context.getString(R.string.calculator_hours_minutes_format_plural_plural, hours, minutes)
+                }
+            } else {
+                context.getString(R.string.calculator_hours_minutes_format_singular_singular, hours, minutes)
+            }
+        }
+    }
+
+    // 일수를 문자열로 변환하는 함수 (다국어 지원)
+    fun workDayToString(days: Int): String {
+        val currentLanguage = languageRepository.getCurrentLanguage()
+        val isEnglish = currentLanguage == AppLanguage.ENGLISH
+
+        return if (isEnglish) {
+            if (days == 1) {
+                context.getString(R.string.calculator_days_format_singular, days)
+            } else {
+                context.getString(R.string.calculator_days_format_plural, days)
+            }
+        } else {
+            context.getString(R.string.calculator_days_format_singular, days)
         }
     }
 }
