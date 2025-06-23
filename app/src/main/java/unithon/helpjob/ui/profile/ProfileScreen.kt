@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,6 +31,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -187,7 +192,7 @@ fun ProfileScreen(
 }
 
 /**
- * 🆕 서류 관리 섹션 컴포넌트
+ * 🆕 서류 관리 섹션 컴포넌트 - 그리드 레이아웃 적용
  */
 @Composable
 private fun DocumentManagementSection(
@@ -312,19 +317,26 @@ private fun DocumentManagementSection(
 
             Spacer(Modifier.height(12.dp))
 
-            uncheckedDocuments.forEach { document ->
-                UncheckedDocumentItem(
-                    document = document,
-                    onClick = { onDocumentClick(document) }
-                )
-                Spacer(Modifier.height(4.dp))
+            // 🆕 LazyVerticalGrid로 2열 그리드 적용
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(uncheckedDocuments) { document ->
+                    UncheckedDocumentItem(
+                        document = document,
+                        onClick = { onDocumentClick(document) }
+                    )
+                }
             }
         }
     }
 }
 
 /**
- * 🆕 누락된 서류 아이템 컴포넌트
+ * 🆕 누락된 서류 아이템 컴포넌트 - 그리드 레이아웃용
  */
 @Composable
 private fun UncheckedDocumentItem(
@@ -333,10 +345,11 @@ private fun UncheckedDocumentItem(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
+            .aspectRatio(1.8f) // 가로:세로 비율 1.8:1로 일관된 카드 크기 유지
             .clickable { onClick() }
             .background(Grey100, RoundedCornerShape(8.dp))
-            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp), // 좁은 너비에 맞게 패딩 조정
+        contentAlignment = Alignment.CenterStart
     ) {
         Text(
             text = stringResource(
@@ -345,7 +358,10 @@ private fun UncheckedDocumentItem(
                 document.documentTitle
             ),
             style = MaterialTheme.typography.body4,
-            color = Grey600
+            color = Grey600,
+            maxLines = 2, // 2줄까지 허용
+            overflow = TextOverflow.Ellipsis, // 긴 텍스트는 ... 처리
+            lineHeight = MaterialTheme.typography.body4.lineHeight // 줄 간격 유지
         )
     }
 }
