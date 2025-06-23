@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.setting
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,10 +23,14 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.body4
+import unithon.helpjob.ui.theme.subhead1
 import unithon.helpjob.util.noRippleClickable
 
 @Composable
@@ -51,12 +54,12 @@ fun SettingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding())
-                .padding(top = 38.dp, start = 20.dp, end = 20.dp),
+                .padding(top = 14.dp, start = 20.dp, end = 20.dp),
         ) {
             // 설정 섹션
             SettingSectionHeader(title = R.string.setting_section_config)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(19.dp))
 
             SettingItem(
                 title = R.string.setting_app_language,
@@ -70,12 +73,20 @@ fun SettingScreen(
                 onClick = onResetProgressClick
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(18.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 4.dp,
+                color = Grey100
+            )
+
+            Spacer(modifier = Modifier.height(17.dp))
 
             // 정보 섹션
             SettingSectionHeader(title = R.string.setting_section_info)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(19.dp))
 
             SettingItem(
                 title = R.string.setting_community_guidelines,
@@ -94,15 +105,22 @@ fun SettingScreen(
             SettingItem(
                 title = R.string.setting_inquiry,
                 onClick = { /* 아직 구현하지 않음 */ },
-                titleColor = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(18.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth(),
+                thickness = 4.dp,
+                color = Grey100
+            )
+
+            Spacer(modifier = Modifier.height(18.dp))
 
             // 계정 섹션
             SettingSectionHeader(title = R.string.setting_section_account)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             SettingItem(
                 title = R.string.setting_logout,
@@ -116,14 +134,13 @@ fun SettingScreen(
                 onClick = { /* 아직 구현하지 않음 */ }
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // 앱 버전
             Text(
                 text = stringResource(R.string.setting_app_version),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Grey400,
-                modifier = Modifier.padding(vertical = 8.dp)
+                style = MaterialTheme.typography.body4,
+                color = Color(0xFF70737D)
             )
         }
     }
@@ -136,7 +153,7 @@ private fun SettingSectionHeader(
 ) {
     Text(
         text = stringResource(title),
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.body4,
         color = Grey700,
         modifier = modifier
     )
@@ -146,8 +163,7 @@ private fun SettingSectionHeader(
 private fun SettingItem(
     modifier: Modifier = Modifier,
     @StringRes title: Int,
-    onClick: () -> Unit,
-    titleColor: Color = Grey700,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -159,16 +175,16 @@ private fun SettingItem(
     ) {
         Text(
             text = stringResource(title),
-            style = MaterialTheme.typography.bodyLarge,
-            color = titleColor
+            style = MaterialTheme.typography.subhead1,
+            lineHeight = 24.sp,
+            color = Grey700
         )
 
         Icon(
             imageVector = Icons.Default.KeyboardArrowUp,
             contentDescription = null,
-            tint = Grey400,
+            tint = Grey700,
             modifier = Modifier
-                .size(20.dp)
                 .rotate(90f) // 오른쪽 화살표로 회전
         )
     }
