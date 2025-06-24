@@ -60,7 +60,16 @@ fun HomeScreen(
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
 
-    // 🔥 핵심 수정: LaunchedEffect 순서 변경 + 조건 강화
+    LaunchedEffect(uiState.memberCheckStep, uiState.steps) {
+        if (uiState.steps.isNotEmpty()) {
+            val targetIndex = uiState.steps.indexOfFirst {
+                it.checkStep == uiState.memberCheckStep.apiStep
+            }
+            if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
+                pagerState.scrollToPage(targetIndex)
+            }
+        }
+    }
 
     // 1. selectedStep 변경 시 pager 동기화 (우선순위 높음)
     LaunchedEffect(uiState.selectedStep) {

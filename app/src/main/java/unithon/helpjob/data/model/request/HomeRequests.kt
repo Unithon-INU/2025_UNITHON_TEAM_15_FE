@@ -14,7 +14,8 @@ data class UpdateEmploymentCheckRequest(
 enum class Steps(val apiStep: String, val uiStep: String) {
     STEP1("STEP1", "Step1"),
     STEP2("STEP2", "Step2"),
-    STEP3("STEP3", "Step3");
+    STEP3("STEP3", "Step3"),
+    STEP4("STEP4", "Step4");
 
     override fun toString(): String = apiStep
 }
