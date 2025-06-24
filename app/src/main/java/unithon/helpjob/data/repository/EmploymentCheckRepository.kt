@@ -16,4 +16,6 @@ interface EmploymentCheckRepository {
     suspend fun getTips(
         checkStep: Steps
     ) : List<TipResponseItem>
+
+    suspend fun resetProgress()
 }

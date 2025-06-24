@@ -280,6 +280,12 @@
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">Current Language</string>
 
+    <!-- Reset Progress Dialog -->
+    <string name="reset_progress_dialog_title">Are you sure you want to reset?</string>
+    <string name="reset_progress_dialog_message">Everything will be reset.\nDeleted data cannot be recovered.</string>
+    <string name="reset_progress_dialog_cancel">Cancel</string>
+    <string name="reset_progress_dialog_confirm">Reset</string>
+
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_calculate">Calculator</string>

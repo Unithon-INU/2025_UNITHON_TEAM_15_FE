@@ -281,6 +281,12 @@
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">현재 언어</string>
 
+    <!-- Reset Progress Dialog -->
+    <string name="reset_progress_dialog_title">정말 초기화 하시겠어요?</string>
+    <string name="reset_progress_dialog_message">지금까지 작성한 정보들이 모두 초기화 되며 \n삭제된 정보들은 복구할 수 없어요.</string>
+    <string name="reset_progress_dialog_cancel">취소</string>
+    <string name="reset_progress_dialog_confirm">초기화</string>
+
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">홈</string>
     <string name="bottom_nav_calculate">계산기</string>

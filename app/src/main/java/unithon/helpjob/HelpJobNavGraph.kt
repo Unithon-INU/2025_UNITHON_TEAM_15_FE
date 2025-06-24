@@ -143,9 +143,6 @@ fun HelpJobNavGraph(
             SettingScreen(
                 onBack = { navController.popBackStack() },
                 onLanguageSettingClick = navActions::navigateToLanguageSetting,
-                onResetProgressClick = {
-                    // TODO: 다이얼로그 표시 로직 구현 시 연결
-                },
                 onLogoutClick = navActions::navigateToSignInAfterLogout,
             )
         }

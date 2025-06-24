@@ -15,6 +15,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,8 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.setting.components.ResetProgressDialog
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.body4
@@ -34,10 +42,15 @@ import unithon.helpjob.util.noRippleClickable
 fun SettingScreen(
     onBack: () -> Unit,
     onLanguageSettingClick: () -> Unit,
-    onResetProgressClick: () -> Unit,
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showResetDialog by remember { mutableStateOf(false) }
+    var isResetting by remember { mutableStateOf(false) }
+
+    val settingViewModel: SettingViewModel = hiltViewModel()
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -71,7 +84,7 @@ fun SettingScreen(
 
             SettingItem(
                 title = R.string.setting_reset_progress,
-                onClick = onResetProgressClick,
+                onClick = { showResetDialog = true },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
 
@@ -158,6 +171,30 @@ fun SettingScreen(
             )
 
         }
+    }
+    if (showResetDialog) {
+        ResetProgressDialog(
+            onDismiss = {
+                if (!isResetting) {
+                    showResetDialog = false
+                }
+            },
+            onConfirm = {
+                if (!isResetting) {
+                    coroutineScope.launch {
+                        try {
+                            isResetting = true
+                            settingViewModel.resetProgress()
+                            showResetDialog = false
+                        } catch (e: Exception) {
+                            // TODO: 에러 처리 - 필요시 토스트 표시
+                        } finally {
+                            isResetting = false
+                        }
+                    }
+                }
+            }
+        )
     }
 }
 
