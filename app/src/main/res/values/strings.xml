@@ -80,6 +80,7 @@
     <string name="step_warning_dialog_message">You can proceed without\ncompleting the previous step.\nPlease check if there are any documents you forgot in the previous step.</string>
     <string name="step_warning_dialog_cancel">Cancel</string>
     <string name="step_warning_dialog_continue">Continue</string>
+    <string name="step_detail_screen_subtitle">Good to know</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>

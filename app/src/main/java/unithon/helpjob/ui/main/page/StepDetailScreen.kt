@@ -267,7 +267,7 @@ private fun TipsSection(tips: List<TipResponseItem>) {
             modifier = Modifier.padding(end = 1.dp)
         )
         Text(
-            text = "이런 것들을 알고가면 좋아요",
+            text = stringResource(R.string.step_detail_screen_subtitle),
             style = MaterialTheme.typography.headlineMedium,
             color = Grey600
         )
