@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.calculator
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -46,6 +48,7 @@ fun CalculatorScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -101,7 +104,7 @@ fun CalculatorScreen(
                 selectedItem = uiState.selectedWorkTime,
                 items = viewModel.workTimeOptions,
                 onItemSelected = viewModel::updateSelectedWorkTime,
-                itemToString = viewModel::workTimeToString,
+                itemToString = { time -> formatWorkTime(time, context) },
                 placeholder = stringResource(R.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
                 isUpward = false
@@ -115,7 +118,7 @@ fun CalculatorScreen(
                 selectedItem = uiState.selectedWorkDayCount,
                 items = viewModel.workDayOptions,
                 onItemSelected = viewModel::updateSelectedWorkDayCount,
-                itemToString = viewModel::workDayToString,
+                itemToString = { days -> formatWorkDays(days, context) },
                 placeholder = stringResource(R.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
                 isUpward = true
@@ -192,6 +195,39 @@ private fun MinimumWageCard(
                 )
             )
         }
+    }
+}
+
+private fun formatWorkTime(time: Float, context: Context): String {
+    val hours = time.toInt()
+    val minutes = ((time - hours) * 60).toInt()
+
+    // 📍 Context가 자동으로 현재 언어의 올바른 리소스를 선택함
+    return if (minutes == 0) {
+        if (hours == 1) {
+            context.getString(R.string.calculator_hours_format_singular, hours)
+        } else {
+            context.getString(R.string.calculator_hours_format_plural, hours)
+        }
+    } else {
+        when {
+            hours == 1 && minutes == 1 ->
+                context.getString(R.string.calculator_hours_minutes_format_singular_singular, hours, minutes)
+            hours == 1 && minutes > 1 ->
+                context.getString(R.string.calculator_hours_minutes_format_singular_plural, hours, minutes)
+            hours > 1 && minutes == 1 ->
+                context.getString(R.string.calculator_hours_minutes_format_plural_singular, hours, minutes)
+            else ->
+                context.getString(R.string.calculator_hours_minutes_format_plural_plural, hours, minutes)
+        }
+    }
+}
+
+private fun formatWorkDays(days: Int, context: Context): String {
+    return if (days == 1) {
+        context.getString(R.string.calculator_days_format_singular, days)
+    } else {
+        context.getString(R.string.calculator_days_format_plural, days)
     }
 }
 
