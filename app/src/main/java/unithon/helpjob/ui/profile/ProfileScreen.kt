@@ -353,14 +353,14 @@ private fun UncheckedDocumentItem(
         modifier = Modifier
             .clickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
-            .padding(vertical = 15.dp),
+            .padding(horizontal = 5.dp,vertical = 15.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = document.documentTitle,
             style = MaterialTheme.typography.title2,
             color = Grey600,
-            maxLines = 2, // 2줄까지 허용
+            maxLines = 1, // 1줄까지 허용
             overflow = TextOverflow.Ellipsis, // 긴 텍스트는 ... 처리
         )
     }
