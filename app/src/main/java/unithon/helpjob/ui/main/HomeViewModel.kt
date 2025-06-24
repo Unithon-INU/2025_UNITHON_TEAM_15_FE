@@ -105,13 +105,13 @@ class HomeViewModel @Inject constructor(
         }
         val targetStep = Steps.valueOf(stepCheckStep)
 
-        // 체크를 하려고 하고, 현재 단계보다 앞선 단계이면서, 현재 단계가 완료되지 않은 경우에만 경고 표시
-        if (isChecked && isNextStep(targetStep) && !isCurrentStepCompleted()) {
+        // 체크를 하려고 하고, 다음 단계이면서, (현재 단계가 완료되지 않았거나 단계를 건너뛰는 경우)에만 경고 표시
+        if (isChecked && isNextStep(targetStep) && (!isCurrentStepCompleted() || !isImmediateNextStep(targetStep))) {
             showStepWarningDialog {
                 updateDocumentCheck(document, stepCheckStep, isChecked)
             }
         } else {
-            // 체크 해제이거나 현재/이전 단계이거나 현재 단계가 완료된 경우 바로 처리
+            // 체크 해제이거나 현재/이전 단계이거나 순차적 진행인 경우 바로 처리
             updateDocumentCheck(document, stepCheckStep, isChecked)
         }
     }
@@ -124,6 +124,19 @@ class HomeViewModel @Inject constructor(
         return when (currentStep) {
             Steps.STEP1 -> targetStep == Steps.STEP2 || targetStep == Steps.STEP3 || targetStep == Steps.STEP4
             Steps.STEP2 -> targetStep == Steps.STEP3 || targetStep == Steps.STEP4
+            Steps.STEP3 -> targetStep == Steps.STEP4
+            Steps.STEP4 -> false
+        }
+    }
+
+    /**
+     * 🆕 바로 다음 단계인지 확인 (순차적 진행)
+     */
+    private fun isImmediateNextStep(targetStep: Steps): Boolean {
+        val currentStep = _uiState.value.memberCheckStep
+        return when (currentStep) {
+            Steps.STEP1 -> targetStep == Steps.STEP2
+            Steps.STEP2 -> targetStep == Steps.STEP3
             Steps.STEP3 -> targetStep == Steps.STEP4
             Steps.STEP4 -> false
         }
