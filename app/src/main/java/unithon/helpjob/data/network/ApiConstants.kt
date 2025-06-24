@@ -15,4 +15,5 @@ object ApiConstants {
     const val GET_HOME_INFO = "api/employment/home"
     const val GET_TIPS = "api/employment/tips"
     const val RESET_PROGRESS = "api/employment/progress"
+    const val POST_CERTIFICATION = "api/cert"
 }

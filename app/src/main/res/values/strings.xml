@@ -122,6 +122,16 @@
     <string name="onboarding_business_setup_learn">Tutoring / Learning Assistant</string>
     <string name="onboarding_business_setup_event">Event Staff / Promotional Support</string>
 
+    <!-- Calculator Time/Day Format Strings -->
+    <string name="calculator_hours_format_singular">%d hour</string>
+    <string name="calculator_hours_format_plural">%d hours</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%d hour %d minute</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%d hour %d minutes</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%d hours %d minute</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%d hours %d minutes</string>
+    <string name="calculator_days_format_singular">%d day</string>
+    <string name="calculator_days_format_plural">%d days</string>
+
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
     <string name="calculator_wage_label">Enter hourly wage</string>
@@ -157,11 +167,11 @@
 
     <!-- DocumentScreen(BasicInfo1) -->
     <string name="document_basic_info_1_name_label">Name</string>
-    <string name="document_basic_info_1_name_placeholder">e.g.) Unithon</string>
+    <string name="document_basic_info_1_name_placeholder">ex) Unithon</string>
     <string name="document_basic_info_1_foreigner_register_number_label">Alien Registration Number</string>
-    <string name="document_basic_info_1_foreigner_register_number_placeholder">e.g.) 123456-1234567</string>
+    <string name="document_basic_info_1_foreigner_register_number_placeholder">ex) 123456-1234567</string>
     <string name="document_basic_info_1_major_label">Department and Major</string>
-    <string name="document_basic_info_1_major_placeholder">e.g.) International Trade</string>
+    <string name="document_basic_info_1_major_placeholder">ex) International Trade</string>
 
     <!-- DocumentScreen(BasicInfo2) -->
     <string name="document_basic_info_2_semester_label">Completed Semesters</string>
@@ -175,15 +185,15 @@
     <string name="semester_4_2">4th Year 2nd Semester</string>
     <string name="document_basic_info_2_semester_placeholder">Select</string>
     <string name="document_basic_info_2_phone_number_label">Phone Number</string>
-    <string name="document_basic_info_2_phone_number_placeholder">e.g.) 010-1234-5678</string>
+    <string name="document_basic_info_2_phone_number_placeholder">ex) 010-1234-5678</string>
     <string name="document_basic_info_2_email_address_label">Email Address</string>
-    <string name="document_basic_info_2_email_address_placeholder">e.g.) unithon@gmail.com</string>
+    <string name="document_basic_info_2_email_address_placeholder">ex) unithon@gmail.com</string>
 
     <!-- DocumentScreen(WorkplaceInfo1) -->
     <string name="document_workplace_info_1_company_name_label">Company Name</string>
-    <string name="document_workplace_info_1_company_name_placeholder">e.g.) Auto Group</string>
+    <string name="document_workplace_info_1_company_name_placeholder">ex) Auto Group</string>
     <string name="document_workplace_info_1_business_number_label">Business Registration Number</string>
-    <string name="document_workplace_info_1_business_number_placeholder">e.g.) 123-45-67890</string>
+    <string name="document_workplace_info_1_business_number_placeholder">ex) 123-45-67890</string>
     <string name="document_workplace_info_1_category_of_business_label">Industry</string>
     <string name="document_workplace_info_1_category_of_business_placeholder">Select</string>
 
@@ -191,41 +201,43 @@
     <string name="document_workplace_info_2_company_address_label">Company Address</string>
     <string name="document_workplace_info_2_company_address_placeholder">Remaining address</string>
     <string name="document_workplace_info_2_employer_name_label">Employer Name</string>
-    <string name="document_workplace_info_2_employer_name_placeholder">e.g.) Gil Dong Kim</string>
+    <string name="document_workplace_info_2_employer_name_placeholder">ex) Gil Dong Kim</string>
     <string name="document_workplace_info_2_employer_phone_number_label">Employer Phone Number</string>
-    <string name="document_workplace_info_2_employer_phone_number_placeholder">e.g.) 010-1234-5678</string>
+    <string name="document_workplace_info_2_employer_phone_number_placeholder">ex) 010-1234-5678</string>
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">Hourly Wage</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">e.g.) 10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">ex)10,030</string>
     <string name="document_workplace_info_3_work_start_date_label">Work Start Date</string>
-    <string name="document_workplace_info_3_work_start_year_placeholder">e.g.) 2024</string>
+    <string name="document_workplace_info_3_work_start_year_placeholder">ex)2024</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">Y</string>
-    <string name="document_workplace_info_3_work_start_month_placeholder">e.g.) 01</string>
+    <string name="document_workplace_info_3_work_start_month_placeholder">ex)01</string>
     <string name="document_workplace_info_3_work_start_month_trailing_text">M</string>
-    <string name="document_workplace_info_3_work_start_day_placeholder">e.g.) 01</string>
+    <string name="document_workplace_info_3_work_start_day_placeholder">ex)01</string>
     <string name="document_workplace_info_3_work_start_day_trailing_text">D</string>
     <string name="document_workplace_info_3_work_end_day_label">Work End Date</string>
-    <string name="document_workplace_info_3_work_end_year_placeholder">e.g.) 2024</string>
+    <string name="document_workplace_info_3_work_end_year_placeholder">ex)2024</string>
     <string name="document_workplace_info_3_work_end_year_trailing_text">Y</string>
-    <string name="document_workplace_info_3_work_end_month_placeholder">e.g.) 01</string>
-    <string name="document_workplace_info_3_work_end_day_placeholder">e.g.) 01</string>
+    <string name="document_workplace_info_3_work_end_month_placeholder">ex)01</string>
+    <string name="document_workplace_info_3_work_end_day_placeholder">ex)01</string>
     <string name="document_workplace_info_3_work_end_month_trailing_text">M</string>
     <string name="document_workplace_info_3_work_end_day_trailing_text">D</string>
 
     <!-- DocumentScreen(WorkplaceInfo4) -->
-    <string name="document_workplace_info_4_work_start_day_list_label">Work Days</string>
-    <string name="document_workplace_info_4_work_start_time_label">Start Time</string>
-    <string name="document_workplace_info_4_work_start_time_placeholder">Select</string>
-    <string name="document_workplace_info_4_work_end_time_label">End Time</string>
-    <string name="document_workplace_info_4_work_end_time_placeholder">Select</string>
-    <string name="workday_monday">Mon</string>
-    <string name="workday_tuesday">Tue</string>
-    <string name="workday_wednesday">Wed</string>
-    <string name="workday_thursday">Thu</string>
-    <string name="workday_friday">Fri</string>
-    <string name="workday_saturday">Sat</string>
-    <string name="workday_sunday">Sun</string>
+    <string name="document_workplace_info_4_work_days_label">Weekly Work Days</string>
+    <string name="document_workplace_info_4_everyday">Everyday</string>
+    <string name="document_workplace_info_4_work_time_label">Start/End Time</string>
+    <string name="document_workplace_info_4_same_time">Same Time for All</string>
+    <string name="document_workplace_info_4_start_time_placeholder">ex)01</string>
+    <string name="document_workplace_info_4_end_time_placeholder">ex)05</string>
+    <string name="document_workplace_info_4_time_unit">Hr/Min</string>
+    <string name="workday_monday">M</string>
+    <string name="workday_tuesday">T</string>
+    <string name="workday_wednesday">W</string>
+    <string name="workday_thursday">T</string>
+    <string name="workday_friday">F</string>
+    <string name="workday_saturday">S</string>
+    <string name="workday_sunday">S</string>
 
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">Almost done!\nIs your email address correct?</string>

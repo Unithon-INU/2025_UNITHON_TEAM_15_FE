@@ -12,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class DefaultEmploymentCheckRepository @Inject constructor(
     private val apiService: HelpJobApiService,
+    private val languageRepository: LanguageRepository,
 ): EmploymentCheckRepository {
     override suspend fun updateChecklist(request: UpdateEmploymentCheckRequest): UpdateEmploymentCheckResponse {
         val response = apiService.updateChecklist(request)
@@ -25,7 +26,7 @@ class DefaultEmploymentCheckRepository @Inject constructor(
     }
 
     override suspend fun getHomeInfo(): HomeInfoResponse {
-        val response = apiService.getHomeInfo()
+        val response = apiService.getHomeInfo(languageRepository.getCurrentLanguage().code)
 
         if (response.isSuccessful){
             response.body()?.let { homeInfoResponse ->

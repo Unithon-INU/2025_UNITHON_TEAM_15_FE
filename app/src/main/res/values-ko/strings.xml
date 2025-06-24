@@ -122,6 +122,16 @@
     <string name="step_warning_dialog_cancel">취소</string>
     <string name="step_warning_dialog_continue">계속 진행</string>
 
+    <!-- English plural forms (not used in Korean but needed for compilation) -->
+    <string name="calculator_hours_format_singular">%d시간</string>
+    <string name="calculator_hours_format_plural">%d시간</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%d시간 %d분</string>
+    <string name="calculator_days_format_singular">%d일</string>
+    <string name="calculator_days_format_plural">%d일</string>
+
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
     <string name="calculator_wage_label">시급 입력</string>
@@ -215,11 +225,13 @@
     <string name="document_workplace_info_3_work_end_day_trailing_text">일</string>
 
     <!-- DocumentScreen(WorkplaceInfo4) -->
-    <string name="document_workplace_info_4_work_start_day_list_label">근무 시작일</string>
-    <string name="document_workplace_info_4_work_start_time_label">시작 시간</string>
-    <string name="document_workplace_info_4_work_start_time_placeholder">선택</string>
-    <string name="document_workplace_info_4_work_end_time_label">종료 시간</string>
-    <string name="document_workplace_info_4_work_end_time_placeholder">선택</string>
+    <string name="document_workplace_info_4_work_days_label">주간 근무 요일</string>
+    <string name="document_workplace_info_4_everyday">매일</string>
+    <string name="document_workplace_info_4_work_time_label">시작/종료 시간</string>
+    <string name="document_workplace_info_4_same_time">시간 모두 같음</string>
+    <string name="document_workplace_info_4_start_time_placeholder">예) 01</string>
+    <string name="document_workplace_info_4_end_time_placeholder">예) 05</string>
+    <string name="document_workplace_info_4_time_unit">시/분</string>
     <string name="workday_monday">월</string>
     <string name="workday_tuesday">화</string>
     <string name="workday_wednesday">수</string>
