@@ -169,7 +169,8 @@ fun WorkplaceInfo3Screen(
                         },
                         itemToString = { it },
                         placeholder = stringResource(R.string.document_workplace_info_3_work_start_year_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_year_trailing_text)
+                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_year_trailing_text),
+                        showScrollbar = false
                     )
 
                     Spacer(Modifier.width(13.dp))
@@ -186,7 +187,8 @@ fun WorkplaceInfo3Screen(
                         },
                         itemToString = { it },
                         placeholder = stringResource(R.string.document_workplace_info_3_work_start_month_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_month_trailing_text)
+                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_month_trailing_text),
+                        showScrollbar = false
                     )
 
                     Spacer(Modifier.width(13.dp))
@@ -202,7 +204,8 @@ fun WorkplaceInfo3Screen(
                         },
                         itemToString = { it },
                         placeholder = stringResource(R.string.document_workplace_info_3_work_start_day_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_day_trailing_text)
+                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_day_trailing_text),
+                        showScrollbar = false
                     )
                 }
             }
