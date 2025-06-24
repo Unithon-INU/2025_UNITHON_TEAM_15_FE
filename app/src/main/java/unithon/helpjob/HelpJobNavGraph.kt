@@ -154,11 +154,17 @@ fun HelpJobNavGraph(
             )
         }
 
-        composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) {
-            LanguageSettingScreen(
-                onBack = { navController.popBackStack() }
-            )
+        composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) { backStackEntry ->
+            // ✅ SettingScreen과 동일한 패턴: HOME 화면의 ViewModel 공유
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(BottomNavDestination.HOME.route)
+            }
+            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
 
+            LanguageSettingScreen(
+                onBack = { navController.popBackStack() },
+                homeViewModel = homeViewModel
+            )
         }
     }
 }

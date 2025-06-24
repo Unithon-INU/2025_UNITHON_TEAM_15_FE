@@ -41,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey600
@@ -50,13 +51,13 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun LanguageSettingScreen(
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel,
     viewModel: LanguageSettingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             HelpJobTopAppBar(
                 title = R.string.setting_app_language,
@@ -83,7 +84,10 @@ fun LanguageSettingScreen(
             LanguageDropdown(
                 items = uiState.availableLanguages,
                 selectedItem = uiState.currentLanguage,
-                onItemSelected = viewModel::setLanguage,
+                onItemSelected = { language ->
+                    viewModel.setLanguage(language)
+                    homeViewModel.refresh()
+                },
                 itemToString = { it.displayName }
             )
         }
