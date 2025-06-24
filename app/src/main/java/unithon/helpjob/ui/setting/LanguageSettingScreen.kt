@@ -86,7 +86,7 @@ fun LanguageSettingScreen(
                 selectedItem = uiState.currentLanguage,
                 onItemSelected = { language ->
                     viewModel.setLanguage(language)
-                    homeViewModel.refresh()
+                    homeViewModel.refresh(language.code)
                 },
                 itemToString = { it.displayName }
             )

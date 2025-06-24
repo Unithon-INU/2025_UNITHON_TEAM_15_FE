@@ -13,6 +13,8 @@ interface EmploymentCheckRepository {
 
     suspend fun getHomeInfo() : HomeInfoResponse
 
+    suspend fun getHomeInfo(language: String) : HomeInfoResponse
+
     suspend fun getTips(
         checkStep: Steps
     ) : List<TipResponseItem>

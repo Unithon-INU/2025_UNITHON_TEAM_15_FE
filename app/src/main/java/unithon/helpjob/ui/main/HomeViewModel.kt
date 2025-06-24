@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -262,12 +261,18 @@ class HomeViewModel @Inject constructor(
         getStepInfo()
     }
 
-    fun getStepInfo(){
+    fun getStepInfo(language: String? = null){
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-                val response = employmentCheckRepository.getHomeInfo()
+                // 🔄 이 부분을 수정
+                val response = if (language != null) {
+                    employmentCheckRepository.getHomeInfo(language)
+                } else {
+                    employmentCheckRepository.getHomeInfo()
+                }
+
                 Timber.d(response.toString())
 
                 // 🔥 핵심 변경: 서버에서 받은 데이터를 기반으로 가장 최근 체크한 step 계산
@@ -317,6 +322,17 @@ class HomeViewModel @Inject constructor(
      */
     fun refresh() {
         getStepInfo()
+        // 선택된 단계가 있으면 팁도 다시 로드
+        uiState.value.selectedStep?.let { selectedStep ->
+            getTips(Steps.valueOf(selectedStep.checkStep))
+        }
+    }
+
+    /**
+     * 특정 언어로 데이터 새로고침
+     */
+    fun refresh(language: String) {
+        getStepInfo(language)
         // 선택된 단계가 있으면 팁도 다시 로드
         uiState.value.selectedStep?.let { selectedStep ->
             getTips(Steps.valueOf(selectedStep.checkStep))
