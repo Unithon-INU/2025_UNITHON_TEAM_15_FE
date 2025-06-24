@@ -26,7 +26,11 @@ class DefaultEmploymentCheckRepository @Inject constructor(
     }
 
     override suspend fun getHomeInfo(): HomeInfoResponse {
-        val response = apiService.getHomeInfo(languageRepository.getCurrentLanguage().code)
+        return getHomeInfo(languageRepository.getCurrentLanguage().code)
+    }
+
+    override suspend fun getHomeInfo(language: String): HomeInfoResponse {
+        val response = apiService.getHomeInfo(language)
 
         if (response.isSuccessful){
             response.body()?.let { homeInfoResponse ->
