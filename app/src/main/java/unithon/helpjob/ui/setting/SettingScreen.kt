@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.setting.components.ResetProgressDialog
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey700
@@ -43,16 +44,15 @@ fun SettingScreen(
     onBack: () -> Unit,
     onLanguageSettingClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    modifier: Modifier = Modifier
+    homeViewModel: HomeViewModel,
+    settingViewModel: SettingViewModel = hiltViewModel()
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
-
-    val settingViewModel: SettingViewModel = hiltViewModel()
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             HelpJobTopAppBar(
                 title = R.string.setting_top_bar_title,
@@ -186,8 +186,9 @@ fun SettingScreen(
                             isResetting = true
                             settingViewModel.resetProgress()
                             showResetDialog = false
+                            homeViewModel.refresh()
                         } catch (e: Exception) {
-                            // TODO: 에러 처리 - 필요시 토스트 표시
+                            // TODO: 에러 처리
                         } finally {
                             isResetting = false
                         }

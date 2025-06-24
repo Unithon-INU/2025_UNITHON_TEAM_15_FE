@@ -139,11 +139,18 @@ fun HelpJobNavGraph(
             )
         }
 
-        composable(route = HelpJobDestinations.SETTING_ROUTE) {
+        composable(route = HelpJobDestinations.SETTING_ROUTE) { backStackEntry ->
+            // ✅ ProfileScreen과 동일한 패턴: HOME 화면의 ViewModel 공유
+            val parentEntry = remember(backStackEntry) {
+                navController.getBackStackEntry(BottomNavDestination.HOME.route)
+            }
+            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+
             SettingScreen(
                 onBack = { navController.popBackStack() },
                 onLanguageSettingClick = navActions::navigateToLanguageSetting,
                 onLogoutClick = navActions::navigateToSignInAfterLogout,
+                homeViewModel = homeViewModel
             )
         }
 
