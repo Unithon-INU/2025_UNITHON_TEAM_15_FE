@@ -46,6 +46,26 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+    /**
+     * 🆕 가장 최근에 체크한 document가 있는 step을 찾는 함수
+     */
+    private fun findLatestCheckedStep(steps: List<EmploymentCheckRes>): Steps {
+        // Step 순서를 역순으로 정렬 (STEP4 -> STEP3 -> STEP2 -> STEP1)
+        val stepOrder = listOf(Steps.STEP4, Steps.STEP3, Steps.STEP2, Steps.STEP1)
+
+        for (step in stepOrder) {
+            val stepData = steps.find { it.checkStep == step.apiStep }
+            if (stepData != null && stepData.documentInfoRes.any { it.isChecked }) {
+                Timber.d("가장 최근 체크된 step 발견: ${step.uiStep}")
+                return step
+            }
+        }
+
+        // 체크된 document가 없으면 STEP1 반환
+        Timber.d("체크된 document가 없으므로 STEP1 반환")
+        return Steps.STEP1
+    }
+
     fun selectStep(step: EmploymentCheckRes){
         if (_uiState.value.selectedStep?.checkStep == step.checkStep) {
             Timber.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
@@ -85,13 +105,13 @@ class HomeViewModel @Inject constructor(
         }
         val targetStep = Steps.valueOf(stepCheckStep)
 
-        // 체크를 하려고 하고, 현재 단계보다 앞선 단계인 경우 경고 표시
-        if (isChecked && isNextStep(targetStep)) {
+        // 체크를 하려고 하고, 현재 단계보다 앞선 단계이면서, 현재 단계가 완료되지 않은 경우에만 경고 표시
+        if (isChecked && isNextStep(targetStep) && !isCurrentStepCompleted()) {
             showStepWarningDialog {
                 updateDocumentCheck(document, stepCheckStep, isChecked)
             }
         } else {
-            // 체크 해제이거나 현재/이전 단계면 바로 처리
+            // 체크 해제이거나 현재/이전 단계이거나 현재 단계가 완료된 경우 바로 처리
             updateDocumentCheck(document, stepCheckStep, isChecked)
         }
     }
@@ -102,10 +122,20 @@ class HomeViewModel @Inject constructor(
     private fun isNextStep(targetStep: Steps): Boolean {
         val currentStep = _uiState.value.memberCheckStep
         return when (currentStep) {
-            Steps.STEP1 -> targetStep == Steps.STEP2 || targetStep == Steps.STEP3
-            Steps.STEP2 -> targetStep == Steps.STEP3
-            Steps.STEP3 -> false
+            Steps.STEP1 -> targetStep == Steps.STEP2 || targetStep == Steps.STEP3 || targetStep == Steps.STEP4
+            Steps.STEP2 -> targetStep == Steps.STEP3 || targetStep == Steps.STEP4
+            Steps.STEP3 -> targetStep == Steps.STEP4
+            Steps.STEP4 -> false
         }
+    }
+
+    /**
+     * 🆕 현재 step의 모든 문서가 체크되었는지 확인
+     */
+    private fun isCurrentStepCompleted(): Boolean {
+        val currentStep = _uiState.value.memberCheckStep
+        val currentStepData = _uiState.value.steps.find { it.checkStep == currentStep.apiStep }
+        return currentStepData?.documentInfoRes?.all { it.isChecked } ?: false
     }
 
     /**
@@ -183,13 +213,11 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
-                    val newMemberCheckStep = if (isChecked) {
-                        val targetStep = Steps.valueOf(stepCheckStep)
-                        maxOf(currentState.memberCheckStep, targetStep) // 현재 단계와 타겟 단계 중 더 높은 것
-                    } else {
-                        currentState.memberCheckStep // 체크 해제시엔 단계 유지
-                    }
-                    Timber.d("current step : ${newMemberCheckStep.uiStep}")
+                    // 🔥 핵심 변경: 가장 최근에 체크한 document가 있는 step을 찾아서 설정
+                    val newMemberCheckStep = Steps.valueOf(stepCheckStep)
+
+                    Timber.d("업데이트된 memberCheckStep: ${newMemberCheckStep.uiStep}")
+
                     currentState.copy(
                         steps = updatedSteps,
                         progressPercentage = newProgress.progress / 100f,
@@ -229,13 +257,16 @@ class HomeViewModel @Inject constructor(
                 val response = employmentCheckRepository.getHomeInfo()
                 Timber.d(response.toString())
 
+                // 🔥 핵심 변경: 서버에서 받은 데이터를 기반으로 가장 최근 체크한 step 계산
+                val latestCheckedStep = findLatestCheckedStep(response.employmentCheckRes)
+
                 _uiState.update {
                     it.copy(
                         steps = response.employmentCheckRes,
                         nickname = response.nickname,
                         email = response.email,
                         progressPercentage = response.progress / 100f,
-                        memberCheckStep = Steps.valueOf(response.memberCheckStep),
+                        memberCheckStep = latestCheckedStep, // 계산된 step 사용
                         isLoading = false
                     )
                 }
