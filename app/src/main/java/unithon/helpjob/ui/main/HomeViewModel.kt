@@ -227,7 +227,7 @@ class HomeViewModel @Inject constructor(
                     }
 
                     // 🔥 핵심 변경: 가장 최근에 체크한 document가 있는 step을 찾아서 설정
-                    val newMemberCheckStep = findLatestCheckedStep(updatedSteps)
+                    val newMemberCheckStep = Steps.valueOf(stepCheckStep)
 
                     Timber.d("업데이트된 memberCheckStep: ${newMemberCheckStep.uiStep}")
 
