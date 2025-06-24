@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.EmailSendReq
@@ -22,7 +23,7 @@ import unithon.helpjob.data.model.response.TokenResponse
 import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 
 interface HelpJobApiService {
-
+    // 회원 관련 API
     @POST(ApiConstants.SIGN_IN)
     suspend fun signIn(
         @Body request: MemberSignInReq
@@ -57,6 +58,7 @@ interface HelpJobApiService {
         @Body request: EmailVerifyCodeReq
     ): Response<Unit>
 
+    // 시간제 취업 확인 관련 API
     @PATCH(ApiConstants.UPDATE_CHECKLIST)
     suspend fun updateChecklist(
         @Body request: UpdateEmploymentCheckRequest
@@ -71,6 +73,9 @@ interface HelpJobApiService {
     suspend fun getTips(
         @Query("checkStep") checkStep: String
     ) : Response<List<TipResponseItem>>
+
+    @PUT(ApiConstants.RESET_PROGRESS)
+    suspend fun resetProgress(): Response<Unit>
 
     @POST(ApiConstants.POST_CERTIFICATION)
     suspend fun postCertification(

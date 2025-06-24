@@ -47,4 +47,10 @@ class DefaultEmploymentCheckRepository @Inject constructor(
         throw Exception(response.errorBody()?.string() ?: "팁 정보 조회 실패")
     }
 
+    override suspend fun resetProgress() {
+        val response = apiService.resetProgress()
+        if (!response.isSuccessful) {
+            throw Exception("초기화 실패")
+        }
+    }
 }

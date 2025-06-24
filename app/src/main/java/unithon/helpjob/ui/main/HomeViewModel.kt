@@ -29,6 +29,7 @@ class HomeViewModel @Inject constructor(
 
     data class HomeUiState(
         val nickname: String = "",
+        val email: String = "",
         val memberCheckStep: Steps = Steps.STEP1,
         val steps : List<EmploymentCheckRes> = emptyList(),
         val tips : List<TipResponseItem> = emptyList(),
@@ -46,6 +47,10 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     fun selectStep(step: EmploymentCheckRes){
+        if (_uiState.value.selectedStep?.checkStep == step.checkStep) {
+            Timber.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
+            return
+        }
         _uiState.update {
             it.copy(
                 selectedStep = step
@@ -74,6 +79,10 @@ class HomeViewModel @Inject constructor(
      * 문서 체크 상태 변경 시도
      */
     fun onDocumentCheckChanged(document: DocumentInfoRes, stepCheckStep: String, isChecked: Boolean) {
+        if (uiState.value.isUpdating) {
+            Timber.d("이미 업데이트 중입니다. 요청 무시.")
+            return
+        }
         val targetStep = Steps.valueOf(stepCheckStep)
 
         // 체크를 하려고 하고, 현재 단계보다 앞선 단계인 경우 경고 표시
@@ -224,6 +233,7 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         steps = response.employmentCheckRes,
                         nickname = response.nickname,
+                        email = response.email,
                         progressPercentage = response.progress / 100f,
                         memberCheckStep = Steps.valueOf(response.memberCheckStep),
                         isLoading = false

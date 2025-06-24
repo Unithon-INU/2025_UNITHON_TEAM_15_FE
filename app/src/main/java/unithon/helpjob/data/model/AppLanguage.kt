@@ -1,8 +1,8 @@
 package unithon.helpjob.data.model
 
 enum class AppLanguage(val code: String, val displayName: String) {
-    ENGLISH("en", "English"),
-    KOREAN("ko", "한국어");
+    KOREAN("ko", "한국어"),
+    ENGLISH("en", "English");
 
     companion object {
         fun fromCode(code: String): AppLanguage {

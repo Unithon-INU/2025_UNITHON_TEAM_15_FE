@@ -249,6 +249,55 @@
     <string name="document_finish_description">메일함을 확인해주세요</string>
     <string name="document_finish_button">완료</string>
 
+    <!-- Profile Screen -->
+    <string name="profile_greeting">안녕하세요 \n%1$s님</string>
+    <string name="profile_nickname_default">유니톤</string>
+    <string name="profile_email_default">temp@naver.com</string>
+    <string name="profile_email_signup_type">이메일 가입</string>
+    <string name="profile_visa_type">비자 종류</string>
+    <string name="profile_visa_default">D-?</string>
+    <string name="profile_korean_level">한국어 능력</string>
+    <string name="profile_korean_default">TOPIK ?급</string>
+    <string name="profile_preferred_job">희망 업종</string>
+    <string name="profile_job_default">임시</string>
+
+    <!-- Profile Document Management - 분리된 문자열들 -->
+    <string name="profile_documents_title">내 서류 관리</string>
+
+    <!-- 누락 서류가 있을 때 사용할 분리된 문자열들 -->
+    <string name="profile_documents_current">현재</string>
+    <string name="profile_documents_count_format">%1$d가지 서류</string>
+    <string name="profile_documents_not_checked">를 체크하지 않았어요</string>
+
+    <!-- 모든 서류 완료 시 사용할 분리된 문자열들 -->
+    <string name="profile_documents_all">모든 서류</string>
+    <string name="profile_documents_completed">를 준비했어요!</string>
+
+    <!-- 기타 -->
+    <string name="profile_documents_no_unchecked">누락된 서류가 없어요.</string>
+
+    <!-- Setting Screen -->
+    <string name="setting_top_bar_title">설정</string>
+    <string name="setting_section_config">설정</string>
+    <string name="setting_section_info">정보</string>
+    <string name="setting_section_account">계정</string>
+    <string name="setting_app_language">앱 언어 설정</string>
+    <string name="setting_reset_progress">진행 상황 초기화</string>
+    <string name="setting_community_guidelines">커뮤니티 가이드라인</string>
+    <string name="setting_privacy_policy">개인정보 취급방침</string>
+    <string name="setting_inquiry">문의</string>
+    <string name="setting_logout">로그아웃</string>
+    <string name="setting_withdrawal">탈퇴</string>
+    <string name="setting_app_version">앱 버전 1.0.0</string>
+
+    <!-- Language Setting Screen -->
+    <string name="language_setting_current_language">현재 언어</string>
+
+    <!-- Reset Progress Dialog -->
+    <string name="reset_progress_dialog_title">정말 초기화 하시겠어요?</string>
+    <string name="reset_progress_dialog_message">지금까지 작성한 정보들이 모두 초기화 되며 \n삭제된 정보들은 복구할 수 없어요.</string>
+    <string name="reset_progress_dialog_cancel">취소</string>
+    <string name="reset_progress_dialog_confirm">초기화</string>
 
     <!-- Bottom Bar -->
     <string name="bottom_nav_home">홈</string>
@@ -262,7 +311,7 @@
     <string name="nickname_setup_top_bar_title">회원가입</string>
     <string name="onboarding_top_bar_title">이용정보</string>
     <string name="document_top_bar_title">서류작성</string>
-
+    <string name="settings_button">설정</string>
 
 
 
