@@ -44,24 +44,45 @@ class AppLocaleManager @Inject constructor(
     /**
      * 현재 설정된 언어 코드 가져오기
      */
+    /**
+     * 현재 설정된 언어 코드 가져오기 (실제 UI에서 사용되는 언어)
+     */
     fun getCurrentLanguageCode(): String {
         return try {
-            val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // Android 13 이상
-                context.getSystemService(LocaleManager::class.java)
+            // 1️⃣ 실제 Context에서 사용되는 언어 (UI가 렌더링되는 언어)
+            val contextLocale = context.resources.configuration.locales[0]
+            val contextLanguageCode = contextLocale.language
+            Timber.d("Context 언어 코드: $contextLanguageCode")
+
+            // 2️⃣ AppCompatDelegate에서 설정된 언어
+            val appCompatLocale = AppCompatDelegate.getApplicationLocales().get(0)
+            val appCompatLanguageCode = appCompatLocale?.language
+            Timber.d("AppCompat 언어 코드: $appCompatLanguageCode")
+
+            // 3️⃣ Android 13+ LocaleManager에서 설정된 언어
+            val localeManagerLanguageCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val locale = context.getSystemService(LocaleManager::class.java)
                     ?.applicationLocales
                     ?.get(0)
+                locale?.language
             } else {
-                // Android 12 이하
-                AppCompatDelegate.getApplicationLocales().get(0)
+                null
+            }
+            Timber.d("LocaleManager 언어 코드: $localeManagerLanguageCode")
+
+            // 4️⃣ 우선순위: Context > AppCompat > LocaleManager > 기본값
+            val finalLanguageCode = when {
+                contextLanguageCode.isNotBlank() -> contextLanguageCode
+                !appCompatLanguageCode.isNullOrBlank() -> appCompatLanguageCode
+                !localeManagerLanguageCode.isNullOrBlank() -> localeManagerLanguageCode
+                else -> getCurrentLanguage().code
             }
 
-            val languageCode = locale?.language ?: getDefaultLanguageCode()
-            Timber.d("현재 언어 코드: $languageCode")
-            languageCode
+            Timber.d("최종 선택된 언어 코드: $finalLanguageCode")
+            finalLanguageCode
         } catch (e: Exception) {
             Timber.e(e, "현재 언어 코드 가져오기 실패")
-            getDefaultLanguageCode()
+            getCurrentLanguage().code
         }
     }
 

@@ -121,6 +121,8 @@
     <string name="step_warning_dialog_message">전단계를 완료하지 않아도 진행할 수 있어요.\n이전 단계에서 잊으신 서류는 없는지 확인해주세요.</string>
     <string name="step_warning_dialog_cancel">취소</string>
     <string name="step_warning_dialog_continue">계속 진행</string>
+    <string name="step_detail_screen_subtitle">이런 것들을 알고가면 좋아요</string>
+
 
     <!-- English plural forms (not used in Korean but needed for compilation) -->
     <string name="calculator_hours_format_singular">%d시간</string>
@@ -312,7 +314,5 @@
     <string name="onboarding_top_bar_title">이용정보</string>
     <string name="document_top_bar_title">서류작성</string>
     <string name="settings_button">설정</string>
-
-
 
 </resources>

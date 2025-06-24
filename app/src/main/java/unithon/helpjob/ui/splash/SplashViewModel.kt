@@ -8,13 +8,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.LanguageRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val languageRepository: LanguageRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SplashUiState())
@@ -36,6 +40,8 @@ class SplashViewModel @Inject constructor(
                 when {
                     token == null -> NavigationTarget.Login
                     else -> {
+
+
                         if (authRepository.isOnboardingCompleted()) {
                             NavigationTarget.Main
                         } else {
@@ -51,6 +57,8 @@ class SplashViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(navigationTarget = target)
         }
     }
+
+
 }
 
 data class SplashUiState(

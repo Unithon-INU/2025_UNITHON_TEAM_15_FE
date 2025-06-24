@@ -1,6 +1,9 @@
 package unithon.helpjob.data.repository
 
+import android.app.LocaleManager
 import android.content.Context
+import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
@@ -26,6 +29,7 @@ class LanguageRepository @Inject constructor(
             Timber.e(e, "❌ 언어 설정 실패: ${language.code}")
         }
     }
+
 
     fun getCurrentLanguage(): AppLanguage {
         return appLocaleManager.getCurrentLanguage()
