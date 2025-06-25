@@ -9,10 +9,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.data.model.AppLanguage
-import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.data.repository.UnauthorizedException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,18 +34,33 @@ class SplashViewModel @Inject constructor(
 
             // 동시에 앱 상태 체크
             val appStateCheck = async {
-                val token = authRepository.getToken()
+                try {
+                    val token = authRepository.getToken()
 
-                when {
-                    token == null -> NavigationTarget.Login
-                    else -> {
-
-
+                    if (token == null) {
+                        NavigationTarget.Login
+                    } else {
+                        // 토큰이 있으면 온보딩 완료 여부 체크
                         if (authRepository.isOnboardingCompleted()) {
                             NavigationTarget.Main
                         } else {
                             NavigationTarget.Onboarding
                         }
+                    }
+                } catch (e: UnauthorizedException) {
+                    // 토큰이 무효한 경우 토큰 클리어 후 로그인으로 분기
+                    authRepository.clearToken()
+                    NavigationTarget.Login
+                } catch (e: Exception) {
+                    // 기타 예외는 온보딩으로 처리 (기존 동작 유지)
+                    Timber.e(e, "앱 상태 체크 실패")
+
+                    // 토큰이 있는지 다시 체크해서 분기
+                    val token = authRepository.getToken()
+                    if (token == null) {
+                        NavigationTarget.Login
+                    } else {
+                        NavigationTarget.Onboarding
                     }
                 }
             }
