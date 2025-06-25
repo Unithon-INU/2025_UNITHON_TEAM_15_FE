@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import unithon.helpjob.R
+import unithon.helpjob.data.model.Business
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
 import unithon.helpjob.ui.theme.Blue500
@@ -152,8 +153,7 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_korean_level),
-                        value = uiState.topikLevel
-                            ?: stringResource(id = R.string.profile_korean_default),
+                        value = formatTopikLevelForDisplay(uiState.topikLevel),
                         modifier = Modifier.weight(1f)
                     )
 
@@ -367,13 +367,40 @@ private fun UncheckedDocumentItem(
 
 @Composable
 private fun formatIndustryForDisplay(industry: String?): String {
-    if (industry.isNullOrBlank()) return stringResource(id = R.string.profile_job_default)
-
-    val industries = industry.split(",").map { it.trim() }
-    return when {
-        industries.size <= 1 -> industry
-        else -> "${industries.first()} ..."
+    if (industry.isNullOrEmpty()) {
+        return stringResource(R.string.profile_job_default)
     }
+
+    // 1. 기존 로직: 쉼표로 구분된 여러 업종 처리
+    val industries = industry.split(",").map { it.trim() }
+
+    return when {
+        industries.size <= 1 -> {
+            // 2. 단일 업종인 경우: enum 매핑 적용
+            val business = Business.fromDisplayText(industry)
+            business?.displayNameResId?.let { resId ->
+                stringResource(resId)
+            } ?: industry
+        }
+        else -> {
+            // 3. 여러 업종인 경우: 첫 번째만 enum 매핑하고 "..." 추가
+            val firstIndustry = industries.first()
+            val business = Business.fromDisplayText(firstIndustry)
+            val displayName = business?.displayNameResId?.let { resId ->
+                stringResource(resId)
+            } ?: firstIndustry
+
+            "$displayName ..."
+        }
+    }
+}
+
+@Composable
+private fun formatTopikLevelForDisplay(topikLevel: String?): String {
+    return topikLevel?.let { value ->
+        val level = TopikLevel.fromDisplayText(value)
+        stringResource(level.displayNameResId)
+    } ?: stringResource(R.string.profile_korean_default)
 }
 
 
