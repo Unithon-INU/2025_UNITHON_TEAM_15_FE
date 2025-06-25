@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,9 +27,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -56,6 +64,9 @@ fun HomeScreen(
     viewmodel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+
+    var maxCardHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
@@ -120,22 +131,53 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(26.dp))
 
-            // HorizontalPager로 스텝 리스트
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(end = 43.dp),
-                pageSpacing = 0.dp
-            ) { page ->
-                StepCard(
-                    step = Steps.valueOf(uiState.steps[page].checkStep).uiStep,
-                    title = uiState.steps[page].stepInfoRes.title,
-                    subTitle = uiState.steps[page].stepInfoRes.subtitle,
-                    onClick = {
-                        viewmodel.selectStep(uiState.steps[page])
-                        onNavigateToStepDetail()
+            // 🆕 최대 높이가 결정된 경우에만 HorizontalPager 표시
+            if (maxCardHeight > 0.dp) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(maxCardHeight), // 🆕 동적으로 계산된 최대 높이 사용
+                    contentPadding = PaddingValues(end = 43.dp),
+                    pageSpacing = 0.dp
+                ) { page ->
+                    StepCard(
+                        step = Steps.valueOf(uiState.steps[page].checkStep).uiStep,
+                        title = uiState.steps[page].stepInfoRes.title,
+                        subTitle = uiState.steps[page].stepInfoRes.subtitle,
+                        onClick = {
+                            viewmodel.selectStep(uiState.steps[page])
+                            onNavigateToStepDetail()
+                        },
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
+            } else {
+                // 🆕 높이 측정을 위한 임시 컴포저블들 (화면에 보이지 않음)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(0f) // 투명하게 만들어 보이지 않게 함
+                ) {
+                    uiState.steps.forEachIndexed { index, step ->
+                        StepCard(
+                            step = Steps.valueOf(step.checkStep).uiStep,
+                            title = step.stepInfoRes.title,
+                            subTitle = step.stepInfoRes.subtitle,
+                            onClick = { },
+                            modifier = Modifier
+                                .onGloballyPositioned { coordinates ->
+                                    val height = with(density) { coordinates.size.height.toDp() }
+                                    if (height > maxCardHeight) {
+                                        maxCardHeight = height
+                                    }
+                                }
+                        )
+                        if (index < uiState.steps.size - 1) {
+                            Spacer(Modifier.height(8.dp))
+                        }
                     }
-                )
+                }
             }
             Spacer(Modifier.height(28.dp))
 
@@ -233,6 +275,7 @@ fun CategoryTab(
 
 @Composable
 fun StepCard(
+    modifier: Modifier = Modifier,
     step: String,
     title: String,
     subTitle: String,
@@ -243,7 +286,7 @@ fun StepCard(
         colors = CardDefaults.cardColors(
             containerColor = Primary400
         ),
-        modifier = Modifier
+        modifier = modifier
             .noRippleClickable {
                 onClick()
             }
@@ -251,6 +294,7 @@ fun StepCard(
         Row(
             modifier = Modifier
                 .width(264.dp)
+                .fillMaxHeight()
                 .padding(
                     horizontal = 12.dp,
                     vertical = 13.dp
@@ -258,7 +302,7 @@ fun StepCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
                 Card(
                     colors = CardDefaults.cardColors(

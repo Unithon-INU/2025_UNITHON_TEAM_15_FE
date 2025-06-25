@@ -65,6 +65,33 @@ class HomeViewModel @Inject constructor(
         return Steps.STEP1
     }
 
+    /**
+     * 🆕 타겟 단계 이전의 모든 단계가 완료되었는지 확인
+     */
+    private fun areAllPreviousStepsCompleted(targetStep: Steps): Boolean {
+        val stepOrder = listOf(Steps.STEP1, Steps.STEP2, Steps.STEP3, Steps.STEP4)
+        val targetIndex = stepOrder.indexOf(targetStep)
+
+        // STEP1이거나 인덱스를 찾을 수 없으면 true (이전 단계가 없음)
+        if (targetIndex <= 0) return true
+
+        // 타겟 단계 이전의 모든 단계들을 확인
+        for (i in 0 until targetIndex) {
+            val stepToCheck = stepOrder[i]
+            val stepData = _uiState.value.steps.find { it.checkStep == stepToCheck.apiStep }
+
+            // 해당 단계의 모든 문서가 체크되었는지 확인
+            val isStepCompleted = stepData?.documentInfoRes?.all { it.isChecked } ?: false
+            if (!isStepCompleted) {
+                Timber.d("${stepToCheck.uiStep}이 완료되지 않았습니다.")
+                return false
+            }
+        }
+
+        Timber.d("${targetStep.uiStep} 이전의 모든 단계가 완료되었습니다.")
+        return true
+    }
+
     fun selectStep(step: EmploymentCheckRes){
         if (_uiState.value.selectedStep?.checkStep == step.checkStep) {
             Timber.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
@@ -95,59 +122,25 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * 문서 체크 상태 변경 시도
+     * 문서 체크 상태 변경 시도 (수정된 버전)
      */
     fun onDocumentCheckChanged(document: DocumentInfoRes, stepCheckStep: String, isChecked: Boolean) {
         if (uiState.value.isUpdating) {
             Timber.d("이미 업데이트 중입니다. 요청 무시.")
             return
         }
+
         val targetStep = Steps.valueOf(stepCheckStep)
 
-        // 체크를 하려고 하고, 다음 단계이면서, (현재 단계가 완료되지 않았거나 단계를 건너뛰는 경우)에만 경고 표시
-        if (isChecked && isNextStep(targetStep) && (!isCurrentStepCompleted() || !isImmediateNextStep(targetStep))) {
+        // 체크를 하려고 하고, 이전 단계들이 완료되지 않은 경우에만 경고 표시
+        if (isChecked && !areAllPreviousStepsCompleted(targetStep)) {
             showStepWarningDialog {
                 updateDocumentCheck(document, stepCheckStep, isChecked)
             }
         } else {
-            // 체크 해제이거나 현재/이전 단계이거나 순차적 진행인 경우 바로 처리
+            // 체크 해제이거나 이전 단계들이 모두 완료된 경우 바로 처리
             updateDocumentCheck(document, stepCheckStep, isChecked)
         }
-    }
-
-    /**
-     * 현재 단계보다 다음 단계인지 확인
-     */
-    private fun isNextStep(targetStep: Steps): Boolean {
-        val currentStep = _uiState.value.memberCheckStep
-        return when (currentStep) {
-            Steps.STEP1 -> targetStep == Steps.STEP2 || targetStep == Steps.STEP3 || targetStep == Steps.STEP4
-            Steps.STEP2 -> targetStep == Steps.STEP3 || targetStep == Steps.STEP4
-            Steps.STEP3 -> targetStep == Steps.STEP4
-            Steps.STEP4 -> false
-        }
-    }
-
-    /**
-     * 🆕 바로 다음 단계인지 확인 (순차적 진행)
-     */
-    private fun isImmediateNextStep(targetStep: Steps): Boolean {
-        val currentStep = _uiState.value.memberCheckStep
-        return when (currentStep) {
-            Steps.STEP1 -> targetStep == Steps.STEP2
-            Steps.STEP2 -> targetStep == Steps.STEP3
-            Steps.STEP3 -> targetStep == Steps.STEP4
-            Steps.STEP4 -> false
-        }
-    }
-
-    /**
-     * 🆕 현재 step의 모든 문서가 체크되었는지 확인
-     */
-    private fun isCurrentStepCompleted(): Boolean {
-        val currentStep = _uiState.value.memberCheckStep
-        val currentStepData = _uiState.value.steps.find { it.checkStep == currentStep.apiStep }
-        return currentStepData?.documentInfoRes?.all { it.isChecked } ?: false
     }
 
     /**
@@ -300,6 +293,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun getTips(language: String,step: Steps){
+        viewModelScope.launch {
+            try {
+                val response = employmentCheckRepository.getTips(language = language,step)
+                Timber.d(response.toString())
+                _uiState.update {
+                    it.copy(
+                        tips = response
+                    )
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "팁 정보 조회 실패")
+                // 팁 조회 실패는 치명적이지 않으므로 에러 메시지 표시하지 않음
+            }
+        }
+    }
+
     fun getTips(step: Steps){
         viewModelScope.launch {
             try {
@@ -335,7 +345,7 @@ class HomeViewModel @Inject constructor(
         getStepInfo(language)
         // 선택된 단계가 있으면 팁도 다시 로드
         uiState.value.selectedStep?.let { selectedStep ->
-            getTips(Steps.valueOf(selectedStep.checkStep))
+            getTips(language = language,Steps.valueOf(selectedStep.checkStep))
         }
     }
 }
