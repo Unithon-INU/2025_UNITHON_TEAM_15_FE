@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.BottomNavDestination
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Primary600
@@ -34,47 +35,49 @@ fun HelpJobBottomBar(
         topEnd = 20.dp
     )
 
-    NavigationBar(
-        modifier = modifier
-            .border(
-                width = 0.5.dp,
-                color = borderColor,
-                shape = bottomBarShape
-            )
-            .background(color = Grey000, shape = bottomBarShape)
-            .clip(bottomBarShape),
-        containerColor = Color.Transparent,
-        tonalElevation = 0.dp
-    ) {
-        destinations.forEach { destination ->
-            val selected = currentDestination == destination.route
-
-            NavigationBarItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        painter = painterResource(
-                            id = if (selected) destination.selectedIcon else destination.unselectedIcon
-                        ),
-                        contentDescription = stringResource(destination.iconTextId),
-                        tint = Color.Unspecified // 아이콘 자체 색상 사용
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(destination.iconTextId),
-                        style = MaterialTheme.typography.labelMedium // Body4 스타일 사용
-                    )
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.Unspecified, // 아이콘 자체 색상 사용
-                    unselectedIconColor = Color.Unspecified, // 아이콘 자체 색상 사용
-                    selectedTextColor = Primary600,
-                    unselectedTextColor = Grey300,
-                    indicatorColor = Color.Transparent // 배경 인디케이터 제거
+    LanguageAwareScreen {
+        NavigationBar(
+            modifier = modifier
+                .border(
+                    width = 0.5.dp,
+                    color = borderColor,
+                    shape = bottomBarShape
                 )
-            )
+                .background(color = Grey000, shape = bottomBarShape)
+                .clip(bottomBarShape),
+            containerColor = Color.Transparent,
+            tonalElevation = 0.dp
+        ) {
+            destinations.forEach { destination ->
+                val selected = currentDestination == destination.route
+
+                NavigationBarItem(
+                    selected = selected,
+                    onClick = { onNavigateToDestination(destination) },
+                    icon = {
+                        Icon(
+                            painter = painterResource(
+                                id = if (selected) destination.selectedIcon else destination.unselectedIcon
+                            ),
+                            contentDescription = stringResource(destination.iconTextId),
+                            tint = Color.Unspecified // 아이콘 자체 색상 사용
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(destination.iconTextId),
+                            style = MaterialTheme.typography.labelMedium // Body4 스타일 사용
+                        )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.Unspecified, // 아이콘 자체 색상 사용
+                        unselectedIconColor = Color.Unspecified, // 아이콘 자체 색상 사용
+                        selectedTextColor = Primary600,
+                        unselectedTextColor = Grey300,
+                        indicatorColor = Color.Transparent // 배경 인디케이터 제거
+                    )
+                )
+            }
         }
     }
 }

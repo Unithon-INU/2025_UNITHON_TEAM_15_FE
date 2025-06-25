@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.calculator.components.CalculationResultDialog
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobDropdown
@@ -49,107 +50,108 @@ fun CalculatorScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        Column(
+    LanguageAwareScreen {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp)
-                .verticalScroll(scrollState)
-                .align(Alignment.TopCenter)
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            Spacer(Modifier.height(39.dp))
-            MinimumWageCard(
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(26.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(scrollState)
+                    .align(Alignment.TopCenter)
+            ) {
+                Spacer(Modifier.height(39.dp))
+                MinimumWageCard(
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(26.dp))
 
-            // 시급 입력
-            HelpJobTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = uiState.wage,
-                onValueChange = viewModel::updateWage,
-                label = stringResource(R.string.calculator_wage_label),
-                placeholder = stringResource(R.string.calculator_wage_example),
-                visualTransformation = CurrencyVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        focusManager.clearFocus()
-                    }
-                ),
-                isError = uiState.isLowerThanMinimumWage,
-                errorMessage = stringResource(R.string.error_lower_than_minimun_wage),
-                labelTextFieldSpace = 9.dp,
-                isWon = true
-            )
+                // 시급 입력
+                HelpJobTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = uiState.wage,
+                    onValueChange = viewModel::updateWage,
+                    label = stringResource(R.string.calculator_wage_label),
+                    placeholder = stringResource(R.string.calculator_wage_example),
+                    visualTransformation = CurrencyVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Number
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            focusManager.clearFocus()
+                        }
+                    ),
+                    isError = uiState.isLowerThanMinimumWage,
+                    errorMessage = stringResource(R.string.error_lower_than_minimun_wage),
+                    labelTextFieldSpace = 9.dp,
+                    isWon = true
+                )
 
-            if (!uiState.isLowerThanMinimumWage){
-                Spacer(Modifier.height(12.dp))
+                if (!uiState.isLowerThanMinimumWage){
+                    Spacer(Modifier.height(12.dp))
+                }
+
+                Spacer(Modifier.height(15.dp))
+
+                // 일일 근무시간 드롭다운
+                HelpJobDropdown(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(R.string.calculator_work_time_label),
+                    selectedItem = uiState.selectedWorkTime,
+                    items = viewModel.workTimeOptions,
+                    onItemSelected = viewModel::updateSelectedWorkTime,
+                    itemToString = { time -> formatWorkTime(time, context) },
+                    placeholder = stringResource(R.string.calculator_select_time),
+                    labelTextFieldSpace = 9.dp,
+                    isUpward = false
+                )
+                Spacer(Modifier.height(27.dp))
+
+                // 주간 근무일수 드롭다운
+                HelpJobDropdown(
+                    modifier = Modifier.fillMaxWidth(),
+                    label = stringResource(R.string.calculator_weekly_work_time_label),
+                    selectedItem = uiState.selectedWorkDayCount,
+                    items = viewModel.workDayOptions,
+                    onItemSelected = viewModel::updateSelectedWorkDayCount,
+                    itemToString = { days -> formatWorkDays(days, context) },
+                    placeholder = stringResource(R.string.calculator_select_time),
+                    labelTextFieldSpace = 9.dp,
+                    isUpward = true
+                )
+
+                // 버튼을 위한 여백
+                Spacer(Modifier.height(100.dp))
             }
 
-            Spacer(Modifier.height(15.dp))
-
-            // 일일 근무시간 드롭다운
-            HelpJobDropdown(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(R.string.calculator_work_time_label),
-                selectedItem = uiState.selectedWorkTime,
-                items = viewModel.workTimeOptions,
-                onItemSelected = viewModel::updateSelectedWorkTime,
-                itemToString = { time -> formatWorkTime(time, context) },
-                placeholder = stringResource(R.string.calculator_select_time),
-                labelTextFieldSpace = 9.dp,
-                isUpward = false
+            HelpJobButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(
+                        start = 20.dp,
+                        end = 20.dp,
+                        bottom = 20.dp
+                    )
+                    .fillMaxWidth(),
+                text = stringResource(R.string.calculator_calculate_salary),
+                onClick = {
+                    viewModel.calculateSalary()
+                },
+                enabled = uiState.isWorkTimeInputValid && uiState.isWorkDayCountInputValid && uiState.isWageInputValid,
             )
-            Spacer(Modifier.height(27.dp))
-
-            // 주간 근무일수 드롭다운
-            HelpJobDropdown(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(R.string.calculator_weekly_work_time_label),
-                selectedItem = uiState.selectedWorkDayCount,
-                items = viewModel.workDayOptions,
-                onItemSelected = viewModel::updateSelectedWorkDayCount,
-                itemToString = { days -> formatWorkDays(days, context) },
-                placeholder = stringResource(R.string.calculator_select_time),
-                labelTextFieldSpace = 9.dp,
-                isUpward = true
-            )
-
-            // 버튼을 위한 여백
-            Spacer(Modifier.height(100.dp))
         }
 
-        HelpJobButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(
-                    start = 20.dp,
-                    end = 20.dp,
-                    bottom = 20.dp
-                )
-                .fillMaxWidth(),
-            text = stringResource(R.string.calculator_calculate_salary),
-            onClick = {
-                viewModel.calculateSalary()
-            },
-            enabled = uiState.isWorkTimeInputValid && uiState.isWorkDayCountInputValid && uiState.isWageInputValid,
-        )
-    }
-
-    if (uiState.showResultDialog) {
-        CalculationResultDialog(
-            result = uiState.calculationResult,
-            onDismiss = { viewModel.dismissResultDialog() }
-        )
+        if (uiState.showResultDialog) {
+            CalculationResultDialog(
+                result = uiState.calculationResult,
+                onDismiss = { viewModel.dismissResultDialog() }
+            )
+        }
     }
 }
 

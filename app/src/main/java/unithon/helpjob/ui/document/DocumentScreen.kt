@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
 import unithon.helpjob.ui.document.page.BasicInfoStep2Screen
@@ -280,57 +281,58 @@ fun DocumentScreen(
             }
         ),
     )
-
-    Scaffold(
-        topBar = {
-            // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
-            if (pagerState.currentPage >= 2) {
-                HelpJobTopAppBar(
-                    title = R.string.document_top_bar_title,
-                    onBack = {
-                        if (pagerState.currentPage > 0) {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+    LanguageAwareScreen {
+        Scaffold(
+            topBar = {
+                // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
+                if (pagerState.currentPage >= 2) {
+                    HelpJobTopAppBar(
+                        title = R.string.document_top_bar_title,
+                        onBack = {
+                            if (pagerState.currentPage > 0) {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                }
                             }
                         }
+                    )
+                }
+            },
+            // 🆕 SnackbarHost 추가
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = { snackbarData ->
+                        Snackbar(
+                            snackbarData = snackbarData,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            shape = RoundedCornerShape(8.dp)
+                        )
                     }
                 )
             }
-        },
-        // 🆕 SnackbarHost 추가
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { snackbarData ->
-                    Snackbar(
-                        snackbarData = snackbarData,
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError,
-                        shape = RoundedCornerShape(8.dp)
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .then(
+                        if (pagerState.currentPage >= 2) {
+                            Modifier.padding(top = innerPadding.calculateTopPadding())
+                        } else {
+                            Modifier
+                        }
                     )
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                // 페이저
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                    userScrollEnabled = false
+                ) { position ->
+                    pages[position].content()
                 }
-            )
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .then(
-                    if (pagerState.currentPage >= 2) {
-                        Modifier.padding(top = innerPadding.calculateTopPadding())
-                    } else {
-                        Modifier
-                    }
-                )
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            // 페이저
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-                userScrollEnabled = false
-            ) { position ->
-                pages[position].content()
             }
         }
     }

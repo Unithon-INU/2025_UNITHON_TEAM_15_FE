@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,9 @@ import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
+import unithon.helpjob.data.repository.DynamicLanguageProvider
+import unithon.helpjob.data.repository.GlobalLanguageState
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey000
@@ -55,41 +59,45 @@ fun LanguageSettingScreen(
     viewModel: LanguageSettingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            HelpJobTopAppBar(
-                title = R.string.setting_app_language,
-                onBack = onBack
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .padding(top = 14.dp, start = 20.dp, end = 20.dp)
-        ) {
-            // 현재 언어 섹션 헤더
-            Text(
-                text = stringResource(R.string.language_setting_current_language),
-                style = MaterialTheme.typography.title2,
-                color = Grey600
-            )
+    LanguageAwareScreen{
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                HelpJobTopAppBar(
+                    title = R.string.setting_app_language,
+                    onBack = onBack
+                )
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .padding(top = 14.dp, start = 20.dp, end = 20.dp)
+            ) {
+                // 현재 언어 섹션 헤더
+                Text(
+                    text = stringResource(R.string.language_setting_current_language),
+                    style = MaterialTheme.typography.title2,
+                    color = Grey600
+                )
 
-            Spacer(modifier = Modifier.height(9.dp))
+                Spacer(modifier = Modifier.height(9.dp))
 
-            // 언어 선택 드롭다운
-            LanguageDropdown(
-                items = uiState.availableLanguages,
-                selectedItem = uiState.currentLanguage,
-                onItemSelected = { language ->
-                    viewModel.setLanguage(language)
-                    homeViewModel.refresh(language.code)
-                },
-                itemToString = { it.displayName }
-            )
+                // 언어 선택 드롭다운
+                LanguageDropdown(
+                    items = uiState.availableLanguages,
+                    selectedItem = uiState.currentLanguage,
+                    onItemSelected = { language ->
+                        viewModel.setLanguage(language)
+                        homeViewModel.refresh(language.code)
+                        GlobalLanguageState.updateLanguage(language)
+                    },
+                    itemToString = { it.displayName }
+                )
+            }
         }
     }
 }

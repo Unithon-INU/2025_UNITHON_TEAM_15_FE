@@ -42,6 +42,8 @@ import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.repository.GlobalLanguageState
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.onboarding.components.AgreementSection
@@ -123,6 +125,7 @@ fun OnboardingScreen(
                         mainTitle = language.mainTitle,
                         onClick = {
                             viewModel.updateLanguage(language.mainTitle)
+                            GlobalLanguageState.updateLanguage(language = AppLanguage.fromDisplayName(language.mainTitle))
                         },
                         icon = R.drawable.ic_check,
                         enabled = uiState.language == language.mainTitle
@@ -233,70 +236,73 @@ fun OnboardingScreen(
         4 -> uiState.isBusinessValid     // 업종 선택 페이지
         else -> false
     }
-    Scaffold(
-        topBar = {
-            HelpJobTopAppBar(
-                title = R.string.onboarding_top_bar_title,
-                onBack = {
-                    if (pagerState.currentPage > 0) {
-                        scope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                        }
-                    }
-                }
-            )
-        },
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = { snackbarData ->
-                    Snackbar(
-                        snackbarData = snackbarData,
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError,
-                        modifier = Modifier.padding(16.dp)  // 여백 추가로 더 잘 보이게
-                    )
-                }
-            )
-        }
-    ) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(top = innerPadding.calculateTopPadding())
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-        ) {
-            // 페이저
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize(),
-                userScrollEnabled = false
-            ) { position ->
-                OnboardingPage(
-                    page = pages[position],
-                    pageCount = pages.size,
-                    currentPage = position,
-                    onNextPage = {
-                        if (position < pages.size - 1) {
+    LanguageAwareScreen {
+        Scaffold(
+            topBar = {
+                HelpJobTopAppBar(
+                    title = R.string.onboarding_top_bar_title,
+                    onBack = {
+                        if (pagerState.currentPage > 0) {
                             scope.launch {
-                                pagerState.animateScrollToPage(position + 1)
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
                             }
                         }
-                    },
-                    onGetStarted = {
-                        viewModel.completeOnboarding()
-                    },
-                    isValid = isCurrentPageValid
+                    }
+                )
+            },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = { snackbarData ->
+                        Snackbar(
+                            snackbarData = snackbarData,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            modifier = Modifier.padding(16.dp)  // 여백 추가로 더 잘 보이게
+                        )
+                    }
                 )
             }
+        ) { innerPadding ->
+            Box(
+                modifier = Modifier
+                    .padding(top = innerPadding.calculateTopPadding())
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                // 페이저
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize(),
+                    userScrollEnabled = false
+                ) { position ->
+                    OnboardingPage(
+                        page = pages[position],
+                        pageCount = pages.size,
+                        currentPage = position,
+                        onNextPage = {
+                            if (position < pages.size - 1) {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(position + 1)
+                                }
+                            }
+                        },
+                        onGetStarted = {
+                            viewModel.completeOnboarding()
+                        },
+                        isValid = isCurrentPageValid
+                    )
+                }
 
-            if (uiState.userProfileError && uiState.userProfileErrorMessage != null) {
-                LaunchedEffect(uiState.userProfileErrorMessage) {
+                if (uiState.userProfileError && uiState.userProfileErrorMessage != null) {
+                    LaunchedEffect(uiState.userProfileErrorMessage) {
 
+                    }
                 }
             }
         }
     }
+
 }
 
 @Composable

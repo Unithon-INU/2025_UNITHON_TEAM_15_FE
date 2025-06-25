@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
 import unithon.helpjob.R
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.setting.components.ResetProgressDialog
@@ -50,153 +51,156 @@ fun SettingScreen(
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    LanguageAwareScreen {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                HelpJobTopAppBar(
+                    title = R.string.setting_top_bar_title,
+                    onBack = onBack
+                )
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = paddingValues.calculateTopPadding())
+                    .padding(top = 14.dp),
+            ) {
+                // 설정 섹션
+                SettingSectionHeader(
+                    title = R.string.setting_section_config,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            HelpJobTopAppBar(
-                title = R.string.setting_top_bar_title,
-                onBack = onBack
-            )
+                Spacer(modifier = Modifier.height(19.dp))
+
+                SettingItem(
+                    title = R.string.setting_app_language,
+                    onClick = onLanguageSettingClick,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SettingItem(
+                    title = R.string.setting_reset_progress,
+                    onClick = { showResetDialog = true },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 4.dp,
+                    color = Grey100
+                )
+
+                Spacer(modifier = Modifier.height(17.dp))
+
+                // 정보 섹션
+                SettingSectionHeader(
+                    title = R.string.setting_section_info,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                SettingItem(
+                    title = R.string.setting_community_guidelines,
+                    onClick = { /* 아직 구현하지 않음 */ },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SettingItem(
+                    title = R.string.setting_privacy_policy,
+                    onClick = { /* 아직 구현하지 않음 */ },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SettingItem(
+                    title = R.string.setting_inquiry,
+                    onClick = { /* 아직 구현하지 않음 */ },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                HorizontalDivider(
+                    modifier = Modifier.fillMaxWidth(),
+                    thickness = 4.dp,
+                    color = Grey100
+                )
+
+                Spacer(modifier = Modifier.height(18.dp))
+
+                // 계정 섹션
+                SettingSectionHeader(
+                    title = R.string.setting_section_account,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                SettingItem(
+                    title = R.string.setting_logout,
+                    onClick = onLogoutClick,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SettingItem(
+                    title = R.string.setting_withdrawal,
+                    onClick = { /* 아직 구현하지 않음 */ },
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // 앱 버전
+                Text(
+                    text = stringResource(R.string.setting_app_version),
+                    style = MaterialTheme.typography.body4,
+                    color = Color(0xFF70737D),
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+
+            }
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .padding(top = 14.dp),
-        ) {
-            // 설정 섹션
-            SettingSectionHeader(
-                title = R.string.setting_section_config,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(19.dp))
-
-            SettingItem(
-                title = R.string.setting_app_language,
-                onClick = onLanguageSettingClick,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SettingItem(
-                title = R.string.setting_reset_progress,
-                onClick = { showResetDialog = true },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 4.dp,
-                color = Grey100
-            )
-
-            Spacer(modifier = Modifier.height(17.dp))
-
-            // 정보 섹션
-            SettingSectionHeader(
-                title = R.string.setting_section_info,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(19.dp))
-
-            SettingItem(
-                title = R.string.setting_community_guidelines,
-                onClick = { /* 아직 구현하지 않음 */ },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SettingItem(
-                title = R.string.setting_privacy_policy,
-                onClick = { /* 아직 구현하지 않음 */ },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SettingItem(
-                title = R.string.setting_inquiry,
-                onClick = { /* 아직 구현하지 않음 */ },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 4.dp,
-                color = Grey100
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            // 계정 섹션
-            SettingSectionHeader(
-                title = R.string.setting_section_account,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            SettingItem(
-                title = R.string.setting_logout,
-                onClick = onLogoutClick,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SettingItem(
-                title = R.string.setting_withdrawal,
-                onClick = { /* 아직 구현하지 않음 */ },
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // 앱 버전
-            Text(
-                text = stringResource(R.string.setting_app_version),
-                style = MaterialTheme.typography.body4,
-                color = Color(0xFF70737D),
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
-
-        }
-    }
-    if (showResetDialog) {
-        ResetProgressDialog(
-            onDismiss = {
-                if (!isResetting) {
-                    showResetDialog = false
-                }
-            },
-            onConfirm = {
-                if (!isResetting) {
-                    coroutineScope.launch {
-                        try {
-                            isResetting = true
-                            settingViewModel.resetProgress()
-                            showResetDialog = false
-                            homeViewModel.refresh()
-                        } catch (e: Exception) {
-                            // TODO: 에러 처리
-                        } finally {
-                            isResetting = false
+        if (showResetDialog) {
+            ResetProgressDialog(
+                onDismiss = {
+                    if (!isResetting) {
+                        showResetDialog = false
+                    }
+                },
+                onConfirm = {
+                    if (!isResetting) {
+                        coroutineScope.launch {
+                            try {
+                                isResetting = true
+                                settingViewModel.resetProgress()
+                                showResetDialog = false
+                                homeViewModel.refresh()
+                            } catch (e: Exception) {
+                                // TODO: 에러 처리
+                            } finally {
+                                isResetting = false
+                            }
                         }
                     }
                 }
-            }
-        )
+            )
+        }
     }
+
+
 }
 
 @Composable

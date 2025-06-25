@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
 import javax.inject.Inject
 
@@ -38,6 +39,8 @@ class HelpJobApplication : Application() {
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(savedLanguage.code)
                 )
+
+                GlobalLanguageState.initializeLanguage(savedLanguage)
             } catch (e: Exception) {
                 // 저장된 언어가 없으면 시스템 언어 그대로 (코드 없음)
                 // 즉, 처음 설치 시에는 시스템 언어를 따름

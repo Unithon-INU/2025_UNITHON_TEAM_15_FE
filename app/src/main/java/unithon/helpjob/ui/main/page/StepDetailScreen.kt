@@ -46,6 +46,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
+import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey100
@@ -101,51 +102,52 @@ private fun StepDetailContent(
     onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.top_arrowback),
-                            contentDescription = stringResource(id = R.string.back_button),
-                            tint = Color.Unspecified // 아이콘 자체 색상 사용
-                        )
-                    }
-                },
-                title = {
-                    Text("")
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                windowInsets = WindowInsets(0.dp)
-            )
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .padding(horizontal = 20.dp)
-                .verticalScroll(scrollState)
-        ) {
-            Spacer(Modifier.height(16.dp))
-
-            // Step 카드
-            StepDetailCard(step = step)
-
-            Spacer(Modifier.height(24.dp))
-
-            // Tips 섹션
-            if (tips.isNotEmpty()) {
-                TipsSection(tips = tips)
-            } else {
-                EmptyTipsSection()
+    LanguageAwareScreen {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    navigationIcon = {
+                        IconButton(onClick = onBackClick) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.top_arrowback),
+                                contentDescription = stringResource(id = R.string.back_button),
+                                tint = Color.Unspecified // 아이콘 자체 색상 사용
+                            )
+                        }
+                    },
+                    title = {
+                        Text("")
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
+                    windowInsets = WindowInsets(0.dp)
+                )
             }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+                    .verticalScroll(scrollState)
+            ) {
+                Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(100.dp))
+                // Step 카드
+                StepDetailCard(step = step)
+
+                Spacer(Modifier.height(24.dp))
+
+                // Tips 섹션
+                if (tips.isNotEmpty()) {
+                    TipsSection(tips = tips)
+                } else {
+                    EmptyTipsSection()
+                }
+
+                Spacer(Modifier.height(100.dp))
+            }
         }
     }
 }
