@@ -165,8 +165,7 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(id = R.string.profile_preferred_job),
-                        value = uiState.industry
-                            ?: stringResource(id = R.string.profile_job_default),
+                        value = formatIndustryForDisplay(uiState.industry),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -353,7 +352,7 @@ private fun UncheckedDocumentItem(
         modifier = Modifier
             .clickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
-            .padding(horizontal = 5.dp,vertical = 15.dp),
+            .padding(horizontal = 7.dp,vertical = 15.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -365,6 +364,18 @@ private fun UncheckedDocumentItem(
         )
     }
 }
+
+@Composable
+private fun formatIndustryForDisplay(industry: String?): String {
+    if (industry.isNullOrBlank()) return stringResource(id = R.string.profile_job_default)
+
+    val industries = industry.split(",").map { it.trim() }
+    return when {
+        industries.size <= 1 -> industry
+        else -> "${industries.first()} ..."
+    }
+}
+
 
 // 기존 ProfileInfoColumn 컴포넌트 (완전히 동일)
 @Composable
@@ -388,7 +399,10 @@ private fun ProfileInfoColumn(
         Text(
             text = value,
             style = MaterialTheme.typography.title2,
-            color = Grey600
+            color = Grey600,
+            maxLines = 1, // 1줄까지 허용
+            overflow = TextOverflow.Ellipsis, // 긴 텍스트는 ... 처리
+            modifier = Modifier.padding(horizontal = 2.dp)
         )
     }
 }
