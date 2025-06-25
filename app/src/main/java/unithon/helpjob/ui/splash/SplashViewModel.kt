@@ -34,33 +34,33 @@ class SplashViewModel @Inject constructor(
 
             // 동시에 앱 상태 체크
             val appStateCheck = async {
-                try {
-                    val token = authRepository.getToken()
+                val token = authRepository.getToken()
 
-                    if (token == null) {
-                        NavigationTarget.Login
-                    } else {
-                        // 토큰이 있으면 온보딩 완료 여부 체크
-                        if (authRepository.isOnboardingCompleted()) {
-                            NavigationTarget.Main
-                        } else {
+                when {
+                    token == null -> NavigationTarget.Login
+                    else -> {
+                        try {
+                            // 🆕 토큰 유효성을 먼저 체크
+                            val profile = authRepository.getMemberProfile()
+
+                            // 토큰이 유효하면 온보딩 완료 여부 판단
+                            if (profile.language.isNotEmpty() &&
+                                profile.visaType.isNotEmpty() &&
+                                profile.topikLevel.isNotEmpty() &&
+                                profile.industry.isNotEmpty()) {
+                                NavigationTarget.Main
+                            } else {
+                                NavigationTarget.Onboarding
+                            }
+                        } catch (e: UnauthorizedException) {
+                            // 토큰이 무효한 경우 토큰 클리어 후 로그인으로 분기
+                            authRepository.clearToken()
+                            NavigationTarget.Login
+                        } catch (e: Exception) {
+                            // 기타 예외는 온보딩으로 처리
+                            Timber.e(e, "프로필 조회 실패")
                             NavigationTarget.Onboarding
                         }
-                    }
-                } catch (e: UnauthorizedException) {
-                    // 토큰이 무효한 경우 토큰 클리어 후 로그인으로 분기
-                    authRepository.clearToken()
-                    NavigationTarget.Login
-                } catch (e: Exception) {
-                    // 기타 예외는 온보딩으로 처리 (기존 동작 유지)
-                    Timber.e(e, "앱 상태 체크 실패")
-
-                    // 토큰이 있는지 다시 체크해서 분기
-                    val token = authRepository.getToken()
-                    if (token == null) {
-                        NavigationTarget.Login
-                    } else {
-                        NavigationTarget.Onboarding
                     }
                 }
             }
