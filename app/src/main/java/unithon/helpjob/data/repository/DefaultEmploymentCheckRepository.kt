@@ -40,8 +40,19 @@ class DefaultEmploymentCheckRepository @Inject constructor(
         throw Exception(response.errorBody()?.string() ?: "홈 정보 조회 실패")
     }
 
+    override suspend fun getTips(language: String,checkStep: Steps) : List<TipResponseItem> {
+        val response = apiService.getTips(language = language,checkStep.apiStep)
+
+        if (response.isSuccessful){
+            response.body()?.let { tipResponse ->
+                return tipResponse
+            }
+        }
+        throw Exception(response.errorBody()?.string() ?: "팁 정보 조회 실패")
+    }
+
     override suspend fun getTips(checkStep: Steps) : List<TipResponseItem> {
-        val response = apiService.getTips(checkStep.apiStep)
+        val response = apiService.getTips(language = languageRepository.getCurrentLanguage().code,checkStep.apiStep)
 
         if (response.isSuccessful){
             response.body()?.let { tipResponse ->

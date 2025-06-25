@@ -71,6 +71,7 @@ interface HelpJobApiService {
 
     @GET(ApiConstants.GET_TIPS)
     suspend fun getTips(
+        @Header ("Accept-Language") language: String,
         @Query("checkStep") checkStep: String
     ) : Response<List<TipResponseItem>>
 
