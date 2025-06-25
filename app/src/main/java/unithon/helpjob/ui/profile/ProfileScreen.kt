@@ -30,6 +30,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -425,11 +426,12 @@ private fun ProfileInfoColumn(
 
         Text(
             text = value,
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.title2,
             color = Grey600,
-            maxLines = 1, // 1줄까지 허용
+            maxLines = 2, // 2줄까지 허용
             overflow = TextOverflow.Ellipsis, // 긴 텍스트는 ... 처리
-            modifier = Modifier.padding(horizontal = 2.dp)
+            modifier = Modifier.padding(horizontal = 4.dp)
         )
     }
 }
