@@ -201,7 +201,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo2) -->
     <string name="document_workplace_info_2_company_address_label">Company Address</string>
-    <string name="document_workplace_info_2_company_address_placeholder">Remaining address</string>
+    <string name="document_workplace_info_2_company_address_placeholder">Address</string>
     <string name="document_workplace_info_2_employer_name_label">Employer Name</string>
     <string name="document_workplace_info_2_employer_name_placeholder">ex) Gil Dong Kim</string>
     <string name="document_workplace_info_2_employer_phone_number_label">Employer Phone Number</string>
