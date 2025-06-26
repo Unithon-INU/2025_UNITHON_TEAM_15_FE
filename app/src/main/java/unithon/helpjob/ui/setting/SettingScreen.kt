@@ -149,7 +149,12 @@ fun SettingScreen(
 
                 SettingItem(
                     title = R.string.setting_logout,
-                    onClick = onLogoutClick,
+                    onClick = {
+                        coroutineScope.launch {
+                            settingViewModel.logout()
+                            onLogoutClick()
+                        }
+                    },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
