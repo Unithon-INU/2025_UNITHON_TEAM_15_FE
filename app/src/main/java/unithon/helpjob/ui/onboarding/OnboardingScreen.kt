@@ -59,7 +59,7 @@ fun OnboardingScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
+    val currentLanguage by GlobalLanguageState.currentLanguage // 🔥 언어 상태 추가
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -79,152 +79,16 @@ fun OnboardingScreen(
         }
     }
 
-    val languageList = AppLanguage.entries.map { appLanguage ->
-        OnboardingData(
-            mainTitle = appLanguage.displayName
-        )
-    }
-    val koreanLevelList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik3),
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik4_over),
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_no_topik),
-        ),
-    )
-    val visaList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_visa_setup_d2_title),
-            subTitle = stringResource(R.string.onboarding_visa_setup_d2_description)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_visa_setup_d4_title),
-            subTitle = stringResource(R.string.onboarding_visa_setup_d4_description)
-        ),
-    )
-    val businessList = Business.entries.map { business ->
-        OnboardingData(
-            mainTitle = stringResource(business.displayNameResId)  // Enum의 StringRes 사용
-        )
+    // 🔥 언어 상태를 remember 키로 사용하여 언어 변경 시 재계산되도록 수정
+    val languageList = remember(currentLanguage) {
+        AppLanguage.entries.map { appLanguage ->
+            OnboardingData(
+                mainTitle = appLanguage.displayName
+            )
+        }
     }
 
-
-    val pages = listOf(
-        //언어 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_language_setup_title),
-            content = {
-                languageList.forEachIndexed { index, language ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(46.dp)
-                            .fillMaxWidth(),
-                        mainTitle = language.mainTitle,
-                        onClick = {
-                            viewModel.updateLanguage(language.mainTitle)
-                            GlobalLanguageState.updateLanguage(language = AppLanguage.fromDisplayName(language.mainTitle))
-                        },
-                        icon = R.drawable.ic_check,
-                        enabled = uiState.language == language.mainTitle
-                    )
-                    if (index < languageList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //필수 약관 동의
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_agreement_setup_title),
-            content = {
-                AgreementSection(
-                    isAllChecked = uiState.fullAgreement,
-                    isServiceChecked = uiState.serviceAgreement,
-                    isPrivacyChecked = uiState.privacyAgreement,
-                    isAgeChecked = uiState.ageAgreement,
-                    onAllCheckedChange = { viewModel.updateAgreement(it) },
-                    onServiceCheckedChange = { viewModel.updateServiceAgreement(it) },
-                    onPrivacyCheckedChange = { viewModel.updatePrivacyAgreement(it) },
-                    onAgeCheckedChange = { viewModel.updateAgeAgreement(it) },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        ),
-        //비자 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_visa_setup_title),
-            content = {
-                visaList.forEachIndexed { index, visa ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(62.dp)
-                            .fillMaxWidth(),
-                        mainTitle = visa.mainTitle,
-                        subTitle = visa.subTitle,
-                        onClick = {
-                            viewModel.updateVisa(visa.mainTitle)
-                        },
-                        contentPosition = Arrangement.Center,
-                        enabled = uiState.visa == visa.mainTitle,
-                    )
-                    if (index < visaList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //한국어 능력 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_korean_level_setup_title),
-            content = {
-                koreanLevelList.forEachIndexed { index, koreanLevel ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(62.dp)
-                            .fillMaxWidth(),
-                        mainTitle = koreanLevel.mainTitle,
-                        subTitle = koreanLevel.subTitle,
-                        onClick = {
-                            viewModel.updateKoreanLevel(koreanLevel.mainTitle)
-                        },
-                        contentPosition = Arrangement.Center,
-                        enabled = uiState.koreanLevel == koreanLevel.mainTitle,
-                    )
-                    if (index < koreanLevelList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //업종 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_business_setup_title),
-            content = {
-                LazyColumn{
-                    itemsIndexed(businessList){ index, business->
-                        OnboardingButton(
-                            modifier = Modifier
-                                .height(46.dp)
-                                .fillMaxWidth(),
-                            mainTitle = business.mainTitle,
-                            onClick = {
-                                viewModel.updateBusiness(business.mainTitle)
-                            },
-                            enabled = business.mainTitle in uiState.businesses
-                        )
-                        if (index < businessList.size - 1) {
-                            Spacer(modifier = Modifier.height(15.dp))
-                        }
-                    }
-                }
-            }
-        )
-    )
-
-    val pagerState = rememberPagerState(pageCount = { pages.size })
+    val pagerState = rememberPagerState(pageCount = { 5 }) // 페이지 수 고정
     val scope = rememberCoroutineScope()
 
     // 현재 페이지에 따른 유효성 검사 결과 계산
@@ -236,6 +100,7 @@ fun OnboardingScreen(
         4 -> uiState.isBusinessValid     // 업종 선택 페이지
         else -> false
     }
+
     LanguageAwareScreen {
         Scaffold(
             topBar = {
@@ -258,7 +123,7 @@ fun OnboardingScreen(
                             snackbarData = snackbarData,
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError,
-                            modifier = Modifier.padding(16.dp)  // 여백 추가로 더 잘 보이게
+                            modifier = Modifier.padding(16.dp)
                         )
                     }
                 )
@@ -276,12 +141,16 @@ fun OnboardingScreen(
                     modifier = Modifier.fillMaxSize(),
                     userScrollEnabled = false
                 ) { position ->
-                    OnboardingPage(
-                        page = pages[position],
-                        pageCount = pages.size,
-                        currentPage = position,
+                    OnboardingPageContainer(
+                        pageIndex = position,
+                        pageCount = 5,
+                        currentLanguage = currentLanguage, // 🔥 언어 상태 전달
+                        uiState = uiState,
+                        viewModel = viewModel,
+                        languageList = languageList,
+                        isValid = isCurrentPageValid,
                         onNextPage = {
-                            if (position < pages.size - 1) {
+                            if (position < 4) {
                                 scope.launch {
                                     pagerState.animateScrollToPage(position + 1)
                                 }
@@ -289,27 +158,29 @@ fun OnboardingScreen(
                         },
                         onGetStarted = {
                             viewModel.completeOnboarding()
-                        },
-                        isValid = isCurrentPageValid
+                        }
                     )
                 }
 
                 if (uiState.userProfileError && uiState.userProfileErrorMessage != null) {
                     LaunchedEffect(uiState.userProfileErrorMessage) {
-
+                        // Handle error if needed
                     }
                 }
             }
         }
     }
-
 }
 
+// 🔥 각 페이지를 별도 Composable로 분리하여 언어 변경 감지 향상
 @Composable
-fun OnboardingPage(
-    page: OnboardingPage,
-    currentPage: Int,
+private fun OnboardingPageContainer(
+    pageIndex: Int,
     pageCount: Int,
+    currentLanguage: AppLanguage, // 🔥 언어 상태 추가
+    uiState: OnboardingViewModel.OnboardingUiState,
+    viewModel: OnboardingViewModel,
+    languageList: List<OnboardingData>,
     isValid: Boolean,
     onNextPage: () -> Unit,
     onGetStarted: () -> Unit
@@ -319,22 +190,34 @@ fun OnboardingPage(
             .fillMaxSize()
             .padding(horizontal = 20.dp)
     ) {
-        Spacer(Modifier.height(15.dp))
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding()
                 .align(Alignment.TopCenter),
         ) {
+            Spacer(Modifier.height(15.dp))
             CustomProgressIndicator(
-                progress = (currentPage + 1).toFloat() / pageCount,
+                progress = (pageIndex + 1).toFloat() / pageCount,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(6.dp)
             )
             Spacer(Modifier.height(44.dp))
+
+            // 🔥 페이지 제목 - currentLanguage를 remember 키로 사용
+            val pageTitle = remember(currentLanguage, pageIndex) {
+                when (pageIndex) {
+                    0 -> R.string.onboarding_language_setup_title
+                    1 -> R.string.onboarding_agreement_setup_title
+                    2 -> R.string.onboarding_visa_setup_title
+                    3 -> R.string.onboarding_korean_level_setup_title
+                    4 -> R.string.onboarding_business_setup_title
+                    else -> R.string.onboarding_language_setup_title
+                }
+            }
+
             Text(
-                text = page.title,
+                text = stringResource(pageTitle),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontSize = 22.sp,
                     lineHeight = 32.sp
@@ -342,37 +225,215 @@ fun OnboardingPage(
                 color = Grey700
             )
             Spacer(Modifier.height(39.dp))
-            page.content()
+
+            // 🔥 페이지별 컨텐츠
+            when (pageIndex) {
+                0 -> LanguageSelectionContent(
+                    languageList = languageList,
+                    selectedLanguage = uiState.language,
+                    onLanguageSelected = { language ->
+                        viewModel.updateLanguage(language)
+                        GlobalLanguageState.updateLanguage(AppLanguage.fromDisplayName(language))
+                    }
+                )
+                1 -> AgreementContent(
+                    uiState = uiState,
+                    viewModel = viewModel
+                )
+                2 -> VisaSelectionContent(
+                    currentLanguage = currentLanguage,
+                    selectedVisa = uiState.visa,
+                    onVisaSelected = viewModel::updateVisa
+                )
+                3 -> KoreanLevelContent(
+                    currentLanguage = currentLanguage,
+                    selectedLevel = uiState.koreanLevel,
+                    onLevelSelected = viewModel::updateKoreanLevel
+                )
+                4 -> BusinessSelectionContent(
+                    currentLanguage = currentLanguage,
+                    selectedBusinesses = uiState.businesses,
+                    onBusinessSelected = viewModel::updateBusiness
+                )
+            }
         }
+
+        // 🔥 하단 버튼 - currentLanguage를 remember 키로 사용
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
         ) {
+            val buttonText = remember(currentLanguage, pageIndex) {
+                if (pageIndex == pageCount - 1) {
+                    R.string.onboarding_done_button
+                } else {
+                    R.string.onboarding_next_button
+                }
+            }
+
             HelpJobButton(
-                text = if (currentPage == pageCount - 1) stringResource(R.string.onboarding_done_button) else stringResource(R.string.onboarding_next_button),
+                text = stringResource(buttonText),
                 onClick = {
-                    if (currentPage == pageCount - 1) onGetStarted() else onNextPage()
+                    if (pageIndex == pageCount - 1) onGetStarted() else onNextPage()
                 },
                 enabled = isValid,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(Modifier.height(20.dp))
         }
-
     }
 }
 
-data class OnboardingPage(
-    val title: String,
-    val content: @Composable () -> Unit,
-)
+// 🔥 언어 선택 컨텐츠
+@Composable
+private fun LanguageSelectionContent(
+    languageList: List<OnboardingData>,
+    selectedLanguage: String,
+    onLanguageSelected: (String) -> Unit
+) {
+    languageList.forEachIndexed { index, language ->
+        OnboardingButton(
+            modifier = Modifier
+                .height(46.dp)
+                .fillMaxWidth(),
+            mainTitle = language.mainTitle,
+            onClick = { onLanguageSelected(language.mainTitle) },
+            icon = R.drawable.ic_check,
+            enabled = selectedLanguage == language.mainTitle
+        )
+        if (index < languageList.size - 1) {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+    }
+}
 
-data class OnboardingData(
-    val mainTitle: String,
-    val subTitle: String? = null
-)
+// 🔥 약관 동의 컨텐츠
+@Composable
+private fun AgreementContent(
+    uiState: OnboardingViewModel.OnboardingUiState,
+    viewModel: OnboardingViewModel
+) {
+    AgreementSection(
+        isAllChecked = uiState.fullAgreement,
+        isServiceChecked = uiState.serviceAgreement,
+        isPrivacyChecked = uiState.privacyAgreement,
+        isAgeChecked = uiState.ageAgreement,
+        onAllCheckedChange = viewModel::updateAgreement,
+        onServiceCheckedChange = viewModel::updateServiceAgreement,
+        onPrivacyCheckedChange = viewModel::updatePrivacyAgreement,
+        onAgeCheckedChange = viewModel::updateAgeAgreement,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+// 🔥 비자 선택 컨텐츠
+@Composable
+private fun VisaSelectionContent(
+    currentLanguage: AppLanguage,
+    selectedVisa: String,
+    onVisaSelected: (String) -> Unit
+) {
+    // 🔥 언어 변경 시 재계산되도록 remember 키 추가
+    val visaList = remember(currentLanguage) {
+        listOf(
+            OnboardingData(
+                mainTitle = "", // stringResource로 대체될 예정
+                subTitle = ""
+            ),
+            OnboardingData(
+                mainTitle = "",
+                subTitle = ""
+            )
+        )
+    }
+
+    visaList.forEachIndexed { index, _ ->
+        val (mainTitle, subTitle) = when (index) {
+            0 -> stringResource(R.string.onboarding_visa_setup_d2_title) to
+                    stringResource(R.string.onboarding_visa_setup_d2_description)
+            else -> stringResource(R.string.onboarding_visa_setup_d4_title) to
+                    stringResource(R.string.onboarding_visa_setup_d4_description)
+        }
+
+        OnboardingButton(
+            modifier = Modifier
+                .height(62.dp)
+                .fillMaxWidth(),
+            mainTitle = mainTitle,
+            subTitle = subTitle,
+            onClick = { onVisaSelected(mainTitle) },
+            contentPosition = Arrangement.Center,
+            enabled = selectedVisa == mainTitle,
+        )
+        if (index < 1) {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+    }
+}
+
+// 🔥 한국어 레벨 선택 컨텐츠
+@Composable
+private fun KoreanLevelContent(
+    currentLanguage: AppLanguage,
+    selectedLevel: String,
+    onLevelSelected: (String) -> Unit
+) {
+    val koreanLevelTitles = listOf(
+        stringResource(R.string.onboarding_korean_level_setup_topik3),
+        stringResource(R.string.onboarding_korean_level_setup_topik4_over),
+        stringResource(R.string.onboarding_korean_level_setup_no_topik)
+    )
+
+    koreanLevelTitles.forEachIndexed { index, title ->
+        OnboardingButton(
+            modifier = Modifier
+                .height(62.dp)
+                .fillMaxWidth(),
+            mainTitle = title,
+            onClick = { onLevelSelected(title) },
+            contentPosition = Arrangement.Center,
+            enabled = selectedLevel == title,
+        )
+        if (index < koreanLevelTitles.size - 1) {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+    }
+}
+
+// 🔥 업종 선택 컨텐츠
+@Composable
+private fun BusinessSelectionContent(
+    currentLanguage: AppLanguage,
+    selectedBusinesses: List<String>,
+    onBusinessSelected: (String) -> Unit
+) {
+    // 🔥 언어 변경 시 재계산되도록 LocalContext 사용
+    val context = LocalContext.current
+    val businessList = remember(currentLanguage) {
+        Business.entries.map { business ->
+            OnboardingData(
+                mainTitle = context.getString(business.displayNameResId)
+            )
+        }
+    }
+
+    LazyColumn {
+        itemsIndexed(businessList) { index, business ->
+            OnboardingButton(
+                modifier = Modifier
+                    .height(46.dp)
+                    .fillMaxWidth(),
+                mainTitle = business.mainTitle,
+                onClick = { onBusinessSelected(business.mainTitle) },
+                enabled = business.mainTitle in selectedBusinesses
+            )
+            if (index < businessList.size - 1) {
+                Spacer(modifier = Modifier.height(15.dp))
+            }
+        }
+    }
+}
 
 @Composable
 fun CustomProgressIndicator(
@@ -396,209 +457,12 @@ fun CustomProgressIndicator(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun OnboardingPreview(){
-    val languageList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_language_setup_korean)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_language_setup_english)
-        )
-    )
-    val koreanLevelList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik3),
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_topik4_over),
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_korean_level_setup_no_topik),
-        ),
-    )
-    val visaList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_visa_setup_d2_title),
-            subTitle = stringResource(R.string.onboarding_visa_setup_d2_description)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_visa_setup_d4_title),
-            subTitle = stringResource(R.string.onboarding_visa_setup_d4_description)
-        ),
-    )
-    val businessList = listOf(
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_restaurant)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_mart)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_logistics)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_office)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_translation)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_learn)
-        ),
-        OnboardingData(
-            mainTitle = stringResource(R.string.onboarding_business_setup_event)
-        )
-    )
+data class OnboardingPage(
+    val title: String,
+    val content: @Composable () -> Unit,
+)
 
-
-    val pages = listOf(
-        //언어 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_language_setup_title),
-            content = {
-                languageList.forEachIndexed { index, language ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(46.dp)
-                            .fillMaxWidth(),
-                        mainTitle = language.mainTitle,
-                        onClick = {
-                        },
-                        icon = R.drawable.ic_check,
-                        enabled = false
-                    )
-                    if (index < languageList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //필수 약관 동의
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_agreement_setup_title),
-            content = {
-                AgreementSection(
-                    isAllChecked = true,
-                    isServiceChecked = true,
-                    isPrivacyChecked = true,
-                    isAgeChecked = true,
-                    onAllCheckedChange = {  },
-                    onServiceCheckedChange = {  },
-                    onPrivacyCheckedChange = {  },
-                    onAgeCheckedChange = {  },
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        ),
-        //한국어 능력 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_korean_level_setup_title),
-            content = {
-                koreanLevelList.forEachIndexed { index, koreanLevel ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(62.dp)
-                            .fillMaxWidth(),
-                        mainTitle = koreanLevel.mainTitle,
-                        subTitle = koreanLevel.subTitle,
-                        onClick = {
-                        },
-                        contentPosition = Arrangement.Center,
-                        enabled = true,
-                    )
-                    if (index < koreanLevelList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //비자 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_visa_setup_title),
-            content = {
-                visaList.forEachIndexed { index, visa ->
-                    OnboardingButton(
-                        modifier = Modifier
-                            .height(62.dp)
-                            .fillMaxWidth(),
-                        mainTitle = visa.mainTitle,
-                        subTitle = visa.subTitle,
-                        onClick = {
-                        },
-                        contentPosition = Arrangement.Center,
-                        enabled = true,
-                    )
-                    if (index < visaList.size - 1) {
-                        Spacer(modifier = Modifier.height(15.dp))
-                    }
-                }
-            }
-        ),
-        //업종 선택
-        OnboardingPage(
-            title = stringResource(R.string.onboarding_business_setup_title),
-            content = {
-                LazyColumn{
-                    itemsIndexed(businessList){ index, business->
-                        OnboardingButton(
-                            modifier = Modifier
-                                .height(46.dp)
-                                .fillMaxWidth(),
-                            mainTitle = business.mainTitle,
-                            onClick = {
-                            },
-                            enabled = false
-                        )
-                        if (index < businessList.size - 1) {
-                            Spacer(modifier = Modifier.height(15.dp))
-                        }
-                    }
-                }
-            }
-        )
-    )
-
-    val pagerState = rememberPagerState(pageCount = { pages.size })
-    val scope = rememberCoroutineScope()
-
-    // 현재 페이지에 따른 유효성 검사 결과 계산
-    val isCurrentPageValid = when (pagerState.currentPage) {
-        0 -> true    // 언어 선택 페이지
-        1 -> true    // 약관 동의 페이지
-        2 -> true  // 한국어 능력 선택 페이지
-        3 -> true         // 비자 선택 페이지
-        4 -> true     // 업종 선택 페이지
-        else -> false
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // 페이저
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize(),
-            userScrollEnabled = false
-        ) { position ->
-            OnboardingPage(
-                page = pages[position],
-                pageCount = pages.size,
-                currentPage = position,
-                onNextPage = {
-                    if (position < pages.size - 1) {
-                        scope.launch {
-                            pagerState.animateScrollToPage(position + 1)
-                        }
-                    }
-                },
-                onGetStarted = {
-                },
-                isValid = isCurrentPageValid
-            )
-        }
-    }
-}
+data class OnboardingData(
+    val mainTitle: String,
+    val subTitle: String? = null
+)
