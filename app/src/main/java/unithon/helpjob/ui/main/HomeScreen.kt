@@ -72,24 +72,46 @@ fun HomeScreen(
     // HorizontalPager 상태
     val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
 
+    // 🆕 초기화 완료 플래그 (첫 번째 데이터 로딩 후 자동 이동 방지용)
+    var isInitialized by remember { mutableStateOf(false) }
+
+    // 🆕 사용자가 수동으로 페이저를 조작했는지 추적
+    var userHasInteracted by remember { mutableStateOf(false) }
+
+    // 첫 번째 데이터 로딩 완료 시 초기화 플래그 설정
+    LaunchedEffect(uiState.steps.isNotEmpty()) {
+        if (uiState.steps.isNotEmpty() && !isInitialized) {
+            isInitialized = true
+        }
+    }
+
+    // 🔥 핵심 수정: memberCheckStep 기반 이동은 초기화 시에만 실행
     LaunchedEffect(uiState.memberCheckStep, uiState.steps) {
-        if (uiState.steps.isNotEmpty()) {
+        if (uiState.steps.isNotEmpty() && !isInitialized && !userHasInteracted) {
             val targetIndex = uiState.steps.indexOfFirst {
                 it.checkStep == uiState.memberCheckStep.apiStep
             }
-            if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
+            if (targetIndex >= 0) {
                 pagerState.scrollToPage(targetIndex)
             }
         }
     }
 
-    // 1. selectedStep 변경 시 pager 동기화 (우선순위 높음)
+    // selectedStep 변경 시 pager 동기화 (우선순위 높음)
     LaunchedEffect(uiState.selectedStep) {
         uiState.selectedStep?.let { selectedStep ->
             val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
             if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
+                userHasInteracted = true // 사용자 인터랙션으로 표시
                 pagerState.scrollToPage(targetIndex)
             }
+        }
+    }
+
+    // 🆕 사용자가 직접 페이저를 스와이프할 때 인터랙션 플래그 설정
+    LaunchedEffect(pagerState.isScrollInProgress) {
+        if (pagerState.isScrollInProgress && isInitialized) {
+            userHasInteracted = true
         }
     }
 
