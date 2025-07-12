@@ -78,12 +78,12 @@
     <string name="onboarding_error_message">온보딩 설정에 실패했습니다</string>
 
     <!-- Onboarding Screen(Language) -->
-    <string name="onboarding_language_setup_title">OOO에서 사용할\n언어를 선택해 주세요</string>
+    <string name="onboarding_language_setup_title">CHECKMATE에서 사용할\n언어를 선택해 주세요</string>
     <string name="onboarding_language_setup_korean">한국어</string>
     <string name="onboarding_language_setup_english">English</string>
 
     <!-- Onboarding Screen(Agreement) -->
-    <string name="onboarding_agreement_setup_title">OOO 이용을 위해\n필수 약관에 동의해 주세요</string>
+    <string name="onboarding_agreement_setup_title">CHECKMATE 이용을 위해\n필수 약관에 동의해 주세요</string>
     <string name="onboarding_agreement_setup_full_agreement">전체동의</string>
     <string name="onboarding_agreement_setup_service_agreement">(필수) 서비스 이용약관 동의</string>
     <string name="onboarding_agreement_setup_info_agreement">(필수) 개인정보 수집·이용 동의</string>
@@ -91,20 +91,20 @@
     <string name="onboarding_agreement_setup_more">더보기</string>
 
     <!-- Onboarding Screen(visa) -->
-    <string name="onboarding_visa_setup_title">유니톤님의 비자 종류를\n선택해 주세요</string>
+    <string name="onboarding_visa_setup_title">사용자님의 비자 종류를\n선택해 주세요</string>
     <string name="onboarding_visa_setup_d2_title">D-2</string>
     <string name="onboarding_visa_setup_d2_description">유학 비자</string>
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
 
     <!-- Onboarding Screen(korean level) -->
-    <string name="onboarding_korean_level_setup_title">유니톤님의 한국어 능력을\n선택해 주세요</string>
+    <string name="onboarding_korean_level_setup_title">사용자님의 한국어 능력을\n선택해 주세요</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
     <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
 
     <!-- Onboarding Screen(business) -->
-    <string name="onboarding_business_setup_title">유니톤님이 희망하는\n업종은 무엇인가요?</string>
+    <string name="onboarding_business_setup_title">사용자님이 희망하는\n업종은 무엇인가요?</string>
     <string name="onboarding_business_setup_restaurant">음식점/카페</string>
     <string name="onboarding_business_setup_mart">편의점/마트</string>
     <string name="onboarding_business_setup_logistics">물류/창고 작업 보조</string>
@@ -202,7 +202,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo2) -->
     <string name="document_workplace_info_2_company_address_label">업체 주소</string>
-    <string name="document_workplace_info_2_company_address_placeholder">나머지 주소</string>
+    <string name="document_workplace_info_2_company_address_placeholder">주소</string>
     <string name="document_workplace_info_2_employer_name_label">고용주 성명</string>
     <string name="document_workplace_info_2_employer_name_placeholder">예) 김길동</string>
     <string name="document_workplace_info_2_employer_phone_number_label">고용주 전화번호</string>
