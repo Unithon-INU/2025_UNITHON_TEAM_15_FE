@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,12 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
 }
 
 android {
@@ -20,11 +28,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(
-            "String",
-            "API_BASE_URL",
-            "\"http://3.36.2.85:8080/\""
-        )
+        val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
 
 //        Room 사용시 적용
 //        javaCompileOptions {
@@ -41,11 +46,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField(
-                "String",
-                "API_BASE_URL",
-                "\"http://3.36.2.85:8080/\""
-            )
+            val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
+            buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
         }
     }
     compileOptions {
