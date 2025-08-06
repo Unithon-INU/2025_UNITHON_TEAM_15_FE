@@ -1,8 +1,6 @@
 package unithon.helpjob.ui.auth.nickname
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,9 +21,7 @@ import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.auth.components.AuthNicknameTextField
 import unithon.helpjob.ui.components.HelpJobButton
-import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.components.HelpJobTopAppBar
-import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
 
 @Composable
@@ -76,8 +71,9 @@ fun NicknameSetupScreen(
                     placeholderText = stringResource(id = R.string.nickname_placeholder),
                     isError = uiState.nicknameError,
                     errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
-                    modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth()
                 )
+
 
                 Spacer(modifier = Modifier.weight(1f))
 
