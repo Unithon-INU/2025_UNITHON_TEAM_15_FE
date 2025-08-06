@@ -42,8 +42,7 @@
     <string name="send_button">send</string>
     <string name="verify_button">verify</string>
     <string name="resend_button">Resend</string>
-    <string name="enter_verification_code">Enter the code</string>
-    <string name="verification_code_hint">Enter verification code</string>
+    <string name="verification_code_hint">Enter the code</string>
     <string name="verification_code_instruction">Enter the code from the email we sent you</string>
     <string name="verification_code_expired">ⓘ Verification code has expired</string>
     <string name="verification_code_invalid">ⓘ Invalid verification code</string>

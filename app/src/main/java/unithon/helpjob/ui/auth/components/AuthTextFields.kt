@@ -46,22 +46,12 @@ fun AuthEmailTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    labelText: String,
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
@@ -108,93 +98,6 @@ fun AuthPasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    labelText: String,
-    placeholderText: String = "",
-    isError: Boolean = false,
-    errorMessage: String? = null,
-    imeAction: ImeAction = ImeAction.Done
-) {
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
-        HelpJobTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            placeholder = if (placeholderText.isNotBlank()) {
-                {
-                    Text(
-                        text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
-                    )
-                }
-            } else null,
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        painter = painterResource(
-                            id = if (passwordVisible) R.drawable.eyeon
-                            else R.drawable.eyeoff
-                        ),
-                        contentDescription = if (passwordVisible) {
-                            stringResource(R.string.hide_password)
-                        } else {
-                            stringResource(R.string.show_password)
-                        },
-                        tint = Grey400,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            },
-            visualTransformation = if (passwordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = imeAction
-            ),
-            isError = isError
-        )
-
-        if (isError && errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = Warning,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-    }
-}
-
-/**
- * 회원가입용 비밀번호 확인 텍스트필드
- */
-@Composable
-fun AuthPasswordConfirmTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    labelText: String,
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
@@ -203,15 +106,6 @@ fun AuthPasswordConfirmTextField(
     var passwordVisible by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
@@ -333,15 +227,16 @@ fun AuthNicknameTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholderText: String = "",
+    maxLength: Int = 10, // 닉네임 최대 길이 (기본값 10자)
     isError: Boolean = false,
     errorMessage: String? = null,
-    maxLength: Int = 10,
     imeAction: ImeAction = ImeAction.Done
 ) {
     Column(modifier = modifier) {
         HelpJobTextField(
             value = value,
             onValueChange = { newValue ->
+                // 최대 길이 제한
                 if (newValue.length <= maxLength) {
                     onValueChange(newValue)
                 }
@@ -364,12 +259,25 @@ fun AuthNicknameTextField(
                 }
             } else null,
             keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
                 imeAction = imeAction
             ),
-            isError = isError || value.length > maxLength
+            isError = isError
         )
 
-        // 글자수 카운터
+        // ✅ 기존 UI 구성 보존: 에러 메시지와 글자수 카운터를 수직으로 배치
+
+        // 에러 메시지 (있을 때만 표시)
+        if (isError && errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = Warning,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        // 글자수 카운터 (항상 표시, 오른쪽 정렬)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -377,19 +285,10 @@ fun AuthNicknameTextField(
             horizontalArrangement = Arrangement.End
         ) {
             Text(
-                text = "${value.length} / $maxLength",
+                text = "${value.length}/$maxLength",
                 style = MaterialTheme.typography.labelMedium,
-                color = Grey400,
+                color = if (value.length == maxLength) Warning else Grey400,
                 textAlign = TextAlign.End
-            )
-        }
-
-        if (isError && errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = Warning,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 8.dp)
             )
         }
     }

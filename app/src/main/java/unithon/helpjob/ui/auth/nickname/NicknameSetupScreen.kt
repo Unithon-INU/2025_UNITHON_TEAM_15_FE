@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.ui.auth.components.AuthNicknameTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -69,36 +70,14 @@ fun NicknameSetupScreen(
 
                 Spacer(modifier = Modifier.height(39.dp))
 
-                // 닉네임 입력 필드
-                Column {
-                    HelpJobTextField(
-                        value = uiState.nickname,
-                        onValueChange = viewModel::updateNickname,
-                        label = "",
-                        placeholder = stringResource(id = R.string.nickname_placeholder),
-                        isError = uiState.nicknameError,
-                        errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    // 글자 수 카운터
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Text(
-                            text = stringResource(
-                                id = R.string.nickname_character_count,
-                                uiState.nicknameLength
-                            ),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Grey400,
-                            textAlign = TextAlign.End
-                        )
-                    }
-                }
+                AuthNicknameTextField(
+                    value = uiState.nickname,
+                    onValueChange = viewModel::updateNickname,
+                    placeholderText = stringResource(id = R.string.nickname_placeholder),
+                    isError = uiState.nicknameError,
+                    errorMessage = uiState.nicknameErrorMessage?.let { stringResource(id = it) },
+                    modifier = Modifier.fillMaxWidth()
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
 

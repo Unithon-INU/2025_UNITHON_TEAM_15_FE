@@ -37,6 +37,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.ui.auth.components.AuthEmailTextField
+import unithon.helpjob.ui.auth.components.AuthPasswordTextField
+import unithon.helpjob.ui.auth.components.AuthVerificationCodeTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -105,18 +108,13 @@ fun SignUpScreen(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    HelpJobTextField(
+                    AuthEmailTextField(
                         value = uiState.email,
                         onValueChange = viewModel::updateEmail,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        label = "",
-                        placeholder = stringResource(id = R.string.sign_up_email_hint),
+                        placeholderText = stringResource(id = R.string.sign_up_email_hint),
                         isError = uiState.emailError,
                         errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
 
                     // send 버튼
@@ -173,14 +171,13 @@ fun SignUpScreen(
                     ) {
                         // 인증코드 텍스트필드 (내부에 Resend 포함)
                         Box(modifier = Modifier.weight(1f)) {
-                            HelpJobTextField(
+                            AuthVerificationCodeTextField(
                                 value = uiState.verificationCode,
                                 onValueChange = viewModel::updateVerificationCode,
-                                label = "",
-                                placeholder = stringResource(id = R.string.verification_code_hint),
+                                placeholderText = stringResource(id = R.string.verification_code_hint),
                                 isError = uiState.verificationCodeError,
                                 errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
 
                             // Resend 텍스트를 텍스트필드 내부 오른쪽에 배치
@@ -279,15 +276,12 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(9.dp))
 
                 // 비밀번호 입력 필드
-                HelpJobTextField(
+                AuthPasswordTextField(
                     value = uiState.password,
                     onValueChange = viewModel::updatePassword,
-                    label = "",
-                    placeholder = stringResource(id = R.string.sign_up_password_hint),
-                    isPassword = true,
+                    placeholderText = stringResource(R.string.sign_up_password_hint),
                     isError = uiState.passwordError,
-                    errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
-                    modifier = Modifier.fillMaxWidth()
+                    errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) }
                 )
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -302,15 +296,13 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(9.dp))
 
                 // 비밀번호 확인 입력 필드
-                HelpJobTextField(
+                AuthPasswordTextField(
                     value = uiState.confirmPassword,
                     onValueChange = viewModel::updateConfirmPassword,
-                    label = "",
-                    placeholder = stringResource(id = R.string.sign_up_confirm_password_hint),
-                    isPassword = true,
+                    placeholderText = stringResource(R.string.sign_up_confirm_password_hint),
                     isError = uiState.confirmPasswordError,
-                    errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(id = it) },
-                    modifier = Modifier.fillMaxWidth()
+                    errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },
+                    imeAction = ImeAction.Done
                 )
 
                 Spacer(modifier = Modifier.weight(1f))

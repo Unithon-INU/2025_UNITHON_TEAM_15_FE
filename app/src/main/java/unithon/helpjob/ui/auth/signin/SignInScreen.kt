@@ -28,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.ui.auth.components.AuthEmailTextField
+import unithon.helpjob.ui.auth.components.AuthPasswordTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
@@ -90,15 +92,10 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            HelpJobTextField(
+            AuthEmailTextField(
                 value = uiState.email,
                 onValueChange = viewModel::updateEmail,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                label = "",
-                placeholder = stringResource(id = R.string.sign_in_email_hint),
+                placeholderText = stringResource(id = R.string.sign_in_email_hint),
                 isError = uiState.emailError,
                 errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
                 modifier = Modifier.fillMaxWidth()
@@ -115,15 +112,13 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(9.dp))
 
-            HelpJobTextField(
+            AuthPasswordTextField(
                 value = uiState.password,
                 onValueChange = viewModel::updatePassword,
-                label = "",
-                placeholder = stringResource(id = R.string.sign_in_password_hint),
-                isPassword = true,
+                placeholderText = stringResource(id = R.string.sign_in_password_hint),
                 isError = uiState.passwordError,
                 errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(46.dp))
