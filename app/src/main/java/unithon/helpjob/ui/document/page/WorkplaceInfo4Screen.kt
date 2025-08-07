@@ -29,7 +29,6 @@ import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.theme.Grey200
-import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme

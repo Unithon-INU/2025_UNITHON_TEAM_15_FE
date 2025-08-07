@@ -20,21 +20,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
-import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
 
 /**
@@ -72,13 +68,8 @@ fun AuthEmailTextField(
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -137,13 +128,8 @@ fun AuthPasswordTextField(
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -211,13 +197,8 @@ fun AuthVerificationCodeTextField(
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -269,13 +250,8 @@ fun AuthNicknameTextField(
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,

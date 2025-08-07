@@ -1,7 +1,6 @@
 package unithon.helpjob.data.repository
 
 import unithon.helpjob.data.model.request.DocumentRequest
-import unithon.helpjob.data.model.request.MemberNicknameReq
 import unithon.helpjob.data.network.HelpJobApiService
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,8 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,11 +33,9 @@ import unithon.helpjob.ui.calculator.components.CalculationResultDialog
 import unithon.helpjob.ui.calculator.components.CalculatorWageTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobDropdown
-import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary200
 import unithon.helpjob.ui.theme.Primary400
-import unithon.helpjob.util.CurrencyVisualTransformation
 
 @Composable
 fun CalculatorScreen(

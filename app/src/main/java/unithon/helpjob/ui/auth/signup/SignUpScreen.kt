@@ -24,13 +24,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
@@ -43,9 +38,7 @@ import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
-import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Warning
 
@@ -125,23 +118,13 @@ fun SignUpScreen(
                         if (uiState.isSendingEmail) {
                             Text(
                                 text = "...",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp,
-                                    fontFamily = PretendardFontFamily,
-                                    fontWeight = FontWeight.Bold,
-                                ),
+                                style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1
                             )
                         } else {
                             Text(
                                 text = if (uiState.isEmailSent) "sent" else "send",
-                                style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp,
-                                    fontFamily = PretendardFontFamily,
-                                    fontWeight = FontWeight.Bold,
-                                ),
+                                style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1
                             )
                         }
@@ -180,13 +163,8 @@ fun SignUpScreen(
                                 ) {
                                     Text(
                                         text = stringResource(R.string.resend_button),
-                                        style = TextStyle(
-                                            fontSize = 12.sp,
-                                            lineHeight = 15.sp,
-                                            fontFamily = FontFamily(Font(R.font.pretendard_medium)),
-                                            fontWeight = FontWeight(500),
-                                            color = Warning,
-                                        ),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = Warning,
                                         modifier = Modifier
                                             .padding(end = 18.dp)
                                             .clickable { viewModel.resendEmailVerification() }
@@ -214,23 +192,13 @@ fun SignUpScreen(
                             if (uiState.isVerifyingCode) {
                                 Text(
                                     text = "...",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp,
-                                        fontFamily = PretendardFontFamily,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
+                                    style = MaterialTheme.typography.titleMedium,
                                     maxLines = 1
                                 )
                             } else {
                                 Text(
                                     text = "verify",
-                                    style = TextStyle(
-                                        fontSize = 16.sp,
-                                        lineHeight = 20.sp,
-                                        fontFamily = PretendardFontFamily,
-                                        fontWeight = FontWeight.Bold,
-                                    ),
+                                    style = MaterialTheme.typography.titleMedium,
                                     maxLines = 1
                                 )
                             }
@@ -242,13 +210,8 @@ fun SignUpScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(R.string.verification_code_instruction),
-                            style = TextStyle(
-                                fontSize = 12.sp,
-                                lineHeight = 15.sp,
-                                fontFamily = FontFamily(Font(R.font.pretendard_medium)),
-                                fontWeight = FontWeight(500),
-                                color = Primary500,
-                            )
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Primary500,
                         )
                     }
                 }
