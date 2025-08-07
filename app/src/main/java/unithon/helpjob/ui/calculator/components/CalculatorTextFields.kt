@@ -2,8 +2,8 @@ package unithon.helpjob.ui.calculator.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +23,7 @@ import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.util.CurrencyVisualTransformation
 
 /**
  * 계산기용 시급 입력 텍스트필드
@@ -36,24 +37,21 @@ fun CalculatorWageTextField(
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
+    onDone: (() -> Unit)? = null,
     imeAction: ImeAction = ImeAction.Done
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
+            modifier = Modifier.fillMaxWidth(),
+            label = {
+                Text(
+                    text = labelText,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Grey500
+                )
+            },
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
@@ -70,18 +68,23 @@ fun CalculatorWageTextField(
             } else null,
             trailingIcon = {
                 Text(
-                    text = stringResource(R.string.calculator_won), // "원"
+                    text = stringResource(R.string.calculator_won),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey600
                 )
             },
+            visualTransformation = CurrencyVisualTransformation(),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = imeAction
+                imeAction = imeAction,
+                keyboardType = KeyboardType.Number
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { onDone?.invoke() }
             ),
             isError = isError
         )
 
+        // 에러 메시지
         if (isError && errorMessage != null) {
             Text(
                 text = errorMessage,

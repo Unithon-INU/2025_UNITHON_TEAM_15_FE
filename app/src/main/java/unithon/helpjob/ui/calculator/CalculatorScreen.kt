@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.calculator.components.CalculationResultDialog
+import unithon.helpjob.ui.calculator.components.CalculatorWageTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.components.HelpJobTextField
@@ -70,26 +71,17 @@ fun CalculatorScreen(
                 Spacer(Modifier.height(26.dp))
 
                 // 시급 입력
-                HelpJobTextField(
+                CalculatorWageTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = uiState.wage,
                     onValueChange = viewModel::updateWage,
-                    label = stringResource(R.string.calculator_wage_label),
-                    placeholder = stringResource(R.string.calculator_wage_example),
-                    visualTransformation = CurrencyVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Done,
-                        keyboardType = KeyboardType.Number
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus()
-                        }
-                    ),
+                    labelText = stringResource(R.string.calculator_wage_label),
+                    placeholderText = stringResource(R.string.calculator_wage_example),
                     isError = uiState.isLowerThanMinimumWage,
-                    errorMessage = stringResource(R.string.error_lower_than_minimun_wage),
-                    labelTextFieldSpace = 9.dp,
-                    isWon = true
+                    errorMessage = if (uiState.isLowerThanMinimumWage) stringResource(R.string.error_lower_than_minimun_wage) else null,
+                    onDone = {
+                        focusManager.clearFocus()
+                    }
                 )
 
                 if (!uiState.isLowerThanMinimumWage){
