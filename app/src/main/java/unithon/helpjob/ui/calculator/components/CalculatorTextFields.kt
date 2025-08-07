@@ -45,13 +45,16 @@ fun CalculatorWageTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier.fillMaxWidth(),
-            label = {
-                Text(
-                    text = labelText,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Grey500
-                )
-            },
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

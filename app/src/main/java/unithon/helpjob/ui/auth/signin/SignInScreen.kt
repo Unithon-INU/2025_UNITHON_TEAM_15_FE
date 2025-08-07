@@ -79,19 +79,11 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(39.dp))
 
-            // 이메일 입력
-            Text(
-                text = stringResource(id = R.string.sign_in_email_label),
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500
-            )
-
-            Spacer(modifier = Modifier.height(9.dp))
-
             AuthEmailTextField(
                 value = uiState.email,
                 onValueChange = viewModel::updateEmail,
-                placeholderText = stringResource(id = R.string.sign_in_email_hint),
+                labelText = stringResource(R.string.sign_in_email_label),
+                placeholderText = stringResource(R.string.sign_in_email_hint),
                 isError = uiState.emailError,
                 errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
                 modifier = Modifier.fillMaxWidth()
@@ -99,18 +91,10 @@ fun SignInScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // 비밀번호 입력
-            Text(
-                text = stringResource(id = R.string.sign_in_password_label),
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500
-            )
-
-            Spacer(modifier = Modifier.height(9.dp))
-
             AuthPasswordTextField(
                 value = uiState.password,
                 onValueChange = viewModel::updatePassword,
+                labelText = stringResource(R.string.sign_in_password_label),
                 placeholderText = stringResource(id = R.string.sign_in_password_hint),
                 isError = uiState.passwordError,
                 errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },

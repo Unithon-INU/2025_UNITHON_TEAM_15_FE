@@ -90,15 +90,6 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                // 이메일 레이블
-                Text(
-                    text = stringResource(id = R.string.sign_up_email_label),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Grey500
-                )
-
-                Spacer(modifier = Modifier.height(9.dp))
-
                 // 이메일 입력 필드 + send 버튼
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -108,7 +99,8 @@ fun SignUpScreen(
                     AuthEmailTextField(
                         value = uiState.email,
                         onValueChange = viewModel::updateEmail,
-                        placeholderText = stringResource(id = R.string.sign_up_email_hint),
+                        labelText = stringResource(R.string.sign_up_email_label),
+                        placeholderText = stringResource(R.string.sign_up_email_hint),
                         isError = uiState.emailError,
                         errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
                         modifier = Modifier.weight(1f),
@@ -263,19 +255,11 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // 비밀번호 레이블
-                Text(
-                    text = stringResource(id = R.string.sign_up_password_label),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Grey500
-                )
-
-                Spacer(modifier = Modifier.height(9.dp))
-
                 // 비밀번호 입력 필드
                 AuthPasswordTextField(
                     value = uiState.password,
                     onValueChange = viewModel::updatePassword,
+                    labelText = stringResource(R.string.sign_up_password_label),
                     placeholderText = stringResource(R.string.sign_up_password_hint),
                     isError = uiState.passwordError,
                     errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) }
@@ -283,19 +267,11 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(15.dp))
 
-                // 비밀번호 확인 레이블
-                Text(
-                    text = stringResource(id = R.string.sign_up_confirm_password_label),
-                    style = MaterialTheme.typography.titleSmall,
-                    color = Grey500
-                )
-
-                Spacer(modifier = Modifier.height(9.dp))
-
                 // 비밀번호 확인 입력 필드
                 AuthPasswordTextField(
                     value = uiState.confirmPassword,
                     onValueChange = viewModel::updateConfirmPassword,
+                    labelText = stringResource(R.string.sign_up_confirm_password_label),
                     placeholderText = stringResource(R.string.sign_up_confirm_password_hint),
                     isError = uiState.confirmPasswordError,
                     errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },

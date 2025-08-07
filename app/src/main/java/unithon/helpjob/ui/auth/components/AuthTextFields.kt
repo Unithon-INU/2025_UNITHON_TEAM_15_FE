@@ -33,6 +33,7 @@ import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
+import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
 
@@ -44,6 +45,7 @@ fun AuthEmailTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    labelText: String = "",
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
@@ -56,6 +58,16 @@ fun AuthEmailTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
@@ -96,6 +108,7 @@ fun AuthPasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    labelText: String = "",
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
@@ -110,6 +123,16 @@ fun AuthPasswordTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
@@ -263,25 +286,22 @@ fun AuthNicknameTextField(
             isError = isError
         )
 
-        // ✅ 기존 UI 구성 보존: 에러 메시지와 글자수 카운터를 수직으로 배치
-
-        // 에러 메시지 (있을 때만 표시)
-        if (isError && errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = Warning,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
 
         // 글자수 카운터 (항상 표시, 오른쪽 정렬)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            if (isError && errorMessage != null) {
+                Text(
+                    text = errorMessage,
+                    color = Warning,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
             Text(
                 text = "${value.length}/$maxLength",
                 style = MaterialTheme.typography.labelMedium,
