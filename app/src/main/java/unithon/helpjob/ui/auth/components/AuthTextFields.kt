@@ -1,6 +1,8 @@
 package unithon.helpjob.ui.auth.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTextField
@@ -52,6 +55,8 @@ fun AuthTextField(
     isError: Boolean = false,
     errorMessage: String? = null,
     showPasswordToggle: Boolean = false,
+    maxLength: Int? = null, // 글자수 제한 (null이면 제한 없음)
+    showCharacterCount: Boolean = false, // 글자수 카운터 표시 여부
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
@@ -89,7 +94,16 @@ fun AuthTextField(
     Column(modifier = modifier) {
         HelpJobTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { newValue ->
+                // 글자수 제한이 있는 경우 체크
+                if (maxLength != null) {
+                    if (newValue.length <= maxLength) {
+                        onValueChange(newValue)
+                    }
+                } else {
+                    onValueChange(newValue)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
@@ -121,13 +135,33 @@ fun AuthTextField(
             isError = isError
         )
 
-        if (isError && errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = Warning,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+        // 에러 메시지와 글자수 카운터를 함께 표시
+        if ((isError && errorMessage != null) || showCharacterCount) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // 에러 메시지 (왼쪽)
+                if (isError && errorMessage != null) {
+                    Text(
+                        text = errorMessage,
+                        color = Warning,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                }
+
+                // 글자수 카운터 (오른쪽)
+                if (showCharacterCount && maxLength != null) {
+                    Text(
+                        text = "${value.length}/$maxLength",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (value.length == maxLength) Warning else Grey400,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
         }
     }
 }
@@ -209,4 +243,30 @@ fun AuthVerificationCodeTextField(
     imeAction = imeAction,
     isError = isError,
     errorMessage = errorMessage
+)
+
+/**
+ * 닉네임 설정용 텍스트필드 (글자수 제한 + 카운터)
+ */
+@Composable
+fun AuthNicknameTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholderText: String = "",
+    maxLength: Int = 10, // 닉네임 최대 길이 (기본값 10자)
+    isError: Boolean = false,
+    errorMessage: String? = null,
+    imeAction: ImeAction = ImeAction.Done
+) = AuthTextField(
+    value = value,
+    onValueChange = onValueChange,
+    modifier = modifier,
+    placeholderText = placeholderText,
+    keyboardType = KeyboardType.Text,
+    imeAction = imeAction,
+    isError = isError,
+    errorMessage = errorMessage,
+    maxLength = maxLength,
+    showCharacterCount = true
 )
