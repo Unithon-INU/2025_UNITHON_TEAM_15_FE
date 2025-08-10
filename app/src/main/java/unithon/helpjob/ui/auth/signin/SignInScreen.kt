@@ -52,29 +52,51 @@ fun SignInScreen(
         }
     }
 
-    // 🆕 홈으로 네비게이션
+    // 홈으로 네비게이션
     LaunchedEffect(uiState.shouldGoToHome) {
         if (uiState.shouldGoToHome) {
             onNavigateToHome()
         }
     }
 
+    SignInContent(
+        uiState = uiState,
+        onEmailChange = viewModel::updateEmail,
+        onPasswordChange = viewModel::updatePassword,
+        onSignInClick = viewModel::signIn,
+        onNavigateToSignUp = onNavigateToSignUp,
+        modifier = modifier
+    )
+}
+
+/**
+ * SignIn UI 컨텐츠 (프리뷰 지원을 위해 분리)
+ */
+@Composable
+private fun SignInContent(
+    uiState: SignInViewModel.SignInUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSignInClick: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     LanguageAwareScreen {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = stringResource(id = R.string.sign_in_welcome_main),
-                style = MaterialTheme.typography.headlineLarge, // Headline1 - 24sp, Bold
+                style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
 
             Text(
                 text = stringResource(id = R.string.sign_in_welcome_sub),
-                style = MaterialTheme.typography.headlineMedium, // Headline2 - 20sp, Bold
+                style = MaterialTheme.typography.headlineMedium,
                 color = Grey700
             )
 
@@ -82,7 +104,7 @@ fun SignInScreen(
 
             AuthEmailTextField(
                 value = uiState.email,
-                onValueChange = viewModel::updateEmail,
+                onValueChange = onEmailChange,
                 labelText = stringResource(R.string.sign_in_email_label),
                 placeholderText = stringResource(R.string.sign_in_email_hint),
                 isError = uiState.emailError,
@@ -94,7 +116,7 @@ fun SignInScreen(
 
             AuthPasswordTextField(
                 value = uiState.password,
-                onValueChange = viewModel::updatePassword,
+                onValueChange = onPasswordChange,
                 labelText = stringResource(R.string.sign_in_password_label),
                 placeholderText = stringResource(id = R.string.sign_in_password_hint),
                 isError = uiState.passwordError,
@@ -107,7 +129,7 @@ fun SignInScreen(
             // 로그인 버튼
             HelpJobButton(
                 text = stringResource(id = R.string.sign_in_button),
-                onClick = viewModel::signIn,
+                onClick = onSignInClick,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
                 modifier = Modifier.fillMaxWidth()
@@ -170,14 +192,73 @@ fun SignInScreen(
     }
 }
 
+// ✅ 프리뷰 수정 - ViewModel 없이 UI만 테스트
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun SignInPreview() {
     HelpJobTheme {
-        SignInScreen(
+        SignInContent(
+            uiState = SignInViewModel.SignInUiState(
+                email = "test@example.com",
+                password = "password123",
+                isLoading = false,
+                emailError = false,
+                passwordError = false,
+                emailErrorMessage = null,
+                passwordErrorMessage = null
+            ),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onSignInClick = {},
             onNavigateToSignUp = {},
-            onNavigateToOnboarding = {},
-            onNavigateToHome = {},
+            modifier = Modifier
+        )
+    }
+}
+
+// ✅ 추가 프리뷰 - 에러 상태
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun SignInErrorPreview() {
+    HelpJobTheme {
+        SignInContent(
+            uiState = SignInViewModel.SignInUiState(
+                email = "invalid-email",
+                password = "123",
+                isLoading = false,
+                emailError = true,
+                passwordError = true,
+                emailErrorMessage = R.string.error_invalid_email,
+                passwordErrorMessage = R.string.error_short_password
+            ),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onSignInClick = {},
+            onNavigateToSignUp = {},
+            modifier = Modifier
+        )
+    }
+}
+
+// ✅ 추가 프리뷰 - 로딩 상태
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun SignInLoadingPreview() {
+    HelpJobTheme {
+        SignInContent(
+            uiState = SignInViewModel.SignInUiState(
+                email = "test@example.com",
+                password = "password123",
+                isLoading = true,
+                emailError = false,
+                passwordError = false,
+                emailErrorMessage = null,
+                passwordErrorMessage = null
+            ),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onSignInClick = {},
+            onNavigateToSignUp = {},
             modifier = Modifier
         )
     }
