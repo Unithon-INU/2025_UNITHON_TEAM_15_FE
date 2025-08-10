@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,9 +29,11 @@ import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.auth.components.AuthEmailTextField
 import unithon.helpjob.ui.auth.components.AuthPasswordTextField
 import unithon.helpjob.ui.components.HelpJobButton
+import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary600
 
 @Composable
@@ -166,5 +169,17 @@ fun SignInScreen(
             }
         }
     }
+}
 
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+fun SignInPreview() {
+    HelpJobTheme {
+        SignInScreen(
+            onNavigateToSignUp = {},
+            onNavigateToOnboarding = {},
+            onNavigateToHome = {},
+            modifier = Modifier
+        )
+    }
 }

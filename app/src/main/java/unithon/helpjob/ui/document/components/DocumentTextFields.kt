@@ -12,17 +12,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
 
 /**
@@ -40,32 +36,28 @@ fun DocumentTextTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -101,32 +93,28 @@ fun DocumentForeignerNumberTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -164,32 +152,28 @@ fun DocumentPhoneNumberTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -227,32 +211,28 @@ fun DocumentBusinessNumberTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -290,32 +270,28 @@ fun DocumentEmailTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -352,32 +328,28 @@ fun DocumentWageTextField(
     imeAction: ImeAction = ImeAction.Next
 ) {
     Column(modifier = modifier) {
-        if (labelText.isNotBlank()) {
-            Text(
-                text = labelText,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-        }
-
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
+            label = if (labelText.isNotBlank()) {
+                {
+                    Text(
+                        text = labelText,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey500,
+                        modifier = Modifier.padding(bottom = 9.dp)
+                    )
+                }
+            } else null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
@@ -431,13 +403,8 @@ fun DocumentDateTextField(
                 {
                     Text(
                         text = placeholderText,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = PretendardFontFamily,
-                            fontWeight = FontWeight.Bold,
-                            color = Grey300
-                        )
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Grey300
                     )
                 }
             } else null,
