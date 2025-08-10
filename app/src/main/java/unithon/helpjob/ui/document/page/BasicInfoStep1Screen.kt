@@ -79,11 +79,11 @@ fun BasicInfoStep1Preview(){
             title = "기본 정보를 입력하세요",
             enabled = false,
             onNext = {},
-            nameValue = "Gayle Gonzalez",
+            nameValue = "",
             onNameValueChange = {},
-            foreignerNumberValue = "minim",
+            foreignerNumberValue = "",
             onForeignerNumberValueChange = {},
-            majorValue = "porttitor",
+            majorValue = "",
             onMajorValueChange = {}
         )
     }
