@@ -1,23 +1,21 @@
 package unithon.helpjob.ui.document.page
 
-import PhoneNumberVisualTransformation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.ui.components.HelpJobDropdown
-import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.document.components.DocumentEmailTextField
+import unithon.helpjob.ui.document.components.DocumentPhoneNumberTextField
 import unithon.helpjob.ui.theme.HelpJobTheme
 
 @Composable
@@ -57,21 +55,20 @@ fun BasicInfoStep2Screen(
                 }
             )
             Spacer(Modifier.height(27.dp))
-            HelpJobTextField(
+            DocumentPhoneNumberTextField(
                 value = phoneNumberValue,
                 onValueChange = onPhoneNumberValueChange,
-                label = stringResource(R.string.document_basic_info_2_phone_number_label),
-                placeholder = stringResource(R.string.document_basic_info_2_phone_number_placeholder),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next,keyboardType = KeyboardType.Number),
-                visualTransformation = PhoneNumberVisualTransformation()
+                labelText = stringResource(R.string.document_basic_info_2_phone_number_label),
+                placeholderText = stringResource(R.string.document_basic_info_2_phone_number_placeholder),
+                imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
-            HelpJobTextField(
+            DocumentEmailTextField(
                 value = emailAddressValue,
                 onValueChange = onEmailAddressValueChange,
-                label = stringResource(R.string.document_basic_info_2_email_address_label),
-                placeholder = stringResource(R.string.document_basic_info_2_email_address_placeholder),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                labelText = stringResource(R.string.document_basic_info_2_email_address_label),
+                placeholderText = stringResource(R.string.document_basic_info_2_email_address_placeholder),
+                imeAction = ImeAction.Next
             )
         }
     }
@@ -87,8 +84,8 @@ fun BasicInfoStep2Preview(){
             title = "기본 정보를 입력하세요",
             enabled = false,
             onNext = {},
-            semesterValue = Semester.FIRST_YEAR_FIRST, // 🆕 enum 사용
-            onSemesterValueChange = {}, // 🆕 enum 콜백
+            semesterValue = Semester.FIRST_YEAR_FIRST,
+            onSemesterValueChange = {},
             phoneNumberValue = "(607) 802-8250",
             onPhoneNumberValueChange = {},
             emailAddressValue = "freeman.spence@example.com",

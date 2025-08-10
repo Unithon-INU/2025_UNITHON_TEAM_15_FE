@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,15 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobDropdown
-import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.document.components.DocumentWageTextField
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.HelpJobTheme
-import unithon.helpjob.util.CurrencyVisualTransformation
 
 /**
  * 윤년 판별 함수
@@ -136,14 +133,12 @@ fun WorkplaceInfo3Screen(
     ) {
         Column {
             // 시급 입력
-            HelpJobTextField(
+            DocumentWageTextField(
                 value = hourlyWageValue,
                 onValueChange = onHourlyWageValueChange,
-                label = stringResource(R.string.document_workplace_info_3_hourly_wage_label),
-                placeholder = stringResource(R.string.document_workplace_info_3_hourly_wage_placeholder),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done, keyboardType = KeyboardType.Number),
-                isWon = true,
-                visualTransformation = CurrencyVisualTransformation()
+                labelText = stringResource(R.string.document_workplace_info_3_hourly_wage_label),
+                placeholderText = stringResource(R.string.document_workplace_info_3_hourly_wage_placeholder),
+                imeAction = ImeAction.Done
             )
 
             Spacer(Modifier.height(27.dp))

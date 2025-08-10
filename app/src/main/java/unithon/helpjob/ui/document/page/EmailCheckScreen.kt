@@ -13,12 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobButton
-import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.document.components.DocumentEmailTextField
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.HelpJobTheme
 
@@ -47,11 +48,12 @@ fun EmailCheckScreen(
                 color = Grey700
             )
             Spacer(Modifier.height(31.dp))
-            HelpJobTextField(
+            DocumentEmailTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = emailAddressValue,
                 onValueChange = emailAddressValueChange,
-                label = stringResource(R.string.document_email_check_label)
+                labelText = stringResource(R.string.document_email_check_label),
+                imeAction = ImeAction.Done // 이메일 입력 후 완료
             )
         }
 
