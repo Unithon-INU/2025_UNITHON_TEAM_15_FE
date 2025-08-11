@@ -181,25 +181,3 @@ fun NicknameSetupScreenErrorPreview() {
         )
     }
 }
-
-// 로딩 상태 프리뷰
-@Preview(
-    name = "로딩 상태",
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF
-)
-@Composable
-fun NicknameSetupScreenLoadingPreview() {
-    HelpJobTheme {
-        NicknameSetupScreenContent(
-            uiState = NicknameSetupViewModel.NicknameSetupUiState(
-                nickname = "헬프잡유저",
-                nicknameLength = 5,
-                isLoading = true
-            ),
-            onNicknameChange = {},
-            onCompleteClick = {},
-            onBack = {}
-        )
-    }
-}

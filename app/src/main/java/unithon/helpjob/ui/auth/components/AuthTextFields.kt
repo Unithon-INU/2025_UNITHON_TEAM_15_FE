@@ -3,6 +3,7 @@ package unithon.helpjob.ui.auth.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -145,22 +146,23 @@ fun AuthTextField(
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // 에러 메시지 (왼쪽)
                 if (isError && errorMessage != null) {
                     Text(
                         text = errorMessage,
                         color = Warning,
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.weight(1f, fill = false)
                     )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
 
-                // 글자수 카운터 (오른쪽)
+                // 글자수 카운터 (오른쪽 고정)
                 if (showCharacterCount && maxLength != null) {
                     Text(
                         text = "${value.length}/$maxLength",
                         style = MaterialTheme.typography.labelMedium,
-                        color = if (value.length == maxLength) Warning else Grey400,
-                        textAlign = TextAlign.End
+                        color = if (value.length == maxLength) Warning else Grey400
                     )
                 }
             }
