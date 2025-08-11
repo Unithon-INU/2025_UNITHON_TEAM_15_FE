@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,8 +24,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,6 +42,7 @@ import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
+import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Warning
 
@@ -57,6 +61,42 @@ fun SignUpScreen(
             onNavigateToNicknameSetup()
         }
     }
+
+    SignUpScreenContent(
+        uiState = uiState,
+        onUpdateEmail = viewModel::updateEmail,
+        onUpdatePassword = viewModel::updatePassword,
+        onUpdateConfirmPassword = viewModel::updateConfirmPassword,
+        onUpdateVerificationCode = viewModel::updateVerificationCode,
+        onSendEmailVerification = viewModel::sendEmailVerification,
+        onVerifyEmailCode = viewModel::verifyEmailCode,
+        onResendEmailVerification = viewModel::resendEmailVerification,
+        onProceedToNickname = viewModel::proceedToNickname,
+        onBack = onBack,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun SignUpScreenContent(
+    uiState: SignUpViewModel.SignUpUiState,
+    onUpdateEmail: (String) -> Unit,
+    onUpdatePassword: (String) -> Unit,
+    onUpdateConfirmPassword: (String) -> Unit,
+    onUpdateVerificationCode: (String) -> Unit,
+    onSendEmailVerification: () -> Unit,
+    onVerifyEmailCode: () -> Unit,
+    onResendEmailVerification: () -> Unit,
+    onProceedToNickname: () -> Unit,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // 레이블 텍스트 높이를 동적으로 계산 + 레이블과 텍스트필드 사이 간격
+    val labelHeight = with(LocalDensity.current) {
+        MaterialTheme.typography.titleSmall.lineHeight.toDp()
+    }
+    val labelSpacing = 9.dp // 레이블과 텍스트필드 사이 간격
+    val totalOffset = labelHeight + labelSpacing
 
     LanguageAwareScreen {
         Scaffold(
@@ -91,7 +131,7 @@ fun SignUpScreen(
                 ) {
                     AuthEmailTextField(
                         value = uiState.email,
-                        onValueChange = viewModel::updateEmail,
+                        onValueChange = onUpdateEmail,
                         labelText = stringResource(R.string.sign_up_email_label),
                         placeholderText = stringResource(R.string.sign_up_email_hint),
                         isError = uiState.emailError,
@@ -99,9 +139,9 @@ fun SignUpScreen(
                         modifier = Modifier.weight(1f),
                     )
 
-                    // send 버튼
+                    // send 버튼 (레이블 높이 + 간격만큼 offset)
                     Button(
-                        onClick = viewModel::sendEmailVerification,
+                        onClick = onSendEmailVerification,
                         enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
@@ -113,7 +153,8 @@ fun SignUpScreen(
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                         modifier = Modifier
                             .width(71.dp)
-                            .height(46.dp)
+                            .height(48.dp)
+                            .offset(y = totalOffset)
                     ) {
                         if (uiState.isSendingEmail) {
                             Text(
@@ -145,7 +186,7 @@ fun SignUpScreen(
                         Box(modifier = Modifier.weight(1f)) {
                             AuthVerificationCodeTextField(
                                 value = uiState.verificationCode,
-                                onValueChange = viewModel::updateVerificationCode,
+                                onValueChange = onUpdateVerificationCode,
                                 placeholderText = stringResource(id = R.string.verification_code_hint),
                                 isError = uiState.verificationCodeError,
                                 errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
@@ -167,15 +208,15 @@ fun SignUpScreen(
                                         color = Warning,
                                         modifier = Modifier
                                             .padding(end = 18.dp)
-                                            .clickable { viewModel.resendEmailVerification() }
+                                            .clickable { onResendEmailVerification() }
                                     )
                                 }
                             }
                         }
 
-                        // verify 버튼
+                        // verify 버튼 (인증코드 필드는 레이블이 없으므로 패딩 없음)
                         Button(
-                            onClick = viewModel::verifyEmailCode,
+                            onClick = onVerifyEmailCode,
                             enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
                             shape = RoundedCornerShape(10.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -187,7 +228,7 @@ fun SignUpScreen(
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                             modifier = Modifier
                                 .width(80.dp)
-                                .height(46.dp)
+                                .height(48.dp)
                         ) {
                             if (uiState.isVerifyingCode) {
                                 Text(
@@ -221,7 +262,7 @@ fun SignUpScreen(
                 // 비밀번호 입력 필드
                 AuthPasswordTextField(
                     value = uiState.password,
-                    onValueChange = viewModel::updatePassword,
+                    onValueChange = onUpdatePassword,
                     labelText = stringResource(R.string.sign_up_password_label),
                     placeholderText = stringResource(R.string.sign_up_password_hint),
                     isError = uiState.passwordError,
@@ -233,7 +274,7 @@ fun SignUpScreen(
                 // 비밀번호 확인 입력 필드
                 AuthPasswordTextField(
                     value = uiState.confirmPassword,
-                    onValueChange = viewModel::updateConfirmPassword,
+                    onValueChange = onUpdateConfirmPassword,
                     labelText = stringResource(R.string.sign_up_confirm_password_label),
                     placeholderText = stringResource(R.string.sign_up_confirm_password_hint),
                     isError = uiState.confirmPasswordError,
@@ -246,7 +287,7 @@ fun SignUpScreen(
                 // 다음 버튼
                 HelpJobButton(
                     text = stringResource(id = R.string.sign_up_next_button),
-                    onClick = viewModel::proceedToNickname,
+                    onClick = onProceedToNickname,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
                     modifier = Modifier
@@ -256,5 +297,193 @@ fun SignUpScreen(
             }
         }
     }
+}
 
+// =================================
+// 프리뷰들
+// =================================
+
+// 기본 상태 프리뷰
+@Preview(
+    name = "기본 상태",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
+}
+
+// 이메일 전송 후 상태 프리뷰
+@Preview(
+    name = "이메일 전송 후",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenEmailSentPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(
+                email = "test@example.com",
+                isEmailSent = true,
+                verificationCode = "123456"
+            ),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
+}
+
+// 에러 상태 프리뷰
+@Preview(
+    name = "에러 상태",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenErrorPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(
+                email = "invalid-email",
+                password = "123",
+                confirmPassword = "456",
+                verificationCode = "wrong",
+                isEmailSent = true,
+                emailError = true,
+                emailErrorMessage = R.string.error_invalid_email,
+                passwordError = true,
+                passwordErrorMessage = R.string.error_short_password,
+                confirmPasswordError = true,
+                confirmPasswordErrorMessage = R.string.error_password_mismatch,
+                verificationCodeError = true,
+                verificationCodeErrorMessage = R.string.verification_code_invalid
+            ),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
+}
+
+// 입력 완료 상태 프리뷰
+@Preview(
+    name = "입력 완료",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenCompletedPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(
+                email = "user@example.com",
+                password = "password123",
+                confirmPassword = "password123",
+                verificationCode = "123456",
+                isEmailSent = true,
+                isCodeVerified = true
+            ),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
+}
+
+// 로딩 상태 프리뷰
+@Preview(
+    name = "로딩 중",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenLoadingPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(
+                email = "user@example.com",
+                password = "password123",
+                confirmPassword = "password123",
+                verificationCode = "123456",
+                isEmailSent = true,
+                isCodeVerified = true,
+                isLoading = true
+            ),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
+}
+
+// 인증코드 만료 에러 프리뷰
+@Preview(
+    name = "인증코드 만료",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+fun SignUpScreenCodeExpiredPreview() {
+    HelpJobTheme {
+        SignUpScreenContent(
+            uiState = SignUpViewModel.SignUpUiState(
+                email = "user@example.com",
+                password = "password123",
+                confirmPassword = "password123",
+                verificationCode = "654321",
+                isEmailSent = true,
+                verificationCodeError = true,
+                verificationCodeErrorMessage = R.string.verification_code_expired
+            ),
+            onUpdateEmail = {},
+            onUpdatePassword = {},
+            onUpdateConfirmPassword = {},
+            onUpdateVerificationCode = {},
+            onSendEmailVerification = {},
+            onVerifyEmailCode = {},
+            onResendEmailVerification = {},
+            onProceedToNickname = {},
+            onBack = {}
+        )
+    }
 }
