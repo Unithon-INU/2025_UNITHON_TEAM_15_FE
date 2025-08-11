@@ -2,6 +2,7 @@ package unithon.helpjob.ui.calculator.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -37,20 +38,21 @@ fun CalculatorWageTextField(
     imeAction: ImeAction = ImeAction.Done
 ) {
     Column(modifier = modifier) {
+        if (labelText.isNotBlank()) {
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey500,
+                modifier = Modifier.padding(bottom = 9.dp)
+            )
+        }
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            label = if (labelText.isNotBlank()) {
-                {
-                    Text(
-                        text = labelText,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Grey500,
-                        modifier = Modifier.padding(bottom = 9.dp)
-                    )
-                }
-            } else null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            label = null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

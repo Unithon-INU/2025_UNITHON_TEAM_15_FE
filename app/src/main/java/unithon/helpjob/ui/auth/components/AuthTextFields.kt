@@ -92,6 +92,17 @@ fun AuthTextField(
     }
 
     Column(modifier = modifier) {
+        // 🎯 Label을 TextField 외부에 별도로 배치 (피그마 디자인대로)
+        if (labelText.isNotBlank()) {
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey500,
+                modifier = Modifier.padding(bottom = 9.dp) // 적절한 간격
+            )
+        }
+
+        // 🎯 TextField는 순수하게 입력 영역만 담당 (46dp 고정 가능)
         HelpJobTextField(
             value = value,
             onValueChange = { newValue ->
@@ -107,16 +118,7 @@ fun AuthTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            label = if (labelText.isNotBlank()) {
-                {
-                    Text(
-                        text = labelText,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Grey500,
-                        modifier = Modifier.padding(bottom = 9.dp)
-                    )
-                }
-            } else null,
+            label = null, // 🎯 floating label 비활성화
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

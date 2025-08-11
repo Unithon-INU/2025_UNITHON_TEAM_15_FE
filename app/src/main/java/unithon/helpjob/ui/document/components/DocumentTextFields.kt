@@ -46,22 +46,24 @@ fun DocumentTextField(
     errorMessage: String? = null
 ) {
     Column(modifier = modifier) {
+        // 🎯 Label을 TextField 외부에 별도로 배치
+        if (labelText.isNotBlank()) {
+            Text(
+                text = labelText,
+                style = MaterialTheme.typography.titleSmall,
+                color = Grey500,
+                modifier = Modifier.padding(bottom = 9.dp)
+            )
+        }
+
+        // 🎯 TextField는 순수하게 입력 영역만 담당
         HelpJobTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            label = if (labelText.isNotBlank()) {
-                {
-                    Text(
-                        text = labelText,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Grey500,
-                        modifier = Modifier.padding(bottom = 9.dp)
-                    )
-                }
-            } else null,
+            label = null, // 🎯 floating label 비활성화
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
