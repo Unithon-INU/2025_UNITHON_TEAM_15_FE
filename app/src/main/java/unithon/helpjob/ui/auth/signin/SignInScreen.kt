@@ -239,27 +239,3 @@ fun SignInErrorPreview() {
         )
     }
 }
-
-// ✅ 추가 프리뷰 - 로딩 상태
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun SignInLoadingPreview() {
-    HelpJobTheme {
-        SignInContent(
-            uiState = SignInViewModel.SignInUiState(
-                email = "test@example.com",
-                password = "password123",
-                isLoading = true,
-                emailError = false,
-                passwordError = false,
-                emailErrorMessage = null,
-                passwordErrorMessage = null
-            ),
-            onEmailChange = {},
-            onPasswordChange = {},
-            onSignInClick = {},
-            onNavigateToSignUp = {},
-            modifier = Modifier
-        )
-    }
-}
