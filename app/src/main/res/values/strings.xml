@@ -20,7 +20,7 @@
     <!-- SignIn Error Messages -->
     <string name="sign_in_email_not_found">ⓘ This mail has no information</string>
     <string name="sign_in_password_wrong">ⓘ The password is wrong</string>
-    <string name="sign_in_failed">Login failed. Please try again.</string>
+    <string name="sign_in_failed">ⓘ Login failed. Please try again.</string>
 
     <!-- SignUp Screen -->
     <string name="sign_up_title">Sign Up</string>
@@ -64,11 +64,11 @@
 
     <!-- Common Error Messages -->
     <string name="error_empty_email">Please enter your email</string>
-    <string name="error_invalid_email">Invalid email format</string>
+    <string name="error_invalid_email">ⓘ Invalid email format</string>
     <string name="error_empty_password">Please enter your password</string>
-    <string name="error_short_password">Password must be at least 6 characters</string>
+    <string name="error_short_password">ⓘ Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
-    <string name="error_authentication_required">Authentication required. Please log in again.</string>
+    <string name="error_authentication_required">ⓘ Authentication required. Please log in again.</string>
     <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
 
     <!-- Home Screen -->

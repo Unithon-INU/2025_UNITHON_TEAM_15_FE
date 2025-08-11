@@ -192,7 +192,7 @@ private fun SignInContent(
     }
 }
 
-// ✅ 프리뷰 수정 - ViewModel 없이 UI만 테스트
+
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun SignInPreview() {
@@ -224,7 +224,7 @@ fun SignInErrorPreview() {
         SignInContent(
             uiState = SignInViewModel.SignInUiState(
                 email = "invalid-email",
-                password = "123",
+                password = "dlwnsgml1234",
                 isLoading = false,
                 emailError = true,
                 passwordError = true,
