@@ -8,12 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentBusinessNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
+import unithon.helpjob.ui.theme.HelpJobTheme
 
 @Composable
 fun WorkplaceInfo1Screen(
@@ -76,5 +78,43 @@ fun WorkplaceInfo1Screen(
                 isUpward = true
             )
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo1ScreenPreview(){
+    HelpJobTheme {
+        WorkplaceInfo1Screen(
+            step = 1,
+            title = stringResource(R.string.document_step_2_title),
+            companyNameValue = "",
+            onCompanyNameValueChange = {},
+            businessRegisterNumberValue = "",
+            onBusinessRegisterNumberValueChange = {},
+            categoryOfBusinessValue = "",
+            onCategoryOfBusinessValueChange = {},
+            enabled = false,
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo1ScreenFilledPreview(){
+    HelpJobTheme {
+        WorkplaceInfo1Screen(
+            step = 1,
+            title = stringResource(R.string.document_step_2_title),
+            companyNameValue = "오토그룹",
+            onCompanyNameValueChange = {},
+            businessRegisterNumberValue = "1234567890",
+            onBusinessRegisterNumberValueChange = {},
+            categoryOfBusinessValue = "RESTAURANT",
+            onCategoryOfBusinessValueChange = {},
+            enabled = true,
+            onNext = {}
+        )
     }
 }

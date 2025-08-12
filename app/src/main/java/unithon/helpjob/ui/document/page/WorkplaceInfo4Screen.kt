@@ -269,7 +269,7 @@ private fun WorkDayCard(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun WorkplaceInfo4Preview(){
     HelpJobTheme {
@@ -282,7 +282,7 @@ fun WorkplaceInfo4Preview(){
             workDays = listOf(WorkDay.MONDAY),
             onWorkDayChange = {},
             workDayTimes = mapOf(
-                WorkDay.MONDAY to DocumentViewModel.WorkDayTime("01:30", "05:00")
+                WorkDay.MONDAY to DocumentViewModel.WorkDayTime("01:30", "5:00")
             ),
             onWorkDayStartTimeChange = { _, _ -> },
             onWorkDayEndTimeChange = { _, _ -> },

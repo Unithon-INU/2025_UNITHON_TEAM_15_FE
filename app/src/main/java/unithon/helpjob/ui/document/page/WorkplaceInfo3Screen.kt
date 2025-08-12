@@ -272,7 +272,7 @@ fun WorkplaceInfo3Screen(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun WorkplaceInfo3Preview() {
     HelpJobTheme {

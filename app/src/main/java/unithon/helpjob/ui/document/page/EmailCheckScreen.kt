@@ -69,7 +69,7 @@ fun EmailCheckScreen(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun EmailCheckPreview(){
     HelpJobTheme {
@@ -84,7 +84,7 @@ fun EmailCheckPreview(){
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun EmailCheckLoadingPreview(){
     HelpJobTheme {

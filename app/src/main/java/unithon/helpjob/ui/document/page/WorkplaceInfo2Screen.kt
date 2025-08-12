@@ -1,5 +1,3 @@
-@file:JvmName("WorkplaceInfo2ScreenKt")
-
 package unithon.helpjob.ui.document.page
 
 import androidx.compose.foundation.layout.Column
@@ -9,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
 import unithon.helpjob.ui.document.components.DocumentPhoneNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
+import unithon.helpjob.ui.theme.HelpJobTheme
 
 @Composable
 fun WorkplaceInfo2Screen(
@@ -61,5 +61,43 @@ fun WorkplaceInfo2Screen(
                 imeAction = ImeAction.Next
             )
         }
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+private fun WorkplaceInfo2ScreenPreview() {
+    HelpJobTheme {
+        WorkplaceInfo2Screen(
+            step = 2,
+            title = "근무지 정보 2",
+            companyAddressValue = "서울시 강남구 테헤란로 123",
+            onCompanyAddressValueChange = {},
+            employerNameValue = "김사장",
+            onEmployerNameValueChange = {},
+            employerPhoneNumberValue = "01012345678",
+            onEmployerPhoneNumberValueChange = {},
+            enabled = true,
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun WorkplaceInfo2ScreenEmptyPreview() {
+    HelpJobTheme {
+        WorkplaceInfo2Screen(
+            step = 2,
+            title = "근무지 정보 2",
+            companyAddressValue = "",
+            onCompanyAddressValueChange = {},
+            employerNameValue = "",
+            onEmployerNameValueChange = {},
+            employerPhoneNumberValue = "",
+            onEmployerPhoneNumberValueChange = {},
+            enabled = false,
+            onNext = {}
+        )
     }
 }

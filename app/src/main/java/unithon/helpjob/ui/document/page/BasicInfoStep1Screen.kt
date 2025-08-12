@@ -69,7 +69,7 @@ fun BasicInfoStep1Screen(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun BasicInfoStep1Preview(){
     HelpJobTheme {
