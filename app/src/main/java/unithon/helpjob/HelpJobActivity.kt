@@ -39,26 +39,26 @@ fun HelpJobApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                // 하단 탭 화면에서만 하단바 표시 - enum의 유틸리티 함수 사용
-                if (BottomNavDestination.isBottomTabRoute(currentRoute)) {
-                    HelpJobBottomBar(
-                        destinations = BottomNavDestination.entries,
-                        currentDestination = currentRoute,
-                        onNavigateToDestination = navActions::navigateToBottomTab
-                    )
-                }
-            }
-        ) { innerPadding ->
-            HelpJobNavGraph(
-                navController = navController,
-                navActions = navActions,
-                modifier = Modifier.padding(
-                    bottom = innerPadding.calculateBottomPadding(),
-                    top = innerPadding.calculateTopPadding()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            // 하단 탭 화면에서만 하단바 표시 - enum의 유틸리티 함수 사용
+            if (BottomNavDestination.isBottomTabRoute(currentRoute)) {
+                HelpJobBottomBar(
+                    destinations = BottomNavDestination.entries,
+                    currentDestination = currentRoute,
+                    onNavigateToDestination = navActions::navigateToBottomTab
                 )
-            )
+            }
         }
+    ) { innerPadding ->
+        HelpJobNavGraph(
+            navController = navController,
+            navActions = navActions,
+            modifier = Modifier.padding(
+                bottom = innerPadding.calculateBottomPadding(),
+                top = innerPadding.calculateTopPadding()
+            )
+        )
+    }
 }
