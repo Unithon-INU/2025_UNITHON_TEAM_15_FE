@@ -154,6 +154,7 @@ private fun CalculatorScreenContent(
 
             // 계산하기 버튼
             HelpJobButton(
+                textRes = R.string.calculator_calculate_salary,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(
@@ -162,7 +163,6 @@ private fun CalculatorScreenContent(
                         bottom = 20.dp
                     )
                     .fillMaxWidth(),
-                text = stringResource(R.string.calculator_calculate_salary),
                 onClick = onCalculateClick,
                 enabled = uiState.isWorkTimeInputValid &&
                         uiState.isWorkDayCountInputValid &&

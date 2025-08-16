@@ -74,7 +74,7 @@ fun SignUpSuccessScreen(
 
             // 하단 버튼
             HelpJobButton(
-                text = stringResource(id = R.string.signup_success_go_to_login),
+                textRes = R.string.signup_success_go_to_login,
                 onClick = onGoToLogin,
                 modifier = Modifier
                     .fillMaxWidth()

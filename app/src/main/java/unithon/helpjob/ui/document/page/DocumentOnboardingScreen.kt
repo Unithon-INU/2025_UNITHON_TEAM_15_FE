@@ -128,8 +128,8 @@ fun DocumentOnboardingScreen(
             }
             Spacer(Modifier.height(29.dp))
             HelpJobButton(
+                textRes = R.string.common_next,
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.onboarding_next_button),
                 onClick = onNext
             )
             Spacer(Modifier.height(20.dp))

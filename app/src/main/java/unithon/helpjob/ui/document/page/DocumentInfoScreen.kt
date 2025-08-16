@@ -90,7 +90,7 @@ fun DocumentInfoScreen(
                 content()
             }
             HelpJobButton(
-                text = stringResource(R.string.document_onboarding_next),
+                textRes = R.string.document_onboarding_next,
                 onClick = onNext,
                 enabled = enabled,
                 modifier = Modifier

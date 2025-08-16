@@ -128,7 +128,7 @@ private fun SignInContent(
 
             // 로그인 버튼
             HelpJobButton(
-                text = stringResource(id = R.string.sign_in_button),
+                textRes = R.string.sign_in_button,
                 onClick = onSignInClick,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
