@@ -58,10 +58,10 @@ fun EmailCheckScreen(
         }
 
         HelpJobButton(
-            textRes = if (isSubmitting) R.string.document_email_check_loading else R.string.common_next,
+            text = if (isSubmitting) "loading..." else stringResource(R.string.document_onboarding_next), // 🆕 로딩 상태에 따른 텍스트 변경
             onClick = onNext,
-            enabled = enabled && !isSubmitting,
-            isLoading = isSubmitting,
+            enabled = enabled && !isSubmitting, // 🆕 로딩 중에는 버튼 비활성화
+            isLoading = isSubmitting, // 🆕 로딩 인디케이터 표시
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)

@@ -286,7 +286,7 @@ private fun SignUpScreenContent(
 
                 // 다음 버튼
                 HelpJobButton(
-                    textRes = R.string.common_next,
+                    text = stringResource(id = R.string.sign_up_next_button),
                     onClick = onProceedToNickname,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,

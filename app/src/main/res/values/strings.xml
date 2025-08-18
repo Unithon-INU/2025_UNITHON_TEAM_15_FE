@@ -31,6 +31,7 @@
     <string name="sign_up_password_hint">Enter Password</string>
     <string name="sign_up_confirm_password_label">Confirm Password</string>
     <string name="sign_up_confirm_password_hint">Re-enter Password</string>
+    <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
     <string name="sign_up_email_exists">ⓘ Email already in use</string>
     <string name="signup_success_title">You\'re in!</string>
@@ -79,9 +80,9 @@
     <string name="step_warning_dialog_cancel">Cancel</string>
     <string name="step_warning_dialog_continue">Continue</string>
     <string name="step_detail_screen_subtitle">Good to know</string>
-    <string name="step_detail_screen_back">Go back</string>
 
     <!-- Onboarding Screen -->
+    <string name="onboarding_next_button">Continue</string>
     <string name="onboarding_done_button">Done</string>
     <string name="onboarding_error_message">Error occurred during onboarding setup. Please try again.</string>
 
@@ -242,7 +243,6 @@
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">Almost done!\nIs your email address correct?</string>
     <string name="document_email_check_label">Email Address</string>
-    <string name="document_email_check_loading">loading…</string>
 
     <!-- DocumentScreen(Finish) -->
     <string name="document_finish_title">Document sent\nsuccessfully!</string>
@@ -313,6 +313,5 @@
     <string name="document_top_bar_title">Document</string>
     <string name="settings_button">Setting</string>
 
-    <!-- public -->
-    <string name="common_next">Continue</string>
+
 </resources>

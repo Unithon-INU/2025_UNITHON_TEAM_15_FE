@@ -59,7 +59,7 @@ fun FinishScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
-            textRes = R.string.document_finish_button,
+            text = stringResource(R.string.document_finish_button),
             onClick = onNext,
             enabled = true
         )

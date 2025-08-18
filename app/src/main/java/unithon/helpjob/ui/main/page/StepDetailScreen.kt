@@ -247,7 +247,7 @@ private fun ErrorScreen(
                 )
                 Spacer(Modifier.height(24.dp))
                 HelpJobButton(
-                    textRes = R.string.step_detail_screen_back,
+                    text = "이전으로 돌아가기",
                     onClick = onBackClick,
                     modifier = Modifier.fillMaxWidth()
                 )

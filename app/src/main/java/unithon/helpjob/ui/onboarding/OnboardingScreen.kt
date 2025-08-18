@@ -267,12 +267,12 @@ private fun OnboardingPageContainer(
                 if (pageIndex == pageCount - 1) {
                     R.string.onboarding_done_button
                 } else {
-                    R.string.common_next
+                    R.string.onboarding_next_button
                 }
             }
 
             HelpJobButton(
-                textRes = buttonText,
+                text = stringResource(buttonText),
                 onClick = {
                     if (pageIndex == pageCount - 1) onGetStarted() else onNextPage()
                 },

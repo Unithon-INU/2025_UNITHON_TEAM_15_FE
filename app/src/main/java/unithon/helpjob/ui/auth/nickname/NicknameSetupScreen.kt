@@ -99,8 +99,8 @@ private fun NicknameSetupScreenContent(
                 Spacer(modifier = Modifier.weight(1f))
 
                 // 완료 버튼
-
-                    textRes = R.string.nickname_complete_button,
+                HelpJobButton(
+                    text = stringResource(id = R.string.nickname_complete_button),
                     onClick = onCompleteClick,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
