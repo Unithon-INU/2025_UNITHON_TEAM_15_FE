@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
@@ -29,7 +30,6 @@ import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.theme.Grey200
-import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -181,7 +181,7 @@ fun WorkplaceInfo4Screen(
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Grey600,
                                     modifier = Modifier.padding(vertical = 13.dp),
-                                    textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                                    textAlign = TextAlign.Center
                                 )
                             }
                         }
@@ -269,7 +269,7 @@ private fun WorkDayCard(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
 @Composable
 fun WorkplaceInfo4Preview(){
     HelpJobTheme {
@@ -282,7 +282,7 @@ fun WorkplaceInfo4Preview(){
             workDays = listOf(WorkDay.MONDAY),
             onWorkDayChange = {},
             workDayTimes = mapOf(
-                WorkDay.MONDAY to DocumentViewModel.WorkDayTime("01:30", "05:00")
+                WorkDay.MONDAY to DocumentViewModel.WorkDayTime("01:30", "5:00")
             ),
             onWorkDayStartTimeChange = { _, _ -> },
             onWorkDayEndTimeChange = { _, _ -> },

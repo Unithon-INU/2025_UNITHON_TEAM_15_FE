@@ -18,9 +18,9 @@ import unithon.helpjob.ui.calculator.CalculatorScreen
 import unithon.helpjob.ui.document.DocumentScreen
 import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.HomeViewModel
-import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
+import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.setting.LanguageSettingScreen
 import unithon.helpjob.ui.setting.SettingScreen
 import unithon.helpjob.ui.splash.SplashScreen

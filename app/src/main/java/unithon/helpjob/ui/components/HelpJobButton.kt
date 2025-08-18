@@ -29,7 +29,7 @@ fun HelpJobButton(
     Button(
         onClick = onClick,
         enabled = enabled && !isLoading,
-        modifier = modifier.height(56.dp),
+        modifier = modifier.height(46.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (enabled) Primary500 else Grey200,

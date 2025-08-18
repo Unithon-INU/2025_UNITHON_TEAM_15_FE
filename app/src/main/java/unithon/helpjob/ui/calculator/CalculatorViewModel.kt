@@ -1,16 +1,11 @@
 package unithon.helpjob.ui.calculator
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import unithon.helpjob.R
-import unithon.helpjob.data.model.AppLanguage
-import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.ui.calculator.components.CalculationResult
 import javax.inject.Inject
 
