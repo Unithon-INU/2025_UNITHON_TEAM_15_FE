@@ -132,4 +132,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // 불변 컬렉션을 사용해 Compose가 이를 stable type으로 인식하여 strong skipping mode와 최적화 시너지를 내주는 라이브러리
+    implementation(libs.kotlinx.collections.immutable)
 }
