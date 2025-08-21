@@ -133,30 +133,28 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // 불변 컬렉션을 사용해 Compose가 이를 stable type으로 인식하여 strong skipping mode와 최적화 시너지를 내주는 라이브러리
-    implementation(libs.kotlinx.collections.immutable)
 }
 
-// Compiler Reports 생성 (선택사항 - 분석용)
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    compilerOptions {
-        if (project.findProperty("composeCompilerReports") == "true") {
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
-                )
-            )
-        }
-        if (project.findProperty("composeCompilerMetrics") == "true") {
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
-                )
-            )
-        }
-    }
-}
+//// Compiler Reports 생성 (최적화 분석용)
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+//    compilerOptions {
+//        if (project.findProperty("composeCompilerReports") == "true") {
+//            freeCompilerArgs.addAll(
+//                listOf(
+//                    "-P",
+//                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+//                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
+//                )
+//            )
+//        }
+//        if (project.findProperty("composeCompilerMetrics") == "true") {
+//            freeCompilerArgs.addAll(
+//                listOf(
+//                    "-P",
+//                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+//                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
+//                )
+//            )
+//        }
+//    }
+//}
