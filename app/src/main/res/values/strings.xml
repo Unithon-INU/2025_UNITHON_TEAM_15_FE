@@ -58,18 +58,19 @@
     <string name="nickname_duplicate_error">ⓘ This nickname is already in use.</string>
     <string name="nickname_complete_button">Complete</string>
     <string name="nickname_empty_error">Please enter a nickname</string>
-    <string name="nickname_too_short_error">Nickname must be at least 2 characters</string>
-    <string name="nickname_too_long_error">Nickname must be 10 characters or less</string>
+    <string name="nickname_too_short_error">ⓘ Nickname must be at least 2 characters</string>
+    <string name="nickname_too_long_error">ⓘ Nickname must be 10 characters or less</string>
     <string name="nickname_setup_failed">Nickname setup failed</string>
 
     <!-- Common Error Messages -->
-    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_empty_email">ⓘ Please enter your email</string>
     <string name="error_invalid_email">ⓘ Invalid email format</string>
-    <string name="error_empty_password">Please enter your password</string>
+    <string name="error_empty_password">ⓘ Please enter your password</string>
     <string name="error_short_password">ⓘ Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
     <string name="error_authentication_required">ⓘ Authentication required. Please log in again.</string>
     <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
+    <string name="error_unknown">ⓘ An unknown error occurred.</string>
 
     <!-- Home Screen -->
     <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
@@ -84,7 +85,7 @@
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
     <string name="onboarding_done_button">Done</string>
-    <string name="onboarding_error_message">Error occurred during onboarding setup. Please try again.</string>
+    <string name="onboarding_error_message">ⓘ Error occurred during onboarding setup. Please try again.</string>
 
     <!-- Onboarding Screen(Language) -->
     <string name="onboarding_language_setup_title">Select the language\nyou want to use</string>

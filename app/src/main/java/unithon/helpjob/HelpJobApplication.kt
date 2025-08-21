@@ -24,10 +24,25 @@ class HelpJobApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // UnCaughtExceptionHandler 설정 (최후 방어선)
+        setupUncaughtExceptionHandler()
+
         // 저장된 언어 설정이 있으면 적용, 없으면 시스템 언어 그대로
         initializeLanguage()
 
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+    }
+
+    private fun setupUncaughtExceptionHandler() {
+        val defaultHandler = Thread.getDefaultUncaughtExceptionHandler()
+
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            Timber.e(throwable, "Uncaught exception on thread: ${thread.name}")
+
+            // 로그 기록 후 기본 핸들러로 전달
+            // 앱을 완전히 크래시시키지 않고 재시작하도록 함
+            defaultHandler?.uncaughtException(thread, throwable)
+        }
     }
 
     private fun initializeLanguage() {
@@ -42,6 +57,7 @@ class HelpJobApplication : Application() {
 
                 GlobalLanguageState.initializeLanguage(savedLanguage)
             } catch (e: Exception) {
+                Timber.e(e, "Failed to initialize language")
                 // 저장된 언어가 없으면 시스템 언어 그대로 (코드 없음)
                 // 즉, 처음 설치 시에는 시스템 언어를 따름
             }
