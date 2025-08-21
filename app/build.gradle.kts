@@ -129,7 +129,32 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling.core)
 
     // 테스트 의존성 추가
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
 }
+
+//// Compiler Reports 생성 (최적화 분석용)
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+//    compilerOptions {
+//        if (project.findProperty("composeCompilerReports") == "true") {
+//            freeCompilerArgs.addAll(
+//                listOf(
+//                    "-P",
+//                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+//                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
+//                )
+//            )
+//        }
+//        if (project.findProperty("composeCompilerMetrics") == "true") {
+//            freeCompilerArgs.addAll(
+//                listOf(
+//                    "-P",
+//                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+//                            layout.buildDirectory.dir("compose_compiler").get().asFile.absolutePath
+//                )
+//            )
+//        }
+//    }
+//}

@@ -48,8 +48,10 @@ class CalculatorViewModel @Inject constructor() : ViewModel() {
     val uiState: StateFlow<CalculatorUiState> = _uiState.asStateFlow()
 
     fun updateWage(wage: String) {
+        // 숫자만 필터링하여 저장
+        val numbersOnly = wage.filter { it.isDigit() }
         _uiState.update {
-            it.copy(wage = wage)
+            it.copy(wage = numbersOnly)
         }
     }
 
