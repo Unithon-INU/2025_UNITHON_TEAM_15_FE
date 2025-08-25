@@ -238,7 +238,7 @@ class HomeViewModel @Inject constructor(
         getStepInfo()
     }
 
-    fun getStepInfo(language: String? = null){
+    private fun getStepInfo(language: String? = null){
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 _uiState.update { it.copy(isLoading = true)
@@ -268,13 +268,13 @@ class HomeViewModel @Inject constructor(
                 }
             } catch (e: Exception){
                 Timber.e(e, "홈 정보 조회 실패")
-                _uiState.update { it.copy(isLoading = false,)
+                _uiState.update { it.copy(isLoading = false)
                 }
             }
         }
     }
 
-    fun getTips(language: String,step: Steps){
+    private fun getTips(language: String, step: Steps){
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(language = language,step)
@@ -290,7 +290,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getTips(step: Steps){
+    private fun getTips(step: Steps){
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(step)
