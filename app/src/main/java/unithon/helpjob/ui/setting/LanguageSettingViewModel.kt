@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.setting
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,12 +9,13 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LanguageSettingViewModel @Inject constructor(
     private val languageRepository: LanguageRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     data class LanguageSettingUiState(
         val currentLanguage: AppLanguage = AppLanguage.KOREAN,
@@ -40,7 +40,7 @@ class LanguageSettingViewModel @Inject constructor(
     }
 
     fun setLanguage(language: AppLanguage) {
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             try {
                 Timber.d("🌐 언어 변경 시작: ${language.displayName}")
 
