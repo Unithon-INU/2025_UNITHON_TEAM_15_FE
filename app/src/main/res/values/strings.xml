@@ -71,6 +71,8 @@
     <string name="error_authentication_required">ⓘ Authentication required. Please log in again.</string>
     <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
     <string name="error_unknown">ⓘ An unknown error occurred.</string>
+    <string name="network_error">Network error occurred. Please check your connection and try again.</string>
+
 
     <!-- Home Screen -->
     <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
