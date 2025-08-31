@@ -49,7 +49,6 @@ fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -76,6 +75,7 @@ fun SignInScreen(
         }
     }
 
+    // 원래 Scaffold 없었다가 추가
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { paddingValues ->

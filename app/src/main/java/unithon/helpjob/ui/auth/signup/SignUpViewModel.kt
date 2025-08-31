@@ -1,13 +1,15 @@
 package unithon.helpjob.ui.auth.signup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
@@ -15,13 +17,14 @@ import unithon.helpjob.data.repository.EmailCodeExpiredException
 import unithon.helpjob.data.repository.EmailVerificationFailedException
 import unithon.helpjob.data.repository.SignUpData
 import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val signUpDataRepository: SignUpDataRepository // 🆕 추가
-) : ViewModel() {
+) : BaseViewModel() {
 
     data class SignUpUiState(
         val email: String = "",
@@ -66,6 +69,9 @@ class SignUpViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateEmail(email: String) {
         _uiState.update {
@@ -155,7 +161,7 @@ class SignUpViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             _uiState.update { it.copy(isSendingEmail = true) }
             try {
                 authRepository.sendEmailVerification(currentState.email)
@@ -177,12 +183,10 @@ class SignUpViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(
-                        isSendingEmail = false,
-                        emailError = true,
-                        emailErrorMessage = R.string.email_send_failed
-                    )
+                    it.copy(isSendingEmail = false)
                 }
+                _snackbarMessage.emit(R.string.email_send_failed)
+                Timber.e(e, "Email send failed - unexpected error")
             }
         }
     }
@@ -200,7 +204,7 @@ class SignUpViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             _uiState.update { it.copy(isVerifyingCode = true) }
             try {
                 authRepository.verifyEmailCode(currentState.email, currentState.verificationCode)
@@ -230,12 +234,10 @@ class SignUpViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update {
-                    it.copy(
-                        isVerifyingCode = false,
-                        verificationCodeError = true,
-                        verificationCodeErrorMessage = R.string.verification_failed
-                    )
+                    it.copy(isVerifyingCode = false)
                 }
+                _snackbarMessage.emit(R.string.verification_failed)
+                Timber.e(e, "Verification failed - unexpected error")
             }
         }
     }
