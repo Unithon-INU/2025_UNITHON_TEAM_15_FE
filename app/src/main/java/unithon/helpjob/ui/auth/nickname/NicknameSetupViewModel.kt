@@ -1,24 +1,27 @@
 package unithon.helpjob.ui.auth.nickname
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class NicknameSetupViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val signUpDataRepository: SignUpDataRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     data class NicknameSetupUiState(
         val nickname: String = "",
@@ -34,6 +37,9 @@ class NicknameSetupViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(NicknameSetupUiState())
     val uiState: StateFlow<NicknameSetupUiState> = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateNickname(nickname: String) {
         if (nickname.length > 10) return
@@ -73,20 +79,16 @@ class NicknameSetupViewModel @Inject constructor(
             }
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             _uiState.update { it.copy(isLoading = true) }
             try {
                 // 1. 저장된 회원가입 데이터 가져오기
                 val signUpData = signUpDataRepository.getSignUpData()
 
                 if (signUpData == null) {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            nicknameError = true,
-                            nicknameErrorMessage = R.string.nickname_setup_failed
-                        )
-                    }
+                    _snackbarMessage.emit(R.string.nickname_setup_failed)  // 스낵바로 변경
+                    _uiState.update { it.copy(isLoading = false) }
+                    Timber.e("SignUp data is null")  // 로깅 추가
                     return@launch
                 }
 
@@ -112,14 +114,9 @@ class NicknameSetupViewModel @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                // ✅ 수정: SharedFlow emit 대신 UI 상태로 에러 처리
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        nicknameError = true,
-                        nicknameErrorMessage = R.string.nickname_setup_failed
-                    )
-                }
+                _snackbarMessage.emit(R.string.nickname_setup_failed)  // 스낵바로 변경
+                _uiState.update { it.copy(isLoading = false) }
+                Timber.e(e, "Nickname setup failed")  // 로깅 추가
             }
         }
     }

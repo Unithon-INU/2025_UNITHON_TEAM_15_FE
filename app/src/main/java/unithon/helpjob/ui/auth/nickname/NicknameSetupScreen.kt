@@ -8,11 +8,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +38,16 @@ fun NicknameSetupScreen(
     viewModel: NicknameSetupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current  // context 선언
+
+    LaunchedEffect(viewModel) {
+        viewModel.snackbarMessage.collect { messageRes ->
+            snackbarHostState.showSnackbar(
+                message = context.getString(messageRes)
+            )
+        }
+    }
 
     // 닉네임 설정 성공시 네비게이션
     LaunchedEffect(uiState.isNicknameSet) {
@@ -47,7 +61,8 @@ fun NicknameSetupScreen(
         onNicknameChange = viewModel::updateNickname,
         onCompleteClick = viewModel::setNickname,
         onBack = onBack,
-        modifier = modifier
+        modifier = modifier,
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -60,7 +75,8 @@ private fun NicknameSetupScreenContent(
     onNicknameChange: (String) -> Unit,
     onCompleteClick: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     LanguageAwareScreen {
         Scaffold(
@@ -70,7 +86,8 @@ private fun NicknameSetupScreenContent(
                     title = R.string.nickname_setup_top_bar_title,
                     onBack = onBack
                 )
-            }
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
             Column(
                 modifier = Modifier
