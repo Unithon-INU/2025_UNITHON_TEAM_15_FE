@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.document
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,18 +11,21 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.R
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.ui.base.BaseViewModel
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class DocumentViewModel @Inject constructor(
     private val documentRepository: DocumentRepository
-): ViewModel() {
+): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(DocumentUiState())
     val uiState: StateFlow<DocumentUiState> = _uiState.asStateFlow()
@@ -32,14 +34,9 @@ class DocumentViewModel @Inject constructor(
     val isSubmitting: StateFlow<Boolean> = _isSubmitting.asStateFlow()
 
     // 🆕 Snackbar용 에러 이벤트 - SharedFlow 사용
-    private val _errorEvent = MutableSharedFlow<String>()
-    val errorEvent: SharedFlow<String> = _errorEvent.asSharedFlow()
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage: SharedFlow<Int> = _snackbarMessage.asSharedFlow()
 
-    // 🆕 성공 이벤트도 SharedFlow로
-    private val _successEvent = MutableSharedFlow<Unit>()
-    val successEvent: SharedFlow<Unit> = _successEvent.asSharedFlow()
-
-    // ... 기존 업데이트 함수들은 그대로 유지 ...
 
     // 기본 정보 입력 함수들 (VisualTransformation 사용으로 숫자만 저장)
     fun updateName(input: String) {
@@ -65,7 +62,23 @@ class DocumentViewModel @Inject constructor(
     }
 
     fun updateEmailAddress(input: String) {
-        _uiState.value = _uiState.value.copy(emailAddress = input)
+        _uiState.update { currentState ->
+            currentState.copy(
+                emailAddress = input,
+                emailError = false,
+                emailErrorMessage = null
+            )
+        }
+
+        // 실시간 이메일 형식 검증
+        if (input.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
+            _uiState.update {
+                it.copy(
+                    emailError = true,
+                    emailErrorMessage = R.string.error_invalid_email
+                )
+            }
+        }
     }
 
     // 회사 정보 입력 함수들
@@ -237,7 +250,7 @@ class DocumentViewModel @Inject constructor(
         // 기본 유효성 검사
         if (!currentState.isAllValid) {
             viewModelScope.launch {
-                _errorEvent.emit("입력 정보를 다시 확인해주세요.")
+                _snackbarMessage.emit(R.string.error_fill_all_fields)
             }
             return
         }
@@ -245,7 +258,7 @@ class DocumentViewModel @Inject constructor(
         // 추가 검사: 외국인등록번호 길이
         if (currentState.foreignerNumber.filter { it.isDigit() }.length != 13) {
             viewModelScope.launch {
-                _errorEvent.emit("외국인등록번호는 13자리여야 합니다.")
+                _snackbarMessage.emit(R.string.error_invalid_foreigner_number)
             }
             return
         }
@@ -253,19 +266,19 @@ class DocumentViewModel @Inject constructor(
         // 추가 검사: 날짜 유효성
         if (!isValidDate(currentState.workStartYear, currentState.workStartMonth, currentState.workStartDay)) {
             viewModelScope.launch {
-                _errorEvent.emit("근무 시작일이 올바르지 않습니다.")
+                _snackbarMessage.emit(R.string.error_invalid_work_start_date)
             }
             return
         }
 
         if (!isValidDate(currentState.workEndYear, currentState.workEndMonth, currentState.workEndDay)) {
             viewModelScope.launch {
-                _errorEvent.emit("근무 종료일이 올바르지 않습니다.")
+                _snackbarMessage.emit(R.string.error_invalid_work_end_date)
             }
             return
         }
 
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             try {
                 _isSubmitting.value = true
 
@@ -275,21 +288,21 @@ class DocumentViewModel @Inject constructor(
                 documentRepository.postCertification(documentRequest)
 
                 Timber.d("Document submitted successfully")
-                _successEvent.emit(Unit) // 성공 이벤트 발생
+                _snackbarMessage.emit(R.string.document_submit_success) // 성공 이벤트 발생
 
             } catch (e: Exception) {
                 Timber.e(e, "Failed to submit document")
 
-                val errorMessage = when {
-                    e.message?.contains("400") == true -> "입력 정보가 올바르지 않습니다."
-                    e.message?.contains("401") == true -> "인증이 필요합니다."
-                    e.message?.contains("403") == true -> "권한이 없습니다."
-                    e.message?.contains("500") == true -> "서버 오류가 발생했습니다."
-                    e.message?.contains("network") == true -> "네트워크 연결을 확인해주세요."
-                    else -> "서류 제출 중 오류가 발생했습니다. 다시 시도해주세요."
-                }
+//                val errorMessage = when {
+//                    e.message?.contains("400") == true -> "입력 정보가 올바르지 않습니다."
+//                    e.message?.contains("401") == true -> "인증이 필요합니다."
+//                    e.message?.contains("403") == true -> "권한이 없습니다."
+//                    e.message?.contains("500") == true -> "서버 오류가 발생했습니다."
+//                    e.message?.contains("network") == true -> "네트워크 연결을 확인해주세요."
+//                    else -> "서류 제출 중 오류가 발생했습니다. 다시 시도해주세요."
+//                }
 
-                _errorEvent.emit(errorMessage) // 에러 이벤트 발생
+                _snackbarMessage.emit(R.string.error_document_submit_failed) // 에러 이벤트 발생
 
             } finally {
                 _isSubmitting.value = false
@@ -386,7 +399,7 @@ class DocumentViewModel @Inject constructor(
     private fun formatHourlyWage(wage: String): String {
         // 10030 -> 10,030원
         val number = wage.toLongOrNull() ?: 0L
-        return "${String.format("%,d", number)}원"
+        return "${String.format(Locale.KOREA,"%,d", number)}원"
     }
 
     private fun formatTime(time: String): String {
@@ -459,6 +472,8 @@ class DocumentViewModel @Inject constructor(
         val semester: Semester? = null,
         val phoneNumber: String = "",
         val emailAddress: String = "",
+        val emailError: Boolean = false,
+        val emailErrorMessage: Int? = null,
         val companyName: String = "",
         val businessRegisterNumber: String = "",
         val categoryOfBusiness: String = "",
@@ -483,71 +498,73 @@ class DocumentViewModel @Inject constructor(
     ) {
         // ... 기존 유효성 검사 함수들은 그대로 유지 ...
 
-        val isNameValid: Boolean
+        private val isNameValid: Boolean
             get() = name.isNotBlank()
 
-        val isForeignerNumberValid: Boolean
+        private val isForeignerNumberValid: Boolean
             get() = foreignerNumber.matches(Regex("^\\d{13}$"))
 
-        val isMajorValid: Boolean
+        private val isMajorValid: Boolean
             get() = major.isNotBlank()
 
-        val isSemesterValid: Boolean
+        private val isSemesterValid: Boolean
             get() = semester != null
 
-        val isPhoneNumberValid: Boolean
+        private val isPhoneNumberValid: Boolean
             get() = phoneNumber.matches(Regex("^010\\d{8}$"))
 
-        val isEmailAddressValid: Boolean
-            get() = emailAddress.matches(Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"))
+        private val isEmailAddressValid: Boolean
+            get() = emailAddress.isNotBlank() &&
+                    android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches() &&
+                    !emailError
 
-        val isCompanyNameValid: Boolean
+        private val isCompanyNameValid: Boolean
             get() = companyName.isNotBlank()
 
-        val isBusinessRegisterNumberValid: Boolean
+        private val isBusinessRegisterNumberValid: Boolean
             get() = businessRegisterNumber.matches(Regex("^\\d{10}$"))
 
-        val isCategoryOfBusinessValid: Boolean
+        private val isCategoryOfBusinessValid: Boolean
             get() = categoryOfBusiness.isNotBlank()
 
-        val isAddressOfCompanyValid: Boolean
+        private val isAddressOfCompanyValid: Boolean
             get() = addressOfCompany.isNotBlank()
 
-        val isEmployerNameValid: Boolean
+        private val isEmployerNameValid: Boolean
             get() = employerName.isNotBlank()
 
-        val isEmployerPhoneNumberValid: Boolean
+        private val isEmployerPhoneNumberValid: Boolean
             get() = employerPhoneNumber.matches(Regex("^0\\d{9,10}$"))
 
-        val isHourlyWageValid: Boolean
+        private val isHourlyWageValid: Boolean
             get() = hourlyWage.matches(Regex("^\\d+$")) && hourlyWage.isNotBlank()
 
-        val isWorkStartYearValid: Boolean
+        private val isWorkStartYearValid: Boolean
             get() = workStartYear.matches(Regex("^\\d{4}$"))
 
-        val isWorkStartMonthValid: Boolean
+        private val isWorkStartMonthValid: Boolean
             get() = workStartMonth.matches(Regex("^\\d{1,2}$")) &&
                     workStartMonth.toIntOrNull()?.let { it in 1..12 } == true
 
-        val isWorkStartDayValid: Boolean
+        private val isWorkStartDayValid: Boolean
             get() = workStartDay.matches(Regex("^\\d{1,2}$")) &&
                     workStartDay.toIntOrNull()?.let { it in 1..31 } == true
 
-        val isWorkEndYearValid: Boolean
+        private val isWorkEndYearValid: Boolean
             get() = workEndYear.matches(Regex("^\\d{4}$"))
 
-        val isWorkEndMonthValid: Boolean
+        private val isWorkEndMonthValid: Boolean
             get() = workEndMonth.matches(Regex("^\\d{1,2}$")) &&
                     workEndMonth.toIntOrNull()?.let { it in 1..12 } == true
 
-        val isWorkEndDayValid: Boolean
+        private val isWorkEndDayValid: Boolean
             get() = workEndDay.matches(Regex("^\\d{1,2}$")) &&
                     workEndDay.toIntOrNull()?.let { it in 1..31 } == true
 
-        val isWorkDayValid: Boolean
+        private val isWorkDayValid: Boolean
             get() = workDays.isNotEmpty()
 
-        val isWorkTimeValid: Boolean
+        private val isWorkTimeValid: Boolean
             get() = workDays.all { workDay ->
                 val dayTime = workDayTimes[workDay]
                 dayTime != null && dayTime.startTime.isNotBlank() && dayTime.endTime.isNotBlank()

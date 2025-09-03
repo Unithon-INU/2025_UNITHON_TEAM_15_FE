@@ -252,6 +252,14 @@
     <string name="document_finish_description">Please check your mailbox</string>
     <string name="document_finish_button">Complete</string>
 
+    <!-- Document Error Messages -->
+    <string name="error_fill_all_fields">Please check your input information</string>
+    <string name="error_invalid_foreigner_number">Alien registration number must be 13 digits</string>
+    <string name="error_invalid_work_start_date">Invalid work start date</string>
+    <string name="error_invalid_work_end_date">Invalid work end date</string>
+    <string name="document_submit_success">Document submitted successfully</string>
+    <string name="error_document_submit_failed">Failed to submit document</string>
+
     <!-- Profile Screen -->
     <string name="profile_greeting">Hello\n%1$s</string>
     <string name="profile_nickname_default">Unithon</string>

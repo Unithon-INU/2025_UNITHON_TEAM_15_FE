@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -19,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,20 +49,20 @@ fun DocumentScreen(
 
     // 🆕 SnackbarHost 설정
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current  // context 선언
 
     // 🆕 에러 이벤트 처리 - Snackbar 표시
-    LaunchedEffect(Unit) {
-        viewModel.errorEvent.collect { errorMessage ->
+    LaunchedEffect(viewModel) {
+        viewModel.snackbarMessage.collect { messageRes  ->
             snackbarHostState.showSnackbar(
-                message = errorMessage,
-                duration = SnackbarDuration.Short
+                message = context.getString(messageRes)
             )
         }
     }
 
     // 🆕 성공 이벤트 처리 - 완료 화면으로 이동
     LaunchedEffect(Unit) {
-        viewModel.successEvent.collect {
+        viewModel.snackbarMessage.collect {
             pagerState.animateScrollToPage(9) // 완료 화면으로 이동
         }
     }
@@ -129,6 +129,8 @@ fun DocumentScreen(
             content = {
                 BasicInfoStep2Screen(
                     modifier = Modifier.fillMaxSize(),
+                    emailError = uiState.emailError,  // 추가
+                    emailErrorMessage = uiState.emailErrorMessage,
                     step = 1,
                     title = stringResource(R.string.document_step_1_title),
                     semesterValue = uiState.semester,
@@ -256,6 +258,8 @@ fun DocumentScreen(
                     modifier = Modifier.fillMaxSize(),
                     emailAddressValue = uiState.emailAddress,
                     emailAddressValueChange = { viewModel.updateEmailAddress(it) },
+                    emailError = uiState.emailError,  // 🆕 추가
+                    emailErrorMessage = uiState.emailErrorMessage,  // 🆕 추가
                     enabled = uiState.isAllValid,
                     isSubmitting = isSubmitting, // 🆕 로딩 상태 전달
                     onNext = {

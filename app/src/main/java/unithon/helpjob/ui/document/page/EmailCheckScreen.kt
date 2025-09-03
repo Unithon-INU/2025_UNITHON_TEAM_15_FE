@@ -28,6 +28,8 @@ fun EmailCheckScreen(
     modifier: Modifier = Modifier,
     emailAddressValue: String,
     emailAddressValueChange: (String) -> Unit,
+    emailError: Boolean,  // 🆕 추가
+    emailErrorMessage: Int?,  // 🆕 추가
     enabled: Boolean,
     isSubmitting: Boolean = false, // 🆕 로딩 상태 파라미터 추가
     onNext: () -> Unit,
@@ -53,7 +55,9 @@ fun EmailCheckScreen(
                 value = emailAddressValue,
                 onValueChange = emailAddressValueChange,
                 labelText = stringResource(R.string.document_email_check_label),
-                imeAction = ImeAction.Done // 이메일 입력 후 완료
+                imeAction = ImeAction.Done, // 이메일 입력 후 완료
+                isError = emailError,  // 🆕 추가
+                errorMessage = emailErrorMessage?.let { stringResource(it) }  // 🆕 추가
             )
         }
 
@@ -80,6 +84,8 @@ fun EmailCheckPreview(){
             onNext = {},
             emailAddressValue = "ladonna.gregory@example.com",
             emailAddressValueChange = {},
+            emailError = false,
+            emailErrorMessage = 0  // 추가
         )
     }
 }
@@ -95,6 +101,8 @@ fun EmailCheckLoadingPreview(){
             onNext = {},
             emailAddressValue = "ladonna.gregory@example.com",
             emailAddressValueChange = {},
+            emailError = false,
+            emailErrorMessage = 0  // 추가
         )
     }
 }

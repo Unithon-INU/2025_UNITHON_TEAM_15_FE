@@ -252,6 +252,14 @@
     <string name="document_finish_description">메일함을 확인해주세요</string>
     <string name="document_finish_button">완료</string>
 
+    <!-- Document Error Messages -->
+    <string name="error_fill_all_fields">ⓘ 입력 정보를 다시 확인해주세요</string>
+    <string name="error_invalid_foreigner_number">ⓘ 외국인등록번호는 13자리여야 합니다</string>
+    <string name="error_invalid_work_start_date">ⓘ 근무 시작일이 올바르지 않습니다</string>
+    <string name="error_invalid_work_end_date">ⓘ 근무 종료일이 올바르지 않습니다</string>
+    <string name="document_submit_success">ⓘ 서류가 성공적으로 제출되었습니다</string>
+    <string name="error_document_submit_failed">서류 제출에 실패했습니다</string>
+
     <!-- Profile Screen -->
     <string name="profile_greeting">안녕하세요 \n%1$s님</string>
     <string name="profile_nickname_default">유니톤</string>
