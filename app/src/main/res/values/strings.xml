@@ -84,6 +84,10 @@
     <string name="step_warning_dialog_continue">Continue</string>
     <string name="step_detail_screen_subtitle">Good to know</string>
 
+    <!-- HomeScreen Error Messages -->
+    <string name="error_load_home_data">ⓘ Failed to load home information. Please try again.</string>
+    <string name="error_update_checklist">ⓘ Failed to save checklist. Please try again.</string>
+
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
     <string name="onboarding_done_button">Done</string>

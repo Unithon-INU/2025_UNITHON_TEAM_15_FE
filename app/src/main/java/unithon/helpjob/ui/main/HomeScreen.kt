@@ -22,6 +22,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -64,6 +67,8 @@ fun HomeScreen(
     viewmodel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var maxCardHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
@@ -76,6 +81,14 @@ fun HomeScreen(
 
     // 🆕 사용자가 수동으로 페이저를 조작했는지 추적
     var userHasInteracted by remember { mutableStateOf(false) }
+
+    LaunchedEffect(viewmodel) {
+        viewmodel.snackbarMessage.collect { messageRes ->
+            snackbarHostState.showSnackbar(
+                message = context.getString(messageRes)
+            )
+        }
+    }
 
     // 첫 번째 데이터 로딩 완료 시 초기화 플래그 설정
     LaunchedEffect(uiState.steps.isNotEmpty()) {
@@ -265,6 +278,10 @@ fun HomeScreen(
                     onContinue = { viewmodel.continueWithCheck() }
                 )
             }
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }

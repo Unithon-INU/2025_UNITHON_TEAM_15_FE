@@ -2,12 +2,15 @@ package unithon.helpjob.ui.main
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.R
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.DocumentInfoRes
@@ -43,6 +46,9 @@ class HomeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     /**
      * 🆕 가장 최근에 체크한 document가 있는 step을 찾는 함수
@@ -228,8 +234,8 @@ class HomeViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 Timber.e(e, "체크리스트 업데이트 실패")
-                _uiState.update { it.copy(isUpdating = false)
-                }
+                _snackbarMessage.emit(R.string.error_update_checklist)  // 추가
+                _uiState.update { it.copy(isUpdating = false) }
             }
         }
     }
@@ -266,10 +272,10 @@ class HomeViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Timber.e(e, "홈 정보 조회 실패")
-                _uiState.update { it.copy(isLoading = false)
-                }
+                _snackbarMessage.emit(R.string.error_load_home_data)  // 추가
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
