@@ -310,6 +310,7 @@
 
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">Current Language</string>
+    <string name="language_change_failed">ⓘ Failed to change language. Please try again.</string>
 
     <!-- Reset Progress Dialog -->
     <string name="reset_progress_dialog_title">Are you sure you want to reset?</string>

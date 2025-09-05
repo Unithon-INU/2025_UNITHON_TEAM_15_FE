@@ -309,6 +309,7 @@
 
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">현재 언어</string>
+    <string name="language_change_failed">ⓘ 언어 변경에 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- Reset Progress Dialog -->
     <string name="reset_progress_dialog_title">정말 초기화 하시겠어요?</string>
