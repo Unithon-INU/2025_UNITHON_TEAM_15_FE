@@ -52,7 +52,7 @@ fun DocumentScreen(
     val context = LocalContext.current  // context 선언
 
     // 🆕 에러 이벤트 처리 - Snackbar 표시
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes  ->
             snackbarHostState.showSnackbar(
                 message = context.getString(messageRes)

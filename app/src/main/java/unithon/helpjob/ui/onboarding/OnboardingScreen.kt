@@ -68,7 +68,7 @@ fun OnboardingScreen(
         }
     }
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageResId ->
             val message = context.getString(messageResId)
             snackbarHostState.showSnackbar(

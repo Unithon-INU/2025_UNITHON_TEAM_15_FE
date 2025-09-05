@@ -41,7 +41,7 @@ fun NicknameSetupScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current  // context 선언
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
                 message = context.getString(messageRes)

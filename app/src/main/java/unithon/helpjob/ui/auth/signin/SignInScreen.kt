@@ -53,7 +53,7 @@ fun SignInScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     // 스낵바 메시지 처리
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
                 message = context.getString(messageRes)

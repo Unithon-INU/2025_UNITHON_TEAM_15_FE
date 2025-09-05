@@ -64,9 +64,9 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun HomeScreen(
     onNavigateToStepDetail: () -> Unit,
-    viewmodel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -82,8 +82,8 @@ fun HomeScreen(
     // 🆕 사용자가 수동으로 페이저를 조작했는지 추적
     var userHasInteracted by remember { mutableStateOf(false) }
 
-    LaunchedEffect(viewmodel) {
-        viewmodel.snackbarMessage.collect { messageRes ->
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
                 message = context.getString(messageRes)
             )
@@ -181,7 +181,7 @@ fun HomeScreen(
                             title = uiState.steps[page].stepInfoRes.title,
                             subTitle = uiState.steps[page].stepInfoRes.subtitle,
                             onClick = {
-                                viewmodel.selectStep(uiState.steps[page])
+                                viewModel.selectStep(uiState.steps[page])
                                 onNavigateToStepDetail()
                             },
                             modifier = Modifier.fillMaxHeight()
@@ -223,13 +223,13 @@ fun HomeScreen(
                     CategoryTab(
                         text = stringResource(R.string.category_documents),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
-                        onClick = { viewmodel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
+                        onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
                         modifier = Modifier.weight(1f)
                     )
                     CategoryTab(
                         text = stringResource(R.string.category_precautions),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
-                        onClick = { viewmodel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
+                        onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -245,7 +245,7 @@ fun HomeScreen(
                                     document = document,
                                     enabled = !uiState.isUpdating,
                                     onCheckedChange = { isChecked ->
-                                        viewmodel.onDocumentCheckChanged(
+                                        viewModel.onDocumentCheckChanged(
                                             document = document,
                                             stepCheckStep = step.checkStep,
                                             isChecked = isChecked
@@ -274,8 +274,8 @@ fun HomeScreen(
             // 경고 다이얼로그
             if (uiState.showStepWarningDialog) {
                 StepProgressWarningDialog(
-                    onDismiss = { viewmodel.dismissStepWarningDialog() },
-                    onContinue = { viewmodel.continueWithCheck() }
+                    onDismiss = { viewModel.dismissStepWarningDialog() },
+                    onContinue = { viewModel.continueWithCheck() }
                 )
             }
             SnackbarHost(
