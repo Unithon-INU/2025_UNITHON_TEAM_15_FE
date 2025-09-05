@@ -291,6 +291,9 @@
     <!-- Others -->
     <string name="profile_documents_no_unchecked">No missing documents.</string>
 
+    <!-- Profile Error Messages 섹션 추가 -->
+    <string name="error_profile_load_failed">Failed to load profile information</string>
+
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">Settings</string>
     <string name="setting_section_config">Settings</string>
