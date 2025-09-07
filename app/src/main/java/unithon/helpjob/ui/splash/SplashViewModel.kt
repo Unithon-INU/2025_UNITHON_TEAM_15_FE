@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.splash
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -10,15 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
-import unithon.helpjob.data.repository.LanguageRepository
-import unithon.helpjob.data.repository.UnauthorizedException
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val languageRepository: LanguageRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(SplashUiState())
     val uiState = _uiState.asStateFlow()
@@ -28,7 +25,7 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun checkAppState() {
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             // 최소 1.5초는 스플래시 보여주기
             val minSplashTime = async { delay(1500) }
 
@@ -52,14 +49,11 @@ class SplashViewModel @Inject constructor(
                             } else {
                                 NavigationTarget.Onboarding
                             }
-                        } catch (e: UnauthorizedException) {
-                            // 토큰이 무효한 경우 토큰 클리어 후 로그인으로 분기
-                            authRepository.clearToken()
-                            NavigationTarget.Login
                         } catch (e: Exception) {
-                            // 기타 예외는 온보딩으로 처리
-                            Timber.e(e, "프로필 조회 실패")
-                            NavigationTarget.Onboarding
+                            // 모든 예외: 로그인으로
+                            Timber.e(e, "프로필 조회 실패 - 로그인으로 이동")
+                            authRepository.clearToken()  // 토큰도 클리어
+                            NavigationTarget.Login
                         }
                     }
                 }
