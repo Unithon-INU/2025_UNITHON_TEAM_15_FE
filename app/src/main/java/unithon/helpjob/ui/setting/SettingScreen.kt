@@ -13,22 +13,23 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import kotlinx.coroutines.launch
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -50,7 +51,17 @@ fun SettingScreen(
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    LaunchedEffect(settingViewModel.snackbarMessage) {
+        settingViewModel.snackbarMessage.collect { messageRes ->
+            snackbarHostState.showSnackbar(
+                message = context.getString(messageRes)
+            )
+        }
+    }
+
     LanguageAwareScreen {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -150,10 +161,8 @@ fun SettingScreen(
                 SettingItem(
                     title = R.string.setting_logout,
                     onClick = {
-                        coroutineScope.launch {
-                            settingViewModel.logout()
-                            onLogoutClick()
-                        }
+                        settingViewModel.logout()
+                        onLogoutClick()
                     },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -187,18 +196,11 @@ fun SettingScreen(
                 },
                 onConfirm = {
                     if (!isResetting) {
-                        coroutineScope.launch {
-                            try {
-                                isResetting = true
-                                settingViewModel.resetProgress()
-                                showResetDialog = false
-                                homeViewModel.refresh()
-                            } catch (e: Exception) {
-                                // TODO: 에러 처리
-                            } finally {
-                                isResetting = false
-                            }
-                        }
+                        isResetting = true
+                        settingViewModel.resetProgress()
+                        showResetDialog = false
+                        homeViewModel.refresh()
+                        isResetting = false
                     }
                 }
             )

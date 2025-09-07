@@ -307,6 +307,9 @@
     <string name="setting_withdrawal">탈퇴</string>
     <string name="setting_app_version">앱 버전 1.0.0</string>
 
+    <!-- Setting Error Messages -->
+    <string name="reset_progress_error">진행 상황을 초기화하지 못했습니다. 다시 시도해 주세요.</string>
+
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">현재 언어</string>
     <string name="language_change_failed">ⓘ 언어 변경에 실패했습니다. 다시 시도해주세요.</string>
