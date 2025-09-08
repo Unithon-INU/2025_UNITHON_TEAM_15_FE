@@ -18,12 +18,16 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -54,6 +58,16 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { messageRes ->
+            snackbarHostState.showSnackbar(
+                message = context.getString(messageRes)
+            )
+        }
+    }
 
     // 회원가입 성공시 네비게이션
     LaunchedEffect(uiState.isSignUpSuccessful) {
@@ -73,7 +87,8 @@ fun SignUpScreen(
         onResendEmailVerification = viewModel::resendEmailVerification,
         onProceedToNickname = viewModel::proceedToNickname,
         onBack = onBack,
-        modifier = modifier
+        modifier = modifier,
+        snackbarHostState = snackbarHostState  // 🆕 추가
     )
 }
 
@@ -89,7 +104,8 @@ private fun SignUpScreenContent(
     onResendEmailVerification: () -> Unit,
     onProceedToNickname: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }  // 🆕 파라미터 추가
 ) {
     // 레이블 텍스트 높이를 동적으로 계산 + 레이블과 텍스트필드 사이 간격
     val labelHeight = with(LocalDensity.current) {
@@ -106,7 +122,8 @@ private fun SignUpScreenContent(
                     title = R.string.sign_up_top_bar_title,
                     onBack = onBack
                 )
-            }
+            },
+            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }  // 🆕 추가
         ) { paddingValues ->
             Column(
                 modifier = Modifier

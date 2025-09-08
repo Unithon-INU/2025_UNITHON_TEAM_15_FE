@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.onboarding
 
 import TopikLevel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,13 +17,14 @@ import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.data.repository.UnauthorizedException
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val languageRepository: LanguageRepository
-) : ViewModel() {
+) : BaseViewModel() {
     data class OnboardingUiState(
         val language: String = "",
         val fullAgreement: Boolean = false,
@@ -61,11 +61,11 @@ class OnboardingViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(OnboardingUiState())
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
 
-    private val _snackBarMessageResId = MutableSharedFlow<Int>()
-    val snackBarMessageResId = _snackBarMessageResId.asSharedFlow()
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateLanguage(language: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             Timber.d("🌐 언어 업데이트 시작: $language")
 
             val selectedLanguage = AppLanguage.fromDisplayName(language)
@@ -169,7 +169,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun completeOnboarding() {
         if (!uiState.value.isAllChecked) return
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             _uiState.update { it.copy(isLoading = true) }
             try {
                 authRepository.setProfile(
@@ -194,8 +194,7 @@ class OnboardingViewModel @Inject constructor(
 
             } catch (e: UnauthorizedException){
                 Timber.e(e, "인증 오류 발생")
-
-                _snackBarMessageResId.emit(R.string.error_authentication_required)
+                _snackbarMessage.emit(R.string.error_authentication_required)
                 _uiState.update {
                     it.copy(
                         isLoading = false  // 로딩 상태 해제
@@ -203,8 +202,7 @@ class OnboardingViewModel @Inject constructor(
                 }
             } catch (e: Exception) {  // 다른 예외 처리 추가
                 Timber.e(e, "프로필 설정 오류 발생")
-
-                _snackBarMessageResId.emit(R.string.onboarding_error_message)
+                _snackbarMessage.emit(R.string.onboarding_error_message)
                 _uiState.update {
                     it.copy(
                         isLoading = false  // 로딩 상태 해제

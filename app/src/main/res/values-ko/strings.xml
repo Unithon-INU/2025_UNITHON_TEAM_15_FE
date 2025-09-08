@@ -58,23 +58,25 @@
     <string name="nickname_duplicate_error">ⓘ 이미 사용 중인 닉네임이에요.</string>
     <string name="nickname_complete_button">완료</string>
     <string name="nickname_empty_error">닉네임을 입력해주세요</string>
-    <string name="nickname_too_short_error">닉네임은 2자 이상이어야 합니다</string>
-    <string name="nickname_too_long_error">닉네임은 10자 이하여야 합니다</string>
+    <string name="nickname_too_short_error">ⓘ 닉네임은 2자 이상이어야 합니다</string>
+    <string name="nickname_too_long_error">ⓘ 닉네임은 10자 이하여야 합니다</string>
     <string name="nickname_setup_failed">닉네임 설정에 실패했습니다</string>
 
     <!-- Common Error Messages -->
-    <string name="error_empty_email">이메일을 입력해주세요</string>
+    <string name="error_empty_email">ⓘ 이메일을 입력해주세요</string>
     <string name="error_invalid_email">ⓘ 올바른 이메일 형식이 아닙니다</string>
-    <string name="error_empty_password">비밀번호를 입력해주세요</string>
+    <string name="error_empty_password">ⓘ 비밀번호를 입력해주세요</string>
     <string name="error_short_password">ⓘ 비밀번호는 6자 이상이어야 합니다</string>
     <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
     <string name="error_authentication_required">ⓘ 인증이 필요합니다. 다시 로그인해주세요.</string>
     <string name="error_lower_than_minimun_wage">ⓘ 최저 시급보다 낮은 금액이에요 </string>
+    <string name="error_unknown">ⓘ 알 수 없는 오류가 발생했습니다.</string>
+    <string name="network_error">네트워크 오류가 발생했습니다. 연결을 확인하고 다시 시도해주세요.</string>
 
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">다음</string>
     <string name="onboarding_done_button">완료</string>
-    <string name="onboarding_error_message">온보딩 설정에 실패했습니다</string>
+    <string name="onboarding_error_message">ⓘ 온보딩 설정에 실패했습니다</string>
 
     <!-- Onboarding Screen(Language) -->
     <string name="onboarding_language_setup_title">CHECKMATE에서 사용할\n언어를 선택해 주세요</string>
@@ -122,6 +124,9 @@
     <string name="step_warning_dialog_continue">계속 진행</string>
     <string name="step_detail_screen_subtitle">이런 것들을 알고가면 좋아요</string>
 
+    <!-- HomeScreen Error Messages -->
+    <string name="error_load_home_data">ⓘ 홈 정보를 불러올 수 없습니다. 다시 시도해주세요.</string>
+    <string name="error_update_checklist">ⓘ 체크리스트 저장에 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- English plural forms (not used in Korean but needed for compilation) -->
     <string name="calculator_hours_format_singular">%d시간</string>
@@ -250,6 +255,14 @@
     <string name="document_finish_description">메일함을 확인해주세요</string>
     <string name="document_finish_button">완료</string>
 
+    <!-- Document Error Messages -->
+    <string name="error_fill_all_fields">ⓘ 입력 정보를 다시 확인해주세요</string>
+    <string name="error_invalid_foreigner_number">ⓘ 외국인등록번호는 13자리여야 합니다</string>
+    <string name="error_invalid_work_start_date">ⓘ 근무 시작일이 올바르지 않습니다</string>
+    <string name="error_invalid_work_end_date">ⓘ 근무 종료일이 올바르지 않습니다</string>
+    <string name="document_submit_success">ⓘ 서류가 성공적으로 제출되었습니다</string>
+    <string name="error_document_submit_failed">서류 제출에 실패했습니다</string>
+
     <!-- Profile Screen -->
     <string name="profile_greeting">안녕하세요 \n%1$s님</string>
     <string name="profile_nickname_default">유니톤</string>
@@ -277,6 +290,9 @@
     <!-- 기타 -->
     <string name="profile_documents_no_unchecked">누락된 서류가 없어요.</string>
 
+    <!-- Profile Error Messages 섹션 추가 -->
+    <string name="error_profile_load_failed">프로필 정보를 불러오는데 실패했습니다</string>
+
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">설정</string>
     <string name="setting_section_config">설정</string>
@@ -291,8 +307,12 @@
     <string name="setting_withdrawal">탈퇴</string>
     <string name="setting_app_version">앱 버전 1.0.0</string>
 
+    <!-- Setting Error Messages -->
+    <string name="reset_progress_error">진행 상황을 초기화하지 못했습니다. 다시 시도해 주세요.</string>
+
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">현재 언어</string>
+    <string name="language_change_failed">ⓘ 언어 변경에 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- Reset Progress Dialog -->
     <string name="reset_progress_dialog_title">정말 초기화 하시겠어요?</string>

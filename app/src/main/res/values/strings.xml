@@ -58,18 +58,21 @@
     <string name="nickname_duplicate_error">ⓘ This nickname is already in use.</string>
     <string name="nickname_complete_button">Complete</string>
     <string name="nickname_empty_error">Please enter a nickname</string>
-    <string name="nickname_too_short_error">Nickname must be at least 2 characters</string>
-    <string name="nickname_too_long_error">Nickname must be 10 characters or less</string>
+    <string name="nickname_too_short_error">ⓘ Nickname must be at least 2 characters</string>
+    <string name="nickname_too_long_error">ⓘ Nickname must be 10 characters or less</string>
     <string name="nickname_setup_failed">Nickname setup failed</string>
 
     <!-- Common Error Messages -->
-    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_empty_email">ⓘ Please enter your email</string>
     <string name="error_invalid_email">ⓘ Invalid email format</string>
-    <string name="error_empty_password">Please enter your password</string>
+    <string name="error_empty_password">ⓘ Please enter your password</string>
     <string name="error_short_password">ⓘ Password must be at least 6 characters</string>
     <string name="error_password_mismatch">ⓘ Passwords do not match</string>
     <string name="error_authentication_required">ⓘ Authentication required. Please log in again.</string>
     <string name="error_lower_than_minimun_wage">ⓘ This amount is lower than the minimum wage </string>
+    <string name="error_unknown">ⓘ An unknown error occurred.</string>
+    <string name="network_error">Network error occurred. Please check your connection and try again.</string>
+
 
     <!-- Home Screen -->
     <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
@@ -81,10 +84,14 @@
     <string name="step_warning_dialog_continue">Continue</string>
     <string name="step_detail_screen_subtitle">Good to know</string>
 
+    <!-- HomeScreen Error Messages -->
+    <string name="error_load_home_data">ⓘ Failed to load home information. Please try again.</string>
+    <string name="error_update_checklist">ⓘ Failed to save checklist. Please try again.</string>
+
     <!-- Onboarding Screen -->
     <string name="onboarding_next_button">Continue</string>
     <string name="onboarding_done_button">Done</string>
-    <string name="onboarding_error_message">Error occurred during onboarding setup. Please try again.</string>
+    <string name="onboarding_error_message">ⓘ Error occurred during onboarding setup. Please try again.</string>
 
     <!-- Onboarding Screen(Language) -->
     <string name="onboarding_language_setup_title">Select the language\nyou want to use</string>
@@ -249,6 +256,14 @@
     <string name="document_finish_description">Please check your mailbox</string>
     <string name="document_finish_button">Complete</string>
 
+    <!-- Document Error Messages -->
+    <string name="error_fill_all_fields">Please check your input information</string>
+    <string name="error_invalid_foreigner_number">Alien registration number must be 13 digits</string>
+    <string name="error_invalid_work_start_date">Invalid work start date</string>
+    <string name="error_invalid_work_end_date">Invalid work end date</string>
+    <string name="document_submit_success">Document submitted successfully</string>
+    <string name="error_document_submit_failed">Failed to submit document</string>
+
     <!-- Profile Screen -->
     <string name="profile_greeting">Hello\n%1$s</string>
     <string name="profile_nickname_default">Unithon</string>
@@ -276,6 +291,9 @@
     <!-- Others -->
     <string name="profile_documents_no_unchecked">No missing documents.</string>
 
+    <!-- Profile Error Messages 섹션 추가 -->
+    <string name="error_profile_load_failed">Failed to load profile information</string>
+
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">Settings</string>
     <string name="setting_section_config">Settings</string>
@@ -290,8 +308,12 @@
     <string name="setting_withdrawal">Account Deletion</string>
     <string name="setting_app_version">App Version 1.0.0</string>
 
+    <!-- Setting Error Messages -->
+    <string name="reset_progress_error">Failed to reset progress. Please try again.</string>
+
     <!-- Language Setting Screen -->
     <string name="language_setting_current_language">Current Language</string>
+    <string name="language_change_failed">ⓘ Failed to change language. Please try again.</string>
 
     <!-- Reset Progress Dialog -->
     <string name="reset_progress_dialog_title">Are you sure you want to reset?</string>

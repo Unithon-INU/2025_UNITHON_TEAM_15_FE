@@ -1,26 +1,29 @@
 package unithon.helpjob.ui.main
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.R
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val employmentCheckRepository: EmploymentCheckRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     enum class Category {
         DOCUMENTS, PRECAUTIONS
@@ -38,12 +41,14 @@ class HomeViewModel @Inject constructor(
         val showStepWarningDialog: Boolean = false,
         val pendingCheckAction: (() -> Unit)? = null,
         val isLoading: Boolean = false,
-        val isUpdating: Boolean = false,
-        val errorMessage: String? = null
+        val isUpdating: Boolean = false
     )
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     /**
      * 🆕 가장 최근에 체크한 document가 있는 step을 찾는 함수
@@ -180,13 +185,9 @@ class HomeViewModel @Inject constructor(
      * 서버와 연동된 문서 체크 상태 업데이트
      */
     private fun updateDocumentCheck(document: DocumentInfoRes, stepCheckStep: String, isChecked: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             try {
-                _uiState.update {
-                    it.copy(
-                        isUpdating = true,
-                        errorMessage = null
-                    )
+                _uiState.update { it.copy(isUpdating = true)
                 }
 
                 // 서버에 업데이트 요청
@@ -233,31 +234,21 @@ class HomeViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 Timber.e(e, "체크리스트 업데이트 실패")
-                _uiState.update {
-                    it.copy(
-                        isUpdating = false,
-                        errorMessage = "문서 상태 업데이트에 실패했습니다. 다시 시도해주세요."
-                    )
-                }
+                _snackbarMessage.emit(R.string.error_update_checklist)  // 추가
+                _uiState.update { it.copy(isUpdating = false) }
             }
         }
-    }
-
-    /**
-     * 에러 메시지 클리어
-     */
-    fun clearErrorMessage() {
-        _uiState.update { it.copy(errorMessage = null) }
     }
 
     init {
         getStepInfo()
     }
 
-    fun getStepInfo(language: String? = null){
-        viewModelScope.launch {
+    private fun getStepInfo(language: String? = null){
+        viewModelScope.launch(crashPreventionHandler) {
             try {
-                _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+                _uiState.update { it.copy(isLoading = true)
+                }
 
                 // 🔄 이 부분을 수정
                 val response = if (language != null) {
@@ -281,20 +272,16 @@ class HomeViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Timber.e(e, "홈 정보 조회 실패")
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = "정보를 불러오는데 실패했습니다. 다시 시도해주세요."
-                    )
-                }
+                _snackbarMessage.emit(R.string.error_load_home_data)  // 추가
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
 
-    fun getTips(language: String,step: Steps){
-        viewModelScope.launch {
+    private fun getTips(language: String, step: Steps){
+        viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(language = language,step)
                 Timber.d(response.toString())
@@ -305,13 +292,12 @@ class HomeViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "팁 정보 조회 실패")
-                // 팁 조회 실패는 치명적이지 않으므로 에러 메시지 표시하지 않음
             }
         }
     }
 
-    fun getTips(step: Steps){
-        viewModelScope.launch {
+    private fun getTips(step: Steps){
+        viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(step)
                 Timber.d(response.toString())
@@ -322,7 +308,6 @@ class HomeViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "팁 정보 조회 실패")
-                // 팁 조회 실패는 치명적이지 않으므로 에러 메시지 표시하지 않음
             }
         }
     }

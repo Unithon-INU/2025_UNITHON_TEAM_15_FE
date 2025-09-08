@@ -22,6 +22,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,9 +64,11 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun HomeScreen(
     onNavigateToStepDetail: () -> Unit,
-    viewmodel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val uiState by viewmodel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var maxCardHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
@@ -76,6 +81,14 @@ fun HomeScreen(
 
     // 🆕 사용자가 수동으로 페이저를 조작했는지 추적
     var userHasInteracted by remember { mutableStateOf(false) }
+
+    LaunchedEffect(viewModel.snackbarMessage) {
+        viewModel.snackbarMessage.collect { messageRes ->
+            snackbarHostState.showSnackbar(
+                message = context.getString(messageRes)
+            )
+        }
+    }
 
     // 첫 번째 데이터 로딩 완료 시 초기화 플래그 설정
     LaunchedEffect(uiState.steps.isNotEmpty()) {
@@ -168,7 +181,7 @@ fun HomeScreen(
                             title = uiState.steps[page].stepInfoRes.title,
                             subTitle = uiState.steps[page].stepInfoRes.subtitle,
                             onClick = {
-                                viewmodel.selectStep(uiState.steps[page])
+                                viewModel.selectStep(uiState.steps[page])
                                 onNavigateToStepDetail()
                             },
                             modifier = Modifier.fillMaxHeight()
@@ -210,13 +223,13 @@ fun HomeScreen(
                     CategoryTab(
                         text = stringResource(R.string.category_documents),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
-                        onClick = { viewmodel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
+                        onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
                         modifier = Modifier.weight(1f)
                     )
                     CategoryTab(
                         text = stringResource(R.string.category_precautions),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
-                        onClick = { viewmodel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
+                        onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -232,7 +245,7 @@ fun HomeScreen(
                                     document = document,
                                     enabled = !uiState.isUpdating,
                                     onCheckedChange = { isChecked ->
-                                        viewmodel.onDocumentCheckChanged(
+                                        viewModel.onDocumentCheckChanged(
                                             document = document,
                                             stepCheckStep = step.checkStep,
                                             isChecked = isChecked
@@ -261,10 +274,14 @@ fun HomeScreen(
             // 경고 다이얼로그
             if (uiState.showStepWarningDialog) {
                 StepProgressWarningDialog(
-                    onDismiss = { viewmodel.dismissStepWarningDialog() },
-                    onContinue = { viewmodel.continueWithCheck() }
+                    onDismiss = { viewModel.dismissStepWarningDialog() },
+                    onContinue = { viewModel.continueWithCheck() }
                 )
             }
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }

@@ -21,6 +21,8 @@ import unithon.helpjob.ui.theme.HelpJobTheme
 @Composable
 fun BasicInfoStep2Screen(
     modifier: Modifier = Modifier,
+    emailError: Boolean,  // 추가
+    emailErrorMessage: Int?,  // 추가
     step: Int,
     title: String,
     semesterValue: Semester?,
@@ -68,7 +70,9 @@ fun BasicInfoStep2Screen(
                 onValueChange = onEmailAddressValueChange,
                 labelText = stringResource(R.string.document_basic_info_2_email_address_label),
                 placeholderText = stringResource(R.string.document_basic_info_2_email_address_placeholder),
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Next,
+                isError = emailError,  // 추가
+                errorMessage = emailErrorMessage?.let { stringResource(it) }  // 추가
             )
         }
     }
@@ -90,6 +94,8 @@ fun BasicInfoStep2Preview(){
             onPhoneNumberValueChange = {},
             emailAddressValue = "freeman.spence@example.com",
             onEmailAddressValueChange = {},
+            emailError = false,
+            emailErrorMessage = 0  // 추가
         )
     }
 }

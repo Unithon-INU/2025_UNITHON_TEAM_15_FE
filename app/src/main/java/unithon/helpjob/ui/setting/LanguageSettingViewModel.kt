@@ -1,21 +1,24 @@
 package unithon.helpjob.ui.setting
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.R
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LanguageSettingViewModel @Inject constructor(
     private val languageRepository: LanguageRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     data class LanguageSettingUiState(
         val currentLanguage: AppLanguage = AppLanguage.KOREAN,
@@ -24,6 +27,9 @@ class LanguageSettingViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(LanguageSettingUiState())
     val uiState: StateFlow<LanguageSettingUiState> = _uiState.asStateFlow()
+
+    private val _snackbarMessage = MutableSharedFlow<Int>()
+    val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     init {
         loadCurrentLanguage()
@@ -40,7 +46,7 @@ class LanguageSettingViewModel @Inject constructor(
     }
 
     fun setLanguage(language: AppLanguage) {
-        viewModelScope.launch {
+        viewModelScope.launch(crashPreventionHandler) {
             try {
                 Timber.d("🌐 언어 변경 시작: ${language.displayName}")
 
@@ -51,6 +57,7 @@ class LanguageSettingViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 Timber.e(e, "❌ 언어 변경 실패: ${language.displayName}")
+                _snackbarMessage.emit(R.string.language_change_failed)
             }
         }
     }
