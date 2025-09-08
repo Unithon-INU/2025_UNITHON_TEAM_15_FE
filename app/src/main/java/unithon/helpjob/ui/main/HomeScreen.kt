@@ -64,11 +64,11 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun HomeScreen(
     onNavigateToStepDetail: () -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     var maxCardHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current

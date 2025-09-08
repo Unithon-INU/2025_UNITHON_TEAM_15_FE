@@ -17,8 +17,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
@@ -75,12 +73,12 @@ fun ProfileScreen(
     onNavigateToSettings: () -> Unit = {},
     onNavigateToHomeWithStep: (String) -> Unit = {},
     homeViewModel: HomeViewModel,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val homeUiState by homeViewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -91,20 +89,14 @@ fun ProfileScreen(
     }
 
     LanguageAwareScreen {
-        Scaffold(
-            topBar = {
-                ProfileTopAppBar(
-                    onNavigateToSettings = onNavigateToSettings
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState)
-            }
-        ) { paddingValues ->
+        Column(modifier = Modifier.fillMaxSize()) {
+            ProfileTopAppBar(
+                onNavigateToSettings = onNavigateToSettings
+            )
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(top = 6.dp, start = 20.dp, end = 20.dp)
             ) {
                 // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
@@ -374,7 +366,7 @@ private fun UncheckedDocumentItem(
         modifier = Modifier
             .clickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
-            .padding(horizontal = 7.dp,vertical = 15.dp),
+            .padding(horizontal = 7.dp, vertical = 15.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(

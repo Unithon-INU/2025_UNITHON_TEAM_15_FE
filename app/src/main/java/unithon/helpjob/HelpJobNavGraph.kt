@@ -2,6 +2,7 @@ package unithon.helpjob
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ fun HelpJobNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     navActions: HelpJobNavigationActions = HelpJobNavigationActions(navController),
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     startDestination: String = HelpJobDestinations.SPLASH_ROUTE
 ) {
     NavHost(
@@ -83,9 +85,8 @@ fun HelpJobNavGraph(
         // 메인 앱 플로우 (하단바 있음)
         composable(route = BottomNavDestination.HOME.route) {
             HomeScreen(
-                onNavigateToStepDetail = {
-                    navActions.navigateToStepDetail()
-                }
+                onNavigateToStepDetail = { navActions.navigateToStepDetail() },
+                snackbarHostState = snackbarHostState
             )
         }
 
@@ -110,7 +111,9 @@ fun HelpJobNavGraph(
         }
 
         composable(route = BottomNavDestination.CONTENT.route) {
-            DocumentScreen()
+            DocumentScreen(
+                snackbarHostState = snackbarHostState
+            )
         }
 
         composable(route = BottomNavDestination.PROFILE.route) { backStackEntry ->
@@ -135,7 +138,8 @@ fun HelpJobNavGraph(
                         }
                     }
                 },
-                homeViewModel = homeViewModel
+                homeViewModel = homeViewModel,
+                snackbarHostState = snackbarHostState,
             )
         }
 

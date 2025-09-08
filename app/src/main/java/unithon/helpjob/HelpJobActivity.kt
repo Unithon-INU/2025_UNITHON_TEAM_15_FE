@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -38,9 +40,13 @@ fun HelpJobApp() {
     val navActions = remember(navController) { HelpJobNavigationActions(navController) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         bottomBar = {
             // 하단 탭 화면에서만 하단바 표시 - enum의 유틸리티 함수 사용
             if (BottomNavDestination.isBottomTabRoute(currentRoute)) {
@@ -55,6 +61,7 @@ fun HelpJobApp() {
         HelpJobNavGraph(
             navController = navController,
             navActions = navActions,
+            snackbarHostState = snackbarHostState,
             modifier = Modifier.padding(
                 bottom = innerPadding.calculateBottomPadding(),
                 top = innerPadding.calculateTopPadding()
