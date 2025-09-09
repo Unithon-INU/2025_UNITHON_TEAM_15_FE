@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,14 +19,10 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +42,7 @@ import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
+import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey200
@@ -93,7 +89,6 @@ fun StepDetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StepDetailContent(
     step: EmploymentCheckRes,
@@ -104,23 +99,8 @@ private fun StepDetailContent(
     LanguageAwareScreen {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = onBackClick) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.top_arrowback),
-                                contentDescription = stringResource(id = R.string.back_button),
-                                tint = Color.Unspecified // 아이콘 자체 색상 사용
-                            )
-                        }
-                    },
-                    title = {
-                        Text("")
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent
-                    ),
-                    windowInsets = WindowInsets(0.dp)
+                HelpJobTopAppBar(
+                    onBack = onBackClick
                 )
             }
         ) { paddingValues ->
@@ -156,26 +136,9 @@ private fun StepDetailContent(
 private fun LoadingScreen(onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 20.dp,
-                        vertical = 16.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = onBackClick,
-                    modifier = Modifier.padding(0.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.top_arrowback),
-                        contentDescription = "뒤로가기",
-                        tint = Color.Unspecified
-                    )
-                }
-            }
+            HelpJobTopAppBar(
+                onBack = onBackClick
+            )
         }
     ) { paddingValues ->
         Box(
@@ -201,7 +164,6 @@ private fun LoadingScreen(onBackClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ErrorScreen(
     message: String,
@@ -209,17 +171,8 @@ private fun ErrorScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.top_arrowback),
-                            contentDescription = "뒤로가기",
-                            tint = Color.Unspecified
-                        )
-                    }
-                }
+            HelpJobTopAppBar(
+                onBack = onBackClick
             )
         }
     ) { paddingValues ->

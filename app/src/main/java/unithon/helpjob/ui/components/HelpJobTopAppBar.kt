@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.components
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,8 +25,7 @@ import unithon.helpjob.ui.theme.Grey700
 fun HelpJobTopAppBar(
     modifier: Modifier = Modifier,
     @StringRes title: Int? = null,
-    onBack: (() -> Unit)? = null,
-    actions: @Composable RowScope.() -> Unit = {}
+    onBack: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -50,7 +48,6 @@ fun HelpJobTopAppBar(
                 }
             }
         },
-        actions = actions,
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Grey000,
             titleContentColor = Grey700,
