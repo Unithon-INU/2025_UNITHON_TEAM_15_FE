@@ -60,7 +60,8 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.SIGN_UP_ROUTE) {
             SignUpScreen(
                 onNavigateToNicknameSetup = navActions::navigateToNicknameSetup,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                snackbarHostState = snackbarHostState
             )
         }
 

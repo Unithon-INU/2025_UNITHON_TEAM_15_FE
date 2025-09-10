@@ -17,8 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,11 +53,11 @@ fun SignUpScreen(
     onNavigateToNicknameSetup: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -87,8 +85,7 @@ fun SignUpScreen(
         onResendEmailVerification = viewModel::resendEmailVerification,
         onProceedToNickname = viewModel::proceedToNickname,
         onBack = onBack,
-        modifier = modifier,
-        snackbarHostState = snackbarHostState  // 🆕 추가
+        modifier = modifier
     )
 }
 
@@ -104,8 +101,7 @@ private fun SignUpScreenContent(
     onResendEmailVerification: () -> Unit,
     onProceedToNickname: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }  // 🆕 파라미터 추가
+    modifier: Modifier = Modifier
 ) {
     // 레이블 텍스트 높이를 동적으로 계산 + 레이블과 텍스트필드 사이 간격
     val labelHeight = with(LocalDensity.current) {
@@ -115,20 +111,14 @@ private fun SignUpScreenContent(
     val totalOffset = labelHeight + labelSpacing
 
     LanguageAwareScreen {
-        Scaffold(
-            modifier = modifier.fillMaxSize(),
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.sign_up_top_bar_title,
-                    onBack = onBack
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }  // 🆕 추가
-        ) { paddingValues ->
+        Column(modifier = modifier.fillMaxSize()) {
+            HelpJobTopAppBar(
+                title = R.string.sign_up_top_bar_title,
+                onBack = onBack
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(top = 19.dp, start = 20.dp, end = 20.dp),
             ) {
                 // 제목
