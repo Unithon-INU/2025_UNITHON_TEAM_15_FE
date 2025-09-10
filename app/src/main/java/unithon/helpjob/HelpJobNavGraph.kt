@@ -52,6 +52,7 @@ fun HelpJobNavGraph(
             SignInScreen(
                 onNavigateToSignUp = navActions::navigateToSignUp,
                 onNavigateToOnboarding = navActions::navigateToOnboarding,
+                snackbarHostState = snackbarHostState,
                 onNavigateToHome = navActions::navigateToAppHome
             )
         }
