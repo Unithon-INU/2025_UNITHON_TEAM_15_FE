@@ -56,7 +56,6 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun StepDetailScreen(
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -83,8 +82,7 @@ fun StepDetailScreen(
             StepDetailContent(
                 step = selectedStep,
                 tips = tips,
-                onBackClick = onBackClick,
-                modifier = modifier
+                onBackClick = onBackClick
             )
         }
     }
@@ -94,27 +92,26 @@ fun StepDetailScreen(
 private fun StepDetailContent(
     step: EmploymentCheckRes,
     tips: List<TipResponseItem>,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     LanguageAwareScreen {
-        Column(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             HelpJobTopAppBar(
                 onBack = onBackClick
             )
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 20.dp)
                     .verticalScroll(scrollState)
             ) {
-                Spacer(modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
                 // Step 카드
                 StepDetailCard(step = step)
 
-                Spacer(modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
 
                 // Tips 섹션
                 if (tips.isNotEmpty()) {
@@ -123,7 +120,7 @@ private fun StepDetailContent(
                     EmptyTipsSection()
                 }
 
-                Spacer(modifier.height(100.dp))
+                Spacer(Modifier.height(100.dp))
             }
         }
     }
@@ -132,15 +129,14 @@ private fun StepDetailContent(
 
 @Composable
 private fun LoadingScreen(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onBackClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         HelpJobTopAppBar(
             onBack = onBackClick
         )
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -149,7 +145,7 @@ private fun LoadingScreen(
                 CircularProgressIndicator(
                     color = Primary500
                 )
-                Spacer(modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = "정보를 불러오는 중...",
                     style = MaterialTheme.typography.bodyMedium,
@@ -162,39 +158,38 @@ private fun LoadingScreen(
 
 @Composable
 private fun ErrorScreen(
-    message: String,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    message: String
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         HelpJobTopAppBar(
             onBack = onBackClick
         )
         Box(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier.padding(40.dp)
+                modifier = Modifier.padding(40.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.exclamation_mark),
                     contentDescription = "에러",
                     tint = Warning
                 )
-                Spacer(modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
                 Text(
                     text = message,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Grey600,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
                 HelpJobButton(
                     text = "이전으로 돌아가기",
                     onClick = onBackClick,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -203,8 +198,7 @@ private fun ErrorScreen(
 
 @Composable
 private fun TipsSection(
-    tips: List<TipResponseItem>,
-    modifier: Modifier = Modifier
+    tips: List<TipResponseItem>
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically
@@ -213,7 +207,7 @@ private fun TipsSection(
             painter = painterResource(R.drawable.filled_checked),
             contentDescription = "체크",
             tint = Color.Unspecified,
-            modifier = modifier.padding(end = 1.dp)
+            modifier = Modifier.padding(end = 1.dp)
         )
         Text(
             text = stringResource(R.string.step_detail_screen_subtitle),
@@ -222,21 +216,19 @@ private fun TipsSection(
         )
     }
 
-    Spacer(modifier.height(16.dp))
+    Spacer(Modifier.height(16.dp))
 
     tips.forEachIndexed { index, tip ->
         ExpandableTipItem(
             number = index + 1,
             tip = tip
         )
-        Spacer(modifier.height(12.dp))
+        Spacer(Modifier.height(12.dp))
     }
 }
 
 @Composable
-private fun EmptyTipsSection(
-    modifier: Modifier = Modifier
-) {
+private fun EmptyTipsSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -253,17 +245,17 @@ private fun EmptyTipsSection(
         )
     }
 
-    Spacer(modifier.height(20.dp))
+    Spacer(Modifier.height(20.dp))
 
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFFF5F5F5)
         ),
-        modifier = modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(40.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -273,7 +265,7 @@ private fun EmptyTipsSection(
                 contentDescription = "정보 없음",
                 tint = Grey400
             )
-            Spacer(modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = "현재 단계에서는\n추가 정보가 준비되지 않았어요",
                 style = MaterialTheme.typography.bodyMedium,
@@ -286,18 +278,17 @@ private fun EmptyTipsSection(
 
 @Composable
 fun StepDetailCard(
-    step: EmploymentCheckRes,
-    modifier: Modifier = Modifier
+    step: EmploymentCheckRes
 ) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = Primary400
         ),
-        modifier = modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(
                     horizontal = 12.dp,
@@ -311,7 +302,7 @@ fun StepDetailCard(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    modifier = modifier.padding(
+                    modifier = Modifier.padding(
                         vertical = 7.dp,
                         horizontal = 17.dp
                     ),
@@ -320,13 +311,13 @@ fun StepDetailCard(
                     color = Grey600
                 )
             }
-            Spacer(modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = step.stepInfoRes.title,
                 style = MaterialTheme.typography.headlineMedium,
                 color = Grey600
             )
-            Spacer(modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 text = step.stepInfoRes.subtitle,
                 style = MaterialTheme.typography.labelMedium,
@@ -339,8 +330,7 @@ fun StepDetailCard(
 @Composable
 fun ExpandableTipItem(
     number: Int,
-    tip: TipResponseItem,
-    modifier: Modifier = Modifier
+    tip: TipResponseItem
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     Column {
@@ -349,7 +339,7 @@ fun ExpandableTipItem(
             colors = CardDefaults.cardColors(
                 containerColor = Grey200
             ),
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .noRippleClickable {
                     isExpanded = !isExpanded
@@ -357,7 +347,7 @@ fun ExpandableTipItem(
         ) {
             // 헤더 부분
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         start = 18.dp,
@@ -372,7 +362,7 @@ fun ExpandableTipItem(
                     text = "$number. ${tip.title}",
                     style = MaterialTheme.typography.titleMedium,
                     color = Grey600,
-                    modifier = modifier.weight(1f)
+                    modifier = Modifier.weight(1f)
                 )
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp
@@ -384,7 +374,7 @@ fun ExpandableTipItem(
         }
         // 확장된 내용
         if (isExpanded) {
-            Spacer(modifier.height(9.dp))
+            Spacer(Modifier.height(9.dp))
             Card(
                 shape = RoundedCornerShape(10.dp),
                 colors = CardDefaults.cardColors(
@@ -392,14 +382,14 @@ fun ExpandableTipItem(
                 )
             ) {
                 Column(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(
                             horizontal = 13.dp,
                             vertical = 22.dp,
                         )
                 ) {
                     TipDetailItem(
-                        modifier = modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         tipDetail = tip
                     )
                 }
@@ -420,7 +410,7 @@ fun TipDetailItem(
         if (tipDetail.tipInfoDetailRes.isNotEmpty()) {
             tipDetail.tipInfoDetailRes.forEachIndexed { index, tipInfoDetail ->
                 if (index > 0) {
-                    Spacer(modifier.height(16.dp))
+                    Spacer(Modifier.height(16.dp))
                 }
 
                 // 각 tipInfoDetail 아이템 표시
@@ -431,7 +421,7 @@ fun TipDetailItem(
                         painter = painterResource(R.drawable.dot),
                         contentDescription = "점",
                     )
-                    Spacer(modifier.width(5.dp))
+                    Spacer(Modifier.width(5.dp))
                     Column {
                         // itemTitle이 있는 경우 표시
                         tipInfoDetail.itemTitle?.let { title ->
@@ -443,7 +433,7 @@ fun TipDetailItem(
                                 )
                                 // itemContent도 있으면 간격 추가
                                 if (!tipInfoDetail.itemContent.isNullOrEmpty()) {
-                                    Spacer(modifier.height(9.dp))
+                                    Spacer(Modifier.height(9.dp))
                                 }
                             }
                         }
@@ -462,7 +452,7 @@ fun TipDetailItem(
                         // warning이 있는 경우 표시
                         tipInfoDetail.warning?.let { warning ->
                             if (warning.isNotEmpty()) {
-                                Spacer(modifier.height(9.dp))
+                                Spacer(Modifier.height(9.dp))
                                 Text(
                                     text = warning,
                                     style = MaterialTheme.typography.labelMedium,

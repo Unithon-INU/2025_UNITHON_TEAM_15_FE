@@ -105,7 +105,6 @@ fun HelpJobNavGraph(
                     homeViewModel.clearSelectedStep()
                     navController.popBackStack()
                 },
-                modifier = modifier,
                 viewModel = homeViewModel
             )
         }
@@ -158,8 +157,8 @@ fun HelpJobNavGraph(
                 onBack = { navController.popBackStack() },
                 onLanguageSettingClick = navActions::navigateToLanguageSetting,
                 onLogoutClick = navActions::navigateToSignInAfterLogout,
-                snackbarHostState = snackbarHostState,
-                modifier = modifier,
+//                snackbarHostState = snackbarHostState,
+//                modifier = modifier,
                 homeViewModel = homeViewModel
             )
         }
