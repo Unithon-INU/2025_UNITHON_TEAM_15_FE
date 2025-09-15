@@ -158,6 +158,8 @@ fun HelpJobNavGraph(
                 onBack = { navController.popBackStack() },
                 onLanguageSettingClick = navActions::navigateToLanguageSetting,
                 onLogoutClick = navActions::navigateToSignInAfterLogout,
+                snackbarHostState = snackbarHostState,
+                modifier = modifier,
                 homeViewModel = homeViewModel
             )
         }

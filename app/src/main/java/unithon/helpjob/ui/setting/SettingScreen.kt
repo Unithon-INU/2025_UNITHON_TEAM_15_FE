@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,11 +46,12 @@ fun SettingScreen(
     onLanguageSettingClick: () -> Unit,
     onLogoutClick: () -> Unit,
     homeViewModel: HomeViewModel,
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     settingViewModel: SettingViewModel = hiltViewModel()
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
-    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     LaunchedEffect(settingViewModel.snackbarMessage) {
@@ -63,100 +63,97 @@ fun SettingScreen(
     }
 
     LanguageAwareScreen {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.setting_top_bar_title,
-                    onBack = onBack
-                )
-            }
-        ) { paddingValues ->
+        Column(
+            modifier = modifier.fillMaxSize()
+        ) {
+            HelpJobTopAppBar(
+                title = R.string.setting_top_bar_title,
+                onBack = onBack
+            )
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(top = 14.dp),
             ) {
                 // 설정 섹션
                 SettingSectionHeader(
                     title = R.string.setting_section_config,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(19.dp))
+                Spacer(modifier = modifier.height(19.dp))
 
                 SettingItem(
                     title = R.string.setting_app_language,
                     onClick = onLanguageSettingClick,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
 
                 SettingItem(
                     title = R.string.setting_reset_progress,
                     onClick = { showResetDialog = true },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = modifier.height(18.dp))
 
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth(),
                     thickness = 4.dp,
                     color = Grey100
                 )
 
-                Spacer(modifier = Modifier.height(17.dp))
+                Spacer(modifier = modifier.height(17.dp))
 
                 // 정보 섹션
                 SettingSectionHeader(
                     title = R.string.setting_section_info,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(19.dp))
+                Spacer(modifier = modifier.height(19.dp))
 
                 SettingItem(
                     title = R.string.setting_community_guidelines,
                     onClick = { /* 아직 구현하지 않음 */ },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
 
                 SettingItem(
                     title = R.string.setting_privacy_policy,
                     onClick = { /* 아직 구현하지 않음 */ },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
 
                 SettingItem(
                     title = R.string.setting_inquiry,
                     onClick = { /* 아직 구현하지 않음 */ },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = modifier.height(18.dp))
 
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = modifier.fillMaxWidth(),
                     thickness = 4.dp,
                     color = Grey100
                 )
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = modifier.height(18.dp))
 
                 // 계정 섹션
                 SettingSectionHeader(
                     title = R.string.setting_section_account,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = modifier.height(20.dp))
 
                 SettingItem(
                     title = R.string.setting_logout,
@@ -164,25 +161,25 @@ fun SettingScreen(
                         settingViewModel.logout()
                         onLogoutClick()
                     },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
 
                 SettingItem(
                     title = R.string.setting_withdrawal,
                     onClick = { /* 아직 구현하지 않음 */ },
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = modifier.height(24.dp))
 
                 // 앱 버전
                 Text(
                     text = stringResource(R.string.setting_app_version),
                     style = MaterialTheme.typography.body4,
                     color = Color(0xFF70737D),
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = modifier.padding(horizontal = 20.dp)
                 )
 
             }
