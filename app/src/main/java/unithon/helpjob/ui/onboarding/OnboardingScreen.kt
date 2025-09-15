@@ -16,10 +16,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,14 +49,15 @@ import unithon.helpjob.ui.theme.Primary500
 
 @Composable
 fun OnboardingScreen(
+    modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
+    snackbarHostState: SnackbarHostState,
     onOnboardingComplete: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val currentLanguage by GlobalLanguageState.currentLanguage // 🔥 언어 상태 추가
+    val currentLanguage by GlobalLanguageState.currentLanguage
 
-    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(uiState.isOnboardingSuccess) {
         if (uiState.isOnboardingSuccess) {
@@ -69,11 +66,9 @@ fun OnboardingScreen(
     }
 
     LaunchedEffect(viewModel.snackbarMessage) {
-        viewModel.snackbarMessage.collect { messageResId ->
-            val message = context.getString(messageResId)
+        viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = message,
-                duration = SnackbarDuration.Short
+                message = context.getString(messageRes)
             )
         }
     }
@@ -101,36 +96,21 @@ fun OnboardingScreen(
     }
 
     LanguageAwareScreen {
-        Scaffold(
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.onboarding_top_bar_title,
-                    onBack = {
-                        if (pagerState.currentPage > 0) {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
+        Column(
+            modifier = modifier.fillMaxSize()
+        ) {
+            HelpJobTopAppBar(
+                title = R.string.onboarding_top_bar_title,
+                onBack = {
+                    if (pagerState.currentPage > 0) {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
                     }
-                )
-            },
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { snackbarData ->
-                        Snackbar(
-                            snackbarData = snackbarData,
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError,
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
-                )
-            }
-        ) { innerPadding ->
+                }
+            )
             Box(
                 modifier = Modifier
-                    .padding(top = innerPadding.calculateTopPadding())
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
