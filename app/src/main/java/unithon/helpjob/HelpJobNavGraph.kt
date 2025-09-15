@@ -105,6 +105,7 @@ fun HelpJobNavGraph(
                     homeViewModel.clearSelectedStep()
                     navController.popBackStack()
                 },
+                modifier = modifier,
                 viewModel = homeViewModel
             )
         }
