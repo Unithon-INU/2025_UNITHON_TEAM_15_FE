@@ -10,17 +10,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,11 +45,11 @@ fun SignInScreen(
     onNavigateToOnboarding: () -> Unit,
     onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     // 스낵바 메시지 처리
     LaunchedEffect(viewModel.snackbarMessage) {
@@ -75,19 +74,14 @@ fun SignInScreen(
         }
     }
 
-    // 원래 Scaffold 없었다가 추가
-    Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) { paddingValues ->
-        SignInContent(
-            uiState = uiState,
-            onEmailChange = viewModel::updateEmail,
-            onPasswordChange = viewModel::updatePassword,
-            onSignInClick = viewModel::signIn,
-            onNavigateToSignUp = onNavigateToSignUp,
-            modifier = modifier.padding(paddingValues)
-        )
-    }
+    SignInContent(
+        uiState = uiState,
+        onEmailChange = viewModel::updateEmail,
+        onPasswordChange = viewModel::updatePassword,
+        onSignInClick = viewModel::signIn,
+        onNavigateToSignUp = onNavigateToSignUp,
+        modifier = modifier
+    )
 }
 
 /**
@@ -106,6 +100,8 @@ private fun SignInContent(
         Column(
             modifier = modifier
                 .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
                 .padding(horizontal = 20.dp),
             verticalArrangement = Arrangement.Center
         ) {

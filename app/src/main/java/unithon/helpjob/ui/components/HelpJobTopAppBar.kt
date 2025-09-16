@@ -23,25 +23,29 @@ import unithon.helpjob.ui.theme.Grey700
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HelpJobTopAppBar(
-    @StringRes title: Int,
-    onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @StringRes title: Int? = null,
+    onBack: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Text(
-                text = stringResource(title),
-                style = MaterialTheme.typography.headlineMedium, // 20sp, Bold
-                color = Grey700
-            )
+            title?.let {
+                Text(
+                    text = stringResource(it),
+                    style = MaterialTheme.typography.headlineMedium, // 20sp, Bold
+                    color = Grey700
+                )
+            }
         },
         navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(
-                    painter = painterResource(id = R.drawable.top_arrowback),
-                    contentDescription = stringResource(id = R.string.back_button),
-                    tint = Color.Unspecified // 아이콘 자체 색상 사용
-                )
+            onBack?.let {
+                IconButton(onClick = it) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.top_arrowback),
+                        contentDescription = stringResource(id = R.string.back_button),
+                        tint = Color.Unspecified // 아이콘 자체 색상 사용
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

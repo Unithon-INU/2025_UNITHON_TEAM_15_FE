@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,14 +21,9 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +43,7 @@ import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
+import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey200
@@ -93,7 +90,6 @@ fun StepDetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StepDetailContent(
     step: EmploymentCheckRes,
@@ -102,31 +98,17 @@ private fun StepDetailContent(
 ) {
     val scrollState = rememberScrollState()
     LanguageAwareScreen {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    navigationIcon = {
-                        IconButton(onClick = onBackClick) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.top_arrowback),
-                                contentDescription = stringResource(id = R.string.back_button),
-                                tint = Color.Unspecified // 아이콘 자체 색상 사용
-                            )
-                        }
-                    },
-                    title = {
-                        Text("")
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent
-                    ),
-                    windowInsets = WindowInsets(0.dp)
-                )
-            }
-        ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
+            HelpJobTopAppBar(
+                onBack = onBackClick
+            )
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)
                     .fillMaxSize()
                     .padding(horizontal = 20.dp)
                     .verticalScroll(scrollState)
@@ -153,35 +135,15 @@ private fun StepDetailContent(
 
 
 @Composable
-private fun LoadingScreen(onBackClick: () -> Unit) {
-    Scaffold(
-        topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        horizontal = 20.dp,
-                        vertical = 16.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = onBackClick,
-                    modifier = Modifier.padding(0.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.top_arrowback),
-                        contentDescription = "뒤로가기",
-                        tint = Color.Unspecified
-                    )
-                }
-            }
-        }
-    ) { paddingValues ->
+private fun LoadingScreen(
+    onBackClick: () -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        HelpJobTopAppBar(
+            onBack = onBackClick
+        )
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -201,32 +163,17 @@ private fun LoadingScreen(onBackClick: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ErrorScreen(
-    message: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    message: String
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {},
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.top_arrowback),
-                            contentDescription = "뒤로가기",
-                            tint = Color.Unspecified
-                        )
-                    }
-                }
-            )
-        }
-    ) { paddingValues ->
+    Column(modifier = Modifier.fillMaxSize()) {
+        HelpJobTopAppBar(
+            onBack = onBackClick
+        )
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+            modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -257,7 +204,9 @@ private fun ErrorScreen(
 }
 
 @Composable
-private fun TipsSection(tips: List<TipResponseItem>) {
+private fun TipsSection(
+    tips: List<TipResponseItem>
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -335,7 +284,9 @@ private fun EmptyTipsSection() {
 }
 
 @Composable
-fun StepDetailCard(step: EmploymentCheckRes) {
+fun StepDetailCard(
+    step: EmploymentCheckRes
+) {
     Card(
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
@@ -455,7 +406,10 @@ fun ExpandableTipItem(
 }
 
 @Composable
-fun TipDetailItem(modifier: Modifier = Modifier, tipDetail: TipResponseItem) {
+fun TipDetailItem(
+    modifier: Modifier = Modifier,
+    tipDetail: TipResponseItem
+) {
     Column(
         modifier = modifier
     ) {

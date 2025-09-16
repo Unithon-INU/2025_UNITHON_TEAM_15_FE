@@ -2,15 +2,12 @@ package unithon.helpjob.ui.document
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -39,17 +35,14 @@ import unithon.helpjob.ui.document.page.WorkplaceInfo4Screen
 
 @Composable
 fun DocumentScreen(
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     viewModel: DocumentViewModel = hiltViewModel()
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isSubmitting by viewModel.isSubmitting.collectAsStateWithLifecycle()
-
     val pagerState = rememberPagerState(pageCount = { 10 })
     val scope = rememberCoroutineScope()
-
-    // 🆕 SnackbarHost 설정
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current  // context 선언
+    val context = LocalContext.current
 
     // 🆕 에러 이벤트 처리 - Snackbar 표시
     LaunchedEffect(viewModel.snackbarMessage) {
@@ -286,47 +279,29 @@ fun DocumentScreen(
         ),
     )
     LanguageAwareScreen {
-        Scaffold(
-            topBar = {
-                // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
-                if (pagerState.currentPage >= 2) {
-                    HelpJobTopAppBar(
-                        title = R.string.document_top_bar_title,
-                        onBack = {
-                            if (pagerState.currentPage > 0) {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                                }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+        ) {
+            // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
+            if (pagerState.currentPage >= 2) {
+                HelpJobTopAppBar(
+                    title = R.string.document_top_bar_title,
+                    onBack = {
+                        if (pagerState.currentPage > 0) {
+                            scope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
                             }
                         }
-                    )
-                }
-            },
-            // 🆕 SnackbarHost 추가
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = { snackbarData ->
-                        Snackbar(
-                            snackbarData = snackbarData,
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError,
-                            shape = RoundedCornerShape(8.dp)
-                        )
                     }
                 )
             }
-        ) { innerPadding ->
+
             Box(
                 modifier = Modifier
-                    .then(
-                        if (pagerState.currentPage >= 2) {
-                            Modifier.padding(top = innerPadding.calculateTopPadding())
-                        } else {
-                            Modifier
-                        }
-                    )
                     .fillMaxSize()
+                    .weight(1f)
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 // 페이저

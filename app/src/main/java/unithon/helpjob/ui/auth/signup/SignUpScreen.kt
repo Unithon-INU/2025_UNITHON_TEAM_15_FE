@@ -10,21 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -55,11 +54,11 @@ fun SignUpScreen(
     onNavigateToNicknameSetup: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -87,8 +86,7 @@ fun SignUpScreen(
         onResendEmailVerification = viewModel::resendEmailVerification,
         onProceedToNickname = viewModel::proceedToNickname,
         onBack = onBack,
-        modifier = modifier,
-        snackbarHostState = snackbarHostState  // 🆕 추가
+        modifier = modifier
     )
 }
 
@@ -104,8 +102,7 @@ private fun SignUpScreenContent(
     onResendEmailVerification: () -> Unit,
     onProceedToNickname: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }  // 🆕 파라미터 추가
+    modifier: Modifier = Modifier
 ) {
     // 레이블 텍스트 높이를 동적으로 계산 + 레이블과 텍스트필드 사이 간격
     val labelHeight = with(LocalDensity.current) {
@@ -115,21 +112,20 @@ private fun SignUpScreenContent(
     val totalOffset = labelHeight + labelSpacing
 
     LanguageAwareScreen {
-        Scaffold(
-            modifier = modifier.fillMaxSize(),
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.sign_up_top_bar_title,
-                    onBack = onBack
-                )
-            },
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) }  // 🆕 추가
-        ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
+            HelpJobTopAppBar(
+                title = R.string.sign_up_top_bar_title,
+                onBack = onBack
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
-                    .padding(top = 19.dp, start = 20.dp, end = 20.dp),
+                    .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
             ) {
                 // 제목
                 Text(
@@ -307,9 +303,7 @@ private fun SignUpScreenContent(
                     onClick = onProceedToNickname,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

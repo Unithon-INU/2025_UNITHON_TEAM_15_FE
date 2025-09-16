@@ -8,11 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,11 +48,12 @@ fun SettingScreen(
     onLanguageSettingClick: () -> Unit,
     onLogoutClick: () -> Unit,
     homeViewModel: HomeViewModel,
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     settingViewModel: SettingViewModel = hiltViewModel()
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
-    val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
     LaunchedEffect(settingViewModel.snackbarMessage) {
@@ -63,19 +65,19 @@ fun SettingScreen(
     }
 
     LanguageAwareScreen {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.setting_top_bar_title,
-                    onBack = onBack
-                )
-            }
-        ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
+            HelpJobTopAppBar(
+                title = R.string.setting_top_bar_title,
+                onBack = onBack
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(top = 14.dp),
             ) {
                 // 설정 섹션
