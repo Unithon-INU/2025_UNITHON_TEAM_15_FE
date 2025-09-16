@@ -172,6 +172,8 @@ fun HelpJobNavGraph(
 
             LanguageSettingScreen(
                 onBack = { navController.popBackStack() },
+                snackbarHostState = snackbarHostState,
+                modifier = modifier,
                 homeViewModel = homeViewModel
             )
         }
