@@ -5,16 +5,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -35,11 +34,11 @@ fun NicknameSetupScreen(
     onNicknameSet: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
     viewModel: NicknameSetupViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current  // context 선언
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -61,8 +60,7 @@ fun NicknameSetupScreen(
         onNicknameChange = viewModel::updateNickname,
         onCompleteClick = viewModel::setNickname,
         onBack = onBack,
-        modifier = modifier,
-        snackbarHostState = snackbarHostState
+        modifier = modifier
     )
 }
 
@@ -75,24 +73,22 @@ private fun NicknameSetupScreenContent(
     onNicknameChange: (String) -> Unit,
     onCompleteClick: () -> Unit,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    modifier: Modifier = Modifier
 ) {
     LanguageAwareScreen {
-        Scaffold(
-            modifier = modifier.fillMaxSize(),
-            topBar = {
-                HelpJobTopAppBar(
-                    title = R.string.nickname_setup_top_bar_title,
-                    onBack = onBack
-                )
-            },
-            snackbarHost = { SnackbarHost(snackbarHostState) }
-        ) { paddingValues ->
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
+            HelpJobTopAppBar(
+                title = R.string.nickname_setup_top_bar_title,
+                onBack = onBack
+            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = paddingValues.calculateTopPadding())
                     .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
             ) {
                 // 제목
