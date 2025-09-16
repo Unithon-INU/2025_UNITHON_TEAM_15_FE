@@ -93,7 +93,7 @@ private fun NicknameSetupScreenContent(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = paddingValues.calculateTopPadding())
-                    .padding(top = 19.dp, start = 20.dp, end = 20.dp),
+                    .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
             ) {
                 // 제목
                 Text(
@@ -121,9 +121,7 @@ private fun NicknameSetupScreenContent(
                     onClick = onCompleteClick,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

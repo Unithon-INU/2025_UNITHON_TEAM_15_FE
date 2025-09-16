@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -110,7 +112,12 @@ private fun SignUpScreenContent(
     val totalOffset = labelHeight + labelSpacing
 
     LanguageAwareScreen {
-        Column(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+        ) {
             HelpJobTopAppBar(
                 title = R.string.sign_up_top_bar_title,
                 onBack = onBack
@@ -118,7 +125,7 @@ private fun SignUpScreenContent(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 19.dp, start = 20.dp, end = 20.dp),
+                    .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
             ) {
                 // 제목
                 Text(
@@ -296,9 +303,7 @@ private fun SignUpScreenContent(
                     onClick = onProceedToNickname,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

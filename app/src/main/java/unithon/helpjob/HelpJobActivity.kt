@@ -72,3 +72,11 @@ fun HelpJobApp() {
         )
     }
 }
+
+/**
+ * Activity 단에서 각 스크린에 패딩값을 위임했으므로 이곳에 각 스크린의 패딩 규칙을 설명
+ * SystemBars 패딩 규칙:
+ * - 모든 Screen: statusBarsPadding() 필수
+ * - 하단바 없는 Screen: navigationBarsPadding() 추가
+ * - 하단바 있는 Screen: navigationBarsPadding() 제외
+ */
