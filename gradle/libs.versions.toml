@@ -24,6 +24,7 @@ coil = "2.7.0"
 # @keep
 compileSdk = "35"
 espressoCore = "3.7.0"
+firebaseBom = "34.3.0"
 hilt = "2.53.1"
 hiltExt = "1.2.0"
 junit = "4.13.2"
@@ -90,6 +91,8 @@ androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", versio
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 hilt-android-core = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }

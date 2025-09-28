@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="unithon.helpjob" />
+                  <option name="mobileSdkAppId" value="1:737675076071:android:bd6870c5174b0a32435d42" />
+                  <option name="projectId" value="checkmate-377fc" />
+                  <option name="projectNumber" value="737675076071" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
