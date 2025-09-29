@@ -9,6 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.data.analytics.AnalyticsService
+import unithon.helpjob.data.analytics.AndroidAnalyticsService
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
 import javax.inject.Inject
@@ -19,6 +21,10 @@ class HelpJobApplication : Application() {
     @Inject
     lateinit var languageRepository: LanguageRepository
 
+    companion object {
+        lateinit var analytics: AnalyticsService
+    }
+
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     override fun onCreate() {
@@ -26,9 +32,10 @@ class HelpJobApplication : Application() {
 
         // UnCaughtExceptionHandler 설정 (최후 방어선)
         setupUncaughtExceptionHandler()
-
         // 저장된 언어 설정이 있으면 적용, 없으면 시스템 언어 그대로
         initializeLanguage()
+
+        analytics = AndroidAnalyticsService()
 
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }

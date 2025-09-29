@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.R
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
@@ -290,6 +291,7 @@ class DocumentViewModel @Inject constructor(
                 Timber.d("Document submitted successfully")
                 _snackbarMessage.emit(R.string.document_submit_success) // 성공 이벤트 발생
 
+                HelpJobApplication.analytics.logEvent("certificate_sent")
             } catch (e: Exception) {
                 Timber.e(e, "Failed to submit document")
 

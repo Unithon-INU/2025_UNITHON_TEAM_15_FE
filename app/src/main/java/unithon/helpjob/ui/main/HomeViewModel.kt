@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.R
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
@@ -231,7 +232,10 @@ class HomeViewModel @Inject constructor(
                         isUpdating = false
                     )
                 }
-
+                HelpJobApplication.analytics.logEvent(
+                    "checklist_updated",
+                    mapOf("step" to stepCheckStep)
+                )
             } catch (e: Exception) {
                 Timber.e(e, "체크리스트 업데이트 실패")
                 _snackbarMessage.emit(R.string.error_update_checklist)  // 추가

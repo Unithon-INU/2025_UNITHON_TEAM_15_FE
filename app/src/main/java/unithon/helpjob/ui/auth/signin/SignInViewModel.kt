@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailNotFoundException
@@ -134,6 +135,7 @@ class SignInViewModel @Inject constructor(
                         shouldGoToHome = isCompleted // 온보딩 완료면 홈으로
                     )
                 }
+                HelpJobApplication.analytics.logEvent("user_login")
             } catch (e: EmailNotFoundException) {
                 // 이메일 관련 에러는 필드 에러로 표시
                 Timber.d(e, "Sign in failed - email not found")
