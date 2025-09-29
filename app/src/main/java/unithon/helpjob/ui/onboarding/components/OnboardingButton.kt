@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.onboarding.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +27,7 @@ import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary300
+import unithon.helpjob.util.noRippleClickable
 
 @Composable
 fun OnboardingButton(
@@ -50,9 +50,7 @@ fun OnboardingButton(
 ){
     Card(
         modifier = modifier
-            .clickable {
-                onClick()
-            },
+            .noRippleClickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = if (enabled) ableBackgroundColor else disableBackgroundColor,
             contentColor = if (enabled) ableColor else disableColor,

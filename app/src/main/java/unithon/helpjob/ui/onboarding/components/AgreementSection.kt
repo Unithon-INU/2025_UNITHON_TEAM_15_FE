@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.onboarding.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Primary500
+import unithon.helpjob.util.noRippleClickable
 
 @Composable
 fun AgreementSection(
@@ -102,7 +102,7 @@ fun AgreementItem(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .clickable { onCheckedChange(!isChecked) },
+                .noRippleClickable { onCheckedChange(!isChecked) },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -124,7 +124,7 @@ fun AgreementItem(
         Text(
             text = stringResource(R.string.onboarding_agreement_setup_more),
             modifier = Modifier
-                .clickable { onViewDetail() }
+                .noRippleClickable { onViewDetail() }
                 .padding(horizontal = 8.dp),
             style = MaterialTheme.typography.labelMedium.copy(
                 color = Color(0xFF70737D),

@@ -2,7 +2,6 @@ package unithon.helpjob.ui.profile
 
 import TopikLevel
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -58,6 +57,7 @@ import unithon.helpjob.ui.theme.body2
 import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.headline2
 import unithon.helpjob.ui.theme.title2
+import unithon.helpjob.util.noRippleClickable
 
 /**
  * 누락된 서류 정보를 담는 데이터 클래스
@@ -369,7 +369,7 @@ private fun UncheckedDocumentItem(
 ) {
     Box(
         modifier = Modifier
-            .clickable { onClick() }
+            .noRippleClickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
             .padding(horizontal = 7.dp, vertical = 15.dp),
         contentAlignment = Alignment.Center

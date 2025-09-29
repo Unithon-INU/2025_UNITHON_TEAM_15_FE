@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.auth.signin
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +37,7 @@ import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary600
+import unithon.helpjob.util.noRippleClickable
 
 @Composable
 fun SignInScreen(
@@ -202,7 +202,7 @@ private fun SignInContent(
                     text = stringResource(id = R.string.sign_in_go_to_sign_up),
                     style = MaterialTheme.typography.titleSmall,
                     color = Primary600,
-                    modifier = Modifier.clickable { onNavigateToSignUp() }
+                    modifier = Modifier.noRippleClickable { onNavigateToSignUp() }
                 )
             }
         }

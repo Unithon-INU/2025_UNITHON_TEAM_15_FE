@@ -2,7 +2,6 @@ package unithon.helpjob.ui.calculator.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +39,7 @@ import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.util.noRippleClickable
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -75,7 +75,7 @@ fun CalculationResultDialog(
                 modifier = Modifier
                     .padding(horizontal = 39.dp)
                     .fillMaxWidth()
-                    .clickable { onDismiss() }
+                    .noRippleClickable { onDismiss() }
             ) {
                 Column(
                     modifier = Modifier
