@@ -303,7 +303,7 @@
     <string name="setting_reset_progress">Reset Progress</string>
     <string name="setting_community_guidelines">Community Guidelines</string>
     <string name="setting_privacy_policy">Privacy Policy</string>
-    <string name="setting_inquiry">Inquiry</string>
+    <string name="setting_open_source_license">Open Source License </string>
     <string name="setting_logout">Logout</string>
     <string name="setting_withdrawal">Account Deletion</string>
     <string name="setting_app_version">App Version 1.0.0</string>

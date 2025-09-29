@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.setting
 
+import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -137,8 +139,12 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_inquiry,
-                    onClick = { /* 아직 구현하지 않음 */ },
+                    title = R.string.setting_open_source_license,
+                    onClick = {
+                        context.startActivity(
+                            Intent(context, OssLicensesMenuActivity::class.java)
+                        )
+                    },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 

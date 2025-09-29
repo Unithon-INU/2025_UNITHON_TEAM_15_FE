@@ -138,7 +138,11 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
 
+    // Google OSS Licenses Plugin
+    implementation(libs.play.services.oss.licenses)
+
 }
+apply(plugin = "com.google.android.gms.oss-licenses-plugin")
 
 //// Compiler Reports 생성 (최적화 분석용)
 //tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

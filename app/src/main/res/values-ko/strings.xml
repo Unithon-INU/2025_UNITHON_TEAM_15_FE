@@ -302,7 +302,7 @@
     <string name="setting_reset_progress">진행 상황 초기화</string>
     <string name="setting_community_guidelines">커뮤니티 가이드라인</string>
     <string name="setting_privacy_policy">개인정보 취급방침</string>
-    <string name="setting_inquiry">문의</string>
+    <string name="setting_open_source_license">오픈소스 라이선스</string>
     <string name="setting_logout">로그아웃</string>
     <string name="setting_withdrawal">탈퇴</string>
     <string name="setting_app_version">앱 버전 1.0.0</string>
