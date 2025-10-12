@@ -263,7 +263,10 @@ private fun SignUpScreenContent(
                     if (!uiState.verificationCodeError) {
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = stringResource(R.string.verification_code_instruction),
+                            text = stringResource(
+                                if (uiState.isCodeVerified) R.string.verification_code_completed
+                                else R.string.verification_code_instruction
+                            ),
                             style = MaterialTheme.typography.labelMedium,
                             color = Primary500,
                         )
