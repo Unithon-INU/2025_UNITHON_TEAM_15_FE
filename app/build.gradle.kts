@@ -44,10 +44,8 @@ android {
         debug{
             val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
             buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
-
             // debug/release 동시 설치 가능하도록 (권장)
             applicationIdSuffix = ".debug"
-
             // 빌드 속도 향상
             isCrunchPngs = false
         }
