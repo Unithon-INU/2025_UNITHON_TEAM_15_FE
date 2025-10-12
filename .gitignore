@@ -17,3 +17,6 @@ local.properties
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 GoogleService-Info.plist
+# AI 도구 컨텍스트 파일
+GEMINI.md
+CLAUDE.md
