@@ -35,18 +35,19 @@ fun PrivacyPolicyScreen(
             onBack = onBack
         )
 
-        htmlContent?.let { html ->
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = { context ->
-                    WebView(context).apply {
-                        settings.javaScriptEnabled = false
-                    }
-                },
-                update = { webView ->
+        AndroidView(
+            modifier = Modifier.weight(1f),
+            factory = { context ->
+                WebView(context).apply {
+                    settings.javaScriptEnabled = false
+                }
+            },
+            update = { webView ->
+                // htmlContent가 null이 아닐 때만 로드
+                htmlContent?.let { html ->
                     webView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
                 }
-            )
-        }
+            }
+        )
     }
 }
