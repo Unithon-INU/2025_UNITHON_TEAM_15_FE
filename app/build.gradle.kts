@@ -141,6 +141,9 @@ dependencies {
     // Google OSS Licenses Plugin
     implementation(libs.play.services.oss.licenses)
 
+    // WebView
+    implementation(libs.androidx.ui.viewbinding)
+
 }
 apply(plugin = "com.google.android.gms.oss-licenses-plugin")
 

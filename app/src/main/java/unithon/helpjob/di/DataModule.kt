@@ -8,8 +8,10 @@ import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.DefaultAuthRepository
 import unithon.helpjob.data.repository.DefaultDocumentRepository
 import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
+import unithon.helpjob.data.repository.DefaultPolicyRepository
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.data.repository.PolicyRepository
 import javax.inject.Singleton
 
 @Module
@@ -33,4 +35,10 @@ abstract class DataModule {
     abstract fun bindDocumentRepository(
         defaultDocumentRepository: DefaultDocumentRepository
     ): DocumentRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindPolicyRepository(
+        defaultPolicyRepository: DefaultPolicyRepository
+    ): PolicyRepository
 }

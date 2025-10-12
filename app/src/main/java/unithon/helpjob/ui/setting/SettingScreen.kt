@@ -48,6 +48,8 @@ import unithon.helpjob.util.noRippleClickable
 fun SettingScreen(
     onBack: () -> Unit,
     onLanguageSettingClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onTermsOfServiceClick: () -> Unit,
     onLogoutClick: () -> Unit,
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
@@ -123,16 +125,16 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(19.dp))
 
                 SettingItem(
-                    title = R.string.setting_community_guidelines,
-                    onClick = { /* 아직 구현하지 않음 */ },
+                    title = R.string.setting_privacy_policy,
+                    onClick = onPrivacyPolicyClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_privacy_policy,
-                    onClick = { /* 아직 구현하지 않음 */ },
+                    title = R.string.setting_terms_of_service,
+                    onClick = onTermsOfServiceClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 

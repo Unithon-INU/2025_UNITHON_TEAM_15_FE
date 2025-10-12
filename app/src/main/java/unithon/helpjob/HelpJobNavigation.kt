@@ -18,6 +18,8 @@ object HelpJobScreens {
     const val STEP_DETAIL_SCREEN = "step_detail"
     const val SETTING_SCREEN = "setting"
     const val LANGUAGE_SETTING_SCREEN = "language_setting"
+    const val PRIVACY_POLICY_SCREEN = "privacy_policy"
+    const val TERMS_OF_SERVICE_SCREEN = "terms_of_service"
 }
 
 /**
@@ -33,6 +35,8 @@ object HelpJobDestinations {
     const val STEP_DETAIL_ROUTE = HelpJobScreens.STEP_DETAIL_SCREEN
     const val SETTING_ROUTE = HelpJobScreens.SETTING_SCREEN
     const val LANGUAGE_SETTING_ROUTE = HelpJobScreens.LANGUAGE_SETTING_SCREEN
+    const val PRIVACY_POLICY_ROUTE = HelpJobScreens.PRIVACY_POLICY_SCREEN
+    const val TERMS_OF_SERVICE_ROUTE = HelpJobScreens.TERMS_OF_SERVICE_SCREEN
 }
 
 /**
@@ -77,11 +81,6 @@ enum class BottomNavDestination(
         fun isBottomTabRoute(route: String?): Boolean {
             return entries.any { it.route == route }
         }
-
-        /**
-         * 하단바 기본 시작 화면
-         */
-        val DEFAULT_TAB = HOME
     }
 }
 
@@ -125,6 +124,14 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToLanguageSetting() {
         navController.navigate(HelpJobDestinations.LANGUAGE_SETTING_ROUTE)
+    }
+
+    fun navigateToPrivacyPolicy() {
+        navController.navigate(HelpJobDestinations.PRIVACY_POLICY_ROUTE)
+    }
+
+    fun navigateToTermsOfService() {
+        navController.navigate(HelpJobDestinations.TERMS_OF_SERVICE_ROUTE)
     }
 
     /**

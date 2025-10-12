@@ -83,4 +83,11 @@ interface HelpJobApiService {
         @Header ("Accept-Language") language: String,
         @Body documentRequest: DocumentRequest
     ) : Response<Unit>
+
+    // 정책 및 약관 관련 API
+    @GET(ApiConstants.PRIVACY_POLICY)
+    suspend fun getPrivacyPolicy(): Response<String>
+
+    @GET(ApiConstants.TERMS_OF_SERVICE)
+    suspend fun getTermsOfService(): Response<String>
 }
