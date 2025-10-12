@@ -242,7 +242,7 @@ fun AuthVerificationCodeTextField(
     onValueChange = onValueChange,
     modifier = modifier,
     placeholderText = placeholderText,
-    keyboardType = KeyboardType.Number,
+    keyboardType = KeyboardType.Text,
     imeAction = imeAction,
     isError = isError,
     errorMessage = errorMessage
