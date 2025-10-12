@@ -302,7 +302,7 @@
     <string name="setting_section_account">Account</string>
     <string name="setting_app_language">App Language</string>
     <string name="setting_reset_progress">Reset Progress</string>
-    <string name="setting_community_guidelines">Community Guidelines</string>
+    <string name="setting_terms_of_service">Terms of Service</string>
     <string name="setting_privacy_policy">Privacy Policy</string>
     <string name="setting_open_source_license">Open Source License </string>
     <string name="setting_logout">Logout</string>

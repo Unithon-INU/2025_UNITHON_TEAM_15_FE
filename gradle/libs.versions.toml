@@ -87,6 +87,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 androidx-tracing-ktx = { group = "androidx.tracing", name="tracing-ktx", version.ref = "androidxTracing" }
+androidx-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 androidx-window-manager = { module = "androidx.window:window", version.ref = "androidxWindowManager" }
 androidx-work-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

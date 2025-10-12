@@ -1,5 +1,6 @@
 package unithon.helpjob.data.network
 
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -83,4 +84,11 @@ interface HelpJobApiService {
         @Header ("Accept-Language") language: String,
         @Body documentRequest: DocumentRequest
     ) : Response<Unit>
+
+    // 정책 및 약관 관련 API
+    @GET(ApiConstants.PRIVACY_POLICY)
+    suspend fun getPrivacyPolicy(): Response<ResponseBody>
+
+    @GET(ApiConstants.TERMS_OF_SERVICE)
+    suspend fun getTermsOfService(): Response<ResponseBody>
 }

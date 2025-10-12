@@ -16,4 +16,6 @@ object ApiConstants {
     const val GET_TIPS = "api/employment/tips"
     const val RESET_PROGRESS = "api/employment/progress"
     const val POST_CERTIFICATION = "api/cert"
+    const val PRIVACY_POLICY = "policy/privacy"
+    const val TERMS_OF_SERVICE = "policy/terms"
 }
