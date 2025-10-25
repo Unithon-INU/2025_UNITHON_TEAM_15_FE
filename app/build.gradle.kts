@@ -20,6 +20,15 @@ android {
     namespace = "unithon.helpjob"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(localProperties.getProperty("KEYSTORE_FILE") ?: "helpjob-release.keystore")
+            storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
+            keyAlias = localProperties.getProperty("KEY_ALIAS")
+            keyPassword = localProperties.getProperty("KEY_PASSWORD")
+        }
+    }
+
     defaultConfig {
         applicationId = "unithon.helpjob"
         minSdk = libs.versions.minSdk.get().toInt()
@@ -50,6 +59,8 @@ android {
             isCrunchPngs = false
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
+            // 서버에서 대부분 중요한 개인정보 다루므로 프론트 계열에서 난독화 하지 않았음(관리 더 용이)
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

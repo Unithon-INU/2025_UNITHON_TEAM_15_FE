@@ -2,6 +2,13 @@
 # You can control the set of applied configuration files using the
 # proguardFiles setting in build.gradle.
 #
+# 디버깅을 위한 라인 번호 유지 (크래시 로그용)
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# Firebase 크래시 리포팅
+-keepattributes *Annotation*
+-keep public class * extends java.lang.Exception
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
@@ -19,3 +26,4 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
