@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(localProperties.getProperty("KEYSTORE_FILE") ?: "helpjob-release.keystore.jks")
+            storeFile = file(localProperties.getProperty("KEYSTORE_FILE") ?: "../helpjob-release.keystore.jks")
             storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
             keyAlias = localProperties.getProperty("KEY_ALIAS")
             keyPassword = localProperties.getProperty("KEY_PASSWORD")

@@ -132,10 +132,10 @@
     <!-- English plural forms (not used in Korean but needed for compilation) -->
     <string name="calculator_hours_format_singular">%d시간</string>
     <string name="calculator_hours_format_plural">%d시간</string>
-    <string name="calculator_hours_minutes_format_singular_singular">%d시간 %d분</string>
-    <string name="calculator_hours_minutes_format_singular_plural">%d시간 %d분</string>
-    <string name="calculator_hours_minutes_format_plural_singular">%d시간 %d분</string>
-    <string name="calculator_hours_minutes_format_plural_plural">%d시간 %d분</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%1$d시간 %2$d분</string>
     <string name="calculator_days_format_singular">%d일</string>
     <string name="calculator_days_format_plural">%d일</string>
 
