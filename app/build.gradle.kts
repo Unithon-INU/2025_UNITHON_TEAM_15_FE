@@ -69,6 +69,10 @@ android {
             val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
             buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
             isCrunchPngs = true
+
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
         }
     }
     compileOptions {
