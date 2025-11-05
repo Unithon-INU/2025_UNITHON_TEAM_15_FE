@@ -1,8 +1,11 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
@@ -16,13 +19,89 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+            // optIn 설정 추가
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-opt-in=kotlin.RequiresOptIn",
+                    "-opt-in=kotlin.Experimental"
+                )
+            )
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
+                implementation(libs.compose.ui)
+                implementation(libs.compose.components.resources)
+                implementation(libs.compose.components.uiToolingPreview)
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                // Android 전용 의존성
+                implementation(libs.androidx.annotation)
+                implementation(libs.kotlinx.coroutines.android)
+                implementation(libs.timber)
+                implementation(libs.androidx.lifecycle.runtimeCompose)
+                implementation(libs.androidx.lifecycle.viewModelCompose)
+                implementation(libs.hilt.android.core)
+                implementation(libs.androidx.hilt.navigation.compose)
+
+                // Retrofit & Network
+                implementation(libs.retrofit.core)
+                implementation(libs.okhttp.core)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.retrofit.kotlinx.serialization)
+                implementation(libs.okhttp.logging)
+
+                // DataStore
+                implementation(libs.androidx.dataStore.core)
+                implementation(libs.androidx.dataStore.preferences)
+
+                // Jetpack Compose (Android)
+                implementation(libs.androidx.appcompat)
+                implementation(libs.androidx.activity.compose)
+                val composeBom = project.dependencies.platform(libs.androidx.compose.bom)
+                implementation(composeBom)
+                implementation(libs.androidx.compose.foundation.core)
+                implementation(libs.androidx.compose.foundation.layout)
+                implementation(libs.androidx.compose.animation)
+                implementation(libs.androidx.compose.material3)
+                implementation(libs.androidx.compose.material.iconsExtended)
+                implementation(libs.androidx.compose.ui.tooling.preview)
+                implementation(libs.androidx.navigation.compose)
+                implementation(libs.accompanist.appcompat.theme)
+                implementation(libs.accompanist.swiperefresh)
+
+                // Firebase
+                implementation(project.dependencies.platform(libs.firebase.bom))
+                implementation(libs.firebase.analytics)
+                implementation(libs.play.services.oss.licenses)
+                implementation(libs.androidx.ui.viewbinding)
+            }
+        }
+    }
+}
+
 android {
     namespace = "unithon.helpjob"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     signingConfigs {
         create("release") {
-            storeFile = file(localProperties.getProperty("KEYSTORE_FILE") ?: "../helpjob-release.keystore.jks")
+            storeFile = file(
+                localProperties.getProperty("KEYSTORE_FILE") ?: "../helpjob-release.keystore.jks"
+            )
             storePassword = localProperties.getProperty("KEYSTORE_PASSWORD")
             keyAlias = localProperties.getProperty("KEY_ALIAS")
             keyPassword = localProperties.getProperty("KEY_PASSWORD")
@@ -50,7 +129,7 @@ android {
     }
 
     buildTypes {
-        debug{
+        debug {
             val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
             buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
             // debug/release 동시 설치 가능하도록 (권장)
@@ -79,95 +158,35 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
-    // kotlin 실험적 API 사용 시 경고 제거
-    kotlin {
-        compilerOptions {
-            optIn.addAll(
-                "kotlin.RequiresOptIn",
-                "kotlin.Experimental"
-            )
-        }
-    }
+
     androidResources {
         generateLocaleConfig = true
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("src/androidMain/kotlin")
+            res.srcDirs("src/androidMain/res")
+            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+        }
     }
 }
 
 dependencies {
+    add("kspAndroid", libs.hilt.compiler)
 
-    // App dependencies
-    implementation(libs.androidx.annotation)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.timber)
-
-    // Architecture Components
-//    implementation(libs.room.runtime)
-//    implementation(libs.room.ktx)
-//    ksp(libs.room.compiler)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-
-    // Hilt
-    implementation(libs.hilt.android.core)
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
-
-    // Retrofit
-    implementation(libs.retrofit.core)
-    implementation(libs.okhttp.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.retrofit.kotlinx.serialization)
-    implementation(libs.okhttp.logging)
-
-    // DataStore
-    implementation(libs.androidx.dataStore.core)
-    implementation(libs.androidx.dataStore.preferences)
-
-    // 다국어 지원
-    implementation(libs.androidx.appcompat)
-
-    // Jetpack Compose
-    val composeBom = platform(libs.androidx.compose.bom)
-
-    implementation(libs.androidx.activity.compose)
-    implementation(composeBom)
-    implementation(libs.androidx.compose.foundation.core)
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.accompanist.appcompat.theme)
-    implementation(libs.accompanist.swiperefresh)
-
-    debugImplementation(composeBom)
+    // Debug
     debugImplementation(libs.androidx.compose.ui.tooling.core)
 
-    // 테스트 의존성 추가
+    // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    // Firebase console 연동
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-
-    // Google OSS Licenses Plugin
-    implementation(libs.play.services.oss.licenses)
-
-    // WebView
-    implementation(libs.androidx.ui.viewbinding)
-
 }
 apply(plugin = "com.google.android.gms.oss-licenses-plugin")
 
