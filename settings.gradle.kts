@@ -14,5 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "HelpJob"
-include(":app")
+//include(":app")
 include(":composeApp")
