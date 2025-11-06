@@ -1,6 +1,5 @@
 package unithon.helpjob
 
-import unithon.helpjob.ui.setting.PrivacyPolicyScreen
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.SnackbarHostState
@@ -24,6 +23,7 @@ import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 import unithon.helpjob.ui.profile.ProfileScreen
 import unithon.helpjob.ui.setting.LanguageSettingScreen
+import unithon.helpjob.ui.setting.PrivacyPolicyScreen
 import unithon.helpjob.ui.setting.SettingScreen
 import unithon.helpjob.ui.setting.TermsOfServiceScreen
 import unithon.helpjob.ui.splash.SplashScreen

@@ -6,11 +6,8 @@ import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 import unithon.helpjob.data.network.HelpJobApiService
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class DefaultEmploymentCheckRepository @Inject constructor(
+class DefaultEmploymentCheckRepository(
     private val apiService: HelpJobApiService,
     private val languageRepository: LanguageRepository,
 ): EmploymentCheckRepository {

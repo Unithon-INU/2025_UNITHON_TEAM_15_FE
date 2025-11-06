@@ -2,19 +2,15 @@ package unithon.helpjob.data.network
 
 import android.content.Context
 import androidx.datastore.preferences.core.stringPreferencesKey
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import unithon.helpjob.data.repository.dataStore
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class AuthInterceptor @Inject constructor(
-    @ApplicationContext private val context: Context
+class AuthInterceptor(
+    private val context: Context
 ) : Interceptor {
 
     private val tokenKey = stringPreferencesKey("auth_token")

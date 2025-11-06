@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
@@ -21,15 +20,12 @@ import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TokenResponse
 import unithon.helpjob.data.network.HelpJobApiService
-import javax.inject.Inject
-import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
 
-@Singleton
-class DefaultAuthRepository @Inject constructor(
+class DefaultAuthRepository(
     private val apiService: HelpJobApiService,
-    @ApplicationContext private val context: Context
+    private val context: Context
 ) : AuthRepository {
 
     private val tokenKey = stringPreferencesKey("auth_token")

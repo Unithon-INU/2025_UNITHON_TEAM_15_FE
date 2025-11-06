@@ -3,23 +3,20 @@ package unithon.helpjob
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
-import dagger.hilt.android.HiltAndroidApp
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import unithon.helpjob.data.analytics.AnalyticsService
 import unithon.helpjob.data.analytics.AndroidAnalyticsService
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
-import javax.inject.Inject
 
-@HiltAndroidApp
 class HelpJobApplication : Application() {
-
-    @Inject
-    lateinit var languageRepository: LanguageRepository
+    private val languageRepository: LanguageRepository by inject()
 
     companion object {
         lateinit var analytics: AnalyticsService
@@ -29,6 +26,9 @@ class HelpJobApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Koin 초기화 (가장 먼저!)
+        unithon.helpjob.di.initKoin(this)
 
         // UnCaughtExceptionHandler 설정 (최후 방어선)
         setupUncaughtExceptionHandler()

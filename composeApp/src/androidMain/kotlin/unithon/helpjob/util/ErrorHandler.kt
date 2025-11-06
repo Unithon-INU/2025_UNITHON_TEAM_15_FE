@@ -2,7 +2,13 @@ package unithon.helpjob.util
 
 import timber.log.Timber
 import unithon.helpjob.R
-import unithon.helpjob.data.repository.*
+import unithon.helpjob.data.repository.EmailAlreadyInUseException
+import unithon.helpjob.data.repository.EmailCodeExpiredException
+import unithon.helpjob.data.repository.EmailNotFoundException
+import unithon.helpjob.data.repository.EmailVerificationFailedException
+import unithon.helpjob.data.repository.NicknameDuplicateException
+import unithon.helpjob.data.repository.UnauthorizedException
+import unithon.helpjob.data.repository.WrongPasswordException
 
 object ErrorHandler {
 

@@ -16,7 +16,18 @@ import retrofit2.Retrofit
 import unithon.helpjob.BuildConfig
 import unithon.helpjob.data.network.AuthInterceptor
 import unithon.helpjob.data.network.HelpJobApiService
-import unithon.helpjob.data.repository.*
+import unithon.helpjob.data.repository.AppLocaleManager
+import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.DefaultAuthRepository
+import unithon.helpjob.data.repository.DefaultDocumentRepository
+import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
+import unithon.helpjob.data.repository.DefaultPolicyRepository
+import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.data.repository.PolicyRepository
+import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.data.repository.dataStore
 import unithon.helpjob.ui.auth.nickname.NicknameSetupViewModel
 import unithon.helpjob.ui.auth.signin.SignInViewModel
 import unithon.helpjob.ui.auth.signup.SignUpViewModel
@@ -27,7 +38,6 @@ import unithon.helpjob.ui.profile.ProfileViewModel
 import unithon.helpjob.ui.setting.LanguageSettingViewModel
 import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.TermsOfServiceViewModel
-
 import java.util.concurrent.TimeUnit
 
 /**
@@ -44,7 +54,7 @@ val dataModule = module {
     single { AppLocaleManager(androidContext()) }
 
     // LanguageRepository (단일 구현체)
-    single { LanguageRepository(androidContext(), get()) }
+    single { LanguageRepository(get()) }
 
     // SignUpDataRepository (단일 구현체)
     single { SignUpDataRepository() }

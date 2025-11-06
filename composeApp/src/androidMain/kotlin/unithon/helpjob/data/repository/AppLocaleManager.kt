@@ -16,16 +16,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.os.LocaleListCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import java.util.Locale
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class AppLocaleManager @Inject constructor(
-    @ApplicationContext private val context: Context
+
+class AppLocaleManager(
+    private val context: Context
 ) {
 
     /**
@@ -93,7 +90,7 @@ class AppLocaleManager @Inject constructor(
     /**
      * 현재 설정된 언어 코드 가져오기
      */
-    fun getCurrentLanguageCode(): String {
+    private fun getCurrentLanguageCode(): String {
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 // Android 13+: LocaleManager 우선
