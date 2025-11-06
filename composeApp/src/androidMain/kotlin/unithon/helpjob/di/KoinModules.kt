@@ -31,13 +31,16 @@ import unithon.helpjob.data.repository.dataStore
 import unithon.helpjob.ui.auth.nickname.NicknameSetupViewModel
 import unithon.helpjob.ui.auth.signin.SignInViewModel
 import unithon.helpjob.ui.auth.signup.SignUpViewModel
+import unithon.helpjob.ui.calculator.CalculatorViewModel
 import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.onboarding.OnboardingViewModel
 import unithon.helpjob.ui.profile.ProfileViewModel
 import unithon.helpjob.ui.setting.LanguageSettingViewModel
 import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
+import unithon.helpjob.ui.setting.SettingViewModel
 import unithon.helpjob.ui.setting.TermsOfServiceViewModel
+import unithon.helpjob.ui.splash.SplashViewModel
 import java.util.concurrent.TimeUnit
 
 /**
@@ -109,16 +112,19 @@ val networkModule = module {
 
 // 🔹 ViewModel 모듈
 val viewModelModule = module {
-    viewModel { HomeViewModel(get()) }
-    viewModel { DocumentViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    viewModel { NicknameSetupViewModel(get(), get()) }
     viewModel { SignInViewModel(get()) }
     viewModel { SignUpViewModel(get(), get()) }
-    viewModel { NicknameSetupViewModel(get(), get()) }
+    viewModel { CalculatorViewModel() }
+    viewModel { DocumentViewModel(get()) }
+    viewModel { HomeViewModel(get()) }
     viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get()) }
     viewModel { LanguageSettingViewModel(get()) }
-    viewModel { TermsOfServiceViewModel(get()) }
     viewModel { PrivacyPolicyViewModel(get()) }
+    viewModel { SettingViewModel(get(), get()) }
+    viewModel { TermsOfServiceViewModel(get()) }
+    viewModel { SplashViewModel(get()) }
 }
 
 /**
