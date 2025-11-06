@@ -18,11 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
 import unithon.helpjob.ui.components.HelpJobBottomBar
 import unithon.helpjob.ui.theme.HelpJobTheme
 
-@AndroidEntryPoint
 class HelpJobActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

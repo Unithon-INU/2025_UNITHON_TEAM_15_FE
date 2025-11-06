@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.application)
     alias(libs.plugins.composeMultiplatform)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
@@ -54,10 +52,6 @@ kotlin {
                 implementation(libs.timber)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.androidx.lifecycle.viewModelCompose)
-
-                // Hilt
-                implementation(libs.hilt.android.core)
-                implementation(libs.androidx.hilt.navigation.compose)
 
                 // Koin 추가 (공존 시작)
                 implementation(libs.koin.core)
@@ -186,8 +180,6 @@ android {
 }
 
 dependencies {
-    add("kspAndroid", libs.hilt.compiler)
-
     // Debug
     debugImplementation(libs.androidx.compose.ui.tooling.core)
 
