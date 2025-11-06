@@ -54,8 +54,15 @@ kotlin {
                 implementation(libs.timber)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.androidx.lifecycle.viewModelCompose)
+
+                // Hilt
                 implementation(libs.hilt.android.core)
                 implementation(libs.androidx.hilt.navigation.compose)
+
+                // Koin 추가 (공존 시작)
+                implementation(libs.koin.core)
+                implementation(libs.koin.android)
+                implementation(libs.koin.androidx.compose)
 
                 // Retrofit & Network
                 implementation(libs.retrofit.core)
