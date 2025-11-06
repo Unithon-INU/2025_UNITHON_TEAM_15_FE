@@ -17,9 +17,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -36,7 +36,7 @@ import unithon.helpjob.ui.document.page.WorkplaceInfo4Screen
 @Composable
 fun DocumentScreen(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    viewModel: DocumentViewModel = hiltViewModel()
+    viewModel: DocumentViewModel = koinViewModel()
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isSubmitting by viewModel.isSubmitting.collectAsStateWithLifecycle()

@@ -26,8 +26,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.calculator.components.CalculationResult
@@ -43,7 +43,7 @@ import unithon.helpjob.ui.theme.Primary400
 @Composable
 fun CalculatorScreen(
     modifier: Modifier = Modifier,
-    viewModel: CalculatorViewModel = hiltViewModel()
+    viewModel: CalculatorViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

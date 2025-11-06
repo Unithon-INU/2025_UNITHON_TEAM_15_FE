@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -54,7 +54,7 @@ fun SettingScreen(
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
-    settingViewModel: SettingViewModel = hiltViewModel()
+    settingViewModel: SettingViewModel = koinViewModel()
 ) {
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }

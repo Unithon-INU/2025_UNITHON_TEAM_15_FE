@@ -11,15 +11,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 
 @Composable
 fun PrivacyPolicyScreen(
     onBack: () -> Unit,
-    viewModel: PrivacyPolicyViewModel = hiltViewModel()
+    viewModel: PrivacyPolicyViewModel = koinViewModel()
 ) {
     val htmlContent by viewModel.htmlContent.collectAsStateWithLifecycle()
 

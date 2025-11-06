@@ -62,7 +62,8 @@ kotlin {
                 // Koin 추가 (공존 시작)
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
-                implementation(libs.koin.androidx.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
 
                 // Retrofit & Network
                 implementation(libs.retrofit.core)

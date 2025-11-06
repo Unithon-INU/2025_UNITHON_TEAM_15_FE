@@ -39,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.repository.LanguageAwareScreen
@@ -75,7 +76,7 @@ fun ProfileScreen(
     onNavigateToHomeWithStep: (String) -> Unit = {},
     homeViewModel: HomeViewModel,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val homeUiState by homeViewModel.uiState.collectAsState()

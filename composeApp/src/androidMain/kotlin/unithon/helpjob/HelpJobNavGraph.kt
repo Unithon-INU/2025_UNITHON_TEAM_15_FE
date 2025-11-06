@@ -6,11 +6,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.koin.compose.viewmodel.sharedKoinViewModel
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
@@ -97,11 +97,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) { backStackEntry ->
-            // HOME 화면의 ViewModel을 가져와서 공유 (기존과 동일)
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(BottomNavDestination.HOME.route)
-            }
-            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+            val homeViewModel = backStackEntry.sharedKoinViewModel<HomeViewModel>(navController)
 
             StepDetailScreen(
                 onBackClick = {
@@ -121,13 +117,9 @@ fun HelpJobNavGraph(
                 snackbarHostState = snackbarHostState
             )
         }
-
+        // HOME 화면의 ViewModel을 가져와서 공유 (StepDetailScreen과 동일한 패턴)
         composable(route = BottomNavDestination.PROFILE.route) { backStackEntry ->
-            // HOME 화면의 ViewModel을 가져와서 공유 (StepDetailScreen과 동일한 패턴)
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(BottomNavDestination.HOME.route)
-            }
-            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+            val homeViewModel = backStackEntry.sharedKoinViewModel<HomeViewModel>(navController)
 
             ProfileScreen(
                 onNavigateToSettings = navActions::navigateToSettings,
@@ -150,11 +142,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.SETTING_ROUTE) { backStackEntry ->
-            // ✅ ProfileScreen과 동일한 패턴: HOME 화면의 ViewModel 공유
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(BottomNavDestination.HOME.route)
-            }
-            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+            val homeViewModel = backStackEntry.sharedKoinViewModel<HomeViewModel>(navController)
 
             SettingScreen(
                 onBack = { navController.popBackStack() },
@@ -169,11 +157,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) { backStackEntry ->
-            // ✅ SettingScreen과 동일한 패턴: HOME 화면의 ViewModel 공유
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry(BottomNavDestination.HOME.route)
-            }
-            val homeViewModel: HomeViewModel = hiltViewModel(parentEntry)
+            val homeViewModel = backStackEntry.sharedKoinViewModel<HomeViewModel>(navController)
 
             LanguageSettingScreen(
                 onBack = { navController.popBackStack() },
