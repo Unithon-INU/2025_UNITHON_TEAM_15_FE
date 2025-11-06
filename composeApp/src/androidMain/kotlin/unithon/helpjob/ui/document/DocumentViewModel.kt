@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.document
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,10 +20,8 @@ import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.ui.base.BaseViewModel
 import java.util.Locale
-import javax.inject.Inject
 
-@HiltViewModel
-class DocumentViewModel @Inject constructor(
+class DocumentViewModel(
     private val documentRepository: DocumentRepository
 ): BaseViewModel() {
 

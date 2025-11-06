@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.splash
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,10 +9,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class SplashViewModel @Inject constructor(
+class SplashViewModel(
     private val authRepository: AuthRepository,
 ) : BaseViewModel() {
 
@@ -74,7 +71,7 @@ data class SplashUiState(
 )
 
 sealed class NavigationTarget {
-    object Login : NavigationTarget()
-    object Onboarding : NavigationTarget()
-    object Main : NavigationTarget()
+    data object Login : NavigationTarget()
+    data object Onboarding : NavigationTarget()
+    data object Main : NavigationTarget()
 }

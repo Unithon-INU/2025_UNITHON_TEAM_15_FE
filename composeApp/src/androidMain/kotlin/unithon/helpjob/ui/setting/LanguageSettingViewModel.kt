@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.setting
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,10 +12,8 @@ import unithon.helpjob.R
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class LanguageSettingViewModel @Inject constructor(
+class LanguageSettingViewModel(
     private val languageRepository: LanguageRepository
 ) : BaseViewModel() {
 

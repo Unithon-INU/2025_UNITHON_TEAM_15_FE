@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.auth.signup
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,12 +17,10 @@ import unithon.helpjob.data.repository.EmailVerificationFailedException
 import unithon.helpjob.data.repository.SignUpData
 import unithon.helpjob.data.repository.SignUpDataRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class SignUpViewModel @Inject constructor(
+class SignUpViewModel(
     private val authRepository: AuthRepository,
-    private val signUpDataRepository: SignUpDataRepository // 🆕 추가
+    private val signUpDataRepository: SignUpDataRepository
 ) : BaseViewModel() {
 
     data class SignUpUiState(

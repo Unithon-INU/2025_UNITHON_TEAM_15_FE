@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.setting
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
@@ -10,10 +9,8 @@ import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class SettingViewModel @Inject constructor(
+class SettingViewModel(
     private val employmentCheckRepository: EmploymentCheckRepository,
     private val authRepository: AuthRepository
 ) : BaseViewModel() {

@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.profile
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +11,6 @@ import timber.log.Timber
 import unithon.helpjob.R
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
 data class ProfileUiState(
     val visaType: String? = null,
@@ -21,8 +19,7 @@ data class ProfileUiState(
     val isLoading: Boolean = false
 )
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileViewModel(
     private val authRepository: AuthRepository
 ) : BaseViewModel() {
 

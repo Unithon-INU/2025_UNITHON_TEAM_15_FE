@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.calculator
 
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,10 +7,8 @@ import kotlinx.coroutines.flow.update
 import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.ui.calculator.components.CalculationResult
-import javax.inject.Inject
 
-@HiltViewModel
-class CalculatorViewModel @Inject constructor() : BaseViewModel() {
+class CalculatorViewModel: BaseViewModel() {
 
     data class CalculatorUiState(
         val wage: String = "",

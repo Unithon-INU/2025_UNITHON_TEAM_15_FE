@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.main
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +18,8 @@ import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val employmentCheckRepository: EmploymentCheckRepository
 ) : BaseViewModel() {
 

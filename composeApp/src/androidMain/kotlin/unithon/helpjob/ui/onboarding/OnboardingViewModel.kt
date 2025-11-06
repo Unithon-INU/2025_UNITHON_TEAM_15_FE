@@ -2,7 +2,6 @@ package unithon.helpjob.ui.onboarding
 
 import TopikLevel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,10 +17,8 @@ import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.data.repository.UnauthorizedException
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class OnboardingViewModel @Inject constructor(
+class OnboardingViewModel(
     private val authRepository: AuthRepository,
     private val languageRepository: LanguageRepository
 ) : BaseViewModel() {

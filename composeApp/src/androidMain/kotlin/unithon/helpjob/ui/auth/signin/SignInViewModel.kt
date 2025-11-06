@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.auth.signin
 
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +15,8 @@ import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailNotFoundException
 import unithon.helpjob.data.repository.WrongPasswordException
 import unithon.helpjob.ui.base.BaseViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class SignInViewModel @Inject constructor(
+class SignInViewModel(
     private val authRepository: AuthRepository
 ) : BaseViewModel() {
 
