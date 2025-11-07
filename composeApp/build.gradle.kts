@@ -66,6 +66,13 @@ kotlin {
                 implementation(libs.retrofit.kotlinx.serialization)
                 implementation(libs.okhttp.logging)
 
+                // Ktor & Network
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.okhttp)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.logging)
+
                 // DataStore
                 implementation(libs.androidx.dataStore.core)
                 implementation(libs.androidx.dataStore.preferences)
