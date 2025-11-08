@@ -3,18 +3,26 @@ package unithon.helpjob.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.ExperimentalSerializationApi
+import androidx.datastore.preferences.core.stringPreferencesKey
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
+import io.ktor.http.encodedPath
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
 import unithon.helpjob.BuildConfig
-import unithon.helpjob.data.network.AuthInterceptor
 import unithon.helpjob.data.network.HelpJobApiService
 import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.AuthRepository
@@ -41,7 +49,6 @@ import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.SettingViewModel
 import unithon.helpjob.ui.setting.TermsOfServiceViewModel
 import unithon.helpjob.ui.splash.SplashViewModel
-import java.util.concurrent.TimeUnit
 
 /**
  * Koin DI 모듈
@@ -71,7 +78,7 @@ val dataModule = module {
 
 // 🔹 Network 계층 모듈
 val networkModule = module {
-    // Json
+    // Json (그대로 유지)
     single {
         Json {
             ignoreUnknownKeys = true
@@ -79,35 +86,58 @@ val networkModule = module {
         }
     }
 
-    // AuthInterceptor
-    single { AuthInterceptor(get()) }
-
-    // OkHttpClient
+    // HttpClient (Ktor)
     single {
-        OkHttpClient.Builder()
-            .addInterceptor(get<AuthInterceptor>())
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-                else HttpLoggingInterceptor.Level.NONE
-            })
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
+        HttpClient(OkHttp) {
+            // Base URL 설정
+            defaultRequest {
+                url(BuildConfig.API_BASE_URL)
+            }
+
+            // JSON 직렬화
+            install(ContentNegotiation) {
+                json(get<Json>())
+            }
+
+            // 로깅
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = if (BuildConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
+            }
+
+            // HttpSend 플러그인 설치 (설정 없이)
+            install(HttpSend)
+        }.apply {
+            // HttpClient 생성 후 intercept 설정
+            plugin(HttpSend).intercept { request ->
+                val noAuthPaths = listOf(
+                    "api/member/sign-in",
+                    "api/member/sign-up",
+                    "api/email/send",
+                    "api/email/verify"
+                )
+
+                val needsAuth = noAuthPaths.none {
+                    request.url.encodedPath.contains(it)
+                }
+
+                if (needsAuth) {
+                    val token = androidContext().dataStore.data
+                        .map { it[stringPreferencesKey("auth_token")] }
+                        .firstOrNull()
+
+                    if (!token.isNullOrBlank()) {
+                        request.headers.append("Authorization", "Bearer $token")
+                    }
+                }
+
+                execute(request)
+            }
+        }
     }
 
-    // Retrofit
-    @OptIn(ExperimentalSerializationApi::class)
-    single {
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
-            .client(get())
-            .addConverterFactory(get<Json>().asConverterFactory("application/json".toMediaType()))
-            .build()
-    }
-
-    // HelpJobApiService
-    single { get<Retrofit>().create(HelpJobApiService::class.java) }
+    // HelpJobApiService (Ktor 구현체)
+    single { HelpJobApiService(get()) }
 }
 
 // 🔹 ViewModel 모듈
