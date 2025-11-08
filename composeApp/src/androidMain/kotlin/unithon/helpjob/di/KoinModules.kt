@@ -169,9 +169,12 @@ val networkModule = module {
                         "409-2" -> throw NicknameDuplicateException()
                         "401-6" -> throw EmailVerificationFailedException()
                         "401-7" -> throw EmailCodeExpiredException()
-                        else -> throw Exception(
-                            errorResponse?.message ?: "알 수 없는 오류가 발생했습니다."
-                        )
+                        else -> {
+                            val status = clientException.response.status.value
+                            val message = errorResponse?.message
+                                ?: "알 수 없는 오류 (HTTP $status)"
+                            throw Exception(message, clientException)
+                        }
                     }
                 }
             }
