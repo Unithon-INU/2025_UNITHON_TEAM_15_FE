@@ -28,6 +28,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import unithon.helpjob.BuildConfig
 import unithon.helpjob.data.model.response.ErrorResponse
+import unithon.helpjob.data.network.ApiConstants
 import unithon.helpjob.data.network.HelpJobApiService
 import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.AuthRepository
@@ -134,10 +135,12 @@ val networkModule = module {
 
                     sendWithoutRequest { request ->
                         val noAuthEndpoints = listOf(
-                            "/api/member/sign-in",
-                            "/api/member/sign-up",
-                            "/api/email/send",
-                            "/api/email/verify"
+                            ApiConstants.SIGN_IN,
+                            ApiConstants.SIGN_UP,
+                            ApiConstants.EMAIL_SEND,
+                            ApiConstants.EMAIL_VERIFY,
+                            ApiConstants.PRIVACY_POLICY,
+                            ApiConstants.TERMS_OF_SERVICE
                         )
 
                         noAuthEndpoints.none { request.url.encodedPath.contains(it) }
