@@ -12,14 +12,8 @@ class DefaultEmploymentCheckRepository(
     private val languageRepository: LanguageRepository,
 ): EmploymentCheckRepository {
     override suspend fun updateChecklist(request: UpdateEmploymentCheckRequest): UpdateEmploymentCheckResponse {
-        val response = apiService.updateChecklist(request)
-
-        if (response.isSuccessful){
-            response.body()?.let { progress ->
-                return progress
-            }
-        }
-        throw Exception(response.errorBody()?.string() ?: "체크리스트 업데이트 실패")
+        return apiService.updateChecklist(request)
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
     override suspend fun getHomeInfo(): HomeInfoResponse {
@@ -27,42 +21,25 @@ class DefaultEmploymentCheckRepository(
     }
 
     override suspend fun getHomeInfo(language: String): HomeInfoResponse {
-        val response = apiService.getHomeInfo(language)
-
-        if (response.isSuccessful){
-            response.body()?.let { homeInfoResponse ->
-                return homeInfoResponse
-            }
-        }
-        throw Exception(response.errorBody()?.string() ?: "홈 정보 조회 실패")
+        return apiService.getHomeInfo(language)
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
-    override suspend fun getTips(language: String,checkStep: Steps) : List<TipResponseItem> {
-        val response = apiService.getTips(language = language,checkStep.apiStep)
-
-        if (response.isSuccessful){
-            response.body()?.let { tipResponse ->
-                return tipResponse
-            }
-        }
-        throw Exception(response.errorBody()?.string() ?: "팁 정보 조회 실패")
+    override suspend fun getTips(language: String, checkStep: Steps): List<TipResponseItem> {
+        return apiService.getTips(language = language, checkStep.apiStep)
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
-    override suspend fun getTips(checkStep: Steps) : List<TipResponseItem> {
-        val response = apiService.getTips(language = languageRepository.getCurrentLanguage().code,checkStep.apiStep)
-
-        if (response.isSuccessful){
-            response.body()?.let { tipResponse ->
-                return tipResponse
-            }
-        }
-        throw Exception(response.errorBody()?.string() ?: "팁 정보 조회 실패")
+    override suspend fun getTips(checkStep: Steps): List<TipResponseItem> {
+        return apiService.getTips(
+            language = languageRepository.getCurrentLanguage().code,
+            checkStep.apiStep
+        )
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
     override suspend fun resetProgress() {
-        val response = apiService.resetProgress()
-        if (!response.isSuccessful) {
-            throw Exception("초기화 실패")
-        }
+        apiService.resetProgress()
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 }

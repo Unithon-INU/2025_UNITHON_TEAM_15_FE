@@ -8,11 +8,10 @@ class DefaultDocumentRepository(
     private val languageRepository: LanguageRepository
 ) : DocumentRepository {
     override suspend fun postCertification(documentRequest: DocumentRequest) {
-        val response = apiService.postCertification(language = languageRepository.getCurrentLanguage().code,documentRequest = documentRequest)
-
-        if (response.isSuccessful) {
-            return
-        }
-        throw Exception(response.errorBody()?.string() ?: "서류 작성 실패")
+        apiService.postCertification(
+            language = languageRepository.getCurrentLanguage().code,
+            documentRequest = documentRequest
+        )
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 }
