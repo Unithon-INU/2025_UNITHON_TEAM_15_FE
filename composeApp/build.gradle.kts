@@ -53,18 +53,11 @@ kotlin {
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.androidx.lifecycle.viewModelCompose)
 
-                // Koin 추가 (공존 시작)
+                // Koin
                 implementation(libs.koin.core)
                 implementation(libs.koin.android)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.compose.viewmodel.navigation)
-
-                // Retrofit & Network
-                implementation(libs.retrofit.core)
-                implementation(libs.okhttp.core)
-                implementation(libs.kotlinx.serialization.json)
-                implementation(libs.retrofit.kotlinx.serialization)
-                implementation(libs.okhttp.logging)
 
                 // Ktor & Network
                 implementation(libs.ktor.client.core)
