@@ -5,15 +5,19 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.plugin
 import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.firstOrNull
@@ -23,6 +27,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import unithon.helpjob.BuildConfig
+import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.network.HelpJobApiService
 import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.AuthRepository
@@ -31,10 +36,16 @@ import unithon.helpjob.data.repository.DefaultDocumentRepository
 import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
 import unithon.helpjob.data.repository.DefaultPolicyRepository
 import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.data.repository.EmailAlreadyInUseException
+import unithon.helpjob.data.repository.EmailCodeExpiredException
+import unithon.helpjob.data.repository.EmailNotFoundException
+import unithon.helpjob.data.repository.EmailVerificationFailedException
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.data.repository.WrongPasswordException
 import unithon.helpjob.data.repository.dataStore
 import unithon.helpjob.ui.auth.nickname.NicknameSetupViewModel
 import unithon.helpjob.ui.auth.signin.SignInViewModel
@@ -88,6 +99,8 @@ val networkModule = module {
 
     // HttpClient (Ktor)
     single {
+        val tokenDataStore: DataStore<Preferences> = get()
+
         HttpClient(OkHttp) {
             // Base URL 설정
             defaultRequest {
@@ -96,7 +109,10 @@ val networkModule = module {
 
             // JSON 직렬화
             install(ContentNegotiation) {
-                json(get<Json>())
+                json(Json {
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                })
             }
 
             // 로깅
@@ -105,33 +121,56 @@ val networkModule = module {
                 level = if (BuildConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
             }
 
-            // HttpSend 플러그인 설치 (설정 없이)
-            install(HttpSend)
-        }.apply {
-            // HttpClient 생성 후 intercept 설정
-            plugin(HttpSend).intercept { request ->
-                val noAuthPaths = listOf(
-                    "api/member/sign-in",
-                    "api/member/sign-up",
-                    "api/email/send",
-                    "api/email/verify"
-                )
+            // 🔑 공식 패턴: Auth + Bearer
+            install(Auth) {
+                bearer {
+                    loadTokens {
+                        val token = tokenDataStore.data
+                            .map { it[stringPreferencesKey("auth_token")] }
+                            .firstOrNull()
 
-                val needsAuth = noAuthPaths.none {
-                    request.url.encodedPath.contains(it)
-                }
+                        token?.let { BearerTokens(it, "") }
+                    }
 
-                if (needsAuth) {
-                    val token = androidContext().dataStore.data
-                        .map { it[stringPreferencesKey("auth_token")] }
-                        .firstOrNull()
+                    sendWithoutRequest { request ->
+                        val noAuthEndpoints = listOf(
+                            "/api/member/sign-in",
+                            "/api/member/sign-up",
+                            "/api/email/send",
+                            "/api/email/verify"
+                        )
 
-                    if (!token.isNullOrBlank()) {
-                        request.headers.append("Authorization", "Bearer $token")
+                        noAuthEndpoints.none { request.url.encodedPath.contains(it) }
                     }
                 }
+            }
 
-                execute(request)
+            // 🚨 전역 에러 처리 (공식 패턴)
+            HttpResponseValidator {
+                handleResponseExceptionWithRequest { exception, _ ->
+                    val clientException = exception as? ClientRequestException
+                        ?: return@handleResponseExceptionWithRequest
+
+                    // Ktor 자동 역직렬화 사용
+                    val errorResponse: ErrorResponse? = try {
+                        clientException.response.body()
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    // 에러 코드별 예외 매핑 (백엔드 스펙 기준)
+                    when (errorResponse?.code) {
+                        "404-1" -> throw EmailNotFoundException()
+                        "401-5" -> throw WrongPasswordException()
+                        "409-1" -> throw EmailAlreadyInUseException()
+                        "409-2" -> throw NicknameDuplicateException()
+                        "401-6" -> throw EmailVerificationFailedException()
+                        "401-7" -> throw EmailCodeExpiredException()
+                        else -> throw Exception(
+                            errorResponse?.message ?: "알 수 없는 오류가 발생했습니다."
+                        )
+                    }
+                }
             }
         }
     }
