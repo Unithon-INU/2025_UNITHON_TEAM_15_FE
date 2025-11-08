@@ -1,14 +1,16 @@
 package unithon.helpjob.data.network
 
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
@@ -23,72 +25,100 @@ import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.TokenResponse
 import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 
-interface HelpJobApiService {
+class HelpJobApiService(private val client: HttpClient) {
     // 회원 관련 API
-    @POST(ApiConstants.SIGN_IN)
-    suspend fun signIn(
-        @Body request: MemberSignInReq
-    ): Response<TokenResponse>
+    suspend fun signIn(request: MemberSignInReq): TokenResponse {
+        return client.post(ApiConstants.SIGN_IN) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
 
-    @POST(ApiConstants.SIGN_UP)
-    suspend fun signUp(
-        @Body request: MemberSignUpReq
-    ): Response<TokenResponse>
+    suspend fun signUp(request: MemberSignUpReq): TokenResponse {
+        return client.post(ApiConstants.SIGN_UP) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
 
-    @POST(ApiConstants.SET_NICKNAME)
-    suspend fun setNickname(
-        @Body request: MemberNicknameReq
-    ): Response<Unit>
+    suspend fun setNickname(request: MemberNicknameReq) {
+        client.post(ApiConstants.SET_NICKNAME) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+    }
 
-    @POST(ApiConstants.SET_PROFILE)
-    suspend fun setProfile(
-        @Body request: MemberProfileSetReq
-    ): Response<TokenResponse>
+    suspend fun setProfile(request: MemberProfileSetReq): TokenResponse {
+        return client.post(ApiConstants.SET_PROFILE) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
 
-    @GET(ApiConstants.GET_PROFILE)
-    suspend fun getMemberProfile(): Response<MemberProfileGetRes>
+    suspend fun getMemberProfile(): MemberProfileGetRes {
+        return client.get(ApiConstants.GET_PROFILE).body()
+    }
 
     // 🆕 이메일 인증 관련 API
-    @POST(ApiConstants.EMAIL_SEND)
-    suspend fun sendEmailVerification(
-        @Body request: EmailSendReq
-    ): Response<Unit>
+    suspend fun sendEmailVerification(request: EmailSendReq) {
+        client.post(ApiConstants.EMAIL_SEND) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+    }
 
-    @POST(ApiConstants.EMAIL_VERIFY)
-    suspend fun verifyEmailCode(
-        @Body request: EmailVerifyCodeReq
-    ): Response<Unit>
+    suspend fun verifyEmailCode(request: EmailVerifyCodeReq) {
+        client.post(ApiConstants.EMAIL_VERIFY) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+    }
 
     // 시간제 취업 확인 관련 API
-    @PATCH(ApiConstants.UPDATE_CHECKLIST)
-    suspend fun updateChecklist(
-        @Body request: UpdateEmploymentCheckRequest
-    ): Response<UpdateEmploymentCheckResponse>
+    suspend fun updateChecklist(request: UpdateEmploymentCheckRequest): UpdateEmploymentCheckResponse {
+        return client.patch(ApiConstants.UPDATE_CHECKLIST) {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }.body()
+    }
 
-    @GET(ApiConstants.GET_HOME_INFO)
-    suspend fun getHomeInfo(
-        @Header ("Accept-Language") language: String
-    ) : Response<HomeInfoResponse>
+    suspend fun getHomeInfo(language: String): HomeInfoResponse {
+        return client.get(ApiConstants.GET_HOME_INFO) {
+            headers {
+                append("Accept-Language", language)
+            }
+        }.body()
+    }
 
-    @GET(ApiConstants.GET_TIPS)
-    suspend fun getTips(
-        @Header ("Accept-Language") language: String,
-        @Query("checkStep") checkStep: String
-    ) : Response<List<TipResponseItem>>
+    suspend fun getTips(language: String, checkStep: String): List<TipResponseItem> {
+        return client.get(ApiConstants.GET_TIPS) {
+            headers {
+                append("Accept-Language", language)
+            }
+            parameter("checkStep", checkStep)
+        }.body()
+    }
 
-    @PUT(ApiConstants.RESET_PROGRESS)
-    suspend fun resetProgress(): Response<Unit>
+    suspend fun resetProgress() {
+        client.put(ApiConstants.RESET_PROGRESS)
+    }
 
-    @POST(ApiConstants.POST_CERTIFICATION)
-    suspend fun postCertification(
-        @Header ("Accept-Language") language: String,
-        @Body documentRequest: DocumentRequest
-    ) : Response<Unit>
+    suspend fun postCertification(language: String, documentRequest: DocumentRequest) {
+        client.post(ApiConstants.POST_CERTIFICATION) {
+            headers {
+                append("Accept-Language", language)
+            }
+            contentType(ContentType.Application.Json)
+            setBody(documentRequest)
+        }
+    }
 
     // 정책 및 약관 관련 API
-    @GET(ApiConstants.PRIVACY_POLICY)
-    suspend fun getPrivacyPolicy(): Response<ResponseBody>
+    suspend fun getPrivacyPolicy(): String {
+        return client.get(ApiConstants.PRIVACY_POLICY).body()
+    }
 
-    @GET(ApiConstants.TERMS_OF_SERVICE)
-    suspend fun getTermsOfService(): Response<ResponseBody>
+    suspend fun getTermsOfService(): String {
+        return client.get(ApiConstants.TERMS_OF_SERVICE).body()
+    }
 }
