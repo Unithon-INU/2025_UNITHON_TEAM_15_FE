@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -26,28 +27,17 @@ import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import unithon.helpjob.BuildConfig
 import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.network.ApiConstants
-import unithon.helpjob.data.network.HelpJobApiService
+import unithon.helpjob.data.repository.AndroidLanguageRepository
 import unithon.helpjob.data.repository.AppLocaleManager
-import unithon.helpjob.data.repository.AuthRepository
-import unithon.helpjob.data.repository.DefaultAuthRepository
-import unithon.helpjob.data.repository.DefaultDocumentRepository
-import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
-import unithon.helpjob.data.repository.DefaultPolicyRepository
-import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
 import unithon.helpjob.data.repository.EmailNotFoundException
 import unithon.helpjob.data.repository.EmailVerificationFailedException
-import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
-import unithon.helpjob.data.repository.PolicyRepository
-import unithon.helpjob.data.repository.SignUpDataRepository
 import unithon.helpjob.data.repository.WrongPasswordException
-import unithon.helpjob.data.repository.dataStore
 import unithon.helpjob.ui.auth.nickname.NicknameSetupViewModel
 import unithon.helpjob.ui.auth.signin.SignInViewModel
 import unithon.helpjob.ui.auth.signup.SignUpViewModel
@@ -61,51 +51,37 @@ import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.SettingViewModel
 import unithon.helpjob.ui.setting.TermsOfServiceViewModel
 import unithon.helpjob.ui.splash.SplashViewModel
+import unithon.helpjob.util.AppConfig
+
+// DataStore extension (Android 전용)
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
 
 /**
- * Koin DI 모듈
- * Hilt에서 Koin으로 전환
+ * Android 플랫폼 Data 계층 모듈
  */
-
-// 🔹 Data 계층 모듈
-val dataModule = module {
-    // DataStore
+val androidDataModule = module {
+    // DataStore (Android 전용 생성)
     single<DataStore<Preferences>> { get<Context>().dataStore }
 
-    // AppLocaleManager
+    // AppLocaleManager (Android 전용)
     single { AppLocaleManager(androidContext()) }
 
-    // LanguageRepository (단일 구현체)
-    single { LanguageRepository(get()) }
-
-    // SignUpDataRepository (단일 구현체)
-    single { SignUpDataRepository() }
-
-    // Repository 인터페이스 → 구현체 바인딩
-    single<AuthRepository> { DefaultAuthRepository(get(), androidContext()) }
-    single<EmploymentCheckRepository> { DefaultEmploymentCheckRepository(get(), get()) }
-    single<DocumentRepository> { DefaultDocumentRepository(get(), get()) }
-    single<PolicyRepository> { DefaultPolicyRepository(get()) }
+    // LanguageRepository (Android 구현체)
+    single<LanguageRepository> { AndroidLanguageRepository(get()) }
 }
 
-// 🔹 Network 계층 모듈
-val networkModule = module {
-    // Json (그대로 유지)
-    single {
-        Json {
-            ignoreUnknownKeys = true
-            coerceInputValues = true
-        }
-    }
-
-    // HttpClient (Ktor)
+/**
+ * Android 플랫폼 Network 계층 모듈
+ */
+val androidNetworkModule = module {
+    // HttpClient (Ktor + OkHttp 엔진)
     single {
         val tokenDataStore: DataStore<Preferences> = get()
 
         HttpClient(OkHttp) {
             // Base URL 설정
             defaultRequest {
-                url(BuildConfig.API_BASE_URL)
+                url(AppConfig.API_BASE_URL)
             }
 
             // JSON 직렬화
@@ -119,7 +95,7 @@ val networkModule = module {
             // 로깅
             install(Logging) {
                 logger = Logger.DEFAULT
-                level = if (BuildConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
+                level = if (AppConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
             }
 
             // 🔑 공식 패턴: Auth + Bearer
@@ -180,13 +156,12 @@ val networkModule = module {
             }
         }
     }
-
-    // HelpJobApiService (Ktor 구현체)
-    single { HelpJobApiService(get()) }
 }
 
-// 🔹 ViewModel 모듈
-val viewModelModule = module {
+/**
+ * Android ViewModel 모듈
+ */
+val androidViewModelModule = module {
     viewModel { NicknameSetupViewModel(get(), get()) }
     viewModel { SignInViewModel(get()) }
     viewModel { SignUpViewModel(get(), get()) }
@@ -210,9 +185,14 @@ fun initKoin(context: Context) {
     org.koin.core.context.startKoin {
         androidContext(context)
         modules(
-            dataModule,
-            networkModule,
-            viewModelModule
+            // Android 전용
+            androidDataModule,
+            androidNetworkModule,
+            androidViewModelModule,
+
+            // 공통
+            commonDataModule,
+            commonNetworkModule
         )
     }
 }
