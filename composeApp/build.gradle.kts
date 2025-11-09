@@ -19,14 +19,14 @@ if (localPropertiesFile.exists()) {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
             // optIn 설정 추가
             freeCompilerArgs.addAll(
                 listOf(
                     "-opt-in=kotlin.RequiresOptIn",
-                    "-opt-in=kotlin.Experimental"
+                    "-opt-in=kotlin.Experimental",
+                    "-Xexpect-actual-classes"  // Beta 경고 억제
                 )
             )
         }
