@@ -3,13 +3,11 @@ package unithon.helpjob.data.repository
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 
-// 굳이 저장/불러오기만 있는 거 말고 복잡한 로직이 없어서 이건 인터페이스 없이 바로 구현했어요
-
-class LanguageRepository(
+class AndroidLanguageRepository(
     private val appLocaleManager: AppLocaleManager
-) {
+) : LanguageRepository {
 
-    fun setLanguage(language: AppLanguage) {
+    override fun setLanguage(language: AppLanguage) {
         Timber.d("🌐 언어 설정 시작: ${language.displayName} (${language.code})")
 
         try {
@@ -21,9 +19,7 @@ class LanguageRepository(
         }
     }
 
-
-    fun getCurrentLanguage(): AppLanguage {
+    override fun getCurrentLanguage(): AppLanguage {
         return appLocaleManager.getCurrentLanguage()
     }
-
 }

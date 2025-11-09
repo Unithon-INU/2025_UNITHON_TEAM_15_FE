@@ -1,14 +1,11 @@
 package unithon.helpjob.data.repository
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
@@ -19,11 +16,9 @@ import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TokenResponse
 import unithon.helpjob.data.network.HelpJobApiService
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
-
 class DefaultAuthRepository(
     private val apiService: HelpJobApiService,
-    private val context: Context
+    private val dataStore: DataStore<Preferences>
 ) : AuthRepository {
 
     private val tokenKey = stringPreferencesKey("auth_token")
@@ -53,7 +48,6 @@ class DefaultAuthRepository(
         visaType: String,
         industry: String
     ) {
-        Timber.d("MemberProfileReq ${MemberProfileSetReq(language, topikLevel, visaType, industry)}")
         apiService.setProfile(MemberProfileSetReq(language, topikLevel, visaType, industry))
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
@@ -75,19 +69,19 @@ class DefaultAuthRepository(
     }
 
     override suspend fun saveToken(token: String) {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences[tokenKey] = token
         }
     }
 
     override suspend fun getToken(): String? {
-        return context.dataStore.data
+        return dataStore.data
             .map { preferences -> preferences[tokenKey] }
             .firstOrNull()
     }
 
     override suspend fun clearToken() {
-        context.dataStore.edit { preferences ->
+        dataStore.edit { preferences ->
             preferences.remove(tokenKey)
         }
     }

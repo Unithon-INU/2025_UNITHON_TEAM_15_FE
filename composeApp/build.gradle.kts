@@ -44,6 +44,17 @@ kotlin {
 
                 // Kotlinx Serialization (data/model 이동을 위해 추가)
                 implementation(libs.kotlinx.serialization.json)
+
+                // Ktor & Network (공통)
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.auth)
+
+                // DataStore (공통)
+                implementation(libs.androidx.dataStore.core)
+                implementation(libs.androidx.dataStore.preferences)
             }
         }
 
@@ -62,17 +73,8 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.compose.viewmodel.navigation)
 
-                // Ktor & Network
-                implementation(libs.ktor.client.core)
+                // Ktor & Network (Android 엔진만)
                 implementation(libs.ktor.client.okhttp)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.serialization.kotlinx.json)
-                implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.client.auth)
-
-                // DataStore
-                implementation(libs.androidx.dataStore.core)
-                implementation(libs.androidx.dataStore.preferences)
 
                 // Jetpack Compose (Android)
                 implementation(libs.androidx.appcompat)
