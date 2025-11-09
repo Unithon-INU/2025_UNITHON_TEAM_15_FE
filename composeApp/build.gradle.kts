@@ -41,6 +41,9 @@ kotlin {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.components.resources)
                 implementation(libs.compose.components.uiToolingPreview)
+
+                // Kotlinx Serialization (data/model 이동을 위해 추가)
+                implementation(libs.kotlinx.serialization.json)
             }
         }
 
