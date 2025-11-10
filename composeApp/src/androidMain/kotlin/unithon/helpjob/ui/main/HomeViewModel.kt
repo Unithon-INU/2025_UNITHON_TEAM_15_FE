@@ -242,9 +242,7 @@ class HomeViewModel(
         }
     }
 
-    init {
-        getStepInfo()
-    }
+    // init 블록 제거: HomeScreen LaunchedEffect가 언어에 맞게 자동으로 데이터 로드
 
     private fun getStepInfo(language: String? = null){
         viewModelScope.launch(crashPreventionHandler) {
@@ -264,13 +262,21 @@ class HomeViewModel(
                 // 🔥 핵심 변경: 서버에서 받은 데이터를 기반으로 가장 최근 체크한 step 계산
                 val latestCheckedStep = findLatestCheckedStep(response.employmentCheckRes)
 
-                _uiState.update {
-                    it.copy(
+                _uiState.update { currentState ->
+                    // 🔥 selectedStep 업데이트: 같은 checkStep의 새 객체로 교체 (언어 변경 대응)
+                    val updatedSelectedStep = currentState.selectedStep?.let { oldSelected ->
+                        response.employmentCheckRes.find {
+                            it.checkStep == oldSelected.checkStep
+                        }
+                    }
+
+                    currentState.copy(
                         steps = response.employmentCheckRes,
                         nickname = response.nickname,
                         email = response.email,
                         progressPercentage = response.progress / 100f,
                         memberCheckStep = latestCheckedStep, // 계산된 step 사용
+                        selectedStep = updatedSelectedStep,  // 🆕 업데이트된 selectedStep
                         isLoading = false
                     )
                 }

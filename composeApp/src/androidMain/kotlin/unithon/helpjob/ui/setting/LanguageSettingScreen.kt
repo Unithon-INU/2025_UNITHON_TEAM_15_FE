@@ -37,16 +37,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
+import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey000
@@ -105,7 +105,7 @@ fun LanguageSettingScreen(
                     selectedItem = uiState.currentLanguage,
                     onItemSelected = { language ->
                         viewModel.setLanguage(language)
-                        homeViewModel.refresh(language.code)
+                        // homeViewModel.refresh() 제거: HomeScreen LaunchedEffect가 자동 처리
                         GlobalLanguageState.updateLanguage(language)
                     },
                     itemToString = { it.displayName }

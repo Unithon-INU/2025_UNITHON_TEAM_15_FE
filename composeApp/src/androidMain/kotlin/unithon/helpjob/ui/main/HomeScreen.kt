@@ -40,16 +40,18 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
+import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
+import org.koin.compose.viewmodel.koinViewModel
+import timber.log.Timber
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.DottedProgressBar
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.main.components.StepProgressWarningDialog
@@ -72,6 +74,14 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    // 🆕 언어 변경 감지 및 자동 새로고침
+    val currentLanguage by GlobalLanguageState.currentLanguage
+
+    LaunchedEffect(currentLanguage) {
+        Timber.d("🌐 HomeScreen 언어 변경 감지: ${currentLanguage.code}")
+        viewModel.refresh(currentLanguage.code)
+    }
 
     var maxCardHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
