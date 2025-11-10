@@ -49,6 +49,9 @@ class HomeViewModel(
     private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
+    // 🔥 이전 언어 추적 (Composition 리셋에도 안전)
+    private var lastLoadedLanguage: String? = null
+
     /**
      * 🆕 가장 최근에 체크한 document가 있는 step을 찾는 함수
      */
@@ -242,7 +245,12 @@ class HomeViewModel(
         }
     }
 
-    // init 블록 제거: HomeScreen LaunchedEffect가 언어에 맞게 자동으로 데이터 로드
+    init {
+        // 🔥 앱 시작 시 GlobalLanguageState의 현재 언어로 초기 로드
+        val initialLanguage = unithon.helpjob.data.repository.GlobalLanguageState.currentLanguage.value.code
+        lastLoadedLanguage = initialLanguage
+        getStepInfo(initialLanguage)
+    }
 
     private fun getStepInfo(language: String? = null){
         viewModelScope.launch(crashPreventionHandler) {
@@ -335,10 +343,19 @@ class HomeViewModel(
      * 특정 언어로 데이터 새로고침
      */
     fun refresh(language: String) {
+        // 🔥 이미 같은 언어로 로드했다면 중복 호출 방지
+        if (language == lastLoadedLanguage) {
+            Timber.d("🌐 이미 $language 로 로드됨. 중복 호출 방지.")
+            return
+        }
+
+        Timber.d("🌐 언어 변경 감지: $lastLoadedLanguage → $language")
+        lastLoadedLanguage = language
+
         getStepInfo(language)
         // 선택된 단계가 있으면 팁도 다시 로드
         uiState.value.selectedStep?.let { selectedStep ->
-            getTips(language = language,Steps.valueOf(selectedStep.checkStep))
+            getTips(language = language, Steps.valueOf(selectedStep.checkStep))
         }
     }
 }

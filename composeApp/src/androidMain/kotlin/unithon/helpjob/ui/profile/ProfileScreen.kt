@@ -82,6 +82,14 @@ fun ProfileScreen(
     val homeUiState by homeViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    // 🔥 언어 변경 감지 및 자동 새로고침 (HomeViewModel 공유)
+    val currentLanguage by unithon.helpjob.data.repository.GlobalLanguageState.currentLanguage
+
+    LaunchedEffect(currentLanguage) {
+        timber.log.Timber.d("🌐 ProfileScreen 언어 변경 감지: ${currentLanguage.code}")
+        homeViewModel.refresh(currentLanguage.code)
+    }
+
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(

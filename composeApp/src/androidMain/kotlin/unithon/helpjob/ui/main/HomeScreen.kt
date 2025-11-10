@@ -75,11 +75,11 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    // 🆕 언어 변경 감지 및 자동 새로고침
+    // 🔥 언어 변경 감지 및 자동 새로고침 (ViewModel에서 중복 방지)
     val currentLanguage by GlobalLanguageState.currentLanguage
 
     LaunchedEffect(currentLanguage) {
-        Timber.d("🌐 HomeScreen 언어 변경 감지: ${currentLanguage.code}")
+        Timber.d("🌐 HomeScreen LaunchedEffect 트리거: ${currentLanguage.code}")
         viewModel.refresh(currentLanguage.code)
     }
 

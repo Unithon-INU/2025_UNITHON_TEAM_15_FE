@@ -27,6 +27,9 @@ object HelpJobScreens {
  * Destinations (라우트 정의)
  */
 object HelpJobDestinations {
+    // 🔥 NavHost의 root graph route (모든 화면이 HomeViewModel을 공유하기 위한 스코프)
+    const val ROOT_GRAPH_ROUTE = "root_graph"
+
     const val SPLASH_ROUTE = HelpJobScreens.SPLASH_SCREEN
     const val SIGN_IN_ROUTE = HelpJobScreens.SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = HelpJobScreens.SIGN_UP_SCREEN
