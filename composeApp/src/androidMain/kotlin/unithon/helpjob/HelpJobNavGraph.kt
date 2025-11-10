@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.koin.compose.viewmodel.sharedKoinViewModel
+import org.koin.compose.koinInject
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
@@ -90,12 +90,10 @@ fun HelpJobNavGraph(
         }
 
         // 메인 앱 플로우 (하단바 있음)
-        // 🔥 Graph 레벨의 backStackEntry를 사용하여 모든 화면이 동일한 HomeViewModel 공유
+        // 🔥 Koin single로 정의된 HomeViewModel을 직접 주입 (앱 전체에서 단일 인스턴스)
         composable(route = BottomNavDestination.HOME.route) {
-            val graphEntry = remember(navController) {
-                navController.getBackStackEntry(HelpJobDestinations.ROOT_GRAPH_ROUTE)
-            }
-            val homeViewModel = graphEntry.sharedKoinViewModel<HomeViewModel>(navController)
+            val homeViewModel = koinInject<HomeViewModel>()
+            timber.log.Timber.d("🔍 HomeScreen composable - ViewModel 인스턴스: ${homeViewModel.hashCode()}")
 
             HomeScreen(
                 onNavigateToStepDetail = { navActions.navigateToStepDetail() },
@@ -105,10 +103,8 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) {
-            val graphEntry = remember(navController) {
-                navController.getBackStackEntry(HelpJobDestinations.ROOT_GRAPH_ROUTE)
-            }
-            val homeViewModel = graphEntry.sharedKoinViewModel<HomeViewModel>(navController)
+            val homeViewModel = koinInject<HomeViewModel>()
+            timber.log.Timber.d("🔍 StepDetailScreen composable - ViewModel 인스턴스: ${homeViewModel.hashCode()}")
 
             StepDetailScreen(
                 onBackClick = {
@@ -130,10 +126,7 @@ fun HelpJobNavGraph(
         }
         // HOME 화면의 ViewModel을 가져와서 공유 (StepDetailScreen과 동일한 패턴)
         composable(route = BottomNavDestination.PROFILE.route) {
-            val graphEntry = remember(navController) {
-                navController.getBackStackEntry(HelpJobDestinations.ROOT_GRAPH_ROUTE)
-            }
-            val homeViewModel = graphEntry.sharedKoinViewModel<HomeViewModel>(navController)
+            val homeViewModel = koinInject<HomeViewModel>()
 
             ProfileScreen(
                 onNavigateToSettings = navActions::navigateToSettings,
@@ -156,10 +149,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.SETTING_ROUTE) {
-            val graphEntry = remember(navController) {
-                navController.getBackStackEntry(HelpJobDestinations.ROOT_GRAPH_ROUTE)
-            }
-            val homeViewModel = graphEntry.sharedKoinViewModel<HomeViewModel>(navController)
+            val homeViewModel = koinInject<HomeViewModel>()
 
             SettingScreen(
                 onBack = { navController.popBackStack() },
@@ -174,10 +164,7 @@ fun HelpJobNavGraph(
         }
 
         composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) {
-            val graphEntry = remember(navController) {
-                navController.getBackStackEntry(HelpJobDestinations.ROOT_GRAPH_ROUTE)
-            }
-            val homeViewModel = graphEntry.sharedKoinViewModel<HomeViewModel>(navController)
+            val homeViewModel = koinInject<HomeViewModel>()
 
             LanguageSettingScreen(
                 onBack = { navController.popBackStack() },

@@ -167,7 +167,8 @@ val androidViewModelModule = module {
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { CalculatorViewModel() }
     viewModel { DocumentViewModel(get()) }
-    viewModel { HomeViewModel(get()) }
+    // 🔥 HomeViewModel을 single로 변경하여 앱 전체에서 단일 인스턴스 공유
+    single { HomeViewModel(get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { LanguageSettingViewModel(get()) }

@@ -100,6 +100,7 @@ class HomeViewModel(
     }
 
     fun selectStep(step: EmploymentCheckRes){
+        Timber.d("🔍 selectStep 호출: ${step.checkStep}, ViewModel 인스턴스: ${this.hashCode()}")
         if (_uiState.value.selectedStep?.checkStep == step.checkStep) {
             Timber.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
             return
@@ -109,6 +110,7 @@ class HomeViewModel(
                 selectedStep = step
             )
         }
+        Timber.d("✅ selectedStep 업데이트 완료: ${_uiState.value.selectedStep?.checkStep}")
         getTips(Steps.valueOf(step.checkStep))
     }
 
