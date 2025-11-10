@@ -39,7 +39,7 @@ fun HelpJobNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        route = HelpJobDestinations.ROOT_GRAPH_ROUTE,  // 🔥 Graph 레벨 route 추가
+        route = HelpJobDestinations.ROOT_GRAPH_ROUTE,
         modifier = modifier,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
@@ -90,7 +90,6 @@ fun HelpJobNavGraph(
         }
 
         // 메인 앱 플로우 (하단바 있음)
-        // 🔥 Koin single로 정의된 HomeViewModel을 직접 주입 (앱 전체에서 단일 인스턴스)
         composable(route = BottomNavDestination.HOME.route) {
             val homeViewModel = koinInject<HomeViewModel>()
             timber.log.Timber.d("🔍 HomeScreen composable - ViewModel 인스턴스: ${homeViewModel.hashCode()}")
@@ -124,7 +123,7 @@ fun HelpJobNavGraph(
                 snackbarHostState = snackbarHostState
             )
         }
-        // HOME 화면의 ViewModel을 가져와서 공유 (StepDetailScreen과 동일한 패턴)
+
         composable(route = BottomNavDestination.PROFILE.route) {
             val homeViewModel = koinInject<HomeViewModel>()
 
