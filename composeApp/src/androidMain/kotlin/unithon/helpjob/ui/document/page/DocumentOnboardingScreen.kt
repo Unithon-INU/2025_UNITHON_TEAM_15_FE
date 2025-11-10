@@ -24,10 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey600
@@ -129,7 +130,7 @@ fun DocumentOnboardingScreen(
             Spacer(Modifier.height(29.dp))
             HelpJobButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.onboarding_next_button),
+                text = stringResource(MR.strings.onboarding_next_button),
                 onClick = onNext
             )
             Spacer(Modifier.height(20.dp))
@@ -145,9 +146,9 @@ fun DocumentOnboardingScreenPreview(
 ){
     HelpJobTheme {
         DocumentOnboardingScreen(
-            title = stringResource(R.string.document_onboarding_title) ,
+            title = stringResource(MR.strings.document_onboarding_title) ,
             image = R.drawable.memo,
-            description = stringResource(R.string.document_onboarding_description_2),
+            description = stringResource(MR.strings.document_onboarding_description_2),
             currentPage = 1
         ) { }
     }

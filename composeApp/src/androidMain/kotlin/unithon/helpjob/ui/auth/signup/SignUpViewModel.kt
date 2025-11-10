@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.auth.signup
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
@@ -33,21 +34,21 @@ class SignUpViewModel(
 
         // 이메일 관련 상태
         val emailError: Boolean = false,
-        val emailErrorMessage: Int? = null,
+        val emailErrorMessage: StringResource? = null,
         val isEmailSent: Boolean = false,
         val isSendingEmail: Boolean = false,
 
         // 비밀번호 관련 상태
         val passwordError: Boolean = false,
-        val passwordErrorMessage: Int? = null,
+        val passwordErrorMessage: StringResource? = null,
 
         // 비밀번호 확인 관련 상태
         val confirmPasswordError: Boolean = false,
-        val confirmPasswordErrorMessage: Int? = null,
+        val confirmPasswordErrorMessage: StringResource? = null,
 
         // 인증코드 관련 상태
         val verificationCodeError: Boolean = false,
-        val verificationCodeErrorMessage: Int? = null,
+        val verificationCodeErrorMessage: StringResource? = null,
         val isVerifyingCode: Boolean = false,
         val isCodeVerified: Boolean = false
     ) {
@@ -67,7 +68,7 @@ class SignUpViewModel(
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateEmail(email: String) {
@@ -118,7 +119,7 @@ class SignUpViewModel(
                 _uiState.update {
                     it.copy(
                         confirmPasswordError = true,
-                        confirmPasswordErrorMessage = R.string.error_password_mismatch
+                        confirmPasswordErrorMessage = MR.strings.error_password_mismatch
                     )
                 }
             }
@@ -142,7 +143,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_empty_email
+                    emailErrorMessage = MR.strings.error_empty_email
                 )
             }
             return
@@ -152,7 +153,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_invalid_email
+                    emailErrorMessage = MR.strings.error_invalid_email
                 )
             }
             return
@@ -175,14 +176,14 @@ class SignUpViewModel(
                     it.copy(
                         isSendingEmail = false,
                         emailError = true,
-                        emailErrorMessage = R.string.sign_up_email_exists
+                        emailErrorMessage = MR.strings.sign_up_email_exists
                     )
                 }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(isSendingEmail = false)
                 }
-                _snackbarMessage.emit(R.string.email_send_failed)
+                _snackbarMessage.emit(MR.strings.email_send_failed)
                 Timber.e(e, "Email send failed - unexpected error")
             }
         }
@@ -195,7 +196,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     verificationCodeError = true,
-                    verificationCodeErrorMessage = R.string.error_empty_verification_code
+                    verificationCodeErrorMessage = MR.strings.error_empty_verification_code
                 )
             }
             return
@@ -218,7 +219,7 @@ class SignUpViewModel(
                     it.copy(
                         isVerifyingCode = false,
                         verificationCodeError = true,
-                        verificationCodeErrorMessage = R.string.verification_code_expired
+                        verificationCodeErrorMessage = MR.strings.verification_code_expired
                     )
                 }
             } catch (e: EmailVerificationFailedException) {
@@ -226,14 +227,14 @@ class SignUpViewModel(
                     it.copy(
                         isVerifyingCode = false,
                         verificationCodeError = true,
-                        verificationCodeErrorMessage = R.string.verification_code_invalid
+                        verificationCodeErrorMessage = MR.strings.verification_code_invalid
                     )
                 }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(isVerifyingCode = false)
                 }
-                _snackbarMessage.emit(R.string.verification_failed)
+                _snackbarMessage.emit(MR.strings.verification_failed)
                 Timber.e(e, "Verification failed - unexpected error")
             }
         }
@@ -254,7 +255,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_invalid_email
+                    emailErrorMessage = MR.strings.error_invalid_email
                 )
             }
             hasError = true
@@ -264,7 +265,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = R.string.error_short_password
+                    passwordErrorMessage = MR.strings.error_short_password
                 )
             }
             hasError = true
@@ -274,7 +275,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     confirmPasswordError = true,
-                    confirmPasswordErrorMessage = R.string.error_password_mismatch
+                    confirmPasswordErrorMessage = MR.strings.error_password_mismatch
                 )
             }
             hasError = true
@@ -284,7 +285,7 @@ class SignUpViewModel(
             _uiState.update {
                 it.copy(
                     verificationCodeError = true,
-                    verificationCodeErrorMessage = R.string.email_verification_required
+                    verificationCodeErrorMessage = MR.strings.email_verification_required
                 )
             }
             return

@@ -20,13 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
@@ -71,9 +72,9 @@ fun AuthTextField(
                         else R.drawable.eyeoff
                     ),
                     contentDescription = if (passwordVisible) {
-                        stringResource(R.string.hide_password)
+                        stringResource(MR.strings.hide_password)
                     } else {
-                        stringResource(R.string.show_password)
+                        stringResource(MR.strings.show_password)
                     },
                     tint = Grey400,
                     modifier = Modifier.size(20.dp)

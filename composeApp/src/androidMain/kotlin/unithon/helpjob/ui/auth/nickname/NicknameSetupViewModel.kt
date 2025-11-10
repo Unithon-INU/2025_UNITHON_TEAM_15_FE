@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.auth.nickname
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
@@ -26,7 +27,7 @@ class NicknameSetupViewModel(
         val isLoading: Boolean = false,
         val isNicknameSet: Boolean = false,
         val nicknameError: Boolean = false,
-        val nicknameErrorMessage: Int? = null
+        val nicknameErrorMessage: StringResource? = null
     ) {
         val isInputValid: Boolean
             get() = nickname.length in 2..10 && !nicknameError
@@ -35,7 +36,7 @@ class NicknameSetupViewModel(
     private val _uiState = MutableStateFlow(NicknameSetupUiState())
     val uiState: StateFlow<NicknameSetupUiState> = _uiState.asStateFlow()
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateNickname(nickname: String) {
@@ -60,7 +61,7 @@ class NicknameSetupViewModel(
                 _uiState.update {
                     it.copy(
                         nicknameError = true,
-                        nicknameErrorMessage = R.string.nickname_empty_error
+                        nicknameErrorMessage = MR.strings.nickname_empty_error
                     )
                 }
                 return
@@ -69,7 +70,7 @@ class NicknameSetupViewModel(
                 _uiState.update {
                     it.copy(
                         nicknameError = true,
-                        nicknameErrorMessage = R.string.nickname_too_short_error
+                        nicknameErrorMessage = MR.strings.nickname_too_short_error
                     )
                 }
                 return
@@ -83,7 +84,7 @@ class NicknameSetupViewModel(
                 val signUpData = signUpDataRepository.getSignUpData()
 
                 if (signUpData == null) {
-                    _snackbarMessage.emit(R.string.nickname_setup_failed)  // 스낵바로 변경
+                    _snackbarMessage.emit(MR.strings.nickname_setup_failed)  // 스낵바로 변경
                     _uiState.update { it.copy(isLoading = false) }
                     Timber.e("SignUp data is null")  // 로깅 추가
                     return@launch
@@ -107,11 +108,11 @@ class NicknameSetupViewModel(
                     it.copy(
                         isLoading = false,
                         nicknameError = true,
-                        nicknameErrorMessage = R.string.nickname_duplicate_error
+                        nicknameErrorMessage = MR.strings.nickname_duplicate_error
                     )
                 }
             } catch (e: Exception) {
-                _snackbarMessage.emit(R.string.nickname_setup_failed)  // 스낵바로 변경
+                _snackbarMessage.emit(MR.strings.nickname_setup_failed)  // 스낵바로 변경
                 _uiState.update { it.copy(isLoading = false) }
                 Timber.e(e, "Nickname setup failed")  // 로깅 추가
             }

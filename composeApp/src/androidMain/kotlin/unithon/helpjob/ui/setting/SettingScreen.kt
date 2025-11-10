@@ -28,12 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.compose.viewmodel.koinViewModel
+import dev.icerock.moko.resources.desc.desc
+import dev.icerock.moko.resources.StringResource
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
@@ -63,7 +66,7 @@ fun SettingScreen(
     LaunchedEffect(settingViewModel.snackbarMessage) {
         settingViewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -76,7 +79,7 @@ fun SettingScreen(
                 .navigationBarsPadding()
         ) {
             HelpJobTopAppBar(
-                title = R.string.setting_top_bar_title,
+                title = MR.strings.setting_top_bar_title,
                 onBack = onBack
             )
             Column(
@@ -86,14 +89,14 @@ fun SettingScreen(
             ) {
                 // 설정 섹션
                 SettingSectionHeader(
-                    title = R.string.setting_section_config,
+                    title = MR.strings.setting_section_config,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
                 Spacer(modifier = Modifier.height(19.dp))
 
                 SettingItem(
-                    title = R.string.setting_app_language,
+                    title = MR.strings.setting_app_language,
                     onClick = onLanguageSettingClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -101,7 +104,7 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_reset_progress,
+                    title = MR.strings.setting_reset_progress,
                     onClick = { showResetDialog = true },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -118,14 +121,14 @@ fun SettingScreen(
 
                 // 정보 섹션
                 SettingSectionHeader(
-                    title = R.string.setting_section_info,
+                    title = MR.strings.setting_section_info,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
                 Spacer(modifier = Modifier.height(19.dp))
 
                 SettingItem(
-                    title = R.string.setting_privacy_policy,
+                    title = MR.strings.setting_privacy_policy,
                     onClick = onPrivacyPolicyClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -133,7 +136,7 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_terms_of_service,
+                    title = MR.strings.setting_terms_of_service,
                     onClick = onTermsOfServiceClick,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -141,7 +144,7 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_open_source_license,
+                    title = MR.strings.setting_open_source_license,
                     onClick = {
                         context.startActivity(
                             Intent(context, OssLicensesMenuActivity::class.java)
@@ -162,14 +165,14 @@ fun SettingScreen(
 
                 // 계정 섹션
                 SettingSectionHeader(
-                    title = R.string.setting_section_account,
+                    title = MR.strings.setting_section_account,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 SettingItem(
-                    title = R.string.setting_logout,
+                    title = MR.strings.setting_logout,
                     onClick = {
                         settingViewModel.logout()
                         onLogoutClick()
@@ -180,7 +183,7 @@ fun SettingScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 SettingItem(
-                    title = R.string.setting_withdrawal,
+                    title = MR.strings.setting_withdrawal,
                     onClick = { /* 아직 구현하지 않음 */ },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -189,7 +192,7 @@ fun SettingScreen(
 
                 // 앱 버전
                 Text(
-                    text = stringResource(R.string.setting_app_version),
+                    text = stringResource(MR.strings.setting_app_version),
                     style = MaterialTheme.typography.body4,
                     color = Color(0xFF70737D),
                     modifier = Modifier.padding(horizontal = 20.dp)
@@ -222,7 +225,7 @@ fun SettingScreen(
 
 @Composable
 private fun SettingSectionHeader(
-    @StringRes title: Int,
+    title: StringResource,
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -236,7 +239,7 @@ private fun SettingSectionHeader(
 @Composable
 private fun SettingItem(
     modifier: Modifier = Modifier,
-    @StringRes title: Int,
+    title: StringResource,
     onClick: () -> Unit
 ) {
     Row(

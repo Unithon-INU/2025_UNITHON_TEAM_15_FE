@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -14,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey700
 
@@ -24,7 +25,7 @@ import unithon.helpjob.ui.theme.Grey700
 @Composable
 fun HelpJobTopAppBar(
     modifier: Modifier = Modifier,
-    @StringRes title: Int? = null,
+    title: StringResource? = null,
     onBack: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
@@ -42,7 +43,7 @@ fun HelpJobTopAppBar(
                 IconButton(onClick = it) {
                     Icon(
                         painter = painterResource(id = R.drawable.top_arrowback),
-                        contentDescription = stringResource(id = R.string.back_button),
+                        contentDescription = stringResource(MR.strings.back_button),
                         tint = Color.Unspecified // 아이콘 자체 색상 사용
                     )
                 }

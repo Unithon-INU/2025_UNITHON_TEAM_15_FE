@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.profile
 
-import TopikLevel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -38,10 +36,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.R
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
 import unithon.helpjob.ui.theme.Blue500
@@ -84,7 +85,7 @@ fun ProfileScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -107,8 +108,8 @@ fun ProfileScreen(
                 // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
                 Text(
                     text = stringResource(
-                        id = R.string.profile_greeting,
-                        homeUiState.nickname.ifEmpty { stringResource(R.string.profile_nickname_default) }
+                        MR.strings.profile_greeting,
+                        homeUiState.nickname.ifEmpty { stringResource(MR.strings.profile_nickname_default) }
                     ),
                     style = TextStyle(
                         fontSize = 22.sp,
@@ -127,13 +128,13 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = homeUiState.email.ifEmpty { stringResource(R.string.profile_email_default) },
+                        text = homeUiState.email.ifEmpty { stringResource(MR.strings.profile_email_default) },
                         style = MaterialTheme.typography.bodyLarge,
                         color = Grey500
                     )
 
                     Text(
-                        text = stringResource(id = R.string.profile_email_signup_type),
+                        text = stringResource(MR.strings.profile_email_signup_type),
                         style = MaterialTheme.typography.bodyMedium, // 15sp Medium
                         color = Grey400
                     )
@@ -157,9 +158,9 @@ fun ProfileScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         ProfileInfoColumn(
-                            label = stringResource(id = R.string.profile_visa_type),
+                            label = stringResource(MR.strings.profile_visa_type),
                             value = uiState.visaType
-                                ?: stringResource(id = R.string.profile_visa_default),
+                                ?: stringResource(MR.strings.profile_visa_default),
                             modifier = Modifier.weight(1f)
                         )
 
@@ -170,7 +171,7 @@ fun ProfileScreen(
                         )
 
                         ProfileInfoColumn(
-                            label = stringResource(id = R.string.profile_korean_level),
+                            label = stringResource(MR.strings.profile_korean_level),
                             value = formatTopikLevelForDisplay(uiState.topikLevel),
                             modifier = Modifier.weight(1f)
                         )
@@ -182,7 +183,7 @@ fun ProfileScreen(
                         )
 
                         ProfileInfoColumn(
-                            label = stringResource(id = R.string.profile_preferred_job),
+                            label = stringResource(MR.strings.profile_preferred_job),
                             value = formatIndustryForDisplay(uiState.industry),
                             modifier = Modifier.weight(1f)
                         )
@@ -193,7 +194,7 @@ fun ProfileScreen(
 
                 // 내 서류 관리 타이틀 (기존과 동일)
                 Text(
-                    text = stringResource(id = R.string.profile_documents_title),
+                    text = stringResource(MR.strings.profile_documents_title),
                     style = MaterialTheme.typography.headline2, // 15sp Bold
                     color = Grey700
                 )
@@ -248,7 +249,7 @@ private fun DocumentManagementSection(
                         fontFamily = MaterialTheme.typography.body2.fontFamily
                     )
                 ) {
-                    append(stringResource(id = R.string.profile_documents_all))
+                    append(stringResource(MR.strings.profile_documents_all))
                 }
 
                 // "를 준비했어요!" 부분 - Grey500
@@ -260,7 +261,7 @@ private fun DocumentManagementSection(
                         fontFamily = MaterialTheme.typography.body2.fontFamily
                     )
                 ) {
-                    append(stringResource(id = R.string.profile_documents_completed))
+                    append(stringResource(MR.strings.profile_documents_completed))
                 }
             }
 
@@ -282,7 +283,7 @@ private fun DocumentManagementSection(
                         .padding(horizontal = 28.dp, vertical = 15.dp)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.profile_documents_no_unchecked),
+                        text = stringResource(MR.strings.profile_documents_no_unchecked),
                         style = MaterialTheme.typography.body2,
                         color = Grey500
                     )
@@ -300,7 +301,7 @@ private fun DocumentManagementSection(
                         fontFamily = MaterialTheme.typography.body2.fontFamily
                     )
                 ) {
-                    append(stringResource(id = R.string.profile_documents_current))
+                    append(stringResource(MR.strings.profile_documents_current))
                     append(" ")
                 }
 
@@ -315,7 +316,7 @@ private fun DocumentManagementSection(
                 ) {
                     append(
                         stringResource(
-                            id = R.string.profile_documents_count_format,
+                            MR.strings.profile_documents_count_format,
                             uncheckedDocuments.size
                         )
                     )
@@ -330,7 +331,7 @@ private fun DocumentManagementSection(
                         fontFamily = MaterialTheme.typography.body2.fontFamily
                     )
                 ) {
-                    append(stringResource(id = R.string.profile_documents_not_checked))
+                    append(stringResource(MR.strings.profile_documents_not_checked))
                 }
             }
 
@@ -387,7 +388,7 @@ private fun UncheckedDocumentItem(
 @Composable
 private fun formatIndustryForDisplay(industry: String?): String {
     if (industry.isNullOrEmpty()) {
-        return stringResource(R.string.profile_job_default)
+        return stringResource(MR.strings.profile_job_default)
     }
 
     // 1. 기존 로직: 쉼표로 구분된 여러 업종 처리
@@ -397,16 +398,16 @@ private fun formatIndustryForDisplay(industry: String?): String {
         industries.size <= 1 -> {
             // 2. 단일 업종인 경우: enum 매핑 적용
             val business = Business.fromDisplayText(industry)
-            business?.displayNameResId?.let { resId ->
-                stringResource(resId)
+            business?.displayNameRes?.let { res ->
+                stringResource(res)
             } ?: industry
         }
         else -> {
             // 3. 여러 업종인 경우: 첫 번째만 enum 매핑하고 "..." 추가
             val firstIndustry = industries.first()
             val business = Business.fromDisplayText(firstIndustry)
-            val displayName = business?.displayNameResId?.let { resId ->
-                stringResource(resId)
+            val displayName = business?.displayNameRes?.let { res ->
+                stringResource(res)
             } ?: firstIndustry
 
             "$displayName ..."
@@ -418,8 +419,8 @@ private fun formatIndustryForDisplay(industry: String?): String {
 private fun formatTopikLevelForDisplay(topikLevel: String?): String {
     return topikLevel?.let { value ->
         val level = TopikLevel.fromDisplayText(value)
-        stringResource(level.displayNameResId)
-    } ?: stringResource(R.string.profile_korean_default)
+        stringResource(level.displayNameRes)
+    } ?: stringResource(MR.strings.profile_korean_default)
 }
 
 

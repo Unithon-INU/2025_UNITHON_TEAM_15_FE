@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.document.components.DocumentPhoneNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -40,24 +40,24 @@ fun WorkplaceInfo2Screen(
             DocumentTextTextField(
                 value = companyAddressValue,
                 onValueChange = onCompanyAddressValueChange,
-                labelText = stringResource(R.string.document_workplace_info_2_company_address_label),
-                placeholderText = stringResource(R.string.document_workplace_info_2_company_address_placeholder),
+                labelText = stringResource(MR.strings.document_workplace_info_2_company_address_label),
+                placeholderText = stringResource(MR.strings.document_workplace_info_2_company_address_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
             DocumentTextTextField(
                 value = employerNameValue,
                 onValueChange = onEmployerNameValueChange,
-                labelText = stringResource(R.string.document_workplace_info_2_employer_name_label),
-                placeholderText = stringResource(R.string.document_workplace_info_2_employer_name_placeholder),
+                labelText = stringResource(MR.strings.document_workplace_info_2_employer_name_label),
+                placeholderText = stringResource(MR.strings.document_workplace_info_2_employer_name_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
             DocumentPhoneNumberTextField(
                 value = employerPhoneNumberValue,
                 onValueChange = onEmployerPhoneNumberValueChange,
-                labelText = stringResource(R.string.document_workplace_info_2_employer_phone_number_label),
-                placeholderText = stringResource(R.string.document_workplace_info_2_employer_phone_number_placeholder),
+                labelText = stringResource(MR.strings.document_workplace_info_2_employer_phone_number_label),
+                placeholderText = stringResource(MR.strings.document_workplace_info_2_employer_phone_number_placeholder),
                 imeAction = ImeAction.Next
             )
         }

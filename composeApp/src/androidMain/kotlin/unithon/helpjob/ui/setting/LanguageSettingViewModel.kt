@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.setting
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.ui.base.BaseViewModel
@@ -25,7 +26,7 @@ class LanguageSettingViewModel(
     private val _uiState = MutableStateFlow(LanguageSettingUiState())
     val uiState: StateFlow<LanguageSettingUiState> = _uiState.asStateFlow()
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     init {
@@ -54,7 +55,7 @@ class LanguageSettingViewModel(
 
             } catch (e: Exception) {
                 Timber.e(e, "❌ 언어 변경 실패: ${language.displayName}")
-                _snackbarMessage.emit(R.string.language_change_failed)
+                _snackbarMessage.emit(MR.strings.language_change_failed)
             }
         }
     }

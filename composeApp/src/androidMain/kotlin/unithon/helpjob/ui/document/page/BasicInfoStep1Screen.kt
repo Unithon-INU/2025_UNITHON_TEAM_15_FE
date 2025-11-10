@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.document.components.DocumentForeignerNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -41,8 +41,8 @@ fun BasicInfoStep1Screen(
             DocumentTextTextField(
                 value = nameValue,
                 onValueChange = onNameValueChange,
-                labelText = stringResource(R.string.document_basic_info_1_name_label),
-                placeholderText = stringResource(R.string.document_basic_info_1_name_placeholder),
+                labelText = stringResource(MR.strings.document_basic_info_1_name_label),
+                placeholderText = stringResource(MR.strings.document_basic_info_1_name_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
@@ -50,8 +50,8 @@ fun BasicInfoStep1Screen(
             DocumentForeignerNumberTextField(
                 value = foreignerNumberValue,
                 onValueChange = onForeignerNumberValueChange,
-                labelText = stringResource(R.string.document_basic_info_1_foreigner_register_number_label),
-                placeholderText = stringResource(R.string.document_basic_info_1_foreigner_register_number_placeholder),
+                labelText = stringResource(MR.strings.document_basic_info_1_foreigner_register_number_label),
+                placeholderText = stringResource(MR.strings.document_basic_info_1_foreigner_register_number_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
@@ -59,8 +59,8 @@ fun BasicInfoStep1Screen(
             DocumentTextTextField(
                 value = majorValue,
                 onValueChange = onMajorValueChange,
-                labelText = stringResource(R.string.document_basic_info_1_major_label),
-                placeholderText = stringResource(R.string.document_basic_info_1_major_placeholder),
+                labelText = stringResource(MR.strings.document_basic_info_1_major_label),
+                placeholderText = stringResource(MR.strings.document_basic_info_1_major_placeholder),
                 imeAction = ImeAction.Next
             )
         }

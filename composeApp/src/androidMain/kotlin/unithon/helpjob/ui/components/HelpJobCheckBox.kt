@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Primary600
 

@@ -14,11 +14,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentWageTextField
 import unithon.helpjob.ui.theme.Grey500
@@ -136,8 +136,8 @@ fun WorkplaceInfo3Screen(
             DocumentWageTextField(
                 value = hourlyWageValue,
                 onValueChange = onHourlyWageValueChange,
-                labelText = stringResource(R.string.document_workplace_info_3_hourly_wage_label),
-                placeholderText = stringResource(R.string.document_workplace_info_3_hourly_wage_placeholder),
+                labelText = stringResource(MR.strings.document_workplace_info_3_hourly_wage_label),
+                placeholderText = stringResource(MR.strings.document_workplace_info_3_hourly_wage_placeholder),
                 imeAction = ImeAction.Done
             )
 
@@ -146,7 +146,7 @@ fun WorkplaceInfo3Screen(
             // 근무 시작일
             Column {
                 Text(
-                    text = stringResource(R.string.document_workplace_info_3_work_start_date_label),
+                    text = stringResource(MR.strings.document_workplace_info_3_work_start_date_label),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey500,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -163,8 +163,8 @@ fun WorkplaceInfo3Screen(
                             // 년도가 변경되면 일 수 재계산을 위해 LaunchedEffect가 동작함
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_start_year_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_year_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_start_year_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_start_year_trailing_text),
                         showScrollbar = false
                     )
 
@@ -181,8 +181,8 @@ fun WorkplaceInfo3Screen(
                             // 월이 변경되면 일 수 재계산을 위해 LaunchedEffect가 동작함
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_start_month_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_month_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_start_month_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_start_month_trailing_text),
                         showScrollbar = false
                     )
 
@@ -198,8 +198,8 @@ fun WorkplaceInfo3Screen(
                             onWorkStartDayValueChange(day)
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_start_day_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_start_day_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_start_day_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_start_day_trailing_text),
                         showScrollbar = false
                     )
                 }
@@ -210,7 +210,7 @@ fun WorkplaceInfo3Screen(
             // 근무 종료일
             Column {
                 Text(
-                    text = stringResource(R.string.document_workplace_info_3_work_end_day_label),
+                    text = stringResource(MR.strings.document_workplace_info_3_work_end_day_label),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey500,
                     modifier = Modifier.padding(bottom = 8.dp)
@@ -227,8 +227,8 @@ fun WorkplaceInfo3Screen(
                             // 년도가 변경되면 일 수 재계산을 위해 LaunchedEffect가 동작함
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_end_year_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_end_year_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_end_year_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_end_year_trailing_text),
                         isUpward = true
                     )
 
@@ -245,8 +245,8 @@ fun WorkplaceInfo3Screen(
                             // 월이 변경되면 일 수 재계산을 위해 LaunchedEffect가 동작함
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_end_month_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_end_month_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_end_month_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_end_month_trailing_text),
                         isUpward = true
                     )
 
@@ -262,8 +262,8 @@ fun WorkplaceInfo3Screen(
                             onWorkEndDayValueChange(day)
                         },
                         itemToString = { it },
-                        placeholder = stringResource(R.string.document_workplace_info_3_work_end_day_placeholder),
-                        trailingText = stringResource(R.string.document_workplace_info_3_work_end_day_trailing_text),
+                        placeholder = stringResource(MR.strings.document_workplace_info_3_work_end_day_placeholder),
+                        trailingText = stringResource(MR.strings.document_workplace_info_3_work_end_day_trailing_text),
                         isUpward = true
                     )
                 }

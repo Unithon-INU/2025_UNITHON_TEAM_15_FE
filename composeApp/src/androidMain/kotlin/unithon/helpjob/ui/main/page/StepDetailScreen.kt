@@ -33,12 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.LanguageAwareScreen
@@ -217,7 +218,7 @@ private fun TipsSection(
             modifier = Modifier.padding(end = 1.dp)
         )
         Text(
-            text = stringResource(R.string.step_detail_screen_subtitle),
+            text = stringResource(MR.strings.step_detail_screen_subtitle),
             style = MaterialTheme.typography.headlineMedium,
             color = Grey600
         )

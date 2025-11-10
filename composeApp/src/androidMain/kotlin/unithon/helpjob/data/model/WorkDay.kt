@@ -1,44 +1,45 @@
 package unithon.helpjob.data.model
 
 import android.content.Context
-import androidx.annotation.StringRes
-import unithon.helpjob.R
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.desc
+import unithon.helpjob.resources.MR
 
 /**
  * 근무 요일 관리 Enum
- * - UI 표시용 String Resource ID
+ * - UI 표시용 String Resource (Moko Resources)
  * - API 전송용 한글 값
  */
 enum class WorkDay(
-    @StringRes val displayNameResId: Int,
+    val displayNameRes: StringResource,
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     MONDAY(
-        displayNameResId = R.string.workday_monday,
+        displayNameRes = MR.strings.workday_monday,
         apiValue = "월"
     ),
     TUESDAY(
-        displayNameResId = R.string.workday_tuesday,
+        displayNameRes = MR.strings.workday_tuesday,
         apiValue = "화"
     ),
     WEDNESDAY(
-        displayNameResId = R.string.workday_wednesday,
+        displayNameRes = MR.strings.workday_wednesday,
         apiValue = "수"
     ),
     THURSDAY(
-        displayNameResId = R.string.workday_thursday,
+        displayNameRes = MR.strings.workday_thursday,
         apiValue = "목"
     ),
     FRIDAY(
-        displayNameResId = R.string.workday_friday,
+        displayNameRes = MR.strings.workday_friday,
         apiValue = "금"
     ),
     SATURDAY(
-        displayNameResId = R.string.workday_saturday,
+        displayNameRes = MR.strings.workday_saturday,
         apiValue = "토"
     ),
     SUNDAY(
-        displayNameResId = R.string.workday_sunday,
+        displayNameRes = MR.strings.workday_sunday,
         apiValue = "일"
     );
 
@@ -46,7 +47,7 @@ enum class WorkDay(
      * Context로 현재 언어에 맞는 표시 이름 반환
      */
     fun getDisplayName(context: Context): String {
-        return context.getString(displayNameResId)
+        return displayNameRes.desc().toString(context)
     }
 
     companion object {

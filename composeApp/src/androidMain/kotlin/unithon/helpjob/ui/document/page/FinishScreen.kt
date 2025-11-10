@@ -13,9 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700
@@ -43,13 +44,13 @@ fun FinishScreen(
             )
             Spacer(Modifier.height(25.dp))
             Text(
-                text = stringResource(R.string.document_finish_title),
+                text = stringResource(MR.strings.document_finish_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
             Spacer(Modifier.height(9.dp))
             Text(
-                text = stringResource(R.string.document_finish_description),
+                text = stringResource(MR.strings.document_finish_description),
                 style = MaterialTheme.typography.titleMedium,
                 color = Grey500
             )
@@ -59,7 +60,7 @@ fun FinishScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
-            text = stringResource(R.string.document_finish_button),
+            text = stringResource(MR.strings.document_finish_button),
             onClick = onNext,
             enabled = true
         )

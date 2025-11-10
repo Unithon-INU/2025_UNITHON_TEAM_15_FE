@@ -2,44 +2,45 @@
 package unithon.helpjob.data.model
 
 import android.content.Context
-import androidx.annotation.StringRes
-import unithon.helpjob.R
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.desc
+import unithon.helpjob.resources.MR
 
 /**
  * 업무 직종 관리 Enum
- * - UI 표시용 String Resource ID
+ * - UI 표시용 String Resource (Moko Resources)
  * - API 전송용 한글 값
  */
 enum class Business(
-    @StringRes val displayNameResId: Int,
+    val displayNameRes: StringResource,
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     RESTAURANT(
-        displayNameResId = R.string.onboarding_business_setup_restaurant,
+        displayNameRes = MR.strings.onboarding_business_setup_restaurant,
         apiValue = "음식점/카페"
     ),
     MART(
-        displayNameResId = R.string.onboarding_business_setup_mart,
+        displayNameRes = MR.strings.onboarding_business_setup_mart,
         apiValue = "편의점/마트"
     ),
     LOGISTICS(
-        displayNameResId = R.string.onboarding_business_setup_logistics,
+        displayNameRes = MR.strings.onboarding_business_setup_logistics,
         apiValue = "물류/창고작업"
     ),
     OFFICE(
-        displayNameResId = R.string.onboarding_business_setup_office,
+        displayNameRes = MR.strings.onboarding_business_setup_office,
         apiValue = "사무보조/문서정리"
     ),
     TRANSLATION(
-        displayNameResId = R.string.onboarding_business_setup_translation,
+        displayNameRes = MR.strings.onboarding_business_setup_translation,
         apiValue = "통역/번역"
     ),
     TUTORING(
-        displayNameResId = R.string.onboarding_business_setup_learn,
+        displayNameRes = MR.strings.onboarding_business_setup_learn,
         apiValue = "과외/학습보조"
     ),
     EVENT(
-        displayNameResId = R.string.onboarding_business_setup_event,
+        displayNameRes = MR.strings.onboarding_business_setup_event,
         apiValue = "행사/이벤트스태프"
     );
 
@@ -47,7 +48,7 @@ enum class Business(
      * Context로 현재 언어에 맞는 표시 이름 반환
      */
     fun getDisplayName(context: Context): String {
-        return context.getString(displayNameResId)
+        return displayNameRes.desc().toString(context)
     }
 
     companion object {

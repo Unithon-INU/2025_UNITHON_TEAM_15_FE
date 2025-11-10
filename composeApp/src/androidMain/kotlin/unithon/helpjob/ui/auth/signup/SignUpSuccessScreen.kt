@@ -17,10 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
@@ -57,7 +58,7 @@ fun SignUpSuccessScreen(
 
                 // 메인 타이틀
                 Text(
-                    text = stringResource(id = R.string.signup_success_title),
+                    text = stringResource(MR.strings.signup_success_title),
                     style = MaterialTheme.typography.headlineLarge.copy(
                         color = Grey700,
                         textAlign = TextAlign.Center
@@ -68,7 +69,7 @@ fun SignUpSuccessScreen(
 
                 // 서브 타이틀
                 Text(
-                    text = stringResource(id = R.string.signup_success_subtitle),
+                    text = stringResource(MR.strings.signup_success_subtitle),
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = Grey500,
                         textAlign = TextAlign.Center
@@ -78,7 +79,7 @@ fun SignUpSuccessScreen(
 
             // 하단 버튼
             HelpJobButton(
-                text = stringResource(id = R.string.signup_success_go_to_login),
+                text = stringResource(MR.strings.signup_success_go_to_login),
                 onClick = onGoToLogin,
                 modifier = Modifier
                     .fillMaxWidth()

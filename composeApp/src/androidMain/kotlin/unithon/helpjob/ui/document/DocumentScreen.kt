@@ -16,11 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
@@ -48,7 +50,7 @@ fun DocumentScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes  ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -65,9 +67,9 @@ fun DocumentScreen(
         DocumentPage(
             content = {
                 DocumentOnboardingScreen(
-                    title = stringResource(R.string.document_onboarding_title) ,
+                    title = stringResource(MR.strings.document_onboarding_title) ,
                     image = R.drawable.memo,
-                    description = stringResource(R.string.document_onboarding_description_1),
+                    description = stringResource(MR.strings.document_onboarding_description_1),
                     currentPage = 1,
                     pageSize = 2,
                     onNext = {
@@ -82,9 +84,9 @@ fun DocumentScreen(
         DocumentPage(
             content = {
                 DocumentOnboardingScreen(
-                    title = stringResource(R.string.document_onboarding_title) ,
+                    title = stringResource(MR.strings.document_onboarding_title) ,
                     image = R.drawable.message,
-                    description = stringResource(R.string.document_onboarding_description_2),
+                    description = stringResource(MR.strings.document_onboarding_description_2),
                     currentPage = 2,
                     pageSize = 2,
                     onNext = {
@@ -101,7 +103,7 @@ fun DocumentScreen(
                 BasicInfoStep1Screen(
                     modifier = Modifier.fillMaxSize(),
                     step = 1,
-                    title = stringResource(R.string.document_step_1_title),
+                    title = stringResource(MR.strings.document_step_1_title),
                     nameValue = uiState.name,
                     onNameValueChange = {viewModel.updateName(it)},
                     foreignerNumberValue = uiState.foreignerNumber,
@@ -125,7 +127,7 @@ fun DocumentScreen(
                     emailError = uiState.emailError,  // 추가
                     emailErrorMessage = uiState.emailErrorMessage,
                     step = 1,
-                    title = stringResource(R.string.document_step_1_title),
+                    title = stringResource(MR.strings.document_step_1_title),
                     semesterValue = uiState.semester,
                     onSemesterValueChange = {viewModel.updateSemester(it)},
                     phoneNumberValue = uiState.phoneNumber,
@@ -147,7 +149,7 @@ fun DocumentScreen(
                 WorkplaceInfo1Screen(
                     modifier = Modifier.fillMaxSize(),
                     step = 2,
-                    title = stringResource(R.string.document_step_2_title),
+                    title = stringResource(MR.strings.document_step_2_title),
                     companyNameValue = uiState.companyName,
                     onCompanyNameValueChange = {viewModel.updateCompanyName(it)},
                     businessRegisterNumberValue = uiState.businessRegisterNumber,
@@ -169,7 +171,7 @@ fun DocumentScreen(
                 WorkplaceInfo2Screen(
                     modifier = Modifier.fillMaxSize(),
                     step = 2,
-                    title = stringResource(R.string.document_step_2_title),
+                    title = stringResource(MR.strings.document_step_2_title),
                     companyAddressValue = uiState.addressOfCompany,
                     onCompanyAddressValueChange = {viewModel.updateAddressOfCompany(it)},
                     employerNameValue = uiState.employerName,
@@ -191,7 +193,7 @@ fun DocumentScreen(
                 WorkplaceInfo3Screen(
                     modifier =Modifier.fillMaxSize(),
                     step = 2,
-                    title = stringResource(R.string.document_step_2_title),
+                    title = stringResource(MR.strings.document_step_2_title),
                     hourlyWageValue = uiState.hourlyWage,
                     onHourlyWageValueChange = {viewModel.updateHourlyWage(it)},
                     workStartYearValue = uiState.workStartYear,
@@ -221,7 +223,7 @@ fun DocumentScreen(
                 WorkplaceInfo4Screen(
                     modifier = Modifier.fillMaxSize(),
                     step = 2,
-                    title = stringResource(R.string.document_step_2_title),
+                    title = stringResource(MR.strings.document_step_2_title),
                     workDays = uiState.workDays,
                     onWorkDayChange = { workDay -> viewModel.updateWorkDay(workDay) },
                     workDayTimes = uiState.workDayTimes,
@@ -287,7 +289,7 @@ fun DocumentScreen(
             // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
             if (pagerState.currentPage >= 2) {
                 HelpJobTopAppBar(
-                    title = R.string.document_top_bar_title,
+                    title = MR.strings.document_top_bar_title,
                     onBack = {
                         if (pagerState.currentPage > 0) {
                             scope.launch {

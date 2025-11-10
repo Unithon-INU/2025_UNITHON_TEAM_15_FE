@@ -24,13 +24,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Blue500
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey100
@@ -101,7 +102,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.calculator_result_work_hours_label),
+                            text = stringResource(MR.strings.calculator_result_work_hours_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -114,7 +115,7 @@ fun CalculationResultDialog(
                                 color = Grey700
                             )
                             Text(
-                                text = " ${stringResource(R.string.calculator_result_hours_unit)}",
+                                text = " ${stringResource(MR.strings.calculator_result_hours_unit)}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -130,7 +131,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.calculator_result_weekly_allowance_label),
+                            text = stringResource(MR.strings.calculator_result_weekly_allowance_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -144,14 +145,14 @@ fun CalculationResultDialog(
                                     color = Grey700
                                 )
                                 Text(
-                                    text = " ${stringResource(R.string.calculator_result_included)}",
+                                    text = " ${stringResource(MR.strings.calculator_result_included)}",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = Grey600
                                 )
                             }
                         } else {
                             Text(
-                                text = stringResource(R.string.calculator_result_not_included),
+                                text = stringResource(MR.strings.calculator_result_not_included),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -167,7 +168,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(R.string.calculator_result_expected_salary_label),
+                            text = stringResource(MR.strings.calculator_result_expected_salary_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -180,7 +181,7 @@ fun CalculationResultDialog(
                                 color = Grey700
                             )
                             Text(
-                                text = " ${stringResource(R.string.calculator_result_won_unit)}",
+                                text = " ${stringResource(MR.strings.calculator_result_won_unit)}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -203,7 +204,7 @@ fun CalculationResultDialog(
                             )
                             Spacer(Modifier.width(5.8.dp))
                             Text(
-                                text = stringResource(R.string.calculator_result_weekly_allowance_condition_met),
+                                text = stringResource(MR.strings.calculator_result_weekly_allowance_condition_met),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Blue500
                             )
@@ -216,7 +217,7 @@ fun CalculationResultDialog(
                             )
                             Spacer(Modifier.width(5.dp))
                             Text(
-                                text = stringResource(R.string.calculator_result_weekly_allowance_condition_not_met),
+                                text = stringResource(MR.strings.calculator_result_weekly_allowance_condition_not_met),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Warning
                             )
@@ -236,7 +237,7 @@ fun CalculationResultDialog(
                             .padding(start = 25.dp, top = 15.dp, end = 25.dp, bottom = 15.dp)
                     ) {
                         Text(
-                            text = stringResource(R.string.calculator_result_disclaimer),
+                            text = stringResource(MR.strings.calculator_result_disclaimer),
                             style = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center),
                             color = Grey500,
                             modifier = Modifier.fillMaxWidth()

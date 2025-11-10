@@ -27,13 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.auth.components.AuthEmailTextField
 import unithon.helpjob.ui.auth.components.AuthPasswordTextField
@@ -63,7 +64,7 @@ fun SignUpScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -119,7 +120,7 @@ private fun SignUpScreenContent(
                 .navigationBarsPadding()
         ) {
             HelpJobTopAppBar(
-                title = R.string.sign_up_top_bar_title,
+                title = MR.strings.sign_up_top_bar_title,
                 onBack = onBack
             )
             Column(
@@ -129,7 +130,7 @@ private fun SignUpScreenContent(
             ) {
                 // 제목
                 Text(
-                    text = stringResource(id = R.string.sign_up_subtitle),
+                    text = stringResource(MR.strings.sign_up_subtitle),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Grey700
                 )
@@ -145,10 +146,10 @@ private fun SignUpScreenContent(
                     AuthEmailTextField(
                         value = uiState.email,
                         onValueChange = onUpdateEmail,
-                        labelText = stringResource(R.string.sign_up_email_label),
-                        placeholderText = stringResource(R.string.sign_up_email_hint),
+                        labelText = stringResource(MR.strings.sign_up_email_label),
+                        placeholderText = stringResource(MR.strings.sign_up_email_hint),
                         isError = uiState.emailError,
-                        errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
+                        errorMessage = uiState.emailErrorMessage?.let { stringResource(it) },
                         modifier = Modifier.weight(1f),
                     )
 
@@ -200,14 +201,14 @@ private fun SignUpScreenContent(
                             AuthVerificationCodeTextField(
                                 value = uiState.verificationCode,
                                 onValueChange = onUpdateVerificationCode,
-                                placeholderText = stringResource(id = R.string.verification_code_hint),
+                                placeholderText = stringResource(MR.strings.verification_code_hint),
                                 isError = uiState.verificationCodeError,
-                                errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(id = it) },
+                                errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(it) },
                                 modifier = Modifier.fillMaxWidth(),
                             )
 
                             // Resend 텍스트를 텍스트필드 내부 오른쪽에 배치
-                            if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == R.string.verification_code_expired) {
+                            if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == MR.strings.verification_code_expired) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -216,7 +217,7 @@ private fun SignUpScreenContent(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.resend_button),
+                                        text = stringResource(MR.strings.resend_button),
                                         style = MaterialTheme.typography.labelMedium,
                                         color = Warning,
                                         modifier = Modifier
@@ -264,8 +265,8 @@ private fun SignUpScreenContent(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = stringResource(
-                                if (uiState.isCodeVerified) R.string.verification_code_completed
-                                else R.string.verification_code_instruction
+                                if (uiState.isCodeVerified) MR.strings.verification_code_completed
+                                else MR.strings.verification_code_instruction
                             ),
                             style = MaterialTheme.typography.labelMedium,
                             color = Primary500,
@@ -279,8 +280,8 @@ private fun SignUpScreenContent(
                 AuthPasswordTextField(
                     value = uiState.password,
                     onValueChange = onUpdatePassword,
-                    labelText = stringResource(R.string.sign_up_password_label),
-                    placeholderText = stringResource(R.string.sign_up_password_hint),
+                    labelText = stringResource(MR.strings.sign_up_password_label),
+                    placeholderText = stringResource(MR.strings.sign_up_password_hint),
                     isError = uiState.passwordError,
                     errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) }
                 )
@@ -291,8 +292,8 @@ private fun SignUpScreenContent(
                 AuthPasswordTextField(
                     value = uiState.confirmPassword,
                     onValueChange = onUpdateConfirmPassword,
-                    labelText = stringResource(R.string.sign_up_confirm_password_label),
-                    placeholderText = stringResource(R.string.sign_up_confirm_password_hint),
+                    labelText = stringResource(MR.strings.sign_up_confirm_password_label),
+                    placeholderText = stringResource(MR.strings.sign_up_confirm_password_hint),
                     isError = uiState.confirmPasswordError,
                     errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },
                     imeAction = ImeAction.Done
@@ -302,7 +303,7 @@ private fun SignUpScreenContent(
 
                 // 다음 버튼
                 HelpJobButton(
-                    text = stringResource(id = R.string.sign_up_next_button),
+                    text = stringResource(MR.strings.sign_up_next_button),
                     onClick = onProceedToNickname,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
@@ -386,13 +387,13 @@ fun SignUpScreenErrorPreview() {
                 verificationCode = "wrong",
                 isEmailSent = true,
                 emailError = true,
-                emailErrorMessage = R.string.error_invalid_email,
+                emailErrorMessage = MR.strings.error_invalid_email,
                 passwordError = true,
-                passwordErrorMessage = R.string.error_short_password,
+                passwordErrorMessage = MR.strings.error_short_password,
                 confirmPasswordError = true,
-                confirmPasswordErrorMessage = R.string.error_password_mismatch,
+                confirmPasswordErrorMessage = MR.strings.error_password_mismatch,
                 verificationCodeError = true,
-                verificationCodeErrorMessage = R.string.verification_code_invalid
+                verificationCodeErrorMessage = MR.strings.verification_code_invalid
             ),
             onUpdateEmail = {},
             onUpdatePassword = {},

@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.moko.resources)
 }
 
 val localProperties = Properties()
@@ -55,6 +56,10 @@ kotlin {
                 // DataStore (공통)
                 implementation(libs.androidx.dataStore.core)
                 implementation(libs.androidx.dataStore.preferences)
+
+                // Moko Resources (공통)
+                implementation(libs.moko.resources)
+                implementation(libs.moko.resources.compose)
             }
         }
 
@@ -195,6 +200,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 apply(plugin = "com.google.android.gms.oss-licenses-plugin")
+
+multiplatformResources {
+    resourcesPackage.set("unithon.helpjob.resources")
+}
 
 //// Compiler Reports 생성 (최적화 분석용)
 //tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

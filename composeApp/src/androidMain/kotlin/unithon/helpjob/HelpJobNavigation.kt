@@ -1,9 +1,10 @@
 package unithon.helpjob
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.navigation.NavHostController
+import dev.icerock.moko.resources.StringResource
 import unithon.helpjob.HelpJobDestinations.STEP_DETAIL_ROUTE
+import unithon.helpjob.resources.MR
 
 /**
  * Navigation 관련 화면들의 이름
@@ -46,31 +47,31 @@ object HelpJobDestinations {
 enum class BottomNavDestination(
     @DrawableRes val selectedIcon: Int,
     @DrawableRes val unselectedIcon: Int,
-    @StringRes val iconTextId: Int,
+    val iconTextId: StringResource,
     val route: String,
 ) {
     HOME(
         selectedIcon = R.drawable.home_selected,
         unselectedIcon = R.drawable.home_unselected,
-        iconTextId = R.string.bottom_nav_home,
+        iconTextId = MR.strings.bottom_nav_home,
         route = "home",
     ),
     CALCULATE(
         selectedIcon = R.drawable.calculate_selected,
         unselectedIcon = R.drawable.calculate_unselected,
-        iconTextId = R.string.bottom_nav_calculate,
+        iconTextId = MR.strings.bottom_nav_calculate,
         route = "calculate",
     ),
     CONTENT(
         selectedIcon = R.drawable.content_selected,
         unselectedIcon = R.drawable.content_unselected,
-        iconTextId = R.string.bottom_nav_content,
+        iconTextId = MR.strings.bottom_nav_content,
         route = "content",
     ),
     PROFILE(
         selectedIcon = R.drawable.profile_selected,
         unselectedIcon = R.drawable.profile_unselected,
-        iconTextId = R.string.bottom_nav_profile,
+        iconTextId = MR.strings.bottom_nav_profile,
         route = "profile",
     );
 

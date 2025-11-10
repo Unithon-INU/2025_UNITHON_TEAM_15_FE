@@ -1,48 +1,49 @@
 package unithon.helpjob.data.model
 
 import android.content.Context
-import androidx.annotation.StringRes
-import unithon.helpjob.R
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.desc
+import unithon.helpjob.resources.MR
 
 /**
  * 학기 관리 Enum
- * - UI 표시용 String Resource ID
+ * - UI 표시용 String Resource (Moko Resources)
  * - API 전송용 한글 값
  */
 enum class Semester(
-    @StringRes val displayNameResId: Int,
+    val displayNameRes: StringResource,
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     FIRST_YEAR_FIRST(
-        displayNameResId = R.string.semester_1_1,
+        displayNameRes = MR.strings.semester_1_1,
         apiValue = "1학기"
     ),
     FIRST_YEAR_SECOND(
-        displayNameResId = R.string.semester_1_2,
+        displayNameRes = MR.strings.semester_1_2,
         apiValue = "2학기"
     ),
     SECOND_YEAR_FIRST(
-        displayNameResId = R.string.semester_2_1,
+        displayNameRes = MR.strings.semester_2_1,
         apiValue = "3학기"
     ),
     SECOND_YEAR_SECOND(
-        displayNameResId = R.string.semester_2_2,
+        displayNameRes = MR.strings.semester_2_2,
         apiValue = "4학기"
     ),
     THIRD_YEAR_FIRST(
-        displayNameResId = R.string.semester_3_1,
+        displayNameRes = MR.strings.semester_3_1,
         apiValue = "5학기"
     ),
     THIRD_YEAR_SECOND(
-        displayNameResId = R.string.semester_3_2,
+        displayNameRes = MR.strings.semester_3_2,
         apiValue = "6학기"
     ),
     FOURTH_YEAR_FIRST(
-        displayNameResId = R.string.semester_4_1,
+        displayNameRes = MR.strings.semester_4_1,
         apiValue = "7학기"
     ),
     FOURTH_YEAR_SECOND(
-        displayNameResId = R.string.semester_4_2,
+        displayNameRes = MR.strings.semester_4_2,
         apiValue = "8학기"
     );
 
@@ -50,7 +51,7 @@ enum class Semester(
      * Context로 현재 언어에 맞는 표시 이름 반환
      */
     fun getDisplayName(context: Context): String {
-        return context.getString(displayNameResId)
+        return displayNameRes.desc().toString(context)
     }
 
     companion object {

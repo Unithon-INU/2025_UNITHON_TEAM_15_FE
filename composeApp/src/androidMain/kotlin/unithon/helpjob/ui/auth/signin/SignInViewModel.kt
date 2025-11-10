@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.auth.signin
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.HelpJobApplication
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailNotFoundException
 import unithon.helpjob.data.repository.WrongPasswordException
@@ -28,8 +29,8 @@ class SignInViewModel(
         val shouldGoToHome: Boolean = false,
         val emailError: Boolean = false,
         val passwordError: Boolean = false,
-        val emailErrorMessage: Int? = null,
-        val passwordErrorMessage: Int? = null
+        val emailErrorMessage: StringResource? = null,
+        val passwordErrorMessage: StringResource? = null
     ) {
         val isInputValid: Boolean
             get() = email.isNotBlank() && password.length >= 6 &&
@@ -40,7 +41,7 @@ class SignInViewModel(
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
     // 🆕 스낵바 메시지용 SharedFlow - 일회성 이벤트
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateEmail(email: String) {
@@ -79,7 +80,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_empty_email
+                    emailErrorMessage = MR.strings.error_empty_email
                 )
             }
             hasError = true
@@ -87,7 +88,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = R.string.error_invalid_email
+                    emailErrorMessage = MR.strings.error_invalid_email
                 )
             }
             hasError = true
@@ -97,7 +98,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = R.string.error_empty_password
+                    passwordErrorMessage = MR.strings.error_empty_password
                 )
             }
             hasError = true
@@ -105,7 +106,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = R.string.error_short_password
+                    passwordErrorMessage = MR.strings.error_short_password
                 )
             }
             hasError = true
@@ -140,7 +141,7 @@ class SignInViewModel(
                     it.copy(
                         isLoading = false,
                         emailError = true,
-                        emailErrorMessage = R.string.sign_in_email_not_found
+                        emailErrorMessage = MR.strings.sign_in_email_not_found
                     )
                 }
             } catch (e: WrongPasswordException) {
@@ -150,14 +151,14 @@ class SignInViewModel(
                     it.copy(
                         isLoading = false,
                         passwordError = true,
-                        passwordErrorMessage = R.string.sign_in_password_wrong
+                        passwordErrorMessage = MR.strings.sign_in_password_wrong
                     )
                 }
             } catch (e: Exception) {
                 // 6. Critical Error - 스낵바 + 로깅
                 Timber.e(e, "Sign in failed - unexpected error")
                 _uiState.update { it.copy(isLoading = false) }
-                _snackbarMessage.emit(R.string.sign_in_failed)
+                _snackbarMessage.emit(MR.strings.sign_in_failed)
             }
         }
     }

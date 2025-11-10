@@ -9,9 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey600
 
@@ -26,7 +27,7 @@ fun ProfileTopAppBar(
             IconButton(onClick = onNavigateToSettings) {
                 Icon(
                     painter = painterResource(id = R.drawable.setting_icon),
-                    contentDescription = stringResource(id = R.string.settings_button)
+                    contentDescription = stringResource(MR.strings.settings_button)
                 )
             }
         },

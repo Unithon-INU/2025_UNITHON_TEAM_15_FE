@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.main
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.HelpJobApplication
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.DocumentInfoRes
@@ -45,7 +46,7 @@ class HomeViewModel(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     /**
@@ -235,7 +236,7 @@ class HomeViewModel(
                 )
             } catch (e: Exception) {
                 Timber.e(e, "체크리스트 업데이트 실패")
-                _snackbarMessage.emit(R.string.error_update_checklist)  // 추가
+                _snackbarMessage.emit(MR.strings.error_update_checklist)  // 추가
                 _uiState.update { it.copy(isUpdating = false) }
             }
         }
@@ -275,7 +276,7 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 Timber.e(e, "홈 정보 조회 실패")
-                _snackbarMessage.emit(R.string.error_load_home_data)  // 추가
+                _snackbarMessage.emit(MR.strings.error_load_home_data)  // 추가
                 _uiState.update { it.copy(isLoading = false) }
             }
         }

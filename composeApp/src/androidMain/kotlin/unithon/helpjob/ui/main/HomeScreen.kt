@@ -40,11 +40,13 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
+import dev.icerock.moko.resources.desc.desc
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.data.repository.LanguageAwareScreen
@@ -86,7 +88,7 @@ fun HomeScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -150,7 +152,7 @@ fun HomeScreen(
 
                 // 환영인사
                 Text(
-                    text = stringResource(R.string.welcome_message, uiState.nickname),
+                    text = stringResource(MR.strings.welcome_message, uiState.nickname),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Grey600
                 )
@@ -224,13 +226,13 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CategoryTab(
-                        text = stringResource(R.string.category_documents),
+                        text = stringResource(MR.strings.category_documents),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
                         onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
                         modifier = Modifier.weight(1f)
                     )
                     CategoryTab(
-                        text = stringResource(R.string.category_precautions),
+                        text = stringResource(MR.strings.category_precautions),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
                         onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
                         modifier = Modifier.weight(1f)

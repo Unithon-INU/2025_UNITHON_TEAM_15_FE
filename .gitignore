@@ -12,6 +12,8 @@ local.defaults.properties
 *.keystore
 *.jks
 .kotlin/
+# Moko Resources 자동 생성 파일
+**/moko-resources/
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 GoogleService-Info.plist

@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.profile
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
 
@@ -26,7 +27,7 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     init {
@@ -47,7 +48,7 @@ class ProfileViewModel(
                 )
             } catch (e: Exception) {
                 Timber.e(e, "프로필 로딩 실패")
-                _snackbarMessage.emit(R.string.error_profile_load_failed)  // 이 줄 추가
+                _snackbarMessage.emit(MR.strings.error_profile_load_failed)  // 이 줄 추가
                 _uiState.value = _uiState.value.copy(
                     isLoading = false
                 )

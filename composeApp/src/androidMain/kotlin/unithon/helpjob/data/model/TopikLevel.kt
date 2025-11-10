@@ -1,27 +1,38 @@
-import androidx.annotation.StringRes
-import unithon.helpjob.R
+package unithon.helpjob.data.model
+
+import android.content.Context
+import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.desc.desc
+import unithon.helpjob.resources.MR
 
 /**
  * TOPIK 레벨 관리 Enum
- * - UI 표시용 String Resource ID
+ * - UI 표시용 String Resource (Moko Resources)
  * - API 전송용 한글 값
  */
 enum class TopikLevel(
-    @StringRes val displayNameResId: Int,
+    val displayNameRes: StringResource,
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     NO_TOPIK(
-        displayNameResId = R.string.onboarding_korean_level_setup_no_topik,
+        displayNameRes = MR.strings.onboarding_korean_level_setup_no_topik,
         apiValue = "없음"
     ),
     TOPIK_3_OR_BELOW(
-        displayNameResId = R.string.onboarding_korean_level_setup_topik3,
+        displayNameRes = MR.strings.onboarding_korean_level_setup_topik3,
         apiValue = "TOPIK 3급"
     ),
     TOPIK_4_OR_ABOVE(
-        displayNameResId = R.string.onboarding_korean_level_setup_topik4_over,
+        displayNameRes = MR.strings.onboarding_korean_level_setup_topik4_over,
         apiValue = "TOPIK 4급 이상"
     );
+
+    /**
+     * Context로 현재 언어에 맞는 표시 이름 반환
+     */
+    fun getDisplayName(context: Context): String {
+        return displayNameRes.desc().toString(context)
+    }
 
     companion object {
         /**

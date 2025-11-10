@@ -20,11 +20,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.components.HelpJobDropdown
@@ -82,7 +82,7 @@ fun WorkplaceInfo4Screen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.document_workplace_info_4_work_days_label),
+                    text = stringResource(MR.strings.document_workplace_info_4_work_days_label),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey600
                 )
@@ -96,7 +96,7 @@ fun WorkplaceInfo4Screen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(R.string.document_workplace_info_4_everyday),
+                        text = stringResource(MR.strings.document_workplace_info_4_everyday),
                         style = MaterialTheme.typography.titleSmall,
                         color = Grey600
                     )
@@ -132,7 +132,7 @@ fun WorkplaceInfo4Screen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(R.string.document_workplace_info_4_work_time_label),
+                        text = stringResource(MR.strings.document_workplace_info_4_work_time_label),
                         style = MaterialTheme.typography.titleSmall,
                         color = Grey600
                     )
@@ -146,7 +146,7 @@ fun WorkplaceInfo4Screen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(R.string.document_workplace_info_4_same_time),
+                            text = stringResource(MR.strings.document_workplace_info_4_same_time),
                             style = MaterialTheme.typography.titleSmall,
                             color = Grey600
                         )
@@ -198,8 +198,8 @@ fun WorkplaceInfo4Screen(
                                 onWorkDayStartTimeChange(workDay, time)
                             },
                             itemToString = { it },
-                            placeholder = stringResource(R.string.document_workplace_info_4_start_time_placeholder),
-                            trailingText = stringResource(R.string.document_workplace_info_4_time_unit),
+                            placeholder = stringResource(MR.strings.document_workplace_info_4_start_time_placeholder),
+                            trailingText = stringResource(MR.strings.document_workplace_info_4_time_unit),
                             isUpward = true,
                             showScrollbar = false
                         )
@@ -224,8 +224,8 @@ fun WorkplaceInfo4Screen(
                                 onWorkDayEndTimeChange(workDay, time)
                             },
                             itemToString = { it },
-                            placeholder = stringResource(R.string.document_workplace_info_4_end_time_placeholder),
-                            trailingText = stringResource(R.string.document_workplace_info_4_time_unit),
+                            placeholder = stringResource(MR.strings.document_workplace_info_4_end_time_placeholder),
+                            trailingText = stringResource(MR.strings.document_workplace_info_4_time_unit),
                             isUpward = true,
                             showScrollbar = false
                         )

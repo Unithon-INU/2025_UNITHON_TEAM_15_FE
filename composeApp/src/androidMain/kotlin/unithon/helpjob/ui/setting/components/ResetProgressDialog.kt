@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
@@ -96,7 +97,7 @@ fun ResetProgressDialog(
 
                 // 제목
                 Text(
-                    text = stringResource(R.string.reset_progress_dialog_title),
+                    text = stringResource(MR.strings.reset_progress_dialog_title),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 18.sp,
                         lineHeight = 24.sp,
@@ -109,7 +110,7 @@ fun ResetProgressDialog(
 
                 // 설명
                 Text(
-                    text = stringResource(R.string.reset_progress_dialog_message),
+                    text = stringResource(MR.strings.reset_progress_dialog_message),
                     style = MaterialTheme.typography.labelMedium,
                     color = Grey600,
                     textAlign = TextAlign.Center,
@@ -137,7 +138,7 @@ fun ResetProgressDialog(
                         )
                     ) {
                         Text(
-                            text = stringResource(R.string.reset_progress_dialog_cancel),
+                            text = stringResource(MR.strings.reset_progress_dialog_cancel),
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,
@@ -163,7 +164,7 @@ fun ResetProgressDialog(
                         )
                     ) {
                         Text(
-                            text = stringResource(R.string.reset_progress_dialog_confirm),
+                            text = stringResource(MR.strings.reset_progress_dialog_confirm),
                             style = MaterialTheme.typography.titleSmall.copy(
                                 fontSize = 14.sp,
                                 lineHeight = 20.sp,

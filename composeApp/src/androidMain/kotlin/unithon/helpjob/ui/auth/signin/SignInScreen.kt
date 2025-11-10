@@ -22,12 +22,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.auth.components.AuthEmailTextField
 import unithon.helpjob.ui.auth.components.AuthPasswordTextField
@@ -55,7 +56,7 @@ fun SignInScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = context.getString(messageRes)
+                message = messageRes.desc().toString(context)
             )
         }
     }
@@ -106,13 +107,13 @@ private fun SignInContent(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(id = R.string.sign_in_welcome_main),
+                text = stringResource(MR.strings.sign_in_welcome_main),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
 
             Text(
-                text = stringResource(id = R.string.sign_in_welcome_sub),
+                text = stringResource(MR.strings.sign_in_welcome_sub),
                 style = MaterialTheme.typography.headlineMedium,
                 color = Grey700
             )
@@ -122,10 +123,10 @@ private fun SignInContent(
             AuthEmailTextField(
                 value = uiState.email,
                 onValueChange = onEmailChange,
-                labelText = stringResource(R.string.sign_in_email_label),
-                placeholderText = stringResource(R.string.sign_in_email_hint),
+                labelText = stringResource(MR.strings.sign_in_email_label),
+                placeholderText = stringResource(MR.strings.sign_in_email_hint),
                 isError = uiState.emailError,
-                errorMessage = uiState.emailErrorMessage?.let { stringResource(id = it) },
+                errorMessage = uiState.emailErrorMessage?.let { stringResource(it) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -134,10 +135,10 @@ private fun SignInContent(
             AuthPasswordTextField(
                 value = uiState.password,
                 onValueChange = onPasswordChange,
-                labelText = stringResource(R.string.sign_in_password_label),
-                placeholderText = stringResource(id = R.string.sign_in_password_hint),
+                labelText = stringResource(MR.strings.sign_in_password_label),
+                placeholderText = stringResource(MR.strings.sign_in_password_hint),
                 isError = uiState.passwordError,
-                errorMessage = uiState.passwordErrorMessage?.let { stringResource(id = it) },
+                errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) },
                 modifier = Modifier.fillMaxWidth(),
             )
 
@@ -145,7 +146,7 @@ private fun SignInContent(
 
             // 로그인 버튼
             HelpJobButton(
-                text = stringResource(id = R.string.sign_in_button),
+                text = stringResource(MR.strings.sign_in_button),
                 onClick = onSignInClick,
                 enabled = uiState.isInputValid,
                 isLoading = uiState.isLoading,
@@ -169,7 +170,7 @@ private fun SignInContent(
                 Spacer(modifier = Modifier.width(22.dp))
 
                 Text(
-                    text = stringResource(id = R.string.sign_in_or_divider),
+                    text = stringResource(MR.strings.sign_in_or_divider),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey300
                 )
@@ -193,13 +194,13 @@ private fun SignInContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.sign_in_no_account),
+                    text = stringResource(MR.strings.sign_in_no_account),
                     style = MaterialTheme.typography.bodySmall,
                     color = Grey600
                 )
                 Spacer(modifier = Modifier.width(11.dp))
                 Text(
-                    text = stringResource(id = R.string.sign_in_go_to_sign_up),
+                    text = stringResource(MR.strings.sign_in_go_to_sign_up),
                     style = MaterialTheme.typography.titleSmall,
                     color = Primary600,
                     modifier = Modifier.noRippleClickable { onNavigateToSignUp() }
@@ -245,8 +246,8 @@ fun SignInErrorPreview() {
                 isLoading = false,
                 emailError = true,
                 passwordError = true,
-                emailErrorMessage = R.string.error_invalid_email,
-                passwordErrorMessage = R.string.error_short_password
+                emailErrorMessage = MR.strings.error_invalid_email,
+                passwordErrorMessage = MR.strings.error_short_password
             ),
             onEmailChange = {},
             onPasswordChange = {},

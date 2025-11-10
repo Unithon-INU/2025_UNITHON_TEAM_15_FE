@@ -1,11 +1,12 @@
 package unithon.helpjob.ui.setting
 
 import androidx.lifecycle.viewModelScope
+import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.R
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.ui.base.BaseViewModel
@@ -15,7 +16,7 @@ class SettingViewModel(
     private val authRepository: AuthRepository
 ) : BaseViewModel() {
 
-    private val _snackbarMessage = MutableSharedFlow<Int>()
+    private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun resetProgress() {
@@ -25,7 +26,7 @@ class SettingViewModel(
                 Timber.d("진행 상황 초기화 성공")
             } catch (e: Exception) {
                 // Critical Error - 사용자에게 알림
-                _snackbarMessage.emit(R.string.reset_progress_error)
+                _snackbarMessage.emit(MR.strings.reset_progress_error)
                 Timber.e(e, "진행 상황 초기화 실패")
             }
         }

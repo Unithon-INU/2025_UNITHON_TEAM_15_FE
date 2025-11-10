@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import dev.icerock.moko.resources.StringResource
+import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentEmailTextField
@@ -22,7 +23,7 @@ import unithon.helpjob.ui.theme.HelpJobTheme
 fun BasicInfoStep2Screen(
     modifier: Modifier = Modifier,
     emailError: Boolean,  // 추가
-    emailErrorMessage: Int?,  // 추가
+    emailErrorMessage: StringResource?,  // 수정: Int? → StringResource?
     step: Int,
     title: String,
     semesterValue: Semester?,
@@ -49,8 +50,8 @@ fun BasicInfoStep2Screen(
                 selectedItem = semesterValue,
                 items = semesterList,
                 onItemSelected = onSemesterValueChange,
-                label = stringResource(R.string.document_basic_info_2_semester_label),
-                placeholder = stringResource(R.string.document_basic_info_2_semester_placeholder),
+                label = stringResource(MR.strings.document_basic_info_2_semester_label),
+                placeholder = stringResource(MR.strings.document_basic_info_2_semester_placeholder),
                 itemToString = { semester ->
                     // 🆕 Context를 통해 현재 언어에 맞는 표시 이름 반환
                     semester.getDisplayName(context)
@@ -60,19 +61,19 @@ fun BasicInfoStep2Screen(
             DocumentPhoneNumberTextField(
                 value = phoneNumberValue,
                 onValueChange = onPhoneNumberValueChange,
-                labelText = stringResource(R.string.document_basic_info_2_phone_number_label),
-                placeholderText = stringResource(R.string.document_basic_info_2_phone_number_placeholder),
+                labelText = stringResource(MR.strings.document_basic_info_2_phone_number_label),
+                placeholderText = stringResource(MR.strings.document_basic_info_2_phone_number_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
             DocumentEmailTextField(
                 value = emailAddressValue,
                 onValueChange = onEmailAddressValueChange,
-                labelText = stringResource(R.string.document_basic_info_2_email_address_label),
-                placeholderText = stringResource(R.string.document_basic_info_2_email_address_placeholder),
+                labelText = stringResource(MR.strings.document_basic_info_2_email_address_label),
+                placeholderText = stringResource(MR.strings.document_basic_info_2_email_address_placeholder),
                 imeAction = ImeAction.Next,
                 isError = emailError,  // 추가
-                errorMessage = emailErrorMessage?.let { stringResource(it) }  // 추가
+                errorMessage = emailErrorMessage?.let { stringResource(it) }  // 수정: StringResource 사용
             )
         }
     }
@@ -95,7 +96,7 @@ fun BasicInfoStep2Preview(){
             emailAddressValue = "freeman.spence@example.com",
             onEmailAddressValueChange = {},
             emailError = false,
-            emailErrorMessage = 0  // 추가
+            emailErrorMessage = null  // 수정: null 사용
         )
     }
 }
