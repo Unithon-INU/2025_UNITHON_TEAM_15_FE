@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.compose.stringResource
 import unithon.helpjob.BottomNavDestination
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.theme.Grey000

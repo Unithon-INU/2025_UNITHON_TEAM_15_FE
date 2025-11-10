@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class NicknameSetupViewModel(

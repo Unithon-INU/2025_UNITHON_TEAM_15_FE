@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.HelpJobApplication
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class HomeViewModel(

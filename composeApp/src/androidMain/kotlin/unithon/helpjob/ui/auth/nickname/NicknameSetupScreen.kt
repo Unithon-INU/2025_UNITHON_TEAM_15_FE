@@ -16,14 +16,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.auth.components.AuthNicknameTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar

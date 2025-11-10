@@ -17,12 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.resources.compose.stringResource
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700

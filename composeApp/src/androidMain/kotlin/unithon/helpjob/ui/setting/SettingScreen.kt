@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.setting
 
 import android.content.Intent
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,16 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import org.koin.compose.viewmodel.koinViewModel
-import dev.icerock.moko.resources.desc.desc
 import dev.icerock.moko.resources.StringResource
+import dev.icerock.moko.resources.compose.stringResource
+import dev.icerock.moko.resources.desc.desc
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.setting.components.ResetProgressDialog

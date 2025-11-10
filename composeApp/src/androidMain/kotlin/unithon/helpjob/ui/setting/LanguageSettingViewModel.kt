@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class LanguageSettingViewModel(

@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
 import unithon.helpjob.data.repository.EmailVerificationFailedException
 import unithon.helpjob.data.repository.SignUpData
 import unithon.helpjob.data.repository.SignUpDataRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class SignUpViewModel(

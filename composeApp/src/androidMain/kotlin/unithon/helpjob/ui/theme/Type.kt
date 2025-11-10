@@ -7,7 +7,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 
 val PretendardFontFamily = FontFamily(
     Font(R.font.pretendard_regular, FontWeight.Normal),

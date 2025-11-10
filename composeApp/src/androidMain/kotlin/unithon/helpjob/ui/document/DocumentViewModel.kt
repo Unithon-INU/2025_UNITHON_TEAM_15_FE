@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import unithon.helpjob.HelpJobApplication
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 import java.util.Locale
 

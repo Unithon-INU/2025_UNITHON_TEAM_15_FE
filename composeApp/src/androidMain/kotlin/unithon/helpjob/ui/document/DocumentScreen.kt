@@ -16,14 +16,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
 import unithon.helpjob.ui.document.page.BasicInfoStep2Screen

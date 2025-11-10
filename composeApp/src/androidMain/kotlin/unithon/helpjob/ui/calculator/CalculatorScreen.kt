@@ -23,14 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.compose.viewmodel.koinViewModel
+import dev.icerock.moko.resources.compose.stringResource
 import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.LanguageAwareScreen
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.calculator.components.CalculationResult
 import unithon.helpjob.ui.calculator.components.CalculationResultDialog
 import unithon.helpjob.ui.calculator.components.CalculatorWageTextField

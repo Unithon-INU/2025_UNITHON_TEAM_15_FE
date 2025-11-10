@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class SettingViewModel(

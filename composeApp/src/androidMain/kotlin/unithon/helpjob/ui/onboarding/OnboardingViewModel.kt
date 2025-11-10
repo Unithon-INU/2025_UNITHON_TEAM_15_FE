@@ -1,7 +1,6 @@
 package unithon.helpjob.ui.onboarding
 
 import androidx.lifecycle.viewModelScope
-import unithon.helpjob.data.model.TopikLevel
 import dev.icerock.moko.resources.StringResource
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,12 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.resources.MR
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.data.repository.UnauthorizedException
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class OnboardingViewModel(

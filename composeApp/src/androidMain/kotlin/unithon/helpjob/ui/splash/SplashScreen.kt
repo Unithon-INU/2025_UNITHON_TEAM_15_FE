@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.HelpJobNavigationActions
 import unithon.helpjob.R
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.theme.Primary500
 
 @Composable

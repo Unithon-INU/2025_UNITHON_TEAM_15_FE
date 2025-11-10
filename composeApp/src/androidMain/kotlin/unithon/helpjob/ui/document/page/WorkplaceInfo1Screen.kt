@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import dev.icerock.moko.resources.compose.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.resources.MR
+import dev.icerock.moko.resources.compose.stringResource
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentBusinessNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
