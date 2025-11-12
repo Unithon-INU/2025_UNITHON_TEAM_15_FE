@@ -59,6 +59,9 @@ kotlin {
                 // Moko Resources (공통)
                 implementation(libs.moko.resources)
                 implementation(libs.moko.resources.compose)
+
+                // KMP ViewModel (Compose 1.7.3 공식)
+                implementation(libs.lifecycle.viewmodel.compose)
             }
         }
 
@@ -69,7 +72,7 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.android)
                 implementation(libs.timber)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
-                implementation(libs.androidx.lifecycle.viewModelCompose)
+                // viewModelCompose는 commonMain에서 제공 (KMP용)
 
                 // Koin
                 implementation(libs.koin.core)
