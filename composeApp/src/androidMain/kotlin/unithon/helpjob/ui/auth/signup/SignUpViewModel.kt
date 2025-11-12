@@ -18,6 +18,7 @@ import unithon.helpjob.data.repository.SignUpData
 import unithon.helpjob.data.repository.SignUpDataRepository
 import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.EmailValidator
 
 class SignUpViewModel(
     private val authRepository: AuthRepository,
@@ -53,7 +54,7 @@ class SignUpViewModel(
         val isCodeVerified: Boolean = false
     ) {
         val isEmailValid: Boolean
-            get() = email.isNotBlank() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            get() = email.isNotBlank() && EmailValidator.isValid(email)
 
         val isPasswordValid: Boolean
             get() = password.length >= 6
@@ -149,7 +150,7 @@ class SignUpViewModel(
             return
         }
 
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(currentState.email).matches()) {
+        if (!EmailValidator.isValid(currentState.email)) {
             _uiState.update {
                 it.copy(
                     emailError = true,

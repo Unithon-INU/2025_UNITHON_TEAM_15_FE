@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.setting
 
-import android.webkit.WebView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.components.HtmlWebView
 
 @Composable
 fun PrivacyPolicyScreen(
@@ -35,19 +34,9 @@ fun PrivacyPolicyScreen(
             onBack = onBack
         )
 
-        AndroidView(
-            modifier = Modifier.weight(1f),
-            factory = { context ->
-                WebView(context).apply {
-                    settings.javaScriptEnabled = false
-                }
-            },
-            update = { webView ->
-                // htmlContent가 null이 아닐 때만 로드
-                htmlContent?.let { html ->
-                    webView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null)
-                }
-            }
+        HtmlWebView(
+            htmlContent = htmlContent,
+            modifier = Modifier.weight(1f)
         )
     }
 }

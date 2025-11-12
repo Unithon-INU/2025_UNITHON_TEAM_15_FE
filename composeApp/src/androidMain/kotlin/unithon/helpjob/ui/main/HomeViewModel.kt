@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.DocumentInfoRes
@@ -19,6 +18,7 @@ import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Analytics
 
 class HomeViewModel(
     private val employmentCheckRepository: EmploymentCheckRepository
@@ -235,7 +235,7 @@ class HomeViewModel(
                         isUpdating = false
                     )
                 }
-                HelpJobApplication.analytics.logEvent(
+                Analytics.logEvent(
                     "checklist_updated",
                     mapOf("step" to stepCheckStep)
                 )

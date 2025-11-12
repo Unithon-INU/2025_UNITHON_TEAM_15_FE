@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.ui.calculator.components.CalculationResult
+import unithon.helpjob.util.Analytics
 
 class CalculatorViewModel: BaseViewModel() {
 
@@ -102,7 +102,7 @@ class CalculatorViewModel: BaseViewModel() {
                 showResultDialog = true
             )
         }
-        HelpJobApplication.analytics.logEvent("calculator_used")
+        Analytics.logEvent("calculator_used")
     }
 
     fun dismissResultDialog() {

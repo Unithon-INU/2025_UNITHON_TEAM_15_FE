@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.request.DocumentRequest
@@ -20,7 +19,9 @@ import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
-import java.util.Locale
+import unithon.helpjob.util.Analytics
+import unithon.helpjob.util.EmailValidator
+import unithon.helpjob.util.NumberFormatter
 
 class DocumentViewModel(
     private val documentRepository: DocumentRepository
@@ -70,7 +71,7 @@ class DocumentViewModel(
         }
 
         // 실시간 이메일 형식 검증
-        if (input.isNotBlank() && !android.util.Patterns.EMAIL_ADDRESS.matcher(input).matches()) {
+        if (input.isNotBlank() && !EmailValidator.isValid(input)) {
             _uiState.update {
                 it.copy(
                     emailError = true,
@@ -289,7 +290,7 @@ class DocumentViewModel(
                 Timber.d("Document submitted successfully")
                 _snackbarMessage.emit(MR.strings.document_submit_success) // 성공 이벤트 발생
 
-                HelpJobApplication.analytics.logEvent("certificate_sent")
+                Analytics.logEvent("certificate_sent")
             } catch (e: Exception) {
                 Timber.e(e, "Failed to submit document")
 
@@ -399,7 +400,7 @@ class DocumentViewModel(
     private fun formatHourlyWage(wage: String): String {
         // 10030 -> 10,030원
         val number = wage.toLongOrNull() ?: 0L
-        return "${String.format(Locale.KOREA,"%,d", number)}원"
+        return NumberFormatter.formatCurrency(number)
     }
 
     private fun formatTime(time: String): String {
@@ -515,7 +516,7 @@ class DocumentViewModel(
 
         private val isEmailAddressValid: Boolean
             get() = emailAddress.isNotBlank() &&
-                    android.util.Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches() &&
+                    EmailValidator.isValid(emailAddress) &&
                     !emailError
 
         private val isCompanyNameValid: Boolean

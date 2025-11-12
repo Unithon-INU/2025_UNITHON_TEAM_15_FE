@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import unithon.helpjob.HelpJobApplication
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailNotFoundException
 import unithon.helpjob.data.repository.WrongPasswordException
 import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Analytics
+import unithon.helpjob.util.EmailValidator
 
 class SignInViewModel(
     private val authRepository: AuthRepository
@@ -34,7 +35,7 @@ class SignInViewModel(
     ) {
         val isInputValid: Boolean
             get() = email.isNotBlank() && password.length >= 6 &&
-                    android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    EmailValidator.isValid(email)
     }
 
     private val _uiState = MutableStateFlow(SignInUiState())
@@ -84,7 +85,7 @@ class SignInViewModel(
                 )
             }
             hasError = true
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(currentState.email).matches()) {
+        } else if (!EmailValidator.isValid(currentState.email)) {
             _uiState.update {
                 it.copy(
                     emailError = true,
@@ -133,7 +134,7 @@ class SignInViewModel(
                         shouldGoToHome = isCompleted // 온보딩 완료면 홈으로
                     )
                 }
-                HelpJobApplication.analytics.logEvent("user_login")
+                Analytics.logEvent("user_login")
             } catch (e: EmailNotFoundException) {
                 // 이메일 관련 에러는 필드 에러로 표시
                 Timber.d(e, "Sign in failed - email not found")
