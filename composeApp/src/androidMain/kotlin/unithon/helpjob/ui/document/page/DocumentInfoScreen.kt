@@ -21,8 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_onboarding_next
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
@@ -90,7 +91,7 @@ fun DocumentInfoScreen(
                 content()
             }
             HelpJobButton(
-                text = stringResource(MR.strings.document_onboarding_next),
+                text = stringResource(Res.string.document_onboarding_next),
                 onClick = onNext,
                 enabled = enabled,
                 modifier = Modifier

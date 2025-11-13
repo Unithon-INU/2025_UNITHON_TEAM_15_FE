@@ -12,10 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import unithon.helpjob.R
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.ic_check
+import org.jetbrains.compose.resources.painterResource
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Primary600
 
@@ -52,7 +53,7 @@ fun HelpJobCheckbox(
     ) {
         if (checked) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_check),
+                painter = painterResource(Res.drawable.ic_check),
                 contentDescription = "체크됨",
                 tint = checkmarkColor,
                 modifier = Modifier.size(size * 0.6f)

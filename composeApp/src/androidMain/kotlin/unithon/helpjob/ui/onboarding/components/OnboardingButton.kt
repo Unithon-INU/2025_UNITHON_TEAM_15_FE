@@ -19,10 +19,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
@@ -32,7 +33,7 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun OnboardingButton(
     modifier: Modifier = Modifier,
-    icon: Int? = null,
+    icon: DrawableResource? = null,
     mainTitle: String,
     subTitle: String? = null,
     mainTitleFontStyle: TextStyle = MaterialTheme.typography.titleMedium,

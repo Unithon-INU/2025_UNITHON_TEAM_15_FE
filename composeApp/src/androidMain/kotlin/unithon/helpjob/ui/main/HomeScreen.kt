@@ -39,19 +39,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.arrow_forward
+import helpjob.composeapp.generated.resources.category_documents
+import helpjob.composeapp.generated.resources.category_precautions
+import helpjob.composeapp.generated.resources.exclamation_mark
+import helpjob.composeapp.generated.resources.welcome_message
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import timber.log.Timber
-import unithon.helpjob.R
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
-import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.DottedProgressBar
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.main.components.StepProgressWarningDialog
@@ -94,7 +96,7 @@ fun HomeScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = messageRes.desc().toString(context)
+                message = getString(messageRes)
             )
         }
     }
@@ -158,7 +160,7 @@ fun HomeScreen(
 
                 // 환영인사
                 Text(
-                    text = stringResource(MR.strings.welcome_message, homeState.nickname),
+                    text = stringResource(Res.string.welcome_message, homeState.nickname),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Grey600
                 )
@@ -232,13 +234,13 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CategoryTab(
-                        text = stringResource(MR.strings.category_documents),
+                        text = stringResource(Res.string.category_documents),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
                         onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
                         modifier = Modifier.weight(1f)
                     )
                     CategoryTab(
-                        text = stringResource(MR.strings.category_precautions),
+                        text = stringResource(Res.string.category_precautions),
                         isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
                         onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
                         modifier = Modifier.weight(1f)
@@ -385,7 +387,7 @@ fun StepCard(
                 )
             }
             Icon(
-                painter = painterResource(R.drawable.arrow_forward),
+                painter = painterResource(Res.drawable.arrow_forward),
                 contentDescription = null,
                 tint = Color.Unspecified
             )
@@ -452,7 +454,7 @@ fun PrecautionItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(R.drawable.exclamation_mark),
+                painter = painterResource(Res.drawable.exclamation_mark),
                 tint = Color.Unspecified,
                 contentDescription = null
             )

@@ -1,13 +1,16 @@
 package unithon.helpjob.data.model
 
-import android.content.Context
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import androidx.compose.runtime.Composable
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_no_topik
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik3
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik4_over
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * TOPIK 레벨 관리 Enum
- * - UI 표시용 String Resource (Moko Resources)
+ * - UI 표시용 String Resource (Compose Multiplatform Resources)
  * - API 전송용 한글 값
  */
 enum class TopikLevel(
@@ -15,23 +18,24 @@ enum class TopikLevel(
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     NO_TOPIK(
-        displayNameRes = MR.strings.onboarding_korean_level_setup_no_topik,
+        displayNameRes = Res.string.onboarding_korean_level_setup_no_topik,
         apiValue = "없음"
     ),
     TOPIK_3_OR_BELOW(
-        displayNameRes = MR.strings.onboarding_korean_level_setup_topik3,
+        displayNameRes = Res.string.onboarding_korean_level_setup_topik3,
         apiValue = "TOPIK 3급"
     ),
     TOPIK_4_OR_ABOVE(
-        displayNameRes = MR.strings.onboarding_korean_level_setup_topik4_over,
+        displayNameRes = Res.string.onboarding_korean_level_setup_topik4_over,
         apiValue = "TOPIK 4급 이상"
     );
 
     /**
-     * Context로 현재 언어에 맞는 표시 이름 반환
+     * Composable에서 현재 언어에 맞는 표시 이름 반환
      */
-    fun getDisplayName(context: Context): String {
-        return displayNameRes.desc().toString(context)
+    @Composable
+    fun getDisplayName(): String {
+        return stringResource(displayNameRes)
     }
 
     companion object {

@@ -16,13 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.signup_finish
+import helpjob.composeapp.generated.resources.signup_success_go_to_login
+import helpjob.composeapp.generated.resources.signup_success_subtitle
+import helpjob.composeapp.generated.resources.signup_success_title
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700
@@ -50,7 +53,7 @@ fun SignUpSuccessScreen(
             ) {
                 // 성공 이미지
                 Image(
-                    painter = painterResource(id = R.drawable.signup_finish),
+                    painter = painterResource(Res.drawable.signup_finish),
                     contentDescription = null
                 )
 
@@ -58,7 +61,7 @@ fun SignUpSuccessScreen(
 
                 // 메인 타이틀
                 Text(
-                    text = stringResource(MR.strings.signup_success_title),
+                    text = stringResource(Res.string.signup_success_title),
                     style = MaterialTheme.typography.headlineLarge.copy(
                         color = Grey700,
                         textAlign = TextAlign.Center
@@ -69,7 +72,7 @@ fun SignUpSuccessScreen(
 
                 // 서브 타이틀
                 Text(
-                    text = stringResource(MR.strings.signup_success_subtitle),
+                    text = stringResource(Res.string.signup_success_subtitle),
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = Grey500,
                         textAlign = TextAlign.Center
@@ -79,7 +82,7 @@ fun SignUpSuccessScreen(
 
             // 하단 버튼
             HelpJobButton(
-                text = stringResource(MR.strings.signup_success_go_to_login),
+                text = stringResource(Res.string.signup_success_go_to_login),
                 onClick = onGoToLogin,
                 modifier = Modifier
                     .fillMaxWidth()

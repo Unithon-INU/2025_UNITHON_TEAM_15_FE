@@ -1,18 +1,26 @@
 package unithon.helpjob.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import unithon.helpjob.R
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.pretendard_bold
+import helpjob.composeapp.generated.resources.pretendard_medium
+import helpjob.composeapp.generated.resources.pretendard_regular
+import org.jetbrains.compose.resources.Font
 
-val PretendardFontFamily = FontFamily(
-    Font(R.font.pretendard_regular, FontWeight.Normal),
-    Font(R.font.pretendard_medium, FontWeight.Medium),
-    Font(R.font.pretendard_bold, FontWeight.Bold)
+@Composable
+fun getPretendardFontFamily() = FontFamily(
+    Font(Res.font.pretendard_regular, FontWeight.Normal),
+    Font(Res.font.pretendard_medium, FontWeight.Medium),
+    Font(Res.font.pretendard_bold, FontWeight.Bold)
 )
+
+// 기본 폰트 (애플리케이션 초기화용, @Composable에서는 getPretendardFontFamily() 사용)
+val PretendardFontFamily = FontFamily.Default
 
 // Typography - 이미지에 정의된 스타일만 포함
 val Typography = Typography(

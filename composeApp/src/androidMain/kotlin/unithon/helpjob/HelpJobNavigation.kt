@@ -1,10 +1,22 @@
 package unithon.helpjob
 
-import androidx.annotation.DrawableRes
 import androidx.navigation.NavHostController
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.bottom_nav_calculate
+import helpjob.composeapp.generated.resources.bottom_nav_content
+import helpjob.composeapp.generated.resources.bottom_nav_home
+import helpjob.composeapp.generated.resources.bottom_nav_profile
+import helpjob.composeapp.generated.resources.calculate_selected
+import helpjob.composeapp.generated.resources.calculate_unselected
+import helpjob.composeapp.generated.resources.content_selected
+import helpjob.composeapp.generated.resources.content_unselected
+import helpjob.composeapp.generated.resources.home_selected
+import helpjob.composeapp.generated.resources.home_unselected
+import helpjob.composeapp.generated.resources.profile_selected
+import helpjob.composeapp.generated.resources.profile_unselected
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.HelpJobDestinations.STEP_DETAIL_ROUTE
-import unithon.helpjob.resources.MR
 
 /**
  * Navigation 관련 화면들의 이름
@@ -51,33 +63,33 @@ object HelpJobDestinations {
  * 하단바 관련 문제는 여기서만 확인하면 됨
  */
 enum class BottomNavDestination(
-    @DrawableRes val selectedIcon: Int,
-    @DrawableRes val unselectedIcon: Int,
+    val selectedIcon: DrawableResource,
+    val unselectedIcon: DrawableResource,
     val iconTextId: StringResource,
     val route: String,
 ) {
     HOME(
-        selectedIcon = R.drawable.home_selected,
-        unselectedIcon = R.drawable.home_unselected,
-        iconTextId = MR.strings.bottom_nav_home,
+        selectedIcon = Res.drawable.home_selected,
+        unselectedIcon = Res.drawable.home_unselected,
+        iconTextId = Res.string.bottom_nav_home,
         route = "home",
     ),
     CALCULATE(
-        selectedIcon = R.drawable.calculate_selected,
-        unselectedIcon = R.drawable.calculate_unselected,
-        iconTextId = MR.strings.bottom_nav_calculate,
+        selectedIcon = Res.drawable.calculate_selected,
+        unselectedIcon = Res.drawable.calculate_unselected,
+        iconTextId = Res.string.bottom_nav_calculate,
         route = "calculate",
     ),
     CONTENT(
-        selectedIcon = R.drawable.content_selected,
-        unselectedIcon = R.drawable.content_unselected,
-        iconTextId = MR.strings.bottom_nav_content,
+        selectedIcon = Res.drawable.content_selected,
+        unselectedIcon = Res.drawable.content_unselected,
+        iconTextId = Res.string.bottom_nav_content,
         route = "content",
     ),
     PROFILE(
-        selectedIcon = R.drawable.profile_selected,
-        unselectedIcon = R.drawable.profile_unselected,
-        iconTextId = MR.strings.bottom_nav_profile,
+        selectedIcon = Res.drawable.profile_selected,
+        unselectedIcon = Res.drawable.profile_unselected,
+        iconTextId = Res.string.bottom_nav_profile,
         route = "profile",
     );
 

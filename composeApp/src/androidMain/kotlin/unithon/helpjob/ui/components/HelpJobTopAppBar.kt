@@ -12,12 +12,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.back_button
+import helpjob.composeapp.generated.resources.top_arrowback
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey700
 
@@ -42,8 +43,8 @@ fun HelpJobTopAppBar(
             onBack?.let {
                 IconButton(onClick = it) {
                     Icon(
-                        painter = painterResource(id = R.drawable.top_arrowback),
-                        contentDescription = stringResource(MR.strings.back_button),
+                        painter = painterResource(Res.drawable.top_arrowback),
+                        contentDescription = stringResource(Res.string.back_button),
                         tint = Color.Unspecified // 아이콘 자체 색상 사용
                     )
                 }

@@ -41,12 +41,14 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.language_setting_current_language
+import helpjob.composeapp.generated.resources.setting_app_language
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey000
@@ -69,7 +71,7 @@ fun LanguageSettingScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = messageRes.desc().toString(context)
+                message = getString(messageRes)
             )
         }
     }
@@ -82,7 +84,7 @@ fun LanguageSettingScreen(
                 .navigationBarsPadding()
         ) {
             HelpJobTopAppBar(
-                title = MR.strings.setting_app_language,
+                title = Res.string.setting_app_language,
                 onBack = onBack
             )
             Column(
@@ -92,7 +94,7 @@ fun LanguageSettingScreen(
             ) {
                 // 현재 언어 섹션 헤더
                 Text(
-                    text = stringResource(MR.strings.language_setting_current_language),
+                    text = stringResource(Res.string.language_setting_current_language),
                     style = MaterialTheme.typography.title2,
                     color = Grey600
                 )

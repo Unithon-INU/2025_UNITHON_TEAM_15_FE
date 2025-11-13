@@ -1,7 +1,8 @@
 package unithon.helpjob.ui.main
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.error_update_checklist
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
@@ -18,7 +20,6 @@ import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.data.repository.LanguageRepository
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
 
@@ -193,7 +194,7 @@ class HomeViewModel(
                 )
             } catch (e: Exception) {
                 Timber.e(e, "체크리스트 업데이트 실패")
-                _snackbarMessage.emit(MR.strings.error_update_checklist)
+                _snackbarMessage.emit(Res.string.error_update_checklist)
             }
         }
     }

@@ -1,6 +1,5 @@
 package unithon.helpjob.ui.calculator
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,11 +25,27 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.calculator_2025
+import helpjob.composeapp.generated.resources.calculator_calculate_salary
+import helpjob.composeapp.generated.resources.calculator_days_format_plural
+import helpjob.composeapp.generated.resources.calculator_days_format_singular
+import helpjob.composeapp.generated.resources.calculator_hours_format_plural
+import helpjob.composeapp.generated.resources.calculator_hours_format_singular
+import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_plural_plural
+import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_plural_singular
+import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_plural
+import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_singular
+import helpjob.composeapp.generated.resources.calculator_select_time
+import helpjob.composeapp.generated.resources.calculator_title_per_hour
+import helpjob.composeapp.generated.resources.calculator_wage_example
+import helpjob.composeapp.generated.resources.calculator_wage_label
+import helpjob.composeapp.generated.resources.calculator_weekly_work_time_label
+import helpjob.composeapp.generated.resources.calculator_work_time_label
+import helpjob.composeapp.generated.resources.error_lower_than_minimun_wage
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.calculator.components.CalculationResult
 import unithon.helpjob.ui.calculator.components.CalculationResultDialog
 import unithon.helpjob.ui.calculator.components.CalculatorWageTextField
@@ -108,11 +123,11 @@ private fun CalculatorScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     value = uiState.wage,
                     onValueChange = onWageChange,
-                    labelText = stringResource(MR.strings.calculator_wage_label),
-                    placeholderText = stringResource(MR.strings.calculator_wage_example),
+                    labelText = stringResource(Res.string.calculator_wage_label),
+                    placeholderText = stringResource(Res.string.calculator_wage_example),
                     isError = uiState.isLowerThanMinimumWage,
                     errorMessage = if (uiState.isLowerThanMinimumWage) {
-                        stringResource(MR.strings.error_lower_than_minimun_wage)
+                        stringResource(Res.string.error_lower_than_minimun_wage)
                     } else null,
                     onDone = { focusManager.clearFocus() }
                 )
@@ -123,15 +138,19 @@ private fun CalculatorScreenContent(
 
                 Spacer(Modifier.height(15.dp))
 
+                // 미리 포맷된 문자열 맵 생성
+                val workTimeDisplayMap = workTimeOptions.associateWith { formatWorkTime(it) }
+                val workDayDisplayMap = workDayOptions.associateWith { formatWorkDays(it) }
+
                 // 일일 근무시간 드롭다운
                 HelpJobDropdown(
                     modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(MR.strings.calculator_work_time_label),
+                    label = stringResource(Res.string.calculator_work_time_label),
                     selectedItem = uiState.selectedWorkTime,
                     items = workTimeOptions,
                     onItemSelected = onWorkTimeSelected,
-                    itemToString = { time -> formatWorkTime(time, context) },
-                    placeholder = stringResource(MR.strings.calculator_select_time),
+                    itemToString = { time -> workTimeDisplayMap[time] ?: "" },
+                    placeholder = stringResource(Res.string.calculator_select_time),
                     labelTextFieldSpace = 9.dp,
                     isUpward = false
                 )
@@ -141,12 +160,12 @@ private fun CalculatorScreenContent(
                 // 주간 근무일수 드롭다운
                 HelpJobDropdown(
                     modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(MR.strings.calculator_weekly_work_time_label),
+                    label = stringResource(Res.string.calculator_weekly_work_time_label),
                     selectedItem = uiState.selectedWorkDayCount,
                     items = workDayOptions,
                     onItemSelected = onWorkDayCountSelected,
-                    itemToString = { days -> formatWorkDays(days, context) },
-                    placeholder = stringResource(MR.strings.calculator_select_time),
+                    itemToString = { days -> workDayDisplayMap[days] ?: "" },
+                    placeholder = stringResource(Res.string.calculator_select_time),
                     labelTextFieldSpace = 9.dp,
                     isUpward = true
                 )
@@ -165,7 +184,7 @@ private fun CalculatorScreenContent(
                         bottom = 20.dp
                     )
                     .fillMaxWidth(),
-                text = stringResource(MR.strings.calculator_calculate_salary),
+                text = stringResource(Res.string.calculator_calculate_salary),
                 onClick = onCalculateClick,
                 enabled = uiState.isWorkTimeInputValid &&
                         uiState.isWorkDayCountInputValid &&
@@ -209,7 +228,7 @@ private fun MinimumWageCard(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = stringResource(MR.strings.calculator_2025),
+                    text = stringResource(Res.string.calculator_2025),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = Grey600
                     ),
@@ -219,7 +238,7 @@ private fun MinimumWageCard(
             }
             Spacer(Modifier.height(9.dp))
             Text(
-                text = stringResource(MR.strings.calculator_title_per_hour),
+                text = stringResource(Res.string.calculator_title_per_hour),
                 style = MaterialTheme.typography.headlineMedium.copy(
                     color = Grey600
                 )
@@ -228,36 +247,38 @@ private fun MinimumWageCard(
     }
 }
 
-private fun formatWorkTime(time: Float, context: Context): String {
+@Composable
+private fun formatWorkTime(time: Float): String {
     val hours = time.toInt()
     val minutes = ((time - hours) * 60).toInt()
 
-    // Context가 자동으로 현재 언어의 올바른 리소스를 선택함
+    // stringResource로 현재 언어의 올바른 리소스를 선택
     return if (minutes == 0) {
         if (hours == 1) {
-            MR.strings.calculator_hours_format_singular.desc().toString(context).format(hours)
+            stringResource(Res.string.calculator_hours_format_singular).format(hours)
         } else {
-            MR.strings.calculator_hours_format_plural.desc().toString(context).format(hours)
+            stringResource(Res.string.calculator_hours_format_plural).format(hours)
         }
     } else {
         when {
             hours == 1 && minutes == 1 ->
-                MR.strings.calculator_hours_minutes_format_singular_singular.desc().toString(context).format(hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_singular_singular).format(hours, minutes)
             hours == 1 && minutes > 1 ->
-                MR.strings.calculator_hours_minutes_format_singular_plural.desc().toString(context).format(hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_singular_plural).format(hours, minutes)
             hours > 1 && minutes == 1 ->
-                MR.strings.calculator_hours_minutes_format_plural_singular.desc().toString(context).format(hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_plural_singular).format(hours, minutes)
             else ->
-                MR.strings.calculator_hours_minutes_format_plural_plural.desc().toString(context).format(hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_plural_plural).format(hours, minutes)
         }
     }
 }
 
-private fun formatWorkDays(days: Int, context: Context): String {
+@Composable
+private fun formatWorkDays(days: Int): String {
     return if (days == 1) {
-        MR.strings.calculator_days_format_singular.desc().toString(context).format(days)
+        stringResource(Res.string.calculator_days_format_singular).format(days)
     } else {
-        MR.strings.calculator_days_format_plural.desc().toString(context).format(days)
+        stringResource(Res.string.calculator_days_format_plural).format(days)
     }
 }
 

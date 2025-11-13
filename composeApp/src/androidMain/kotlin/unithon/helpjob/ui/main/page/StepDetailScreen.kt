@@ -32,17 +32,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.dot
+import helpjob.composeapp.generated.resources.exclamation_mark
+import helpjob.composeapp.generated.resources.filled_checked
+import helpjob.composeapp.generated.resources.ic_check
+import helpjob.composeapp.generated.resources.step_detail_screen_subtitle
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.R
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
@@ -189,7 +193,7 @@ private fun ErrorScreen(
                 modifier = Modifier.padding(40.dp)
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.exclamation_mark),
+                    painter = painterResource(Res.drawable.exclamation_mark),
                     contentDescription = "에러",
                     tint = Warning
                 )
@@ -219,13 +223,13 @@ private fun TipsSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.drawable.filled_checked),
+            painter = painterResource(Res.drawable.filled_checked),
             contentDescription = "체크",
             tint = Color.Unspecified,
             modifier = Modifier.padding(end = 1.dp)
         )
         Text(
-            text = stringResource(MR.strings.step_detail_screen_subtitle),
+            text = stringResource(Res.string.step_detail_screen_subtitle),
             style = MaterialTheme.typography.headlineMedium,
             color = Grey600
         )
@@ -248,7 +252,7 @@ private fun EmptyTipsSection() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_check),
+            painter = painterResource(Res.drawable.ic_check),
             contentDescription = "체크",
             tint = Primary500,
             modifier = Modifier.padding(end = 8.dp)
@@ -276,7 +280,7 @@ private fun EmptyTipsSection() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_check),
+                painter = painterResource(Res.drawable.ic_check),
                 contentDescription = "정보 없음",
                 tint = Grey400
             )
@@ -433,7 +437,7 @@ fun TipDetailItem(
                     verticalAlignment = Alignment.Top
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.dot),
+                        painter = painterResource(Res.drawable.dot),
                         contentDescription = "점",
                     )
                     Spacer(Modifier.width(5.dp))

@@ -23,9 +23,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_workplace_info_4_end_time_placeholder
+import helpjob.composeapp.generated.resources.document_workplace_info_4_everyday
+import helpjob.composeapp.generated.resources.document_workplace_info_4_same_time
+import helpjob.composeapp.generated.resources.document_workplace_info_4_start_time_placeholder
+import helpjob.composeapp.generated.resources.document_workplace_info_4_time_unit
+import helpjob.composeapp.generated.resources.document_workplace_info_4_work_days_label
+import helpjob.composeapp.generated.resources.document_workplace_info_4_work_time_label
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.data.model.WorkDay
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.DocumentViewModel
@@ -82,7 +89,7 @@ fun WorkplaceInfo4Screen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(MR.strings.document_workplace_info_4_work_days_label),
+                    text = stringResource(Res.string.document_workplace_info_4_work_days_label),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey600
                 )
@@ -96,7 +103,7 @@ fun WorkplaceInfo4Screen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(MR.strings.document_workplace_info_4_everyday),
+                        text = stringResource(Res.string.document_workplace_info_4_everyday),
                         style = MaterialTheme.typography.titleSmall,
                         color = Grey600
                     )
@@ -132,7 +139,7 @@ fun WorkplaceInfo4Screen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = stringResource(MR.strings.document_workplace_info_4_work_time_label),
+                        text = stringResource(Res.string.document_workplace_info_4_work_time_label),
                         style = MaterialTheme.typography.titleSmall,
                         color = Grey600
                     )
@@ -146,7 +153,7 @@ fun WorkplaceInfo4Screen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = stringResource(MR.strings.document_workplace_info_4_same_time),
+                            text = stringResource(Res.string.document_workplace_info_4_same_time),
                             style = MaterialTheme.typography.titleSmall,
                             color = Grey600
                         )
@@ -177,7 +184,7 @@ fun WorkplaceInfo4Screen(
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Text(
-                                    text = workDay.getDisplayName(context),
+                                    text = workDay.getDisplayName(),
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Grey600,
                                     modifier = Modifier.padding(vertical = 13.dp),
@@ -198,8 +205,8 @@ fun WorkplaceInfo4Screen(
                                 onWorkDayStartTimeChange(workDay, time)
                             },
                             itemToString = { it },
-                            placeholder = stringResource(MR.strings.document_workplace_info_4_start_time_placeholder),
-                            trailingText = stringResource(MR.strings.document_workplace_info_4_time_unit),
+                            placeholder = stringResource(Res.string.document_workplace_info_4_start_time_placeholder),
+                            trailingText = stringResource(Res.string.document_workplace_info_4_time_unit),
                             isUpward = true,
                             showScrollbar = false
                         )
@@ -224,8 +231,8 @@ fun WorkplaceInfo4Screen(
                                 onWorkDayEndTimeChange(workDay, time)
                             },
                             itemToString = { it },
-                            placeholder = stringResource(MR.strings.document_workplace_info_4_end_time_placeholder),
-                            trailingText = stringResource(MR.strings.document_workplace_info_4_time_unit),
+                            placeholder = stringResource(Res.string.document_workplace_info_4_end_time_placeholder),
+                            trailingText = stringResource(Res.string.document_workplace_info_4_time_unit),
                             isUpward = true,
                             showScrollbar = false
                         )
@@ -262,7 +269,7 @@ private fun WorkDayCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = workDay.getDisplayName(context),
+                text = workDay.getDisplayName(),
                 style = MaterialTheme.typography.titleMedium,
             )
         }

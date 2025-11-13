@@ -33,16 +33,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.ic_check
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_title
+import helpjob.composeapp.generated.resources.onboarding_business_setup_title
+import helpjob.composeapp.generated.resources.onboarding_done_button
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_no_topik
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_title
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik3
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik4_over
+import helpjob.composeapp.generated.resources.onboarding_language_setup_title
+import helpjob.composeapp.generated.resources.onboarding_next_button
+import helpjob.composeapp.generated.resources.onboarding_top_bar_title
+import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_description
+import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_title
+import helpjob.composeapp.generated.resources.onboarding_visa_setup_d4_description
+import helpjob.composeapp.generated.resources.onboarding_visa_setup_d4_title
+import helpjob.composeapp.generated.resources.onboarding_visa_setup_title
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.R
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.onboarding.components.AgreementSection
@@ -72,7 +87,7 @@ fun OnboardingScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = messageRes.desc().toString(context)
+                message = getString(messageRes)
             )
         }
     }
@@ -107,7 +122,7 @@ fun OnboardingScreen(
                 .navigationBarsPadding()
         ) {
             HelpJobTopAppBar(
-                title = MR.strings.onboarding_top_bar_title,
+                title = Res.string.onboarding_top_bar_title,
                 onBack = {
                     if (pagerState.currentPage > 0) {
                         scope.launch {
@@ -193,12 +208,12 @@ private fun OnboardingPageContainer(
             // 🔥 페이지 제목 - currentLanguage를 remember 키로 사용
             val pageTitle = remember(currentLanguage, pageIndex) {
                 when (pageIndex) {
-                    0 -> MR.strings.onboarding_language_setup_title
-                    1 -> MR.strings.onboarding_agreement_setup_title
-                    2 -> MR.strings.onboarding_visa_setup_title
-                    3 -> MR.strings.onboarding_korean_level_setup_title
-                    4 -> MR.strings.onboarding_business_setup_title
-                    else -> MR.strings.onboarding_language_setup_title
+                    0 -> Res.string.onboarding_language_setup_title
+                    1 -> Res.string.onboarding_agreement_setup_title
+                    2 -> Res.string.onboarding_visa_setup_title
+                    3 -> Res.string.onboarding_korean_level_setup_title
+                    4 -> Res.string.onboarding_business_setup_title
+                    else -> Res.string.onboarding_language_setup_title
                 }
             }
 
@@ -252,9 +267,9 @@ private fun OnboardingPageContainer(
         ) {
             val buttonText = remember(currentLanguage, pageIndex) {
                 if (pageIndex == pageCount - 1) {
-                    MR.strings.onboarding_done_button
+                    Res.string.onboarding_done_button
                 } else {
-                    MR.strings.onboarding_next_button
+                    Res.string.onboarding_next_button
                 }
             }
 
@@ -285,7 +300,7 @@ private fun LanguageSelectionContent(
                 .fillMaxWidth(),
             mainTitle = language.mainTitle,
             onClick = { onLanguageSelected(language.mainTitle) },
-            icon = R.drawable.ic_check,
+            icon = Res.drawable.ic_check,
             enabled = selectedLanguage == language.mainTitle
         )
         if (index < languageList.size - 1) {
@@ -336,10 +351,10 @@ private fun VisaSelectionContent(
 
     visaList.forEachIndexed { index, _ ->
         val (mainTitle, subTitle) = when (index) {
-            0 -> stringResource(MR.strings.onboarding_visa_setup_d2_title) to
-                    stringResource(MR.strings.onboarding_visa_setup_d2_description)
-            else -> stringResource(MR.strings.onboarding_visa_setup_d4_title) to
-                    stringResource(MR.strings.onboarding_visa_setup_d4_description)
+            0 -> stringResource(Res.string.onboarding_visa_setup_d2_title) to
+                    stringResource(Res.string.onboarding_visa_setup_d2_description)
+            else -> stringResource(Res.string.onboarding_visa_setup_d4_title) to
+                    stringResource(Res.string.onboarding_visa_setup_d4_description)
         }
 
         OnboardingButton(
@@ -366,9 +381,9 @@ private fun KoreanLevelContent(
     onLevelSelected: (String) -> Unit
 ) {
     val koreanLevelTitles = listOf(
-        stringResource(MR.strings.onboarding_korean_level_setup_topik3),
-        stringResource(MR.strings.onboarding_korean_level_setup_topik4_over),
-        stringResource(MR.strings.onboarding_korean_level_setup_no_topik)
+        stringResource(Res.string.onboarding_korean_level_setup_topik3),
+        stringResource(Res.string.onboarding_korean_level_setup_topik4_over),
+        stringResource(Res.string.onboarding_korean_level_setup_no_topik)
     )
 
     koreanLevelTitles.forEachIndexed { index, title ->
@@ -394,25 +409,21 @@ private fun BusinessSelectionContent(
     selectedBusinesses: List<String>,
     onBusinessSelected: (String) -> Unit
 ) {
-    // 🔥 언어 변경 시 재계산되도록 LocalContext 사용
-    val context = LocalContext.current
+    // 🔥 언어 변경 시 재계산되도록 remember + @Composable 패턴 사용
     val businessList = remember(currentLanguage) {
-        Business.entries.map { business ->
-            OnboardingData(
-                mainTitle = business.getDisplayName(context)
-            )
-        }
+        Business.entries
     }
 
     LazyColumn {
         itemsIndexed(businessList) { index, business ->
+            val displayName = business.getDisplayName()
             OnboardingButton(
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth(),
-                mainTitle = business.mainTitle,
-                onClick = { onBusinessSelected(business.mainTitle) },
-                enabled = business.mainTitle in selectedBusinesses
+                mainTitle = displayName,
+                onClick = { onBusinessSelected(displayName) },
+                enabled = displayName in selectedBusinesses
             )
             if (index < businessList.size - 1) {
                 Spacer(modifier = Modifier.height(15.dp))

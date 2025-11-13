@@ -9,11 +9,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.splash
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.HelpJobNavigationActions
-import unithon.helpjob.R
 import unithon.helpjob.ui.theme.Primary500
 
 @Composable
@@ -39,7 +40,7 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.splash),
+            painter = painterResource(Res.drawable.splash),
             contentDescription = null
         )
     }

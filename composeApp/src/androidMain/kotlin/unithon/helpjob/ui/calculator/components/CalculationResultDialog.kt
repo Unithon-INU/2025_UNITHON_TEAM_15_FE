@@ -23,15 +23,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.calculate_check
+import helpjob.composeapp.generated.resources.calculate_exclamation
+import helpjob.composeapp.generated.resources.calculator_result_disclaimer
+import helpjob.composeapp.generated.resources.calculator_result_expected_salary_label
+import helpjob.composeapp.generated.resources.calculator_result_hours_unit
+import helpjob.composeapp.generated.resources.calculator_result_included
+import helpjob.composeapp.generated.resources.calculator_result_not_included
+import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_condition_met
+import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_condition_not_met
+import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_label
+import helpjob.composeapp.generated.resources.calculator_result_won_unit
+import helpjob.composeapp.generated.resources.calculator_result_work_hours_label
+import helpjob.composeapp.generated.resources.signup_finish
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.theme.Blue500
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey100
@@ -88,7 +100,7 @@ fun CalculationResultDialog(
 
                     // 완료 이미지
                     Image(
-                        painter = painterResource(R.drawable.signup_finish),
+                        painter = painterResource(Res.drawable.signup_finish),
                         contentDescription = null,
                         modifier = Modifier.size(97.dp)
                     )
@@ -102,7 +114,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(MR.strings.calculator_result_work_hours_label),
+                            text = stringResource(Res.string.calculator_result_work_hours_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -115,7 +127,7 @@ fun CalculationResultDialog(
                                 color = Grey700
                             )
                             Text(
-                                text = " ${stringResource(MR.strings.calculator_result_hours_unit)}",
+                                text = " ${stringResource(Res.string.calculator_result_hours_unit)}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -131,7 +143,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(MR.strings.calculator_result_weekly_allowance_label),
+                            text = stringResource(Res.string.calculator_result_weekly_allowance_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -145,14 +157,14 @@ fun CalculationResultDialog(
                                     color = Grey700
                                 )
                                 Text(
-                                    text = " ${stringResource(MR.strings.calculator_result_included)}",
+                                    text = " ${stringResource(Res.string.calculator_result_included)}",
                                     style = MaterialTheme.typography.bodyLarge,
                                     color = Grey600
                                 )
                             }
                         } else {
                             Text(
-                                text = stringResource(MR.strings.calculator_result_not_included),
+                                text = stringResource(Res.string.calculator_result_not_included),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -168,7 +180,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(MR.strings.calculator_result_expected_salary_label),
+                            text = stringResource(Res.string.calculator_result_expected_salary_label),
                             style = MaterialTheme.typography.bodyLarge,
                             color = Grey600
                         )
@@ -181,7 +193,7 @@ fun CalculationResultDialog(
                                 color = Grey700
                             )
                             Text(
-                                text = " ${stringResource(MR.strings.calculator_result_won_unit)}",
+                                text = " ${stringResource(Res.string.calculator_result_won_unit)}",
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = Grey600
                             )
@@ -197,27 +209,27 @@ fun CalculationResultDialog(
                     ) {
                         if (result.includesWeeklyAllowance) {
                             Icon(
-                                painter = painterResource(R.drawable.calculate_check),
+                                painter = painterResource(Res.drawable.calculate_check),
                                 contentDescription = null,
                                 tint = Blue500,
                                 modifier = Modifier.size(13.dp)
                             )
                             Spacer(Modifier.width(5.8.dp))
                             Text(
-                                text = stringResource(MR.strings.calculator_result_weekly_allowance_condition_met),
+                                text = stringResource(Res.string.calculator_result_weekly_allowance_condition_met),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Blue500
                             )
                         } else {
                             Icon(
-                                painter = painterResource(R.drawable.calculate_exclamation),
+                                painter = painterResource(Res.drawable.calculate_exclamation),
                                 contentDescription = null,
                                 tint = Warning,
                                 modifier = Modifier.height(15.dp)
                             )
                             Spacer(Modifier.width(5.dp))
                             Text(
-                                text = stringResource(MR.strings.calculator_result_weekly_allowance_condition_not_met),
+                                text = stringResource(Res.string.calculator_result_weekly_allowance_condition_not_met),
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Warning
                             )
@@ -237,7 +249,7 @@ fun CalculationResultDialog(
                             .padding(start = 25.dp, top = 15.dp, end = 25.dp, bottom = 15.dp)
                     ) {
                         Text(
-                            text = stringResource(MR.strings.calculator_result_disclaimer),
+                            text = stringResource(Res.string.calculator_result_disclaimer),
                             style = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center),
                             color = Grey500,
                             modifier = Modifier.fillMaxWidth()

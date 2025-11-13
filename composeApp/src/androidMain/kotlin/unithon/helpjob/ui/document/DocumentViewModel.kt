@@ -1,7 +1,14 @@
 package unithon.helpjob.ui.document
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_submit_success
+import helpjob.composeapp.generated.resources.error_document_submit_failed
+import helpjob.composeapp.generated.resources.error_fill_all_fields
+import helpjob.composeapp.generated.resources.error_invalid_email
+import helpjob.composeapp.generated.resources.error_invalid_foreigner_number
+import helpjob.composeapp.generated.resources.error_invalid_work_end_date
+import helpjob.composeapp.generated.resources.error_invalid_work_start_date
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -10,6 +17,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
@@ -17,7 +25,6 @@ import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.DocumentRepository
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
 import unithon.helpjob.util.EmailValidator
@@ -75,7 +82,7 @@ class DocumentViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = MR.strings.error_invalid_email
+                    emailErrorMessage = Res.string.error_invalid_email
                 )
             }
         }
@@ -250,7 +257,7 @@ class DocumentViewModel(
         // 기본 유효성 검사
         if (!currentState.isAllValid) {
             viewModelScope.launch {
-                _snackbarMessage.emit(MR.strings.error_fill_all_fields)
+                _snackbarMessage.emit(Res.string.error_fill_all_fields)
             }
             return
         }
@@ -258,7 +265,7 @@ class DocumentViewModel(
         // 추가 검사: 외국인등록번호 길이
         if (currentState.foreignerNumber.filter { it.isDigit() }.length != 13) {
             viewModelScope.launch {
-                _snackbarMessage.emit(MR.strings.error_invalid_foreigner_number)
+                _snackbarMessage.emit(Res.string.error_invalid_foreigner_number)
             }
             return
         }
@@ -266,14 +273,14 @@ class DocumentViewModel(
         // 추가 검사: 날짜 유효성
         if (!isValidDate(currentState.workStartYear, currentState.workStartMonth, currentState.workStartDay)) {
             viewModelScope.launch {
-                _snackbarMessage.emit(MR.strings.error_invalid_work_start_date)
+                _snackbarMessage.emit(Res.string.error_invalid_work_start_date)
             }
             return
         }
 
         if (!isValidDate(currentState.workEndYear, currentState.workEndMonth, currentState.workEndDay)) {
             viewModelScope.launch {
-                _snackbarMessage.emit(MR.strings.error_invalid_work_end_date)
+                _snackbarMessage.emit(Res.string.error_invalid_work_end_date)
             }
             return
         }
@@ -288,7 +295,7 @@ class DocumentViewModel(
                 documentRepository.postCertification(documentRequest)
 
                 Timber.d("Document submitted successfully")
-                _snackbarMessage.emit(MR.strings.document_submit_success) // 성공 이벤트 발생
+                _snackbarMessage.emit(Res.string.document_submit_success) // 성공 이벤트 발생
 
                 Analytics.logEvent("certificate_sent")
             } catch (e: Exception) {
@@ -303,7 +310,7 @@ class DocumentViewModel(
 //                    else -> "서류 제출 중 오류가 발생했습니다. 다시 시도해주세요."
 //                }
 
-                _snackbarMessage.emit(MR.strings.error_document_submit_failed) // 에러 이벤트 발생
+                _snackbarMessage.emit(Res.string.error_document_submit_failed) // 에러 이벤트 발생
 
             } finally {
                 _isSubmitting.value = false

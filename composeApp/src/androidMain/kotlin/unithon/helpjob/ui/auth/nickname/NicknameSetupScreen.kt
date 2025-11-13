@@ -19,11 +19,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dev.icerock.moko.resources.compose.stringResource
-import dev.icerock.moko.resources.desc.desc
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.nickname_complete_button
+import helpjob.composeapp.generated.resources.nickname_duplicate_error
+import helpjob.composeapp.generated.resources.nickname_placeholder
+import helpjob.composeapp.generated.resources.nickname_setup_title
+import helpjob.composeapp.generated.resources.nickname_setup_top_bar_title
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.LanguageAwareScreen
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.auth.components.AuthNicknameTextField
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -44,7 +49,7 @@ fun NicknameSetupScreen(
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
             snackbarHostState.showSnackbar(
-                message = messageRes.desc().toString(context)
+                message = getString(messageRes)
             )
         }
     }
@@ -84,7 +89,7 @@ private fun NicknameSetupScreenContent(
                 .navigationBarsPadding()
         ) {
             HelpJobTopAppBar(
-                title = MR.strings.nickname_setup_top_bar_title,
+                title = Res.string.nickname_setup_top_bar_title,
                 onBack = onBack
             )
             Column(
@@ -94,7 +99,7 @@ private fun NicknameSetupScreenContent(
             ) {
                 // 제목
                 Text(
-                    text = stringResource(MR.strings.nickname_setup_title),
+                    text = stringResource(Res.string.nickname_setup_title),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Grey700
                 )
@@ -104,7 +109,7 @@ private fun NicknameSetupScreenContent(
                 AuthNicknameTextField(
                     value = uiState.nickname,
                     onValueChange = onNicknameChange,
-                    placeholderText = stringResource(MR.strings.nickname_placeholder),
+                    placeholderText = stringResource(Res.string.nickname_placeholder),
                     isError = uiState.nicknameError,
                     errorMessage = uiState.nicknameErrorMessage?.let { stringResource(it) },
                     modifier = Modifier.fillMaxWidth()
@@ -114,7 +119,7 @@ private fun NicknameSetupScreenContent(
 
                 // 완료 버튼
                 HelpJobButton(
-                    text = stringResource(MR.strings.nickname_complete_button),
+                    text = stringResource(Res.string.nickname_complete_button),
                     onClick = onCompleteClick,
                     enabled = uiState.isInputValid,
                     isLoading = uiState.isLoading,
@@ -185,7 +190,7 @@ fun NicknameSetupScreenErrorPreview() {
                 nickname = "중복닉네임",
                 nicknameLength = 5,
                 nicknameError = true,
-                nicknameErrorMessage = MR.strings.nickname_duplicate_error
+                nicknameErrorMessage = Res.string.nickname_duplicate_error
             ),
             onNicknameChange = {},
             onCompleteClick = {},

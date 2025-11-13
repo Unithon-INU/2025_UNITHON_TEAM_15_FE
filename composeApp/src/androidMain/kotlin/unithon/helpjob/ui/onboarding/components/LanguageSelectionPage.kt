@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.ic_check
+import helpjob.composeapp.generated.resources.onboarding_language_setup_title
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.onboarding.OnboardingData
 import unithon.helpjob.ui.onboarding.OnboardingPage
 
@@ -19,7 +20,7 @@ fun LanguageSelectionPage(
     onLanguageSelect: (String) -> Unit
 ) {
     OnboardingPage(
-        title = stringResource(MR.strings.onboarding_language_setup_title), // ✅ 직접 호출
+        title = stringResource(Res.string.onboarding_language_setup_title), // ✅ 직접 호출
         content = {
             languageList.forEachIndexed { index, language ->
                 OnboardingButton(
@@ -28,7 +29,7 @@ fun LanguageSelectionPage(
                         .fillMaxWidth(),
                     mainTitle = language.mainTitle,
                     onClick = { onLanguageSelect(language.mainTitle) },
-                    icon = R.drawable.ic_check,
+                    icon = Res.drawable.ic_check,
                     enabled = selectedLanguage == language.mainTitle
                 )
                 if (index < languageList.size - 1) {

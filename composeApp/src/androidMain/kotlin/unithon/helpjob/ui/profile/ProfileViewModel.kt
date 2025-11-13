@@ -1,16 +1,17 @@
 package unithon.helpjob.ui.profile
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.error_profile_load_failed
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 data class ProfileUiState(
@@ -48,7 +49,7 @@ class ProfileViewModel(
                 )
             } catch (e: Exception) {
                 Timber.e(e, "프로필 로딩 실패")
-                _snackbarMessage.emit(MR.strings.error_profile_load_failed)  // 이 줄 추가
+                _snackbarMessage.emit(Res.string.error_profile_load_failed)  // 이 줄 추가
                 _uiState.value = _uiState.value.copy(
                     isLoading = false
                 )

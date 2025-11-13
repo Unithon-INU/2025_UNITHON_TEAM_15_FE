@@ -1,14 +1,21 @@
 // data/model/Business.kt
 package unithon.helpjob.data.model
 
-import android.content.Context
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import androidx.compose.runtime.Composable
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.onboarding_business_setup_event
+import helpjob.composeapp.generated.resources.onboarding_business_setup_learn
+import helpjob.composeapp.generated.resources.onboarding_business_setup_logistics
+import helpjob.composeapp.generated.resources.onboarding_business_setup_mart
+import helpjob.composeapp.generated.resources.onboarding_business_setup_office
+import helpjob.composeapp.generated.resources.onboarding_business_setup_restaurant
+import helpjob.composeapp.generated.resources.onboarding_business_setup_translation
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 업무 직종 관리 Enum
- * - UI 표시용 String Resource (Moko Resources)
+ * - UI 표시용 String Resource (Compose Multiplatform Resources)
  * - API 전송용 한글 값
  */
 enum class Business(
@@ -16,39 +23,40 @@ enum class Business(
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     RESTAURANT(
-        displayNameRes = MR.strings.onboarding_business_setup_restaurant,
+        displayNameRes = Res.string.onboarding_business_setup_restaurant,
         apiValue = "음식점/카페"
     ),
     MART(
-        displayNameRes = MR.strings.onboarding_business_setup_mart,
+        displayNameRes = Res.string.onboarding_business_setup_mart,
         apiValue = "편의점/마트"
     ),
     LOGISTICS(
-        displayNameRes = MR.strings.onboarding_business_setup_logistics,
+        displayNameRes = Res.string.onboarding_business_setup_logistics,
         apiValue = "물류/창고작업"
     ),
     OFFICE(
-        displayNameRes = MR.strings.onboarding_business_setup_office,
+        displayNameRes = Res.string.onboarding_business_setup_office,
         apiValue = "사무보조/문서정리"
     ),
     TRANSLATION(
-        displayNameRes = MR.strings.onboarding_business_setup_translation,
+        displayNameRes = Res.string.onboarding_business_setup_translation,
         apiValue = "통역/번역"
     ),
     TUTORING(
-        displayNameRes = MR.strings.onboarding_business_setup_learn,
+        displayNameRes = Res.string.onboarding_business_setup_learn,
         apiValue = "과외/학습보조"
     ),
     EVENT(
-        displayNameRes = MR.strings.onboarding_business_setup_event,
+        displayNameRes = Res.string.onboarding_business_setup_event,
         apiValue = "행사/이벤트스태프"
     );
 
     /**
-     * Context로 현재 언어에 맞는 표시 이름 반환
+     * Composable에서 현재 언어에 맞는 표시 이름 반환
      */
-    fun getDisplayName(context: Context): String {
-        return displayNameRes.desc().toString(context)
+    @Composable
+    fun getDisplayName(): String {
+        return stringResource(displayNameRes)
     }
 
     companion object {

@@ -13,8 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.calculator_won
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
@@ -64,7 +65,7 @@ fun CalculatorWageTextField(
             } else null,
             trailingIcon = {
                 Text(
-                    text = stringResource(MR.strings.calculator_won),
+                    text = stringResource(Res.string.calculator_won),
                     style = MaterialTheme.typography.titleSmall,
                     color = Grey600
                 )

@@ -16,9 +16,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_email_check_label
+import helpjob.composeapp.generated.resources.document_email_check_title
+import helpjob.composeapp.generated.resources.document_onboarding_next
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.document.components.DocumentEmailTextField
 import unithon.helpjob.ui.theme.Grey700
@@ -43,7 +46,7 @@ fun EmailCheckScreen(
         Column{
             Spacer(Modifier.height(19.dp))
             Text(
-                text = stringResource(MR.strings.document_email_check_title),
+                text = stringResource(Res.string.document_email_check_title),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontSize = 22.sp,
                     lineHeight = 32.sp,
@@ -55,7 +58,7 @@ fun EmailCheckScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = emailAddressValue,
                 onValueChange = emailAddressValueChange,
-                labelText = stringResource(MR.strings.document_email_check_label),
+                labelText = stringResource(Res.string.document_email_check_label),
                 imeAction = ImeAction.Done, // 이메일 입력 후 완료
                 isError = emailError,  // 🆕 추가
                 errorMessage = emailErrorMessage?.let { stringResource(it) }  // 수정: StringResource 사용
@@ -63,7 +66,7 @@ fun EmailCheckScreen(
         }
 
         HelpJobButton(
-            text = if (isSubmitting) "loading..." else stringResource(MR.strings.document_onboarding_next), // 🆕 로딩 상태에 따른 텍스트 변경
+            text = if (isSubmitting) "loading..." else stringResource(Res.string.document_onboarding_next), // 🆕 로딩 상태에 따른 텍스트 변경
             onClick = onNext,
             enabled = enabled && !isSubmitting, // 🆕 로딩 중에는 버튼 비활성화
             isLoading = isSubmitting, // 🆕 로딩 인디케이터 표시

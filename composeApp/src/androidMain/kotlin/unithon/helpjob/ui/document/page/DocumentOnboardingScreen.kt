@@ -23,12 +23,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_onboarding_description_2
+import helpjob.composeapp.generated.resources.document_onboarding_title
+import helpjob.composeapp.generated.resources.dot
+import helpjob.composeapp.generated.resources.memo
+import helpjob.composeapp.generated.resources.onboarding_next_button
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey600
@@ -40,7 +45,7 @@ import unithon.helpjob.ui.theme.Primary500
 @Composable
 fun DocumentOnboardingScreen(
     title: String,
-    image: Int,
+    image: DrawableResource,
     description: String,
     currentPage: Int,
     pageSize: Int = 2,
@@ -94,7 +99,7 @@ fun DocumentOnboardingScreen(
                         .padding(horizontal = 13.dp, vertical = 22.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.dot),
+                        painter = painterResource(Res.drawable.dot),
                         contentDescription = "점",
                         modifier = Modifier
                             .padding(top = 5.dp, end = 10.dp)
@@ -130,7 +135,7 @@ fun DocumentOnboardingScreen(
             Spacer(Modifier.height(29.dp))
             HelpJobButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(MR.strings.onboarding_next_button),
+                text = stringResource(Res.string.onboarding_next_button),
                 onClick = onNext
             )
             Spacer(Modifier.height(20.dp))
@@ -146,9 +151,9 @@ fun DocumentOnboardingScreenPreview(
 ){
     HelpJobTheme {
         DocumentOnboardingScreen(
-            title = stringResource(MR.strings.document_onboarding_title) ,
-            image = R.drawable.memo,
-            description = stringResource(MR.strings.document_onboarding_description_2),
+            title = stringResource(Res.string.document_onboarding_title) ,
+            image = Res.drawable.memo,
+            description = stringResource(Res.string.document_onboarding_description_2),
             currentPage = 1
         ) { }
     }

@@ -9,8 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_basic_info_1_foreigner_register_number_label
+import helpjob.composeapp.generated.resources.document_basic_info_1_foreigner_register_number_placeholder
+import helpjob.composeapp.generated.resources.document_basic_info_1_major_label
+import helpjob.composeapp.generated.resources.document_basic_info_1_major_placeholder
+import helpjob.composeapp.generated.resources.document_basic_info_1_name_label
+import helpjob.composeapp.generated.resources.document_basic_info_1_name_placeholder
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.document.components.DocumentForeignerNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -41,8 +47,8 @@ fun BasicInfoStep1Screen(
             DocumentTextTextField(
                 value = nameValue,
                 onValueChange = onNameValueChange,
-                labelText = stringResource(MR.strings.document_basic_info_1_name_label),
-                placeholderText = stringResource(MR.strings.document_basic_info_1_name_placeholder),
+                labelText = stringResource(Res.string.document_basic_info_1_name_label),
+                placeholderText = stringResource(Res.string.document_basic_info_1_name_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
@@ -50,8 +56,8 @@ fun BasicInfoStep1Screen(
             DocumentForeignerNumberTextField(
                 value = foreignerNumberValue,
                 onValueChange = onForeignerNumberValueChange,
-                labelText = stringResource(MR.strings.document_basic_info_1_foreigner_register_number_label),
-                placeholderText = stringResource(MR.strings.document_basic_info_1_foreigner_register_number_placeholder),
+                labelText = stringResource(Res.string.document_basic_info_1_foreigner_register_number_label),
+                placeholderText = stringResource(Res.string.document_basic_info_1_foreigner_register_number_placeholder),
                 imeAction = ImeAction.Next
             )
             Spacer(Modifier.height(27.dp))
@@ -59,8 +65,8 @@ fun BasicInfoStep1Screen(
             DocumentTextTextField(
                 value = majorValue,
                 onValueChange = onMajorValueChange,
-                labelText = stringResource(MR.strings.document_basic_info_1_major_label),
-                placeholderText = stringResource(MR.strings.document_basic_info_1_major_placeholder),
+                labelText = stringResource(Res.string.document_basic_info_1_major_label),
+                placeholderText = stringResource(Res.string.document_basic_info_1_major_placeholder),
                 imeAction = ImeAction.Next
             )
         }

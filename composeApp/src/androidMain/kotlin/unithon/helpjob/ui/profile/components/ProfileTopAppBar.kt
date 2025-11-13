@@ -8,11 +8,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.setting_icon
+import helpjob.composeapp.generated.resources.settings_button
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey600
 
@@ -26,8 +27,8 @@ fun ProfileTopAppBar(
         actions = {
             IconButton(onClick = onNavigateToSettings) {
                 Icon(
-                    painter = painterResource(id = R.drawable.setting_icon),
-                    contentDescription = stringResource(MR.strings.settings_button)
+                    painter = painterResource(Res.drawable.setting_icon),
+                    contentDescription = stringResource(Res.string.settings_button)
                 )
             }
         },

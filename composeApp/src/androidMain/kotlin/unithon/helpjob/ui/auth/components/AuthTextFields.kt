@@ -19,15 +19,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.eyeoff
+import helpjob.composeapp.generated.resources.eyeon
+import helpjob.composeapp.generated.resources.hide_password
+import helpjob.composeapp.generated.resources.show_password
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
@@ -68,13 +71,13 @@ fun AuthTextField(
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
                     painter = painterResource(
-                        id = if (passwordVisible) R.drawable.eyeon
-                        else R.drawable.eyeoff
+                        if (passwordVisible) Res.drawable.eyeon
+                        else Res.drawable.eyeoff
                     ),
                     contentDescription = if (passwordVisible) {
-                        stringResource(MR.strings.hide_password)
+                        stringResource(Res.string.hide_password)
                     } else {
-                        stringResource(MR.strings.show_password)
+                        stringResource(Res.string.show_password)
                     },
                     tint = Grey400,
                     modifier = Modifier.size(20.dp)

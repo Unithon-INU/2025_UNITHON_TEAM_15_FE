@@ -12,11 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_finish_button
+import helpjob.composeapp.generated.resources.document_finish_description
+import helpjob.composeapp.generated.resources.document_finish_title
+import helpjob.composeapp.generated.resources.message
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700
@@ -37,20 +40,20 @@ fun FinishScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(R.drawable.message),
+                painter = painterResource(Res.drawable.message),
                 contentDescription = "메시지",
                 modifier = Modifier
                     .padding(horizontal = 68.dp)
             )
             Spacer(Modifier.height(25.dp))
             Text(
-                text = stringResource(MR.strings.document_finish_title),
+                text = stringResource(Res.string.document_finish_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = Grey700
             )
             Spacer(Modifier.height(9.dp))
             Text(
-                text = stringResource(MR.strings.document_finish_description),
+                text = stringResource(Res.string.document_finish_description),
                 style = MaterialTheme.typography.titleMedium,
                 color = Grey500
             )
@@ -60,7 +63,7 @@ fun FinishScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = 20.dp),
-            text = stringResource(MR.strings.document_finish_button),
+            text = stringResource(Res.string.document_finish_button),
             onClick = onNext,
             enabled = true
         )

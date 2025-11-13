@@ -1,7 +1,9 @@
 package unithon.helpjob.ui.onboarding
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.error_authentication_required
+import helpjob.composeapp.generated.resources.onboarding_error_message
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,6 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
@@ -16,7 +19,6 @@ import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.data.repository.UnauthorizedException
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class OnboardingViewModel(
@@ -192,7 +194,7 @@ class OnboardingViewModel(
 
             } catch (e: UnauthorizedException){
                 Timber.e(e, "인증 오류 발생")
-                _snackbarMessage.emit(MR.strings.error_authentication_required)
+                _snackbarMessage.emit(Res.string.error_authentication_required)
                 _uiState.update {
                     it.copy(
                         isLoading = false  // 로딩 상태 해제
@@ -200,7 +202,7 @@ class OnboardingViewModel(
                 }
             } catch (e: Exception) {  // 다른 예외 처리 추가
                 Timber.e(e, "프로필 설정 오류 발생")
-                _snackbarMessage.emit(MR.strings.onboarding_error_message)
+                _snackbarMessage.emit(Res.string.onboarding_error_message)
                 _uiState.update {
                     it.copy(
                         isLoading = false  // 로딩 상태 해제

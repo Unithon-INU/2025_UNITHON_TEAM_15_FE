@@ -9,9 +9,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_step_2_title
+import helpjob.composeapp.generated.resources.document_workplace_info_1_business_number_label
+import helpjob.composeapp.generated.resources.document_workplace_info_1_business_number_placeholder
+import helpjob.composeapp.generated.resources.document_workplace_info_1_category_of_business_label
+import helpjob.composeapp.generated.resources.document_workplace_info_1_category_of_business_placeholder
+import helpjob.composeapp.generated.resources.document_workplace_info_1_company_name_label
+import helpjob.composeapp.generated.resources.document_workplace_info_1_company_name_placeholder
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.data.model.Business
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentBusinessNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
@@ -34,6 +41,8 @@ fun WorkplaceInfo1Screen(
     val context = LocalContext.current
     val businessList = Business.entries
     val selectedBusiness = Business.fromApiValue(categoryOfBusinessValue)
+    // 🆕 미리 displayName 맵 생성 (@Composable 컨텍스트에서)
+    val businessDisplayMap = businessList.associateWith { it.getDisplayName() }
 
     DocumentInfoScreen(
         modifier = modifier,
@@ -46,8 +55,8 @@ fun WorkplaceInfo1Screen(
             DocumentTextTextField(
                 value = companyNameValue,
                 onValueChange = onCompanyNameValueChange,
-                labelText = stringResource(MR.strings.document_workplace_info_1_company_name_label),
-                placeholderText = stringResource(MR.strings.document_workplace_info_1_company_name_placeholder),
+                labelText = stringResource(Res.string.document_workplace_info_1_company_name_label),
+                placeholderText = stringResource(Res.string.document_workplace_info_1_company_name_placeholder),
                 imeAction = ImeAction.Next
             )
 
@@ -56,8 +65,8 @@ fun WorkplaceInfo1Screen(
             DocumentBusinessNumberTextField(
                 value = businessRegisterNumberValue,
                 onValueChange = onBusinessRegisterNumberValueChange,
-                labelText = stringResource(MR.strings.document_workplace_info_1_business_number_label),
-                placeholderText = stringResource(MR.strings.document_workplace_info_1_business_number_placeholder),
+                labelText = stringResource(Res.string.document_workplace_info_1_business_number_label),
+                placeholderText = stringResource(Res.string.document_workplace_info_1_business_number_placeholder),
                 imeAction = ImeAction.Next
             )
 
@@ -69,11 +78,11 @@ fun WorkplaceInfo1Screen(
                 onItemSelected = { business ->
                     onCategoryOfBusinessValueChange(business.apiValue)
                 },
-                label = stringResource(MR.strings.document_workplace_info_1_category_of_business_label),
-                placeholder = stringResource(MR.strings.document_workplace_info_1_category_of_business_placeholder),
+                label = stringResource(Res.string.document_workplace_info_1_category_of_business_label),
+                placeholder = stringResource(Res.string.document_workplace_info_1_category_of_business_placeholder),
                 itemToString = { business ->
-                    // 간단하고 확실한 방법
-                    business.getDisplayName(context)
+                    // 미리 생성된 맵에서 가져오기
+                    businessDisplayMap[business] ?: ""
                 },
                 isUpward = true
             )
@@ -87,7 +96,7 @@ fun WorkplaceInfo1ScreenPreview(){
     HelpJobTheme {
         WorkplaceInfo1Screen(
             step = 1,
-            title = stringResource(MR.strings.document_step_2_title),
+            title = stringResource(Res.string.document_step_2_title),
             companyNameValue = "",
             onCompanyNameValueChange = {},
             businessRegisterNumberValue = "",
@@ -106,7 +115,7 @@ fun WorkplaceInfo1ScreenFilledPreview(){
     HelpJobTheme {
         WorkplaceInfo1Screen(
             step = 1,
-            title = stringResource(MR.strings.document_step_2_title),
+            title = stringResource(Res.string.document_step_2_title),
             companyNameValue = "오토그룹",
             onCompanyNameValueChange = {},
             businessRegisterNumberValue = "1234567890",

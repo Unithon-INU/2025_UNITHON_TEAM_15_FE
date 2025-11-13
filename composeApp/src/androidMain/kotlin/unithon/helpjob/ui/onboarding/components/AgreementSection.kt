@@ -16,13 +16,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.icerock.moko.resources.compose.stringResource
-import unithon.helpjob.R
-import unithon.helpjob.resources.MR
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.ic_check
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_age_agreement
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_full_agreement
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_info_agreement
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_more
+import helpjob.composeapp.generated.resources.onboarding_agreement_setup_service_agreement
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.util.noRippleClickable
@@ -48,9 +53,9 @@ fun AgreementSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(46.dp),
-            mainTitle = stringResource(MR.strings.onboarding_agreement_setup_full_agreement),
+            mainTitle = stringResource(Res.string.onboarding_agreement_setup_full_agreement),
             onClick = { onAllCheckedChange(!isAllChecked) },
-            icon = R.drawable.ic_check,
+            icon = Res.drawable.ic_check,
             iconMainSpacer = 16.dp,
             contentPosition = Arrangement.Start,
             enabled = isAllChecked
@@ -60,7 +65,7 @@ fun AgreementSection(
 
         // 서비스 이용약관 동의
         AgreementItem(
-            text = stringResource(MR.strings.onboarding_agreement_setup_service_agreement),
+            text = stringResource(Res.string.onboarding_agreement_setup_service_agreement),
             isChecked = isServiceChecked,
             onCheckedChange = onServiceCheckedChange,
             onViewDetail = { /* 세부내용 보기 구현 */ }
@@ -69,7 +74,7 @@ fun AgreementSection(
 
         // 개인정보 수집·이용 동의
         AgreementItem(
-            text = stringResource(MR.strings.onboarding_agreement_setup_info_agreement),
+            text = stringResource(Res.string.onboarding_agreement_setup_info_agreement),
             isChecked = isPrivacyChecked,
             onCheckedChange = onPrivacyCheckedChange,
             onViewDetail = { /* 세부내용 보기 구현 */ }
@@ -78,7 +83,7 @@ fun AgreementSection(
 
         // 만 14세 이상 확인
         AgreementItem(
-            text = stringResource(MR.strings.onboarding_agreement_setup_age_agreement),
+            text = stringResource(Res.string.onboarding_agreement_setup_age_agreement),
             isChecked = isAgeChecked,
             onCheckedChange = onAgeCheckedChange,
             onViewDetail = { /* 세부내용 보기 구현 */ }
@@ -107,7 +112,7 @@ fun AgreementItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_check),
+                painter = painterResource(Res.drawable.ic_check),
                 contentDescription = "동의 체크",
                 tint = if (isChecked) Primary500 else Grey500,
                 modifier = Modifier.size(16.dp)
@@ -123,7 +128,7 @@ fun AgreementItem(
         }
 
         Text(
-            text = stringResource(MR.strings.onboarding_agreement_setup_more),
+            text = stringResource(Res.string.onboarding_agreement_setup_more),
             modifier = Modifier
                 .noRippleClickable { onViewDetail() }
                 .padding(horizontal = 8.dp),

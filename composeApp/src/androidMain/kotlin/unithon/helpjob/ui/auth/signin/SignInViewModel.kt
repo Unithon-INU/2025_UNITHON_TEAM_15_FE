@@ -1,7 +1,14 @@
 package unithon.helpjob.ui.auth.signin
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.error_empty_email
+import helpjob.composeapp.generated.resources.error_empty_password
+import helpjob.composeapp.generated.resources.error_invalid_email
+import helpjob.composeapp.generated.resources.error_short_password
+import helpjob.composeapp.generated.resources.sign_in_email_not_found
+import helpjob.composeapp.generated.resources.sign_in_failed
+import helpjob.composeapp.generated.resources.sign_in_password_wrong
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,11 +16,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailNotFoundException
 import unithon.helpjob.data.repository.WrongPasswordException
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
 import unithon.helpjob.util.EmailValidator
@@ -81,7 +88,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = MR.strings.error_empty_email
+                    emailErrorMessage = Res.string.error_empty_email
                 )
             }
             hasError = true
@@ -89,7 +96,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     emailError = true,
-                    emailErrorMessage = MR.strings.error_invalid_email
+                    emailErrorMessage = Res.string.error_invalid_email
                 )
             }
             hasError = true
@@ -99,7 +106,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = MR.strings.error_empty_password
+                    passwordErrorMessage = Res.string.error_empty_password
                 )
             }
             hasError = true
@@ -107,7 +114,7 @@ class SignInViewModel(
             _uiState.update {
                 it.copy(
                     passwordError = true,
-                    passwordErrorMessage = MR.strings.error_short_password
+                    passwordErrorMessage = Res.string.error_short_password
                 )
             }
             hasError = true
@@ -142,7 +149,7 @@ class SignInViewModel(
                     it.copy(
                         isLoading = false,
                         emailError = true,
-                        emailErrorMessage = MR.strings.sign_in_email_not_found
+                        emailErrorMessage = Res.string.sign_in_email_not_found
                     )
                 }
             } catch (e: WrongPasswordException) {
@@ -152,14 +159,14 @@ class SignInViewModel(
                     it.copy(
                         isLoading = false,
                         passwordError = true,
-                        passwordErrorMessage = MR.strings.sign_in_password_wrong
+                        passwordErrorMessage = Res.string.sign_in_password_wrong
                     )
                 }
             } catch (e: Exception) {
                 // 6. Critical Error - 스낵바 + 로깅
                 Timber.e(e, "Sign in failed - unexpected error")
                 _uiState.update { it.copy(isLoading = false) }
-                _snackbarMessage.emit(MR.strings.sign_in_failed)
+                _snackbarMessage.emit(Res.string.sign_in_failed)
             }
         }
     }

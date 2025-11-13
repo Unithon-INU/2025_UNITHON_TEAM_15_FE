@@ -1,13 +1,20 @@
 package unithon.helpjob.data.model
 
-import android.content.Context
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import androidx.compose.runtime.Composable
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.workday_friday
+import helpjob.composeapp.generated.resources.workday_monday
+import helpjob.composeapp.generated.resources.workday_saturday
+import helpjob.composeapp.generated.resources.workday_sunday
+import helpjob.composeapp.generated.resources.workday_thursday
+import helpjob.composeapp.generated.resources.workday_tuesday
+import helpjob.composeapp.generated.resources.workday_wednesday
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 근무 요일 관리 Enum
- * - UI 표시용 String Resource (Moko Resources)
+ * - UI 표시용 String Resource (Compose Multiplatform Resources)
  * - API 전송용 한글 값
  */
 enum class WorkDay(
@@ -15,39 +22,40 @@ enum class WorkDay(
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     MONDAY(
-        displayNameRes = MR.strings.workday_monday,
+        displayNameRes = Res.string.workday_monday,
         apiValue = "월"
     ),
     TUESDAY(
-        displayNameRes = MR.strings.workday_tuesday,
+        displayNameRes = Res.string.workday_tuesday,
         apiValue = "화"
     ),
     WEDNESDAY(
-        displayNameRes = MR.strings.workday_wednesday,
+        displayNameRes = Res.string.workday_wednesday,
         apiValue = "수"
     ),
     THURSDAY(
-        displayNameRes = MR.strings.workday_thursday,
+        displayNameRes = Res.string.workday_thursday,
         apiValue = "목"
     ),
     FRIDAY(
-        displayNameRes = MR.strings.workday_friday,
+        displayNameRes = Res.string.workday_friday,
         apiValue = "금"
     ),
     SATURDAY(
-        displayNameRes = MR.strings.workday_saturday,
+        displayNameRes = Res.string.workday_saturday,
         apiValue = "토"
     ),
     SUNDAY(
-        displayNameRes = MR.strings.workday_sunday,
+        displayNameRes = Res.string.workday_sunday,
         apiValue = "일"
     );
 
     /**
-     * Context로 현재 언어에 맞는 표시 이름 반환
+     * Composable에서 현재 언어에 맞는 표시 이름 반환
      */
-    fun getDisplayName(context: Context): String {
-        return displayNameRes.desc().toString(context)
+    @Composable
+    fun getDisplayName(): String {
+        return stringResource(displayNameRes)
     }
 
     companion object {

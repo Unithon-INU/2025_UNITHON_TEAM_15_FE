@@ -1,13 +1,21 @@
 package unithon.helpjob.data.model
 
-import android.content.Context
-import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.desc
-import unithon.helpjob.resources.MR
+import androidx.compose.runtime.Composable
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.semester_1_1
+import helpjob.composeapp.generated.resources.semester_1_2
+import helpjob.composeapp.generated.resources.semester_2_1
+import helpjob.composeapp.generated.resources.semester_2_2
+import helpjob.composeapp.generated.resources.semester_3_1
+import helpjob.composeapp.generated.resources.semester_3_2
+import helpjob.composeapp.generated.resources.semester_4_1
+import helpjob.composeapp.generated.resources.semester_4_2
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * 학기 관리 Enum
- * - UI 표시용 String Resource (Moko Resources)
+ * - UI 표시용 String Resource (Compose Multiplatform Resources)
  * - API 전송용 한글 값
  */
 enum class Semester(
@@ -15,43 +23,44 @@ enum class Semester(
     val apiValue: String  // API에는 항상 한글로 전송
 ) {
     FIRST_YEAR_FIRST(
-        displayNameRes = MR.strings.semester_1_1,
+        displayNameRes = Res.string.semester_1_1,
         apiValue = "1학기"
     ),
     FIRST_YEAR_SECOND(
-        displayNameRes = MR.strings.semester_1_2,
+        displayNameRes = Res.string.semester_1_2,
         apiValue = "2학기"
     ),
     SECOND_YEAR_FIRST(
-        displayNameRes = MR.strings.semester_2_1,
+        displayNameRes = Res.string.semester_2_1,
         apiValue = "3학기"
     ),
     SECOND_YEAR_SECOND(
-        displayNameRes = MR.strings.semester_2_2,
+        displayNameRes = Res.string.semester_2_2,
         apiValue = "4학기"
     ),
     THIRD_YEAR_FIRST(
-        displayNameRes = MR.strings.semester_3_1,
+        displayNameRes = Res.string.semester_3_1,
         apiValue = "5학기"
     ),
     THIRD_YEAR_SECOND(
-        displayNameRes = MR.strings.semester_3_2,
+        displayNameRes = Res.string.semester_3_2,
         apiValue = "6학기"
     ),
     FOURTH_YEAR_FIRST(
-        displayNameRes = MR.strings.semester_4_1,
+        displayNameRes = Res.string.semester_4_1,
         apiValue = "7학기"
     ),
     FOURTH_YEAR_SECOND(
-        displayNameRes = MR.strings.semester_4_2,
+        displayNameRes = Res.string.semester_4_2,
         apiValue = "8학기"
     );
 
     /**
-     * Context로 현재 언어에 맞는 표시 이름 반환
+     * Composable에서 현재 언어에 맞는 표시 이름 반환
      */
-    fun getDisplayName(context: Context): String {
-        return displayNameRes.desc().toString(context)
+    @Composable
+    fun getDisplayName(): String {
+        return stringResource(displayNameRes)
     }
 
     companion object {

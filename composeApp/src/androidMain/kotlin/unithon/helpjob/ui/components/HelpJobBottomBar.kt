@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import dev.icerock.moko.resources.compose.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.BottomNavDestination
 import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.theme.Grey000
@@ -57,7 +57,7 @@ fun HelpJobBottomBar(
                     icon = {
                         Icon(
                             painter = painterResource(
-                                id = if (selected) destination.selectedIcon else destination.unselectedIcon
+                                if (selected) destination.selectedIcon else destination.unselectedIcon
                             ),
                             contentDescription = stringResource(destination.iconTextId),
                             tint = Color.Unspecified // 아이콘 자체 색상 사용

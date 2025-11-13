@@ -10,8 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.setting_privacy_policy
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.components.HtmlWebView
 
@@ -30,7 +31,7 @@ fun PrivacyPolicyScreen(
             .navigationBarsPadding()
     ) {
         HelpJobTopAppBar(
-            title = MR.strings.setting_privacy_policy,
+            title = Res.string.setting_privacy_policy,
             onBack = onBack
         )
 

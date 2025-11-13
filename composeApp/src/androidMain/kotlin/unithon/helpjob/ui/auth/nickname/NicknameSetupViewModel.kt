@@ -1,7 +1,11 @@
 package unithon.helpjob.ui.auth.nickname
 
 import androidx.lifecycle.viewModelScope
-import dev.icerock.moko.resources.StringResource
+import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.nickname_duplicate_error
+import helpjob.composeapp.generated.resources.nickname_empty_error
+import helpjob.composeapp.generated.resources.nickname_setup_failed
+import helpjob.composeapp.generated.resources.nickname_too_short_error
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,11 +13,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
-import unithon.helpjob.resources.MR
 import unithon.helpjob.ui.base.BaseViewModel
 
 class NicknameSetupViewModel(
@@ -61,7 +65,7 @@ class NicknameSetupViewModel(
                 _uiState.update {
                     it.copy(
                         nicknameError = true,
-                        nicknameErrorMessage = MR.strings.nickname_empty_error
+                        nicknameErrorMessage = Res.string.nickname_empty_error
                     )
                 }
                 return
@@ -70,7 +74,7 @@ class NicknameSetupViewModel(
                 _uiState.update {
                     it.copy(
                         nicknameError = true,
-                        nicknameErrorMessage = MR.strings.nickname_too_short_error
+                        nicknameErrorMessage = Res.string.nickname_too_short_error
                     )
                 }
                 return
@@ -84,7 +88,7 @@ class NicknameSetupViewModel(
                 val signUpData = signUpDataRepository.getSignUpData()
 
                 if (signUpData == null) {
-                    _snackbarMessage.emit(MR.strings.nickname_setup_failed)  // 스낵바로 변경
+                    _snackbarMessage.emit(Res.string.nickname_setup_failed)  // 스낵바로 변경
                     _uiState.update { it.copy(isLoading = false) }
                     Timber.e("SignUp data is null")  // 로깅 추가
                     return@launch
@@ -108,11 +112,11 @@ class NicknameSetupViewModel(
                     it.copy(
                         isLoading = false,
                         nicknameError = true,
-                        nicknameErrorMessage = MR.strings.nickname_duplicate_error
+                        nicknameErrorMessage = Res.string.nickname_duplicate_error
                     )
                 }
             } catch (e: Exception) {
-                _snackbarMessage.emit(MR.strings.nickname_setup_failed)  // 스낵바로 변경
+                _snackbarMessage.emit(Res.string.nickname_setup_failed)  // 스낵바로 변경
                 _uiState.update { it.copy(isLoading = false) }
                 Timber.e(e, "Nickname setup failed")  // 로깅 추가
             }
