@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="Theme.HelpJob" parent="android:Theme.Material.Light.NoActionBar" />
-
-    <!-- OSS Licenses용 기본 테마 -->
-    <style name="Theme.OssLicenses" parent="Theme.AppCompat.Light" />
-
-</resources>
