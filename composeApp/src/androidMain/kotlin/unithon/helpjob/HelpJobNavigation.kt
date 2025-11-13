@@ -30,6 +30,9 @@ object HelpJobDestinations {
     // 🔥 NavHost의 root graph route (모든 화면이 HomeViewModel을 공유하기 위한 스코프)
     const val ROOT_GRAPH_ROUTE = "root_graph"
 
+    // 🏠 Main 화면들의 nested navigation graph (BottomNav 영역)
+    const val MAIN_GRAPH_ROUTE = "main_graph"
+
     const val SPLASH_ROUTE = HelpJobScreens.SPLASH_SCREEN
     const val SIGN_IN_ROUTE = HelpJobScreens.SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = HelpJobScreens.SIGN_UP_SCREEN
@@ -148,13 +151,13 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
      *
      * 효과:
      * - 모든 이전 화면들을 백스택에서 완전 제거
-     * - 홈이 새로운 백스택의 루트가 됨
+     * - MAIN_GRAPH가 새로운 백스택의 루트가 됨 (내부적으로 HOME이 startDestination)
      * - 뒤로가기 시 앱 종료
      */
     fun navigateToAppHome() {
-        navController.navigate(BottomNavDestination.HOME.route) {
-            popUpTo(0) {
-                inclusive = true  // 모든 이전 화면 완전 제거
+        navController.navigate(HelpJobDestinations.MAIN_GRAPH_ROUTE) {
+            popUpTo(navController.graph.startDestinationId) {
+                inclusive = true  // SPLASH 포함 모든 이전 화면 완전 제거
             }
             launchSingleTop = true
         }

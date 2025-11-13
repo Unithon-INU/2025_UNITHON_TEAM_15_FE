@@ -167,8 +167,7 @@ val androidViewModelModule = module {
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { CalculatorViewModel() }
     viewModel { DocumentViewModel(get()) }
-    // HomeViewModel은 앱 전체에서 상태를 공유하기 위해 single 스코프 사용
-    single { HomeViewModel(get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { LanguageSettingViewModel(get()) }

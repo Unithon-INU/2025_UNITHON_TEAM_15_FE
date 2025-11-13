@@ -79,16 +79,10 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val homeUiState by homeViewModel.uiState.collectAsState()
+    val homeState by homeViewModel.homeState.collectAsState()
     val context = LocalContext.current
 
-    // 🔥 언어 변경 감지 및 자동 새로고침 (HomeViewModel 공유)
-    val currentLanguage by unithon.helpjob.data.repository.GlobalLanguageState.currentLanguage
-
-    LaunchedEffect(currentLanguage) {
-        timber.log.Timber.d("🌐 ProfileScreen 언어 변경 감지: ${currentLanguage.code}")
-        homeViewModel.refresh(currentLanguage.code)
-    }
+    // 🔥 언어 변경은 HomeViewModel에서 자동 처리 (여기서는 불필요)
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -117,7 +111,7 @@ fun ProfileScreen(
                 Text(
                     text = stringResource(
                         MR.strings.profile_greeting,
-                        homeUiState.nickname.ifEmpty { stringResource(MR.strings.profile_nickname_default) }
+                        homeState.nickname.ifEmpty { stringResource(MR.strings.profile_nickname_default) }
                     ),
                     style = TextStyle(
                         fontSize = 22.sp,
@@ -136,7 +130,7 @@ fun ProfileScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = homeUiState.email.ifEmpty { stringResource(MR.strings.profile_email_default) },
+                        text = homeState.email.ifEmpty { stringResource(MR.strings.profile_email_default) },
                         style = MaterialTheme.typography.bodyLarge,
                         color = Grey500
                     )
@@ -210,7 +204,7 @@ fun ProfileScreen(
 
                 // 🆕 서류 관리 섹션만 추가
                 DocumentManagementSection(
-                    homeUiState = homeUiState,
+                    homeState = homeState,
                     onDocumentClick = { document ->
                         onNavigateToHomeWithStep(document.checkStep)
                     }
@@ -225,12 +219,12 @@ fun ProfileScreen(
  */
 @Composable
 private fun DocumentManagementSection(
-    homeUiState: HomeViewModel.HomeUiState,
+    homeState: unithon.helpjob.data.repository.HomeStateRepository.HomeState,
     onDocumentClick: (UncheckedDocument) -> Unit
 ) {
-    // HomeUiState에서 실시간으로 누락된 서류 계산
-    val uncheckedDocuments = remember(homeUiState.steps) {
-        homeUiState.steps.flatMap { step ->
+    // HomeState에서 실시간으로 누락된 서류 계산
+    val uncheckedDocuments = remember(homeState.steps) {
+        homeState.steps.flatMap { step ->
             step.documentInfoRes
                 .filter { !it.isChecked }
                 .map { document ->

@@ -73,21 +73,17 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeState by viewModel.homeState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    // 🔥 언어 변경 감지 및 자동 새로고침 (ViewModel에서 중복 방지)
-    val currentLanguage by GlobalLanguageState.currentLanguage
-
-    LaunchedEffect(currentLanguage) {
-        Timber.d("🌐 HomeScreen LaunchedEffect 트리거: ${currentLanguage.code}")
-        viewModel.refresh(currentLanguage.code)
-    }
+    // 🔥 언어 변경 감지는 ViewModel에서 처리하므로 여기서는 제거
+    // (ViewModel의 observeLanguageChanges가 자동으로 처리)
 
     var maxCardHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
     // HorizontalPager 상태
-    val pagerState = rememberPagerState(pageCount = { uiState.steps.size })
+    val pagerState = rememberPagerState(pageCount = { homeState.steps.size })
 
     // 🆕 초기화 완료 플래그 (첫 번째 데이터 로딩 후 자동 이동 방지용)
     var isInitialized by remember { mutableStateOf(false) }
@@ -104,17 +100,17 @@ fun HomeScreen(
     }
 
     // 첫 번째 데이터 로딩 완료 시 초기화 플래그 설정
-    LaunchedEffect(uiState.steps.isNotEmpty()) {
-        if (uiState.steps.isNotEmpty() && !isInitialized) {
+    LaunchedEffect(homeState.steps.isNotEmpty()) {
+        if (homeState.steps.isNotEmpty() && !isInitialized) {
             isInitialized = true
         }
     }
 
     // 🔥 핵심 수정: memberCheckStep 기반 이동은 초기화 시에만 실행
-    LaunchedEffect(uiState.memberCheckStep, uiState.steps) {
-        if (uiState.steps.isNotEmpty() && !isInitialized && !userHasInteracted) {
-            val targetIndex = uiState.steps.indexOfFirst {
-                it.checkStep == uiState.memberCheckStep.apiStep
+    LaunchedEffect(homeState.memberCheckStep, homeState.steps) {
+        if (homeState.steps.isNotEmpty() && !isInitialized && !userHasInteracted) {
+            val targetIndex = homeState.steps.indexOfFirst {
+                it.checkStep == homeState.memberCheckStep.apiStep
             }
             if (targetIndex >= 0) {
                 pagerState.scrollToPage(targetIndex)
@@ -125,7 +121,7 @@ fun HomeScreen(
     // selectedStep 변경 시 pager 동기화 (우선순위 높음)
     LaunchedEffect(uiState.selectedStep) {
         uiState.selectedStep?.let { selectedStep ->
-            val targetIndex = uiState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
+            val targetIndex = homeState.steps.indexOfFirst { it.checkStep == selectedStep.checkStep }
             if (targetIndex >= 0 && targetIndex != pagerState.currentPage) {
                 userHasInteracted = true // 사용자 인터랙션으로 표시
                 pagerState.scrollToPage(targetIndex)
@@ -141,8 +137,8 @@ fun HomeScreen(
     }
 
     // ✅ 핵심 수정 3: displayStep 로직 개선 - 항상 최신 데이터 사용
-    val displayStep = if (uiState.steps.isNotEmpty() && pagerState.currentPage < uiState.steps.size) {
-        uiState.steps[pagerState.currentPage]  // 항상 현재 페이지의 최신 데이터 사용
+    val displayStep = if (homeState.steps.isNotEmpty() && pagerState.currentPage < homeState.steps.size) {
+        homeState.steps[pagerState.currentPage]  // 항상 현재 페이지의 최신 데이터 사용
     } else null
 
     val scrollState = rememberScrollState()
@@ -162,7 +158,7 @@ fun HomeScreen(
 
                 // 환영인사
                 Text(
-                    text = stringResource(MR.strings.welcome_message, uiState.nickname),
+                    text = stringResource(MR.strings.welcome_message, homeState.nickname),
                     style = MaterialTheme.typography.headlineLarge,
                     color = Grey600
                 )
@@ -173,7 +169,7 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     DottedProgressBar(
-                        progress = uiState.progressPercentage,
+                        progress = homeState.progressPercentage,
                         modifier = Modifier.fillMaxWidth(),
                         showTicks = true,
                         showPercentage = true
@@ -192,11 +188,11 @@ fun HomeScreen(
                         pageSpacing = 0.dp
                     ) { page ->
                         StepCard(
-                            step = Steps.valueOf(uiState.steps[page].checkStep).uiStep,
-                            title = uiState.steps[page].stepInfoRes.title,
-                            subTitle = uiState.steps[page].stepInfoRes.subtitle,
+                            step = Steps.valueOf(homeState.steps[page].checkStep).uiStep,
+                            title = homeState.steps[page].stepInfoRes.title,
+                            subTitle = homeState.steps[page].stepInfoRes.subtitle,
                             onClick = {
-                                viewModel.selectStep(uiState.steps[page])
+                                viewModel.selectStep(homeState.steps[page])
                                 onNavigateToStepDetail()
                             },
                             modifier = Modifier.fillMaxHeight()
@@ -209,7 +205,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .alpha(0f) // 투명하게 만들어 보이지 않게 함
                     ) {
-                        uiState.steps.forEachIndexed { index, step ->
+                        homeState.steps.forEachIndexed { index, step ->
                             StepCard(
                                 step = Steps.valueOf(step.checkStep).uiStep,
                                 title = step.stepInfoRes.title,
@@ -223,7 +219,7 @@ fun HomeScreen(
                                         }
                                     }
                             )
-                            if (index < uiState.steps.size - 1) {
+                            if (index < homeState.steps.size - 1) {
                                 Spacer(Modifier.height(8.dp))
                             }
                         }
@@ -258,7 +254,6 @@ fun HomeScreen(
                             step.documentInfoRes.forEach { document ->
                                 DocumentItem(
                                     document = document,
-                                    enabled = !uiState.isUpdating,
                                     onCheckedChange = { isChecked ->
                                         viewModel.onDocumentCheckChanged(
                                             document = document,

@@ -9,8 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
@@ -89,88 +90,116 @@ fun HelpJobNavGraph(
             )
         }
 
-        // 메인 앱 플로우 (하단바 있음)
-        composable(route = BottomNavDestination.HOME.route) {
-            val homeViewModel = koinInject<HomeViewModel>()
-            timber.log.Timber.d("🔍 HomeScreen composable - ViewModel 인스턴스: ${homeViewModel.hashCode()}")
+        // 메인 앱 플로우 (하단바 있음) - HomeViewModel 공유 영역
+        navigation(
+            route = HelpJobDestinations.MAIN_GRAPH_ROUTE,
+            startDestination = BottomNavDestination.HOME.route
+        ) {
+            composable(route = BottomNavDestination.HOME.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
-            HomeScreen(
-                onNavigateToStepDetail = { navActions.navigateToStepDetail() },
-                snackbarHostState = snackbarHostState,
-                viewModel = homeViewModel
-            )
-        }
+                HomeScreen(
+                    onNavigateToStepDetail = { navActions.navigateToStepDetail() },
+                    snackbarHostState = snackbarHostState,
+                    viewModel = homeViewModel
+                )
+            }
 
-        composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) {
-            val homeViewModel = koinInject<HomeViewModel>()
-            timber.log.Timber.d("🔍 StepDetailScreen composable - ViewModel 인스턴스: ${homeViewModel.hashCode()}")
+            composable(route = HelpJobDestinations.STEP_DETAIL_ROUTE) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
-            StepDetailScreen(
-                onBackClick = {
-                    homeViewModel.clearSelectedStep()
-                    navController.popBackStack()
-                },
-                viewModel = homeViewModel
-            )
-        }
+                StepDetailScreen(
+                    onBackClick = {
+                        homeViewModel.clearSelectedStep()
+                        navController.popBackStack()
+                    },
+                    viewModel = homeViewModel
+                )
+            }
 
-        composable(route = BottomNavDestination.CALCULATE.route) {
-            CalculatorScreen()
-        }
+            composable(route = BottomNavDestination.CALCULATE.route) {
+                CalculatorScreen()
+            }
 
-        composable(route = BottomNavDestination.CONTENT.route) {
-            DocumentScreen(
-                snackbarHostState = snackbarHostState
-            )
-        }
+            composable(route = BottomNavDestination.CONTENT.route) {
+                DocumentScreen(
+                    snackbarHostState = snackbarHostState
+                )
+            }
 
-        composable(route = BottomNavDestination.PROFILE.route) {
-            val homeViewModel = koinInject<HomeViewModel>()
+            composable(route = BottomNavDestination.PROFILE.route) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
-            ProfileScreen(
-                onNavigateToSettings = navActions::navigateToSettings,
-                onNavigateToHomeWithStep = { stepId ->
-                    val targetStep = homeViewModel.uiState.value.steps.find { it.checkStep == stepId }
-                    targetStep?.let { step ->
-                        homeViewModel.selectStep(step)
-                    }
-                    navController.navigate(BottomNavDestination.HOME.route) {
-                        launchSingleTop = true
-                        restoreState = false
-                        popUpTo(BottomNavDestination.PROFILE.route) {
-                            inclusive = true
+                ProfileScreen(
+                    onNavigateToSettings = navActions::navigateToSettings,
+                    onNavigateToHomeWithStep = { stepId ->
+                        val targetStep = homeViewModel.homeState.value.steps.find { it.checkStep == stepId }
+                        targetStep?.let { step ->
+                            homeViewModel.selectStep(step)
                         }
-                    }
-                },
-                homeViewModel = homeViewModel,
-                snackbarHostState = snackbarHostState,
-            )
-        }
+                        navController.navigate(BottomNavDestination.HOME.route) {
+                            launchSingleTop = true
+                            restoreState = false
+                            popUpTo(BottomNavDestination.PROFILE.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    homeViewModel = homeViewModel,
+                    snackbarHostState = snackbarHostState,
+                )
+            }
 
-        composable(route = HelpJobDestinations.SETTING_ROUTE) {
-            val homeViewModel = koinInject<HomeViewModel>()
+            composable(route = HelpJobDestinations.SETTING_ROUTE) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
-            SettingScreen(
-                onBack = { navController.popBackStack() },
-                onLanguageSettingClick = navActions::navigateToLanguageSetting,
-                onPrivacyPolicyClick = navActions::navigateToPrivacyPolicy,
-                onTermsOfServiceClick = navActions::navigateToTermsOfService,
-                onLogoutClick = navActions::navigateToSignInAfterLogout,
-                snackbarHostState = snackbarHostState,
-                modifier = modifier,
-                homeViewModel = homeViewModel
-            )
-        }
+                SettingScreen(
+                    onBack = { navController.popBackStack() },
+                    onLanguageSettingClick = navActions::navigateToLanguageSetting,
+                    onPrivacyPolicyClick = navActions::navigateToPrivacyPolicy,
+                    onTermsOfServiceClick = navActions::navigateToTermsOfService,
+                    onLogoutClick = navActions::navigateToSignInAfterLogout,
+                    snackbarHostState = snackbarHostState,
+                    modifier = modifier,
+                    homeViewModel = homeViewModel
+                )
+            }
 
-        composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) {
-            val homeViewModel = koinInject<HomeViewModel>()
+            composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
-            LanguageSettingScreen(
-                onBack = { navController.popBackStack() },
-                snackbarHostState = snackbarHostState,
-                modifier = modifier,
-                homeViewModel = homeViewModel
-            )
+                LanguageSettingScreen(
+                    onBack = { navController.popBackStack() },
+                    snackbarHostState = snackbarHostState,
+                    modifier = modifier,
+                    homeViewModel = homeViewModel
+                )
+            }
         }
 
         composable(route = HelpJobDestinations.PRIVACY_POLICY_ROUTE) {

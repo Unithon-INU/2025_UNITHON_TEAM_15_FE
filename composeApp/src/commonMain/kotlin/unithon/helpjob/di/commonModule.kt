@@ -10,6 +10,7 @@ import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
 import unithon.helpjob.data.repository.DefaultPolicyRepository
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.data.repository.SignUpDataRepository
 
@@ -25,6 +26,9 @@ val commonDataModule = module {
     single<EmploymentCheckRepository> { DefaultEmploymentCheckRepository(get(), get()) }
     single<DocumentRepository> { DefaultDocumentRepository(get(), get()) }
     single<PolicyRepository> { DefaultPolicyRepository(get()) }
+
+    // HomeStateRepository (상태 관리)
+    single { HomeStateRepository(get()) }
 }
 
 /**

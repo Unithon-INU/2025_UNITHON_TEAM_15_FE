@@ -62,17 +62,18 @@ fun StepDetailScreen(
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeState by viewModel.homeState.collectAsStateWithLifecycle()
 
     val selectedStep = uiState.selectedStep
     val tips = uiState.tips
 
     // 🔍 디버깅 로그
     timber.log.Timber.d("🔍 StepDetailScreen - ViewModel 인스턴스: ${viewModel.hashCode()}")
-    timber.log.Timber.d("🔍 StepDetailScreen - selectedStep: ${selectedStep?.checkStep}, steps.size: ${uiState.steps.size}")
+    timber.log.Timber.d("🔍 StepDetailScreen - selectedStep: ${selectedStep?.checkStep}, steps.size: ${homeState.steps.size}")
 
     when {
         // 1. 데이터 로딩 중 (steps가 비어있음)
-        uiState.steps.isEmpty() -> {
+        homeState.steps.isEmpty() -> {
             timber.log.Timber.d("❌ StepDetailScreen - steps가 비어있음")
             LoadingScreen(onBackClick = onBackClick)
         }
