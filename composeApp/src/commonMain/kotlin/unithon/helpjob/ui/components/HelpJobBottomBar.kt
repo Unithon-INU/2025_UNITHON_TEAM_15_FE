@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.BottomNavDestination
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Primary600
@@ -35,8 +34,7 @@ fun HelpJobBottomBar(
         topEnd = 20.dp
     )
 
-    LanguageAwareScreen {
-        NavigationBar(
+    NavigationBar(
             modifier = modifier
                 .border(
                     width = 0.5.dp,
@@ -79,5 +77,4 @@ fun HelpJobBottomBar(
                 )
             }
         }
-    }
 }

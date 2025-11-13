@@ -57,6 +57,9 @@ kotlin {
 
                 // KMP ViewModel (Compose 1.7.3 공식)
                 implementation(libs.lifecycle.viewmodel.compose)
+
+                // KMP Navigation (JetBrains multiplatform)
+                implementation(libs.navigation.compose)
             }
         }
 
@@ -89,7 +92,6 @@ kotlin {
                 implementation(libs.androidx.compose.material3)
                 implementation(libs.androidx.compose.material.iconsExtended)
                 implementation(libs.androidx.compose.ui.tooling.preview)
-                implementation(libs.androidx.navigation.compose)
                 implementation(libs.accompanist.appcompat.theme)
                 implementation(libs.accompanist.swiperefresh)
 
