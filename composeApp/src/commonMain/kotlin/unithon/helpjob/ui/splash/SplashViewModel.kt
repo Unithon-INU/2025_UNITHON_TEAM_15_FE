@@ -6,7 +6,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
 
@@ -48,7 +47,7 @@ class SplashViewModel(
                             }
                         } catch (e: Exception) {
                             // 모든 예외: 로그인으로
-                            Timber.e(e, "프로필 조회 실패 - 로그인으로 이동")
+                            println("프로필 조회 실패 - 로그인으로 이동: ${e.message}")
                             authRepository.clearToken()  // 토큰도 클리어
                             NavigationTarget.Login
                         }

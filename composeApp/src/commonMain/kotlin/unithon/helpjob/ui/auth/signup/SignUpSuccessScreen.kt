@@ -25,7 +25,6 @@ import helpjob.composeapp.generated.resources.signup_success_subtitle
 import helpjob.composeapp.generated.resources.signup_success_title
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey700
@@ -35,8 +34,7 @@ fun SignUpSuccessScreen(
     onGoToLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LanguageAwareScreen {
-        Box(
+    Box(
             modifier = modifier
                 .fillMaxSize()
                 .statusBarsPadding()
@@ -90,5 +88,4 @@ fun SignUpSuccessScreen(
                     .padding(bottom = 20.dp)
             )
         }
-    }
 }
