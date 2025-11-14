@@ -12,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,7 +22,6 @@ import unithon.helpjob.data.repository.DynamicLanguageProvider
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobBottomBar
 import unithon.helpjob.ui.theme.HelpJobTheme
-import unithon.helpjob.util.LocalAppLocale
 
 class HelpJobActivity : ComponentActivity() {
 
@@ -41,9 +39,7 @@ class HelpJobActivity : ComponentActivity() {
                 // DynamicLanguageProvider로 LocalContext를 언어별로 재생성
                 // 이렇게 해야 stringResource()가 올바른 locale의 텍스트를 가져옴
                 DynamicLanguageProvider(currentLanguage = currentLanguage) {
-                    CompositionLocalProvider(LocalAppLocale provides currentLanguage.code) {
-                        HelpJobApp()
-                    }
+                    HelpJobApp()
                 }
             }
         }

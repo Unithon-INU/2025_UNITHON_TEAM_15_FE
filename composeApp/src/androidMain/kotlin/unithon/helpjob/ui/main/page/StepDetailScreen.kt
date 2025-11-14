@@ -46,7 +46,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.response.EmploymentCheckRes
 import unithon.helpjob.data.model.response.TipResponseItem
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.main.HomeViewModel
@@ -109,38 +108,36 @@ private fun StepDetailContent(
     onBackClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-    LanguageAwareScreen {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        HelpJobTopAppBar(
+            onBack = onBackClick
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState)
         ) {
-            HelpJobTopAppBar(
-                onBack = onBackClick
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp)
-                    .verticalScroll(scrollState)
-            ) {
-                Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
 
-                // Step 카드
-                StepDetailCard(step = step)
+            // Step 카드
+            StepDetailCard(step = step)
 
-                Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-                // Tips 섹션
-                if (tips.isNotEmpty()) {
-                    TipsSection(tips = tips)
-                } else {
-                    EmptyTipsSection()
-                }
-
-                Spacer(Modifier.height(100.dp))
+            // Tips 섹션
+            if (tips.isNotEmpty()) {
+                TipsSection(tips = tips)
+            } else {
+                EmptyTipsSection()
             }
+
+            Spacer(Modifier.height(100.dp))
         }
     }
 }

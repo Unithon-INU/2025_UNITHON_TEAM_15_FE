@@ -65,7 +65,7 @@ val androidDataModule = module {
     single<DataStore<Preferences>> { get<Context>().dataStore }
 
     // AppLocaleManager (Android 전용, DataStore 주입)
-    single { AppLocaleManager(androidContext(), get()) }
+    single { AppLocaleManager(get()) }
 
     // LanguageRepository (Android 구현체)
     single<LanguageRepository> { AndroidLanguageRepository(get()) }

@@ -59,7 +59,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.model.TopikLevel
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
 import unithon.helpjob.ui.theme.Blue500
@@ -109,124 +108,122 @@ fun ProfileScreen(
         }
     }
 
-    LanguageAwareScreen {
+    Column(
+        modifier = Modifier
+        .fillMaxSize()
+        .statusBarsPadding()
+    ) {
+        ProfileTopAppBar(
+            onNavigateToSettings = onNavigateToSettings
+        )
+
         Column(
             modifier = Modifier
-            .fillMaxSize()
-            .statusBarsPadding()
+                .fillMaxSize()
+                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
         ) {
-            ProfileTopAppBar(
-                onNavigateToSettings = onNavigateToSettings
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 6.dp, start = 20.dp, end = 20.dp)
-            ) {
-                // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
-                Text(
-                    text = stringResource(
-                        Res.string.profile_greeting,
-                        homeState.nickname.ifEmpty { stringResource(Res.string.profile_nickname_default) }
-                    ),
-                    style = TextStyle(
-                        fontSize = 22.sp,
-                        lineHeight = 32.sp,
-                        fontFamily = PretendardFontFamily,
-                        fontWeight = FontWeight.Bold,
-                        color = Grey700
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                // 이메일 정보 Row - 양끝 정렬 (기존과 동일)
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = homeState.email.ifEmpty { stringResource(Res.string.profile_email_default) },
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Grey500
-                    )
-
-                    Text(
-                        text = stringResource(Res.string.profile_email_signup_type),
-                        style = MaterialTheme.typography.bodyMedium, // 15sp Medium
-                        color = Grey400
-                    )
-                }
-
-                Spacer(Modifier.height(24.dp))
-
-                // 사용자 정보 카드 (기존과 동일)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = Grey100,
-                            shape = RoundedCornerShape(size = 10.dp)
-                        )
-                        .padding(11.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ProfileInfoColumn(
-                            label = stringResource(Res.string.profile_visa_type),
-                            value = uiState.visaType
-                                ?: stringResource(Res.string.profile_visa_default),
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        VerticalDivider(
-                            modifier = Modifier.height(71.dp),
-                            thickness = 1.dp,
-                            color = Grey300
-                        )
-
-                        ProfileInfoColumn(
-                            label = stringResource(Res.string.profile_korean_level),
-                            value = formatTopikLevelForDisplay(uiState.topikLevel),
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        VerticalDivider(
-                            modifier = Modifier.height(71.dp),
-                            thickness = 1.dp,
-                            color = Grey300
-                        )
-
-                        ProfileInfoColumn(
-                            label = stringResource(Res.string.profile_preferred_job),
-                            value = formatIndustryForDisplay(uiState.industry),
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-
-                Spacer(Modifier.height(39.dp))
-
-                // 내 서류 관리 타이틀 (기존과 동일)
-                Text(
-                    text = stringResource(Res.string.profile_documents_title),
-                    style = MaterialTheme.typography.headline2, // 15sp Bold
+            // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
+            Text(
+                text = stringResource(
+                    Res.string.profile_greeting,
+                    homeState.nickname.ifEmpty { stringResource(Res.string.profile_nickname_default) }
+                ),
+                style = TextStyle(
+                    fontSize = 22.sp,
+                    lineHeight = 32.sp,
+                    fontFamily = PretendardFontFamily,
+                    fontWeight = FontWeight.Bold,
                     color = Grey700
                 )
-                Spacer(Modifier.height(5.dp))
+            )
 
-                // 🆕 서류 관리 섹션만 추가
-                DocumentManagementSection(
-                    homeState = homeState,
-                    onDocumentClick = { document ->
-                        onNavigateToHomeWithStep(document.checkStep)
-                    }
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // 이메일 정보 Row - 양끝 정렬 (기존과 동일)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = homeState.email.ifEmpty { stringResource(Res.string.profile_email_default) },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Grey500
+                )
+
+                Text(
+                    text = stringResource(Res.string.profile_email_signup_type),
+                    style = MaterialTheme.typography.bodyMedium, // 15sp Medium
+                    color = Grey400
                 )
             }
+
+            Spacer(Modifier.height(24.dp))
+
+            // 사용자 정보 카드 (기존과 동일)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = Grey100,
+                        shape = RoundedCornerShape(size = 10.dp)
+                    )
+                    .padding(11.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    ProfileInfoColumn(
+                        label = stringResource(Res.string.profile_visa_type),
+                        value = uiState.visaType
+                            ?: stringResource(Res.string.profile_visa_default),
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    VerticalDivider(
+                        modifier = Modifier.height(71.dp),
+                        thickness = 1.dp,
+                        color = Grey300
+                    )
+
+                    ProfileInfoColumn(
+                        label = stringResource(Res.string.profile_korean_level),
+                        value = formatTopikLevelForDisplay(uiState.topikLevel),
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    VerticalDivider(
+                        modifier = Modifier.height(71.dp),
+                        thickness = 1.dp,
+                        color = Grey300
+                    )
+
+                    ProfileInfoColumn(
+                        label = stringResource(Res.string.profile_preferred_job),
+                        value = formatIndustryForDisplay(uiState.industry),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(39.dp))
+
+            // 내 서류 관리 타이틀 (기존과 동일)
+            Text(
+                text = stringResource(Res.string.profile_documents_title),
+                style = MaterialTheme.typography.headline2, // 15sp Bold
+                color = Grey700
+            )
+            Spacer(Modifier.height(5.dp))
+
+            // 🆕 서류 관리 섹션만 추가
+            DocumentManagementSection(
+                homeState = homeState,
+                onDocumentClick = { document ->
+                    onNavigateToHomeWithStep(document.checkStep)
+                }
+            )
         }
     }
 }

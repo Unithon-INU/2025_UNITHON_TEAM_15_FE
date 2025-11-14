@@ -57,7 +57,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.repository.GlobalLanguageState
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.onboarding.components.AgreementSection
@@ -114,13 +113,12 @@ fun OnboardingScreen(
         else -> false
     }
 
-    LanguageAwareScreen {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-        ) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
             HelpJobTopAppBar(
                 title = Res.string.onboarding_top_bar_title,
                 onBack = {
@@ -170,7 +168,6 @@ fun OnboardingScreen(
                 }
             }
         }
-    }
 }
 
 // 🔥 각 페이지를 별도 Composable로 분리하여 언어 변경 감지 향상

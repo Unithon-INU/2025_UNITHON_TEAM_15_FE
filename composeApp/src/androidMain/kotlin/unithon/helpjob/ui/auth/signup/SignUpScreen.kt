@@ -53,7 +53,6 @@ import helpjob.composeapp.generated.resources.verification_code_invalid
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.auth.components.AuthEmailTextField
 import unithon.helpjob.ui.auth.components.AuthPasswordTextField
 import unithon.helpjob.ui.auth.components.AuthVerificationCodeTextField
@@ -130,65 +129,138 @@ private fun SignUpScreenContent(
     val labelSpacing = 9.dp // 레이블과 텍스트필드 사이 간격
     val totalOffset = labelHeight + labelSpacing
 
-    LanguageAwareScreen {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        HelpJobTopAppBar(
+            title = Res.string.sign_up_top_bar_title,
+            onBack = onBack
+        )
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
+                .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
         ) {
-            HelpJobTopAppBar(
-                title = Res.string.sign_up_top_bar_title,
-                onBack = onBack
+            // 제목
+            Text(
+                text = stringResource(Res.string.sign_up_subtitle),
+                style = MaterialTheme.typography.headlineLarge,
+                color = Grey700
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 19.dp, bottom = 20.dp, start = 20.dp, end = 20.dp),
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // 이메일 입력 필드 + send 버튼
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.Top
             ) {
-                // 제목
-                Text(
-                    text = stringResource(Res.string.sign_up_subtitle),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = Grey700
+                AuthEmailTextField(
+                    value = uiState.email,
+                    onValueChange = onUpdateEmail,
+                    labelText = stringResource(Res.string.sign_up_email_label),
+                    placeholderText = stringResource(Res.string.sign_up_email_hint),
+                    isError = uiState.emailError,
+                    errorMessage = uiState.emailErrorMessage?.let { stringResource(it) },
+                    modifier = Modifier.weight(1f),
                 )
 
-                Spacer(modifier = Modifier.height(40.dp))
+                // send 버튼 (레이블 높이 + 간격만큼 offset)
+                Button(
+                    onClick = onSendEmailVerification,
+                    enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Primary500 else Grey200,
+                        contentColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Grey000 else Grey400,
+                        disabledContainerColor = Grey200,
+                        disabledContentColor = Grey400
+                    ),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
+                    modifier = Modifier
+                        .width(71.dp)
+                        .height(48.dp)
+                        .offset(y = totalOffset)
+                ) {
+                    if (uiState.isSendingEmail) {
+                        Text(
+                            text = "...",
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1
+                        )
+                    } else {
+                        Text(
+                            text = if (uiState.isEmailSent) "sent" else "send",
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1
+                        )
+                    }
+                }
+            }
 
-                // 이메일 입력 필드 + send 버튼
+            // 이메일 전송 후 인증코드 입력 섹션
+            if (uiState.isEmailSent) {
+                Spacer(modifier = Modifier.height(20.dp))
+
+                // 인증코드 입력 필드 + verify 버튼
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.Top
                 ) {
-                    AuthEmailTextField(
-                        value = uiState.email,
-                        onValueChange = onUpdateEmail,
-                        labelText = stringResource(Res.string.sign_up_email_label),
-                        placeholderText = stringResource(Res.string.sign_up_email_hint),
-                        isError = uiState.emailError,
-                        errorMessage = uiState.emailErrorMessage?.let { stringResource(it) },
-                        modifier = Modifier.weight(1f),
-                    )
+                    // 인증코드 텍스트필드 (내부에 Resend 포함)
+                    Box(modifier = Modifier.weight(1f)) {
+                        AuthVerificationCodeTextField(
+                            value = uiState.verificationCode,
+                            onValueChange = onUpdateVerificationCode,
+                            placeholderText = stringResource(Res.string.verification_code_hint),
+                            isError = uiState.verificationCodeError,
+                            errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(it) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
 
-                    // send 버튼 (레이블 높이 + 간격만큼 offset)
+                        // Resend 텍스트를 텍스트필드 내부 오른쪽에 배치
+                        if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == Res.string.verification_code_expired) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                horizontalArrangement = Arrangement.End,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = stringResource(Res.string.resend_button),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Warning,
+                                    modifier = Modifier
+                                        .padding(end = 18.dp)
+                                        .noRippleClickable{ onResendEmailVerification() }
+                                )
+                            }
+                        }
+                    }
+
+                    // verify 버튼 (인증코드 필드는 레이블이 없으므로 패딩 없음)
                     Button(
-                        onClick = onSendEmailVerification,
-                        enabled = uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent,
+                        onClick = onVerifyEmailCode,
+                        enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Primary500 else Grey200,
-                            contentColor = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) Grey000 else Grey400,
+                            containerColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Primary500 else Grey200,
+                            contentColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400,
                             disabledContainerColor = Grey200,
                             disabledContentColor = Grey400
                         ),
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                         modifier = Modifier
-                            .width(71.dp)
+                            .width(80.dp)
                             .height(48.dp)
-                            .offset(y = totalOffset)
                     ) {
-                        if (uiState.isSendingEmail) {
+                        if (uiState.isVerifyingCode) {
                             Text(
                                 text = "...",
                                 style = MaterialTheme.typography.titleMedium,
@@ -196,7 +268,7 @@ private fun SignUpScreenContent(
                             )
                         } else {
                             Text(
-                                text = if (uiState.isEmailSent) "sent" else "send",
+                                text = "verify",
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1
                             )
@@ -204,130 +276,55 @@ private fun SignUpScreenContent(
                     }
                 }
 
-                // 이메일 전송 후 인증코드 입력 섹션
-                if (uiState.isEmailSent) {
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    // 인증코드 입력 필드 + verify 버튼
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        // 인증코드 텍스트필드 (내부에 Resend 포함)
-                        Box(modifier = Modifier.weight(1f)) {
-                            AuthVerificationCodeTextField(
-                                value = uiState.verificationCode,
-                                onValueChange = onUpdateVerificationCode,
-                                placeholderText = stringResource(Res.string.verification_code_hint),
-                                isError = uiState.verificationCodeError,
-                                errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(it) },
-                                modifier = Modifier.fillMaxWidth(),
-                            )
-
-                            // Resend 텍스트를 텍스트필드 내부 오른쪽에 배치
-                            if (uiState.verificationCodeError || uiState.verificationCodeErrorMessage == Res.string.verification_code_expired) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(48.dp),
-                                    horizontalArrangement = Arrangement.End,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = stringResource(Res.string.resend_button),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = Warning,
-                                        modifier = Modifier
-                                            .padding(end = 18.dp)
-                                            .noRippleClickable{ onResendEmailVerification() }
-                                    )
-                                }
-                            }
-                        }
-
-                        // verify 버튼 (인증코드 필드는 레이블이 없으므로 패딩 없음)
-                        Button(
-                            onClick = onVerifyEmailCode,
-                            enabled = uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified,
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Primary500 else Grey200,
-                                contentColor = if (uiState.verificationCode.isNotBlank() && !uiState.isCodeVerified) Grey000 else Grey400,
-                                disabledContainerColor = Grey200,
-                                disabledContentColor = Grey400
-                            ),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
-                            modifier = Modifier
-                                .width(80.dp)
-                                .height(48.dp)
-                        ) {
-                            if (uiState.isVerifyingCode) {
-                                Text(
-                                    text = "...",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    maxLines = 1
-                                )
-                            } else {
-                                Text(
-                                    text = "verify",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    maxLines = 1
-                                )
-                            }
-                        }
-                    }
-
-                    // 인증번호 안내 메시지 (정상 상태일 때만)
-                    if (!uiState.verificationCodeError) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(
-                                if (uiState.isCodeVerified) Res.string.verification_code_completed
-                                else Res.string.verification_code_instruction
-                            ),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = Primary500,
-                        )
-                    }
+                // 인증번호 안내 메시지 (정상 상태일 때만)
+                if (!uiState.verificationCodeError) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(
+                            if (uiState.isCodeVerified) Res.string.verification_code_completed
+                            else Res.string.verification_code_instruction
+                        ),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Primary500,
+                    )
                 }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // 비밀번호 입력 필드
-                AuthPasswordTextField(
-                    value = uiState.password,
-                    onValueChange = onUpdatePassword,
-                    labelText = stringResource(Res.string.sign_up_password_label),
-                    placeholderText = stringResource(Res.string.sign_up_password_hint),
-                    isError = uiState.passwordError,
-                    errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) }
-                )
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // 비밀번호 확인 입력 필드
-                AuthPasswordTextField(
-                    value = uiState.confirmPassword,
-                    onValueChange = onUpdateConfirmPassword,
-                    labelText = stringResource(Res.string.sign_up_confirm_password_label),
-                    placeholderText = stringResource(Res.string.sign_up_confirm_password_hint),
-                    isError = uiState.confirmPasswordError,
-                    errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },
-                    imeAction = ImeAction.Done
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // 다음 버튼
-                HelpJobButton(
-                    text = stringResource(Res.string.sign_up_next_button),
-                    onClick = onProceedToNickname,
-                    enabled = uiState.isInputValid,
-                    isLoading = uiState.isLoading,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            // 비밀번호 입력 필드
+            AuthPasswordTextField(
+                value = uiState.password,
+                onValueChange = onUpdatePassword,
+                labelText = stringResource(Res.string.sign_up_password_label),
+                placeholderText = stringResource(Res.string.sign_up_password_hint),
+                isError = uiState.passwordError,
+                errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) }
+            )
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            // 비밀번호 확인 입력 필드
+            AuthPasswordTextField(
+                value = uiState.confirmPassword,
+                onValueChange = onUpdateConfirmPassword,
+                labelText = stringResource(Res.string.sign_up_confirm_password_label),
+                placeholderText = stringResource(Res.string.sign_up_confirm_password_hint),
+                isError = uiState.confirmPasswordError,
+                errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },
+                imeAction = ImeAction.Done
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // 다음 버튼
+            HelpJobButton(
+                text = stringResource(Res.string.sign_up_next_button),
+                onClick = onProceedToNickname,
+                enabled = uiState.isInputValid,
+                isLoading = uiState.isLoading,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

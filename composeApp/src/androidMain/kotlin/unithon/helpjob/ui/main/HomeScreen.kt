@@ -53,7 +53,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.DottedProgressBar
 import unithon.helpjob.ui.components.HelpJobCheckbox
 import unithon.helpjob.ui.main.components.StepProgressWarningDialog
@@ -144,157 +143,155 @@ fun HomeScreen(
     } else null
 
     val scrollState = rememberScrollState()
-    LanguageAwareScreen {
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState)
         ) {
+            Spacer(Modifier.height(51.dp))
+
+            // 환영인사
+            Text(
+                text = stringResource(Res.string.welcome_message, homeState.nickname),
+                style = MaterialTheme.typography.headlineLarge,
+                color = Grey600
+            )
+            Spacer(Modifier.height(18.dp))
+
+            // 진행바
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp)
-                    .verticalScroll(scrollState)
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Spacer(Modifier.height(51.dp))
-
-                // 환영인사
-                Text(
-                    text = stringResource(Res.string.welcome_message, homeState.nickname),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = Grey600
+                DottedProgressBar(
+                    progress = homeState.progressPercentage,
+                    modifier = Modifier.fillMaxWidth(),
+                    showTicks = true,
+                    showPercentage = true
                 )
-                Spacer(Modifier.height(18.dp))
+            }
+            Spacer(Modifier.height(26.dp))
 
-                // 진행바
+            // 🆕 최대 높이가 결정된 경우에만 HorizontalPager 표시
+            if (maxCardHeight > 0.dp) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(maxCardHeight), // 🆕 동적으로 계산된 최대 높이 사용
+                    contentPadding = PaddingValues(end = 43.dp),
+                    pageSpacing = 0.dp
+                ) { page ->
+                    StepCard(
+                        step = Steps.valueOf(homeState.steps[page].checkStep).uiStep,
+                        title = homeState.steps[page].stepInfoRes.title,
+                        subTitle = homeState.steps[page].stepInfoRes.subtitle,
+                        onClick = {
+                            viewModel.selectStep(homeState.steps[page])
+                            onNavigateToStepDetail()
+                        },
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
+            } else {
+                // 🆕 높이 측정을 위한 임시 컴포저블들 (화면에 보이지 않음)
                 Column(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .alpha(0f) // 투명하게 만들어 보이지 않게 함
                 ) {
-                    DottedProgressBar(
-                        progress = homeState.progressPercentage,
-                        modifier = Modifier.fillMaxWidth(),
-                        showTicks = true,
-                        showPercentage = true
-                    )
-                }
-                Spacer(Modifier.height(26.dp))
-
-                // 🆕 최대 높이가 결정된 경우에만 HorizontalPager 표시
-                if (maxCardHeight > 0.dp) {
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(maxCardHeight), // 🆕 동적으로 계산된 최대 높이 사용
-                        contentPadding = PaddingValues(end = 43.dp),
-                        pageSpacing = 0.dp
-                    ) { page ->
+                    homeState.steps.forEachIndexed { index, step ->
                         StepCard(
-                            step = Steps.valueOf(homeState.steps[page].checkStep).uiStep,
-                            title = homeState.steps[page].stepInfoRes.title,
-                            subTitle = homeState.steps[page].stepInfoRes.subtitle,
-                            onClick = {
-                                viewModel.selectStep(homeState.steps[page])
-                                onNavigateToStepDetail()
-                            },
-                            modifier = Modifier.fillMaxHeight()
+                            step = Steps.valueOf(step.checkStep).uiStep,
+                            title = step.stepInfoRes.title,
+                            subTitle = step.stepInfoRes.subtitle,
+                            onClick = { },
+                            modifier = Modifier
+                                .onGloballyPositioned { coordinates ->
+                                    val height = with(density) { coordinates.size.height.toDp() }
+                                    if (height > maxCardHeight) {
+                                        maxCardHeight = height
+                                    }
+                                }
                         )
-                    }
-                } else {
-                    // 🆕 높이 측정을 위한 임시 컴포저블들 (화면에 보이지 않음)
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .alpha(0f) // 투명하게 만들어 보이지 않게 함
-                    ) {
-                        homeState.steps.forEachIndexed { index, step ->
-                            StepCard(
-                                step = Steps.valueOf(step.checkStep).uiStep,
-                                title = step.stepInfoRes.title,
-                                subTitle = step.stepInfoRes.subtitle,
-                                onClick = { },
-                                modifier = Modifier
-                                    .onGloballyPositioned { coordinates ->
-                                        val height = with(density) { coordinates.size.height.toDp() }
-                                        if (height > maxCardHeight) {
-                                            maxCardHeight = height
-                                        }
-                                    }
-                            )
-                            if (index < homeState.steps.size - 1) {
-                                Spacer(Modifier.height(8.dp))
-                            }
+                        if (index < homeState.steps.size - 1) {
+                            Spacer(Modifier.height(8.dp))
                         }
                     }
                 }
-                Spacer(Modifier.height(28.dp))
-
-                // 카테고리 (제출 서류, 유의사항) - stringResource 사용
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    CategoryTab(
-                        text = stringResource(Res.string.category_documents),
-                        isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
-                        onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
-                        modifier = Modifier.weight(1f)
-                    )
-                    CategoryTab(
-                        text = stringResource(Res.string.category_precautions),
-                        isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
-                        onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                Spacer(Modifier.height(31.dp))
-
-                //  displayStep 기반으로 UI 표시 (기존 컴포넌트 그대로 사용)
-                displayStep?.let { step ->
-                    when (uiState.selectedCategory) {
-                        HomeViewModel.Category.DOCUMENTS -> {
-                            // 제출 서류 목록 표시 (기존 DocumentItem 그대로 사용)
-                            step.documentInfoRes.forEach { document ->
-                                DocumentItem(
-                                    document = document,
-                                    onCheckedChange = { isChecked ->
-                                        viewModel.onDocumentCheckChanged(
-                                            document = document,
-                                            stepCheckStep = step.checkStep,
-                                            isChecked = isChecked
-                                        )
-                                    }
-                                )
-                                Spacer(Modifier.height(9.dp))
-                            }
-                        }
-                        HomeViewModel.Category.PRECAUTIONS -> {
-                            // 유의사항 목록 표시 (기존 PrecautionItem 그대로 사용)
-                            step.stepInfoRes.precautions.forEach { precaution ->
-                                PrecautionItem(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    precaution = precaution
-                                )
-                                Spacer(Modifier.height(8.dp))
-                            }
-                        }
-                    }
-                }
-
-                Spacer(Modifier.height(100.dp))
             }
+            Spacer(Modifier.height(28.dp))
 
-            // 경고 다이얼로그
-            if (uiState.showStepWarningDialog) {
-                StepProgressWarningDialog(
-                    onDismiss = { viewModel.dismissStepWarningDialog() },
-                    onContinue = { viewModel.continueWithCheck() }
+            // 카테고리 (제출 서류, 유의사항) - stringResource 사용
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                CategoryTab(
+                    text = stringResource(Res.string.category_documents),
+                    isSelected = uiState.selectedCategory == HomeViewModel.Category.DOCUMENTS,
+                    onClick = { viewModel.selectCategory(HomeViewModel.Category.DOCUMENTS) },
+                    modifier = Modifier.weight(1f)
+                )
+                CategoryTab(
+                    text = stringResource(Res.string.category_precautions),
+                    isSelected = uiState.selectedCategory == HomeViewModel.Category.PRECAUTIONS,
+                    onClick = { viewModel.selectCategory(HomeViewModel.Category.PRECAUTIONS) },
+                    modifier = Modifier.weight(1f)
                 )
             }
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier.align(Alignment.BottomCenter)
+            Spacer(Modifier.height(31.dp))
+
+            //  displayStep 기반으로 UI 표시 (기존 컴포넌트 그대로 사용)
+            displayStep?.let { step ->
+                when (uiState.selectedCategory) {
+                    HomeViewModel.Category.DOCUMENTS -> {
+                        // 제출 서류 목록 표시 (기존 DocumentItem 그대로 사용)
+                        step.documentInfoRes.forEach { document ->
+                            DocumentItem(
+                                document = document,
+                                onCheckedChange = { isChecked ->
+                                    viewModel.onDocumentCheckChanged(
+                                        document = document,
+                                        stepCheckStep = step.checkStep,
+                                        isChecked = isChecked
+                                    )
+                                }
+                            )
+                            Spacer(Modifier.height(9.dp))
+                        }
+                    }
+                    HomeViewModel.Category.PRECAUTIONS -> {
+                        // 유의사항 목록 표시 (기존 PrecautionItem 그대로 사용)
+                        step.stepInfoRes.precautions.forEach { precaution ->
+                            PrecautionItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                precaution = precaution
+                            )
+                            Spacer(Modifier.height(8.dp))
+                        }
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(100.dp))
+        }
+
+        // 경고 다이얼로그
+        if (uiState.showStepWarningDialog) {
+            StepProgressWarningDialog(
+                onDismiss = { viewModel.dismissStepWarningDialog() },
+                onContinue = { viewModel.continueWithCheck() }
             )
         }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 

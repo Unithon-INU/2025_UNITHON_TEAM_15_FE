@@ -1,21 +1,13 @@
 package unithon.helpjob.data.repository
 
-import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
-import android.os.LocaleList
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.core.os.LocaleListCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -28,7 +20,6 @@ import java.util.Locale
 
 
 class AppLocaleManager(
-    private val context: Context,
     private val dataStore: DataStore<Preferences>
 ) {
 
@@ -66,68 +57,6 @@ class AppLocaleManager(
             }
         } catch (e: Exception) {
             Timber.e(e, "❌ 언어 복원 실패")
-        }
-    }
-
-    /**
-     * 🔥 새로운 접근: LocaleManager + Configuration 직접 업데이트
-     */
-    fun changeLanguage(languageCode: String) {
-        Timber.d("🌐 언어 변경 시작: $languageCode (API ${Build.VERSION.SDK_INT})")
-
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // 1️⃣ LocaleManager로 시스템 설정 저장
-                val localeManager = context.getSystemService(LocaleManager::class.java)
-                localeManager.applicationLocales = LocaleList.forLanguageTags(languageCode)
-                Timber.d("✅ LocaleManager로 시스템 설정 저장: $languageCode")
-
-                // 2️⃣ 🆕 Configuration 직접 업데이트 (즉시 적용)
-                updateContextConfiguration(languageCode)
-
-            } else {
-                // Android 12 이하: AppCompatDelegate 사용
-                AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(languageCode)
-                )
-                Timber.d("✅ AppCompatDelegate로 언어 변경 완료: $languageCode")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "❌ 언어 변경 실패: $languageCode")
-        }
-    }
-
-    /**
-     * 🆕 Context Configuration 직접 업데이트
-     */
-    private fun updateContextConfiguration(languageCode: String) {
-        try {
-            val locale = Locale.forLanguageTag(languageCode)
-
-            // ✅ 프리뷰 환경이 아닐 때만 Locale.setDefault() 호출
-            try {
-                Locale.setDefault(locale)
-            } catch (e: Exception) {
-                // 프리뷰 환경에서는 무시
-                Timber.d("Locale.setDefault() 실행 불가 (프리뷰 환경일 가능성): ${e.message}")
-            }
-
-            val resources = context.resources
-            val configuration = Configuration(resources.configuration)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                configuration.setLocales(LocaleList(locale))
-            } else {
-                @Suppress("DEPRECATION")
-                configuration.locale = locale
-            }
-
-            // Configuration 업데이트 적용
-            resources.updateConfiguration(configuration, resources.displayMetrics)
-
-            Timber.d("✅ Configuration 직접 업데이트 완료: $languageCode")
-        } catch (e: Exception) {
-            Timber.e(e, "❌ Configuration 업데이트 실패: $languageCode")
         }
     }
 
@@ -217,16 +146,3 @@ private fun createLanguageContext(
 
     return baseContext.createConfigurationContext(configuration)
 }
-
-@Composable
-fun LanguageAwareScreen(
-    content: @Composable () -> Unit
-) {
-    val currentLanguage by GlobalLanguageState.currentLanguage
-
-    // 🔥 DynamicLanguageProvider로 감싸기
-    DynamicLanguageProvider(currentLanguage = currentLanguage) {
-        content()
-    }
-}
-

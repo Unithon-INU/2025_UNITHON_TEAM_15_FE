@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
 import unithon.helpjob.ui.document.page.BasicInfoStep2Screen
@@ -287,40 +286,38 @@ fun DocumentScreen(
             }
         ),
     )
-    LanguageAwareScreen {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-        ) {
-            // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
-            if (pagerState.currentPage >= 2) {
-                HelpJobTopAppBar(
-                    title = Res.string.document_top_bar_title,
-                    onBack = {
-                        if (pagerState.currentPage > 0) {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        // 온보딩 화면(페이지 0, 1)에서는 TopBar 숨김
+        if (pagerState.currentPage >= 2) {
+            HelpJobTopAppBar(
+                title = Res.string.document_top_bar_title,
+                onBack = {
+                    if (pagerState.currentPage > 0) {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
                     }
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                // 페이저
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxSize(),
-                    userScrollEnabled = false
-                ) { position ->
-                    pages[position].content()
                 }
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            // 페이저
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                userScrollEnabled = false
+            ) { position ->
+                pages[position].content()
             }
         }
     }
