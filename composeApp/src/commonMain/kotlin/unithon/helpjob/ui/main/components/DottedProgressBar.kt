@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,14 +27,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary200
 import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Primary600
@@ -123,11 +121,13 @@ fun DottedProgressBar(
                 }
             } else {
                 // 1% 이상일 때는 진행된 부분의 끝에 위치
-                Box(
+                // BoxWithConstraints를 사용하여 부모 크기 측정 (CMP 호환)
+                BoxWithConstraints(
                     modifier = Modifier
-                        .fillMaxWidth() // progress 제거
+                        .fillMaxWidth()
                         .height(30.dp)
                 ) {
+                    val screenWidth = maxWidth
                     Box(
                         modifier = Modifier
                             .wrapContentSize()
@@ -135,7 +135,7 @@ fun DottedProgressBar(
                                 bubbleWidth.value = with(density) { size.width.toDp() }
                             }
                             .offset(
-                                x = (LocalConfiguration.current.screenWidthDp.dp - 40.dp) * progress - (bubbleWidth.value / 2)
+                                x = (screenWidth - 40.dp) * progress - (bubbleWidth.value / 2)
                             )
                     ) {
                         PercentageBubble(
@@ -192,75 +192,6 @@ private fun PercentageBubble(
             drawPath(
                 path = path,
                 color = backgroundColor
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun DottedProgressBarPreview() {
-    HelpJobTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            Text(
-                text = "진행바 예제",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Grey700
-            )
-
-            // 70% 진행 - 물풍선 + 틱
-            Text(
-                text = "70% 진행 (물풍선 + 틱)",
-                style = MaterialTheme.typography.titleMedium,
-                color = Grey600
-            )
-            DottedProgressBar(
-                progress = 0.1f,
-                modifier = Modifier.fillMaxWidth(),
-                showTicks = true,
-                showPercentage = true
-            )
-
-            // 45% 진행 - 물풍선만
-            Text(
-                text = "45% 진행 (물풍선만)",
-                style = MaterialTheme.typography.titleMedium,
-                color = Grey600
-            )
-            DottedProgressBar(
-                progress = 1f,
-                modifier = Modifier.fillMaxWidth(),
-                showPercentage = true
-            )
-
-            // 30% 진행 - 틱만
-            Text(
-                text = "30% 진행 (틱만)",
-                style = MaterialTheme.typography.titleMedium,
-                color = Grey600
-            )
-            DottedProgressBar(
-                progress = 0.1f,
-                modifier = Modifier.fillMaxWidth(),
-                showTicks = true
-            )
-
-            // 85% 진행 - 모든 기능
-            Text(
-                text = "85% 진행 (모든 기능)",
-                style = MaterialTheme.typography.titleMedium,
-                color = Grey600
-            )
-            DottedProgressBar(
-                progress = 0.85f,
-                modifier = Modifier.fillMaxWidth(),
-                showTicks = true,
-                showPercentage = true
             )
         }
     }

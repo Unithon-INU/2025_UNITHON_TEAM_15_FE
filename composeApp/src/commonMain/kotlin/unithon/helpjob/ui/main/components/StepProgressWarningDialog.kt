@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -43,7 +42,6 @@ import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary400
 import unithon.helpjob.ui.theme.Warning
 
@@ -184,16 +182,5 @@ fun StepProgressWarningDialog(
                 Spacer(Modifier.height(19.dp))
             }
         }
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun BasicInfoStep2Preview(){
-    HelpJobTheme {
-        StepProgressWarningDialog(
-            onDismiss = {},
-            onContinue = {}
-        )
     }
 }
