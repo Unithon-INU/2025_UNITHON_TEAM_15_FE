@@ -25,16 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
-import helpjob.composeapp.generated.resources.error_invalid_email
-import helpjob.composeapp.generated.resources.error_password_mismatch
-import helpjob.composeapp.generated.resources.error_short_password
 import helpjob.composeapp.generated.resources.resend_button
 import helpjob.composeapp.generated.resources.sign_up_confirm_password_hint
 import helpjob.composeapp.generated.resources.sign_up_confirm_password_label
@@ -49,7 +44,6 @@ import helpjob.composeapp.generated.resources.verification_code_completed
 import helpjob.composeapp.generated.resources.verification_code_expired
 import helpjob.composeapp.generated.resources.verification_code_hint
 import helpjob.composeapp.generated.resources.verification_code_instruction
-import helpjob.composeapp.generated.resources.verification_code_invalid
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -62,7 +56,6 @@ import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.util.noRippleClickable
@@ -76,7 +69,6 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -326,130 +318,5 @@ private fun SignUpScreenContent(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-    }
-}
-
-// =================================
-// 프리뷰들
-// =================================
-
-// 기본 상태 프리뷰
-@Preview(
-    name = "기본 상태",
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF
-)
-@Composable
-fun SignUpScreenPreview() {
-    HelpJobTheme {
-        SignUpScreenContent(
-            uiState = SignUpViewModel.SignUpUiState(),
-            onUpdateEmail = {},
-            onUpdatePassword = {},
-            onUpdateConfirmPassword = {},
-            onUpdateVerificationCode = {},
-            onSendEmailVerification = {},
-            onVerifyEmailCode = {},
-            onResendEmailVerification = {},
-            onProceedToNickname = {},
-            onBack = {}
-        )
-    }
-}
-
-// 이메일 전송 후 상태 프리뷰
-@Preview(
-    name = "이메일 전송 후",
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF
-)
-@Composable
-fun SignUpScreenEmailSentPreview() {
-    HelpJobTheme {
-        SignUpScreenContent(
-            uiState = SignUpViewModel.SignUpUiState(
-                email = "test@example.com",
-                isEmailSent = true,
-                verificationCode = "123456"
-            ),
-            onUpdateEmail = {},
-            onUpdatePassword = {},
-            onUpdateConfirmPassword = {},
-            onUpdateVerificationCode = {},
-            onSendEmailVerification = {},
-            onVerifyEmailCode = {},
-            onResendEmailVerification = {},
-            onProceedToNickname = {},
-            onBack = {}
-        )
-    }
-}
-
-// 에러 상태 프리뷰
-@Preview(
-    name = "에러 상태",
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF
-)
-@Composable
-fun SignUpScreenErrorPreview() {
-    HelpJobTheme {
-        SignUpScreenContent(
-            uiState = SignUpViewModel.SignUpUiState(
-                email = "invalid-email",
-                password = "123",
-                confirmPassword = "456",
-                verificationCode = "wrong",
-                isEmailSent = true,
-                emailError = true,
-                emailErrorMessage = Res.string.error_invalid_email,
-                passwordError = true,
-                passwordErrorMessage = Res.string.error_short_password,
-                confirmPasswordError = true,
-                confirmPasswordErrorMessage = Res.string.error_password_mismatch,
-                verificationCodeError = true,
-                verificationCodeErrorMessage = Res.string.verification_code_invalid
-            ),
-            onUpdateEmail = {},
-            onUpdatePassword = {},
-            onUpdateConfirmPassword = {},
-            onUpdateVerificationCode = {},
-            onSendEmailVerification = {},
-            onVerifyEmailCode = {},
-            onResendEmailVerification = {},
-            onProceedToNickname = {},
-            onBack = {}
-        )
-    }
-}
-
-// 입력 완료 상태 프리뷰
-@Preview(
-    name = "입력 완료",
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF
-)
-@Composable
-fun SignUpScreenCompletedPreview() {
-    HelpJobTheme {
-        SignUpScreenContent(
-            uiState = SignUpViewModel.SignUpUiState(
-                email = "user@example.com",
-                password = "password123",
-                confirmPassword = "password123",
-                verificationCode = "123456",
-                isEmailSent = true,
-                isCodeVerified = true
-            ),
-            onUpdateEmail = {},
-            onUpdatePassword = {},
-            onUpdateConfirmPassword = {},
-            onUpdateVerificationCode = {},
-            onSendEmailVerification = {},
-            onVerifyEmailCode = {},
-            onResendEmailVerification = {},
-            onProceedToNickname = {},
-            onBack = {}
-        )
     }
 }
