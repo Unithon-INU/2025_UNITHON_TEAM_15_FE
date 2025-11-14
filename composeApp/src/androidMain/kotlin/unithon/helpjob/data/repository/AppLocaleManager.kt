@@ -16,40 +16,48 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.os.LocaleListCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import unithon.helpjob.data.model.AppLanguage
 import java.util.Locale
 
 
 class AppLocaleManager(
-    private val context: Context
+    private val context: Context,
+    private val dataStore: DataStore<Preferences>
 ) {
 
     companion object {
-        private const val PREFS_NAME = "app_locale_prefs"
-        private const val KEY_LANGUAGE_CODE = "language_code"
+        private val KEY_LANGUAGE_CODE = stringPreferencesKey("language_code")
     }
 
     /**
-     * 🆕 SharedPreferences에만 언어 저장 (시스템 API 호출 없음, Activity 재시작 없음)
+     * DataStore에 언어 저장 (시스템 API 호출 없음, Activity 재시작 없음)
      */
-    fun saveLanguageToPreferences(languageCode: String) {
+    suspend fun saveLanguageToDataStore(languageCode: String) {
         try {
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            prefs.edit().putString(KEY_LANGUAGE_CODE, languageCode).apply()
-            Timber.d("✅ SharedPreferences에 언어 저장 완료: $languageCode")
+            dataStore.edit { preferences ->
+                preferences[KEY_LANGUAGE_CODE] = languageCode
+            }
+            Timber.d("✅ DataStore에 언어 저장 완료: $languageCode")
         } catch (e: Exception) {
             Timber.e(e, "❌ 언어 저장 실패: $languageCode")
         }
     }
 
     /**
-     * 🆕 앱 시작 시 저장된 언어 복원 (모든 Android 버전)
+     * 앱 시작 시 저장된 언어 복원
      */
-    fun restoreSavedLanguage() {
+    suspend fun restoreSavedLanguage() {
         try {
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            val savedLanguageCode = prefs.getString(KEY_LANGUAGE_CODE, null)
+            val savedLanguageCode = dataStore.data
+                .map { it[KEY_LANGUAGE_CODE] }
+                .firstOrNull()
 
             if (savedLanguageCode != null) {
                 val savedLanguage = AppLanguage.fromCode(savedLanguageCode)
@@ -124,13 +132,14 @@ class AppLocaleManager(
     }
 
     /**
-     * 현재 설정된 언어 코드 가져오기 (SharedPreferences에서 읽기)
+     * 현재 설정된 언어 코드 가져오기 (DataStore에서 읽기)
      */
-    private fun getCurrentLanguageCode(): String {
+    private suspend fun getCurrentLanguageCode(): String {
         return try {
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            val savedLanguageCode = prefs.getString(KEY_LANGUAGE_CODE, null)
-            Timber.d("✅ SharedPreferences 언어 코드: $savedLanguageCode")
+            val savedLanguageCode = dataStore.data
+                .map { it[KEY_LANGUAGE_CODE] }
+                .firstOrNull()
+            Timber.d("✅ DataStore 언어 코드: $savedLanguageCode")
             savedLanguageCode ?: getDefaultLanguageCode()
         } catch (e: Exception) {
             Timber.e(e, "현재 언어 코드 가져오기 실패")
@@ -141,7 +150,7 @@ class AppLocaleManager(
     /**
      * 현재 설정된 AppLanguage 가져오기
      */
-    fun getCurrentLanguage(): AppLanguage {
+    suspend fun getCurrentLanguage(): AppLanguage {
         val languageCode = getCurrentLanguageCode()
         return AppLanguage.fromCode(languageCode)
     }

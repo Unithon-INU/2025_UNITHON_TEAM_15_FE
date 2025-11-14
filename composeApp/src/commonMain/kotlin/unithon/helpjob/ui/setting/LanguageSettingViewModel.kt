@@ -34,12 +34,14 @@ class LanguageSettingViewModel(
     }
 
     private fun loadCurrentLanguage() {
-        try {
-            val currentLanguage = languageRepository.getCurrentLanguage()
-            _uiState.value = _uiState.value.copy(currentLanguage = currentLanguage)
-            println("[LanguageSettingViewModel] 현재 언어 로드: ${currentLanguage.displayName}")
-        } catch (e: Exception) {
-            println("[LanguageSettingViewModel] 현재 언어 로드 실패: ${e.message}")
+        viewModelScope.launch(crashPreventionHandler) {
+            try {
+                val currentLanguage = languageRepository.getCurrentLanguage()
+                _uiState.value = _uiState.value.copy(currentLanguage = currentLanguage)
+                println("[LanguageSettingViewModel] 현재 언어 로드: ${currentLanguage.displayName}")
+            } catch (e: Exception) {
+                println("[LanguageSettingViewModel] 현재 언어 로드 실패: ${e.message}")
+            }
         }
     }
 

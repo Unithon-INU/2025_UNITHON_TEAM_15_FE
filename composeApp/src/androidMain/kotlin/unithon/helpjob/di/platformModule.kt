@@ -54,7 +54,8 @@ import unithon.helpjob.ui.splash.SplashViewModel
 import unithon.helpjob.util.AppConfig
 
 // DataStore extension (Android 전용)
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
+// 인증 토큰, 언어 설정 등 앱 전반적인 설정 저장
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "app_prefs")
 
 /**
  * Android 플랫폼 Data 계층 모듈
@@ -63,8 +64,8 @@ val androidDataModule = module {
     // DataStore (Android 전용 생성)
     single<DataStore<Preferences>> { get<Context>().dataStore }
 
-    // AppLocaleManager (Android 전용)
-    single { AppLocaleManager(androidContext()) }
+    // AppLocaleManager (Android 전용, DataStore 주입)
+    single { AppLocaleManager(androidContext(), get()) }
 
     // LanguageRepository (Android 구현체)
     single<LanguageRepository> { AndroidLanguageRepository(get()) }

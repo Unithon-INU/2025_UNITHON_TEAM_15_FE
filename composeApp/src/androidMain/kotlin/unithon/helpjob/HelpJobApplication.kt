@@ -54,10 +54,10 @@ class HelpJobApplication : Application() {
     private fun initializeLanguage() {
         applicationScope.launch {
             try {
-                // ✅ Android 12 이하에서 저장된 언어 복원
+                // ✅ 저장된 언어 복원
                 appLocaleManager.restoreSavedLanguage()
 
-                // ✅ 현재 언어 가져오기 (LocaleManager/AppCompatDelegate/SharedPreferences)
+                // ✅ 현재 언어 가져오기 (DataStore)
                 val savedLanguage = languageRepository.getCurrentLanguage()
                 Timber.d("저장된 언어: ${savedLanguage.code}")
 

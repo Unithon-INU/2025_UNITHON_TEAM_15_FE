@@ -15,15 +15,15 @@ class AndroidLanguageRepository(
         snapshotFlow { GlobalLanguageState.currentLanguage.value }
             .distinctUntilChanged()
 
-    override fun setLanguage(language: AppLanguage) {
+    override suspend fun setLanguage(language: AppLanguage) {
         Timber.d("🌐 언어 설정 시작: ${language.displayName} (${language.code})")
 
         try {
             // ✅ GlobalLanguageState만 업데이트 (즉시 반영, Activity 재시작 없음)
             GlobalLanguageState.updateLanguage(language)
 
-            // ✅ SharedPreferences에만 저장 (앱 재시작 시 복원용)
-            appLocaleManager.saveLanguageToPreferences(language.code)
+            // ✅ DataStore에 저장 (앱 재시작 시 복원용)
+            appLocaleManager.saveLanguageToDataStore(language.code)
 
             Timber.d("✅ 언어 설정 완료: ${language.code}")
         } catch (e: Exception) {
@@ -31,7 +31,7 @@ class AndroidLanguageRepository(
         }
     }
 
-    override fun getCurrentLanguage(): AppLanguage {
+    override suspend fun getCurrentLanguage(): AppLanguage {
         return appLocaleManager.getCurrentLanguage()
     }
 }
