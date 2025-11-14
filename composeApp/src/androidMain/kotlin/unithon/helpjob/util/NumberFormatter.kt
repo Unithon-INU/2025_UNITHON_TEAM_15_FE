@@ -10,4 +10,8 @@ actual object NumberFormatter {
     actual fun formatCurrency(value: Long): String {
         return "${String.format(Locale.KOREA, "%,d", value)}원"
     }
+
+    actual fun formatNumber(value: Int): String {
+        return String.format(Locale.KOREA, "%,d", value)
+    }
 }

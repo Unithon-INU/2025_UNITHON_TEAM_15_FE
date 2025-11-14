@@ -200,17 +200,3 @@ fun LanguageAwareScreen(
     }
 }
 
-object GlobalLanguageState {
-    private val _currentLanguage = mutableStateOf(AppLanguage.ENGLISH)
-    val currentLanguage: State<AppLanguage> = _currentLanguage
-
-    fun updateLanguage(language: AppLanguage) {
-        _currentLanguage.value = language
-        Timber.d("🌐 전역 언어 상태 업데이트: ${language.displayName}")
-    }
-
-    fun initializeLanguage(language: AppLanguage) {
-        _currentLanguage.value = language
-        Timber.d("🌐 전역 언어 초기화: ${language.displayName}")
-    }
-}

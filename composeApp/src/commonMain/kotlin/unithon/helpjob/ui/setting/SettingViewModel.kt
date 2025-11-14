@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.ui.base.BaseViewModel
@@ -24,11 +23,10 @@ class SettingViewModel(
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 employmentCheckRepository.resetProgress()
-                Timber.d("진행 상황 초기화 성공")
+                println("[SettingViewModel] 진행 상황 초기화 성공")
             } catch (e: Exception) {
-                // Critical Error - 사용자에게 알림
                 _snackbarMessage.emit(Res.string.reset_progress_error)
-                Timber.e(e, "진행 상황 초기화 실패")
+                println("[SettingViewModel] 진행 상황 초기화 실패: ${e.message}")
             }
         }
     }
@@ -36,7 +34,6 @@ class SettingViewModel(
     fun logout() {
         viewModelScope.launch(crashPreventionHandler) {
             authRepository.clearToken()
-            // 로그아웃은 실패할 가능성이 거의 없으므로 에러 처리 불필요
         }
     }
 }

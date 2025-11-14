@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
@@ -88,9 +87,9 @@ class NicknameSetupViewModel(
                 val signUpData = signUpDataRepository.getSignUpData()
 
                 if (signUpData == null) {
-                    _snackbarMessage.emit(Res.string.nickname_setup_failed)  // 스낵바로 변경
+                    _snackbarMessage.emit(Res.string.nickname_setup_failed)
                     _uiState.update { it.copy(isLoading = false) }
-                    Timber.e("SignUp data is null")  // 로깅 추가
+                    println("[NicknameSetupViewModel] SignUp data is null")
                     return@launch
                 }
 
@@ -116,9 +115,9 @@ class NicknameSetupViewModel(
                     )
                 }
             } catch (e: Exception) {
-                _snackbarMessage.emit(Res.string.nickname_setup_failed)  // 스낵바로 변경
+                _snackbarMessage.emit(Res.string.nickname_setup_failed)
                 _uiState.update { it.copy(isLoading = false) }
-                Timber.e(e, "Nickname setup failed")  // 로깅 추가
+                println("[NicknameSetupViewModel] Nickname setup failed: ${e.message}")
             }
         }
     }

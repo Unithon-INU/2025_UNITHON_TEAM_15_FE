@@ -12,14 +12,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobBottomBar
 import unithon.helpjob.ui.theme.HelpJobTheme
+import unithon.helpjob.util.LocalAppLocale
 
 class HelpJobActivity : ComponentActivity() {
 
@@ -31,8 +35,15 @@ class HelpJobActivity : ComponentActivity() {
             isAppearanceLightStatusBars = true  // 검정 아이콘 (라이트 모드)
         }
         setContent {
+            val currentLanguage by GlobalLanguageState.currentLanguage
+
             HelpJobTheme {
-                HelpJobApp()
+                // JetBrains 공식 패턴: key()로 언어 변경 시 재구성 보장
+                key(currentLanguage) {
+                    CompositionLocalProvider(LocalAppLocale provides currentLanguage.code) {
+                        HelpJobApp()
+                    }
+                }
             }
         }
     }

@@ -10,4 +10,11 @@ expect object NumberFormatter {
      * @return 포맷팅된 문자열 (예: "10,030원")
      */
     fun formatCurrency(value: Long): String
+
+    /**
+     * 숫자를 천 단위 콤마로 포맷팅 (예: 10,030)
+     * @param value 포맷팅할 숫자
+     * @return 포맷팅된 문자열 (예: "10,030")
+     */
+    fun formatNumber(value: Int): String
 }

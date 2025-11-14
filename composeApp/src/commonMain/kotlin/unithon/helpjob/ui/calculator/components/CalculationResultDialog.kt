@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
@@ -50,18 +49,9 @@ import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.util.NumberFormatter
 import unithon.helpjob.util.noRippleClickable
-import java.text.NumberFormat
-import java.util.Locale
-
-data class CalculationResult(
-    val workHours: Int,
-    val weeklyAllowanceHours: Int,
-    val totalAmount: Int,
-    val includesWeeklyAllowance: Boolean
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -152,7 +142,7 @@ fun CalculationResultDialog(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = NumberFormat.getNumberInstance(Locale.KOREA).format(result.weeklyAllowanceHours),
+                                    text = NumberFormatter.formatNumber(result.weeklyAllowanceHours),
                                     style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp),
                                     color = Grey700
                                 )
@@ -188,7 +178,7 @@ fun CalculationResultDialog(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = NumberFormat.getNumberInstance(Locale.KOREA).format(result.totalAmount),
+                                text = NumberFormatter.formatNumber(result.totalAmount),
                                 style = MaterialTheme.typography.headlineMedium.copy(lineHeight = 24.sp),
                                 color = Grey700
                             )
@@ -260,45 +250,5 @@ fun CalculationResultDialog(
                 }
             }
         }
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF,
-    locale = "ko"
-)
-@Composable
-fun CalculationResultDialogWithWeeklyAllowancePreview() {
-    HelpJobTheme {
-        CalculationResultDialog(
-            result = CalculationResult(
-                workHours = 15,
-                weeklyAllowanceHours = 100300,
-                totalAmount = 501500,
-                includesWeeklyAllowance = true
-            ),
-            onDismiss = {}
-        )
-    }
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 0xFFFFFFFF,
-    locale = "ko"
-)
-@Composable
-fun CalculationResultDialogWithoutWeeklyAllowancePreview() {
-    HelpJobTheme {
-        CalculationResultDialog(
-            result = CalculationResult(
-                workHours = 10,
-                weeklyAllowanceHours = 0,
-                totalAmount = 401200,
-                includesWeeklyAllowance = false
-            ),
-            onDismiss = {}
-        )
     }
 }

@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -48,9 +47,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.repository.GlobalLanguageState
-import unithon.helpjob.data.repository.LanguageAwareScreen
 import unithon.helpjob.ui.components.HelpJobTopAppBar
-import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey600
@@ -60,13 +57,11 @@ import unithon.helpjob.util.noRippleClickable
 @Composable
 fun LanguageSettingScreen(
     onBack: () -> Unit,
-    homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     viewModel: LanguageSettingViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes ->
@@ -76,43 +71,38 @@ fun LanguageSettingScreen(
         }
     }
 
-    LanguageAwareScreen{
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+    ) {
+        HelpJobTopAppBar(
+            title = Res.string.setting_app_language,
+            onBack = onBack
+        )
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
+                .padding(top = 14.dp, start = 20.dp, end = 20.dp)
         ) {
-            HelpJobTopAppBar(
-                title = Res.string.setting_app_language,
-                onBack = onBack
+            Text(
+                text = stringResource(Res.string.language_setting_current_language),
+                style = MaterialTheme.typography.title2,
+                color = Grey600
             )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 14.dp, start = 20.dp, end = 20.dp)
-            ) {
-                // 현재 언어 섹션 헤더
-                Text(
-                    text = stringResource(Res.string.language_setting_current_language),
-                    style = MaterialTheme.typography.title2,
-                    color = Grey600
-                )
 
-                Spacer(modifier = Modifier.height(9.dp))
+            Spacer(modifier = Modifier.height(9.dp))
 
-                // 언어 선택 드롭다운
-                LanguageDropdown(
-                    items = uiState.availableLanguages,
-                    selectedItem = uiState.currentLanguage,
-                    onItemSelected = { language ->
-                        viewModel.setLanguage(language)
-                        // homeViewModel.refresh() 제거: HomeScreen LaunchedEffect가 자동 처리
-                        GlobalLanguageState.updateLanguage(language)
-                    },
-                    itemToString = { it.displayName }
-                )
-            }
+            LanguageDropdown(
+                items = uiState.availableLanguages,
+                selectedItem = uiState.currentLanguage,
+                onItemSelected = { language ->
+                    viewModel.setLanguage(language)
+                    GlobalLanguageState.updateLanguage(language)
+                },
+                itemToString = { it.displayName }
+            )
         }
     }
 }
@@ -129,7 +119,6 @@ private fun <T> LanguageDropdown(
     var rowSize by remember { mutableStateOf(androidx.compose.ui.geometry.Size.Zero) }
 
     Box(modifier = modifier) {
-        // 드롭다운 박스 (전체 너비)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -139,7 +128,7 @@ private fun <T> LanguageDropdown(
                 }
                 .border(
                     width = 1.dp,
-                    color = Grey200, // 고정 색상
+                    color = Grey200,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .background(
@@ -170,11 +159,10 @@ private fun <T> LanguageDropdown(
             }
         }
 
-        // DropdownMenu (텍스트 크기에 맞게, 오른쪽 정렬)
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.wrapContentWidth(), // 텍스트 크기에 맞게
+            modifier = Modifier.wrapContentWidth(),
             border = BorderStroke(
                 width = 1.dp,
                 color = Grey200,
@@ -185,7 +173,7 @@ private fun <T> LanguageDropdown(
             offset = DpOffset(
                 y = 6.dp,
                 x = with(LocalDensity.current) {
-                    (rowSize.width.toDp() - 110.dp) // 대략적인 오른쪽 정렬
+                    (rowSize.width.toDp() - 110.dp)
                 }
             )
         ) {

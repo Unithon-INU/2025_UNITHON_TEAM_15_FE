@@ -1,26 +1,18 @@
 package unithon.helpjob.ui.setting
 
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.ui.base.BaseViewModel
 
 class PrivacyPolicyViewModel(
-    private val repository: PolicyRepository
+    private val policyRepository: PolicyRepository
 ) : BaseViewModel() {
 
-    private val _htmlContent = MutableStateFlow<String?>(null)
-    val htmlContent = _htmlContent.asStateFlow()
-
-    init {
-        loadContent()
-    }
-
-    private fun loadContent() {
-        viewModelScope.launch(crashPreventionHandler) {
-            _htmlContent.value = repository.getPrivacyPolicy()
+    suspend fun getPrivacyPolicy(): String {
+        return try {
+            policyRepository.getPrivacyPolicy()
+        } catch (e: Exception) {
+            println("[PrivacyPolicyViewModel] Failed to load privacy policy: ${e.message}")
+            ""
         }
     }
 }

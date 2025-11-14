@@ -1,15 +1,16 @@
 package unithon.helpjob.ui.setting
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.setting_privacy_policy
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,14 +20,18 @@ import unithon.helpjob.ui.components.HtmlWebView
 @Composable
 fun PrivacyPolicyScreen(
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: PrivacyPolicyViewModel = koinViewModel()
 ) {
-    val htmlContent by viewModel.htmlContent.collectAsStateWithLifecycle()
+    var htmlContent by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        htmlContent = viewModel.getPrivacyPolicy()
+    }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .background(Color.White)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
@@ -37,7 +42,7 @@ fun PrivacyPolicyScreen(
 
         HtmlWebView(
             htmlContent = htmlContent,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.fillMaxSize()
         )
     }
 }

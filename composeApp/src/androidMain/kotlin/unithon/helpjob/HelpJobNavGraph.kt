@@ -165,14 +165,7 @@ fun HelpJobNavGraph(
                 )
             }
 
-            composable(route = HelpJobDestinations.SETTING_ROUTE) { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
-                }
-                val homeViewModel = koinViewModel<HomeViewModel>(
-                    viewModelStoreOwner = parentEntry
-                )
-
+            composable(route = HelpJobDestinations.SETTING_ROUTE) {
                 SettingScreen(
                     onBack = { navController.popBackStack() },
                     onLanguageSettingClick = navActions::navigateToLanguageSetting,
@@ -180,24 +173,15 @@ fun HelpJobNavGraph(
                     onTermsOfServiceClick = navActions::navigateToTermsOfService,
                     onLogoutClick = navActions::navigateToSignInAfterLogout,
                     snackbarHostState = snackbarHostState,
-                    modifier = modifier,
-                    homeViewModel = homeViewModel
+                    modifier = modifier
                 )
             }
 
-            composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) { backStackEntry ->
-                val parentEntry = remember(backStackEntry) {
-                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
-                }
-                val homeViewModel = koinViewModel<HomeViewModel>(
-                    viewModelStoreOwner = parentEntry
-                )
-
+            composable(route = HelpJobDestinations.LANGUAGE_SETTING_ROUTE) {
                 LanguageSettingScreen(
                     onBack = { navController.popBackStack() },
                     snackbarHostState = snackbarHostState,
-                    modifier = modifier,
-                    homeViewModel = homeViewModel
+                    modifier = modifier
                 )
             }
         }
