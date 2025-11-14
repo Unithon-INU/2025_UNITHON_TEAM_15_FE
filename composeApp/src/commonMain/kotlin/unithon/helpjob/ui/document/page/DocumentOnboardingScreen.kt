@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_onboarding_description_2
@@ -37,7 +36,6 @@ import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary100
 import unithon.helpjob.ui.theme.Primary300
 import unithon.helpjob.ui.theme.Primary500
@@ -140,21 +138,5 @@ fun DocumentOnboardingScreen(
             )
             Spacer(Modifier.height(20.dp))
         }
-    }
-}
-
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
-@Composable
-fun DocumentOnboardingScreenPreview(
-
-){
-    HelpJobTheme {
-        DocumentOnboardingScreen(
-            title = stringResource(Res.string.document_onboarding_title) ,
-            image = Res.drawable.memo,
-            description = stringResource(Res.string.document_onboarding_description_2),
-            currentPage = 1
-        ) { }
     }
 }

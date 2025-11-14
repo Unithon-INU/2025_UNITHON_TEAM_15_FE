@@ -2,12 +2,10 @@ package unithon.helpjob.ui.document.page
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_basic_info_1_foreigner_register_number_label
@@ -19,7 +17,6 @@ import helpjob.composeapp.generated.resources.document_basic_info_1_name_placeho
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.document.components.DocumentForeignerNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
-import unithon.helpjob.ui.theme.HelpJobTheme
 
 @Composable
 fun BasicInfoStep1Screen(
@@ -72,25 +69,5 @@ fun BasicInfoStep1Screen(
         }
 
 
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
-@Composable
-fun BasicInfoStep1Preview(){
-    HelpJobTheme {
-        BasicInfoStep1Screen(
-            modifier = Modifier.fillMaxSize(),
-            step = 1,
-            title = "기본 정보를 입력하세요",
-            enabled = false,
-            onNext = {},
-            nameValue = "",
-            onNameValueChange = {},
-            foreignerNumberValue = "",
-            onForeignerNumberValueChange = {},
-            majorValue = "",
-            onMajorValueChange = {}
-        )
     }
 }
