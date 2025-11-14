@@ -70,20 +70,14 @@ fun StepDetailScreen(
     val selectedStep = uiState.selectedStep
     val tips = uiState.tips
 
-    // 🔍 디버깅 로그
-    timber.log.Timber.d("🔍 StepDetailScreen - ViewModel 인스턴스: ${viewModel.hashCode()}")
-    timber.log.Timber.d("🔍 StepDetailScreen - selectedStep: ${selectedStep?.checkStep}, steps.size: ${homeState.steps.size}")
-
     when {
         // 1. 데이터 로딩 중 (steps가 비어있음)
         homeState.steps.isEmpty() -> {
-            timber.log.Timber.d("❌ StepDetailScreen - steps가 비어있음")
             LoadingScreen(onBackClick = onBackClick)
         }
 
         // 2. selectedStep이 null인 경우 (잘못된 접근)
         selectedStep == null -> {
-            timber.log.Timber.d("❌ StepDetailScreen - selectedStep이 null")
             ErrorScreen(
                 message = "요청하신 단계를 찾을 수 없습니다.",
                 onBackClick = onBackClick
