@@ -19,8 +19,11 @@ class AndroidLanguageRepository(
         Timber.d("🌐 언어 설정 시작: ${language.displayName} (${language.code})")
 
         try {
-            appLocaleManager.changeLanguage(language.code)
-            GlobalLanguageState.updateLanguage(language)  // ✅ GlobalLanguageState 동기화
+            // ✅ GlobalLanguageState만 업데이트 (즉시 반영, Activity 재시작 없음)
+            GlobalLanguageState.updateLanguage(language)
+
+            // ✅ SharedPreferences에만 저장 (앱 재시작 시 복원용)
+            appLocaleManager.saveLanguageToPreferences(language.code)
 
             Timber.d("✅ 언어 설정 완료: ${language.code}")
         } catch (e: Exception) {

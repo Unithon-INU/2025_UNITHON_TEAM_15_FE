@@ -14,12 +14,12 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import unithon.helpjob.data.repository.DynamicLanguageProvider
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobBottomBar
 import unithon.helpjob.ui.theme.HelpJobTheme
@@ -38,8 +38,9 @@ class HelpJobActivity : ComponentActivity() {
             val currentLanguage by GlobalLanguageState.currentLanguage
 
             HelpJobTheme {
-                // JetBrains 공식 패턴: key()로 언어 변경 시 재구성 보장
-                key(currentLanguage) {
+                // DynamicLanguageProvider로 LocalContext를 언어별로 재생성
+                // 이렇게 해야 stringResource()가 올바른 locale의 텍스트를 가져옴
+                DynamicLanguageProvider(currentLanguage = currentLanguage) {
                     CompositionLocalProvider(LocalAppLocale provides currentLanguage.code) {
                         HelpJobApp()
                     }

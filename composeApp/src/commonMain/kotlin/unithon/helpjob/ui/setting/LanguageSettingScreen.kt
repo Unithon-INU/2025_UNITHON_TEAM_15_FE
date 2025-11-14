@@ -46,7 +46,6 @@ import helpjob.composeapp.generated.resources.setting_app_language
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
@@ -99,7 +98,6 @@ fun LanguageSettingScreen(
                 selectedItem = uiState.currentLanguage,
                 onItemSelected = { language ->
                     viewModel.setLanguage(language)
-                    GlobalLanguageState.updateLanguage(language)
                 },
                 itemToString = { it.displayName }
             )

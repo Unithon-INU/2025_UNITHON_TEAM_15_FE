@@ -25,6 +25,42 @@ class AppLocaleManager(
     private val context: Context
 ) {
 
+    companion object {
+        private const val PREFS_NAME = "app_locale_prefs"
+        private const val KEY_LANGUAGE_CODE = "language_code"
+    }
+
+    /**
+     * 🆕 SharedPreferences에만 언어 저장 (시스템 API 호출 없음, Activity 재시작 없음)
+     */
+    fun saveLanguageToPreferences(languageCode: String) {
+        try {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putString(KEY_LANGUAGE_CODE, languageCode).apply()
+            Timber.d("✅ SharedPreferences에 언어 저장 완료: $languageCode")
+        } catch (e: Exception) {
+            Timber.e(e, "❌ 언어 저장 실패: $languageCode")
+        }
+    }
+
+    /**
+     * 🆕 앱 시작 시 저장된 언어 복원 (모든 Android 버전)
+     */
+    fun restoreSavedLanguage() {
+        try {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val savedLanguageCode = prefs.getString(KEY_LANGUAGE_CODE, null)
+
+            if (savedLanguageCode != null) {
+                val savedLanguage = AppLanguage.fromCode(savedLanguageCode)
+                GlobalLanguageState.updateLanguage(savedLanguage)
+                Timber.d("✅ 저장된 언어 복원: ${savedLanguage.displayName}")
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "❌ 언어 복원 실패")
+        }
+    }
+
     /**
      * 🔥 새로운 접근: LocaleManager + Configuration 직접 업데이트
      */
@@ -88,29 +124,14 @@ class AppLocaleManager(
     }
 
     /**
-     * 현재 설정된 언어 코드 가져오기
+     * 현재 설정된 언어 코드 가져오기 (SharedPreferences에서 읽기)
      */
     private fun getCurrentLanguageCode(): String {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                // Android 13+: LocaleManager 우선
-                val localeManager = context.getSystemService(LocaleManager::class.java)
-                val applicationLocales = localeManager?.applicationLocales
-
-                if (applicationLocales != null && !applicationLocales.isEmpty) {
-                    val languageCode = applicationLocales.get(0)?.language
-                    Timber.d("LocaleManager 언어 코드: $languageCode")
-                    languageCode ?: getDefaultLanguageCode()
-                } else {
-                    getDefaultLanguageCode()
-                }
-            } else {
-                // Android 12 이하: AppCompatDelegate
-                val appCompatLocale = AppCompatDelegate.getApplicationLocales().get(0)
-                val languageCode = appCompatLocale?.language
-                Timber.d("AppCompat 언어 코드: $languageCode")
-                languageCode ?: getDefaultLanguageCode()
-            }
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val savedLanguageCode = prefs.getString(KEY_LANGUAGE_CODE, null)
+            Timber.d("✅ SharedPreferences 언어 코드: $savedLanguageCode")
+            savedLanguageCode ?: getDefaultLanguageCode()
         } catch (e: Exception) {
             Timber.e(e, "현재 언어 코드 가져오기 실패")
             getDefaultLanguageCode()

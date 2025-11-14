@@ -1,9 +1,6 @@
 package unithon.helpjob
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,11 +9,13 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import unithon.helpjob.data.analytics.AnalyticsService
 import unithon.helpjob.data.analytics.AndroidAnalyticsService
+import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
 
 class HelpJobApplication : Application() {
     private val languageRepository: LanguageRepository by inject()
+    private val appLocaleManager: AppLocaleManager by inject()
 
     companion object {
         lateinit var analytics: AnalyticsService
@@ -55,18 +54,18 @@ class HelpJobApplication : Application() {
     private fun initializeLanguage() {
         applicationScope.launch {
             try {
-                val savedLanguage = languageRepository.getCurrentLanguage()
-                Timber.d("savedLanguage: ${savedLanguage.code}")
-                // 저장된 언어가 있으면 적용
-                AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(savedLanguage.code)
-                )
+                // ✅ Android 12 이하에서 저장된 언어 복원
+                appLocaleManager.restoreSavedLanguage()
 
+                // ✅ 현재 언어 가져오기 (LocaleManager/AppCompatDelegate/SharedPreferences)
+                val savedLanguage = languageRepository.getCurrentLanguage()
+                Timber.d("저장된 언어: ${savedLanguage.code}")
+
+                // ✅ GlobalLanguageState 초기화 (UI 반영)
                 GlobalLanguageState.initializeLanguage(savedLanguage)
             } catch (e: Exception) {
                 Timber.e(e, "Failed to initialize language")
-                // 저장된 언어가 없으면 시스템 언어 그대로 (코드 없음)
-                // 즉, 처음 설치 시에는 시스템 언어를 따름
+                // 저장된 언어가 없으면 시스템 언어 그대로
             }
         }
     }
