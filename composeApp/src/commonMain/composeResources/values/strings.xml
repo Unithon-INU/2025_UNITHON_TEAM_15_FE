@@ -307,7 +307,7 @@
     <string name="setting_open_source_license">Open Source License </string>
     <string name="setting_logout">Logout</string>
     <string name="setting_withdrawal">Account Deletion</string>
-    <string name="setting_app_version">App Version 1.0.0</string>
+    <string name="setting_app_version">App Version</string>
 
     <!-- Setting Error Messages -->
     <string name="reset_progress_error">Failed to reset progress. Please try again.</string>

@@ -51,6 +51,7 @@ import unithon.helpjob.ui.theme.Grey100
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.subhead1
+import unithon.helpjob.util.AppConfig
 import unithon.helpjob.util.noRippleClickable
 
 @Composable
@@ -195,7 +196,7 @@ fun SettingScreen(
 
             // 앱 버전
             Text(
-                text = stringResource(Res.string.setting_app_version),
+                text = "${stringResource(Res.string.setting_app_version)} ${AppConfig.APP_VERSION}",
                 style = MaterialTheme.typography.body4,
                 color = Color(0xFF70737D),
                 modifier = Modifier.padding(horizontal = 20.dp)

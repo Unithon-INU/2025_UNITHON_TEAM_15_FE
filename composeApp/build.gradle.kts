@@ -144,6 +144,7 @@ android {
         debug {
             val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
             buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
             // debug/release 동시 설치 가능하도록 (권장)
             applicationIdSuffix = ".debug"
             // 빌드 속도 향상
@@ -159,6 +160,7 @@ android {
             )
             val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
             buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
             isCrunchPngs = true
 
             ndk {
