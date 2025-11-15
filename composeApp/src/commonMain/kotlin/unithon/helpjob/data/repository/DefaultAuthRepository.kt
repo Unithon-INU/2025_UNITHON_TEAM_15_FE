@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import org.koin.core.Koin
+import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
@@ -28,7 +29,6 @@ class DefaultAuthRepository(
     override suspend fun signIn(email: String, password: String): TokenResponse {
         println("🔥 [Auth] 로그인 시도: $email")
         val tokenResponse = apiService.signIn(MemberSignInReq(email, password))
-        println("🔥 [Auth] 로그인 성공! 받은 토큰: ${tokenResponse.token}")
         saveToken(tokenResponse.token)
         return tokenResponse
         // ✅ HttpResponseValidator가 자동으로 에러 처리
@@ -73,7 +73,6 @@ class DefaultAuthRepository(
     }
 
     override suspend fun saveToken(token: String) {
-        println("🔥 [Auth] 토큰 저장 시작: $token")
         dataStore.edit { preferences ->
             preferences[tokenKey] = token
         }
@@ -81,11 +80,9 @@ class DefaultAuthRepository(
     }
 
     override suspend fun getToken(): String? {
-        val token = dataStore.data
+        return dataStore.data
             .map { preferences -> preferences[tokenKey] }
             .firstOrNull()
-        println("🔥 [Auth] getToken() 호출됨: $token")
-        return token
     }
 
     override suspend fun clearToken() {
@@ -105,6 +102,9 @@ class DefaultAuthRepository(
             println("🔥 [DefaultAuthRepository] clearCache() 호출: ${repository::class.simpleName}")
             repository.clearCache()
         }
+
+        // 3. GlobalLanguageState 초기화 (로그아웃 시 언어 설정 기본값으로 리셋)
+        GlobalLanguageState.initializeLanguage(AppLanguage.ENGLISH)
 
         println("🔥 [DefaultAuthRepository] clearToken() 완료")
     }
