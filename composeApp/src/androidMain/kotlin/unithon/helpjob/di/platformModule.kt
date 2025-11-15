@@ -25,6 +25,7 @@ import kotlinx.serialization.json.Json
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import timber.log.Timber
 import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.network.ApiConstants
 import unithon.helpjob.data.repository.AndroidLanguageRepository
@@ -90,15 +91,13 @@ val androidNetworkModule = module {
                 )
 
                 val requiresAuth = noAuthEndpoints.none { request.url.encodedPath.contains(it) }
-                println("🔥 [TokenAuth] ${request.url.encodedPath} - 인증 필요: $requiresAuth")
+                Timber.d("[TokenAuth] ${request.url.encodedPath} - 인증 필요: $requiresAuth")
 
                 if (requiresAuth) {
                     // 매 요청마다 DataStore에서 최신 토큰 읽기
                     val token = tokenDataStore.data
                         .map { it[stringPreferencesKey("auth_token")] }
                         .firstOrNull()
-
-                    println("🔥 [TokenAuth] DataStore에서 읽은 토큰: $token")
 
                     if (!token.isNullOrBlank()) {
                         request.headers.append("Authorization", "Bearer $token")
