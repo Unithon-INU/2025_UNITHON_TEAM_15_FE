@@ -15,7 +15,7 @@ import unithon.helpjob.data.model.response.EmploymentCheckRes
  */
 class HomeStateRepository(
     private val employmentCheckRepository: EmploymentCheckRepository
-) {
+) : CacheableRepository {
     /**
      * 홈 화면의 서버 데이터 상태
      */
@@ -36,11 +36,15 @@ class HomeStateRepository(
      * @throws Exception 네트워크 오류 또는 서버 오류 시
      */
     suspend fun loadHomeInfo(language: String? = null) {
+        println("🔥 [HomeStateRepository] loadHomeInfo() 시작")
+
         val response = if (language != null) {
             employmentCheckRepository.getHomeInfo(language)
         } else {
             employmentCheckRepository.getHomeInfo()
         }
+
+        println("🔥 [HomeStateRepository] API 응답: nickname=${response.nickname}, email=${response.email}, progress=${response.progress}")
 
         val latestCheckedStep = findLatestCheckedStep(response.employmentCheckRes)
 
@@ -53,6 +57,8 @@ class HomeStateRepository(
                 progressPercentage = response.progress / 100f
             )
         }
+
+        println("🔥 [HomeStateRepository] loadHomeInfo() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
     }
 
     /**
@@ -111,5 +117,14 @@ class HomeStateRepository(
         }
 
         return Steps.STEP1
+    }
+
+    /**
+     * 인메모리 캐시 초기화 (로그아웃 시 호출)
+     */
+    override fun clearCache() {
+        println("🔥 [HomeStateRepository] clearCache() 호출됨!")
+        _homeState.value = HomeState()
+        println("🔥 [HomeStateRepository] clearCache() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
     }
 }

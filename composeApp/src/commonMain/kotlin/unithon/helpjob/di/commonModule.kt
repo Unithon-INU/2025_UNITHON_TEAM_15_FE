@@ -1,9 +1,11 @@
 package unithon.helpjob.di
 
 import kotlinx.serialization.json.Json
+import org.koin.dsl.binds
 import org.koin.dsl.module
 import unithon.helpjob.data.network.HelpJobApiService
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.CacheableRepository
 import unithon.helpjob.data.repository.DefaultAuthRepository
 import unithon.helpjob.data.repository.DefaultDocumentRepository
 import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
@@ -22,13 +24,16 @@ val commonDataModule = module {
     single { SignUpDataRepository() }
 
     // Repository 인터페이스 → 구현체 바인딩
-    single<AuthRepository> { DefaultAuthRepository(get(), get()) }
+    single<AuthRepository> { DefaultAuthRepository(get(), get(), getKoin()) }
     single<EmploymentCheckRepository> { DefaultEmploymentCheckRepository(get(), get()) }
     single<DocumentRepository> { DefaultDocumentRepository(get(), get()) }
     single<PolicyRepository> { DefaultPolicyRepository(get()) }
 
-    // HomeStateRepository (상태 관리)
-    single { HomeStateRepository(get()) }
+    // HomeStateRepository (상태 관리 + 캐시 관리)
+    single { HomeStateRepository(get()) } binds arrayOf(
+        HomeStateRepository::class,
+        CacheableRepository::class
+    )
 }
 
 /**

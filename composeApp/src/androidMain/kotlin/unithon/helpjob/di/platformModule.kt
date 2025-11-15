@@ -10,11 +10,9 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -79,6 +77,36 @@ val androidNetworkModule = module {
     single {
         val tokenDataStore: DataStore<Preferences> = get()
 
+        // 🔑 커스텀 인증 플러그인: 매 요청마다 DataStore에서 최신 토큰 읽기
+        val TokenAuthPlugin = createClientPlugin("TokenAuth") {
+            onRequest { request, _ ->
+                val noAuthEndpoints = listOf(
+                    ApiConstants.SIGN_IN,
+                    ApiConstants.SIGN_UP,
+                    ApiConstants.EMAIL_SEND,
+                    ApiConstants.EMAIL_VERIFY,
+                    ApiConstants.PRIVACY_POLICY,
+                    ApiConstants.TERMS_OF_SERVICE
+                )
+
+                val requiresAuth = noAuthEndpoints.none { request.url.encodedPath.contains(it) }
+                println("🔥 [TokenAuth] ${request.url.encodedPath} - 인증 필요: $requiresAuth")
+
+                if (requiresAuth) {
+                    // 매 요청마다 DataStore에서 최신 토큰 읽기
+                    val token = tokenDataStore.data
+                        .map { it[stringPreferencesKey("auth_token")] }
+                        .firstOrNull()
+
+                    println("🔥 [TokenAuth] DataStore에서 읽은 토큰: $token")
+
+                    if (!token.isNullOrBlank()) {
+                        request.headers.append("Authorization", "Bearer $token")
+                    }
+                }
+            }
+        }
+
         HttpClient(OkHttp) {
             // Base URL 설정
             defaultRequest {
@@ -99,31 +127,8 @@ val androidNetworkModule = module {
                 level = if (AppConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
             }
 
-            // 🔑 공식 패턴: Auth + Bearer
-            install(Auth) {
-                bearer {
-                    loadTokens {
-                        val token = tokenDataStore.data
-                            .map { it[stringPreferencesKey("auth_token")] }
-                            .firstOrNull()
-
-                        token?.let { BearerTokens(it, "") }
-                    }
-
-                    sendWithoutRequest { request ->
-                        val noAuthEndpoints = listOf(
-                            ApiConstants.SIGN_IN,
-                            ApiConstants.SIGN_UP,
-                            ApiConstants.EMAIL_SEND,
-                            ApiConstants.EMAIL_VERIFY,
-                            ApiConstants.PRIVACY_POLICY,
-                            ApiConstants.TERMS_OF_SERVICE
-                        )
-
-                        noAuthEndpoints.none { request.url.encodedPath.contains(it) }
-                    }
-                }
-            }
+            // 🔑 커스텀 인증 플러그인 적용
+            install(TokenAuthPlugin)
 
             // 🚨 전역 에러 처리 (공식 패턴)
             HttpResponseValidator {

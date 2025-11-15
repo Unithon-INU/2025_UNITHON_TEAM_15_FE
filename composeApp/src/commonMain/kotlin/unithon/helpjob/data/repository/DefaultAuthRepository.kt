@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import org.koin.core.Koin
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
@@ -18,13 +19,16 @@ import unithon.helpjob.data.network.HelpJobApiService
 
 class DefaultAuthRepository(
     private val apiService: HelpJobApiService,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val koin: Koin
 ) : AuthRepository {
 
     private val tokenKey = stringPreferencesKey("auth_token")
 
     override suspend fun signIn(email: String, password: String): TokenResponse {
+        println("🔥 [Auth] 로그인 시도: $email")
         val tokenResponse = apiService.signIn(MemberSignInReq(email, password))
+        println("🔥 [Auth] 로그인 성공! 받은 토큰: ${tokenResponse.token}")
         saveToken(tokenResponse.token)
         return tokenResponse
         // ✅ HttpResponseValidator가 자동으로 에러 처리
@@ -69,21 +73,40 @@ class DefaultAuthRepository(
     }
 
     override suspend fun saveToken(token: String) {
+        println("🔥 [Auth] 토큰 저장 시작: $token")
         dataStore.edit { preferences ->
             preferences[tokenKey] = token
         }
+        println("🔥 [Auth] 토큰 저장 완료")
     }
 
     override suspend fun getToken(): String? {
-        return dataStore.data
+        val token = dataStore.data
             .map { preferences -> preferences[tokenKey] }
             .firstOrNull()
+        println("🔥 [Auth] getToken() 호출됨: $token")
+        return token
     }
 
     override suspend fun clearToken() {
+        println("🔥 [DefaultAuthRepository] clearToken() 시작")
+
+        // 1. DataStore의 모든 데이터 삭제 (토큰, 언어 설정 등)
         dataStore.edit { preferences ->
-            preferences.remove(tokenKey)
+            preferences.clear()
         }
+        println("🔥 [DefaultAuthRepository] DataStore 초기화 완료")
+
+        // 2. 모든 Repository의 인메모리 캐시 일괄 초기화
+        val cacheableRepos = koin.getAll<CacheableRepository>()
+        println("🔥 [DefaultAuthRepository] 찾은 CacheableRepository: ${cacheableRepos.size}개")
+
+        cacheableRepos.forEach { repository ->
+            println("🔥 [DefaultAuthRepository] clearCache() 호출: ${repository::class.simpleName}")
+            repository.clearCache()
+        }
+
+        println("🔥 [DefaultAuthRepository] clearToken() 완료")
     }
 
     // 🆕 온보딩 완료 여부 체크 구현
