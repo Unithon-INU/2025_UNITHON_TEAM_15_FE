@@ -53,6 +53,7 @@ import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.subhead1
 import unithon.helpjob.util.AppConfig
 import unithon.helpjob.util.noRippleClickable
+import unithon.helpjob.util.rememberPlatformActions
 
 @Composable
 fun SettingScreen(
@@ -65,6 +66,7 @@ fun SettingScreen(
     snackbarHostState: SnackbarHostState,
     settingViewModel: SettingViewModel = koinViewModel()
 ) {
+    val platformActions = rememberPlatformActions()
     var showResetDialog by remember { mutableStateOf(false) }
     var isResetting by remember { mutableStateOf(false) }
 
@@ -149,11 +151,7 @@ fun SettingScreen(
 
             SettingItem(
                 title = Res.string.setting_open_source_license,
-                onClick = {
-                    // TODO: Platform-specific implementation needed for OssLicensesMenuActivity
-                    // Android: context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-                    // iOS: Navigate to licenses screen
-                },
+                onClick = { platformActions.openOssLicenses() },
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
 
