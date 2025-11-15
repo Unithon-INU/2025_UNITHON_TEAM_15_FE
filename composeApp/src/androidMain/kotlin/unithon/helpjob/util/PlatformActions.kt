@@ -3,7 +3,7 @@ package unithon.helpjob.util
 import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 /**
@@ -23,7 +23,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
  */
 @Composable
 actual fun rememberPlatformActions(): PlatformActions {
-    val context = LocalContext.current
+    val context = LocalView.current.context
 
     return remember(context) {
         object : PlatformActions {
