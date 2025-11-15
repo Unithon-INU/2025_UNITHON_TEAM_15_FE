@@ -79,7 +79,13 @@ fun HelpJobNavGraph(
 
         composable(route = HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE) {
             SignUpSuccessScreen(
-                onGoToLogin = navActions::navigateToSignIn
+                onGoToLogin = {
+                    // 🔥 SignUpSuccess → SignIn: SignUpSuccess를 백스택에서 제거
+                    navController.navigate(HelpJobDestinations.SIGN_IN_ROUTE) {
+                        popUpTo(HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 

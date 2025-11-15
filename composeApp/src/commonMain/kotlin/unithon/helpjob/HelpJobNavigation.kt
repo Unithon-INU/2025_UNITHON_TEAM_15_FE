@@ -111,7 +111,9 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
     // 인증 플로우 - 이전 화면 제거하며 진행
     fun navigateToSignIn() {
         navController.navigate(HelpJobDestinations.SIGN_IN_ROUTE) {
-            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+            // 🔥 SPLASH에서 호출되므로, SPLASH를 백스택에서 제거
+            popUpTo(HelpJobDestinations.SPLASH_ROUTE) { inclusive = true }
+            launchSingleTop = true
         }
     }
 
@@ -127,7 +129,13 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSignUpSuccess() {
         navController.navigate(HelpJobDestinations.SIGN_UP_SUCCESS_ROUTE) {
-            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+            // 🔥 회원가입 플로우: [SIGN_IN, NICKNAME_SETUP] → [SIGN_IN, SIGN_UP_SUCCESS]
+            // SIGN_IN을 백스택 베이스로 유지, 그 위의 모든 화면(NICKNAME_SETUP) 제거
+            // → NICKNAME_SETUP이 백스택에서 제거되므로 뒤로가기로 돌아갈 수 없음
+            // → LaunchedEffect 자동 네비게이션 방지
+            popUpTo(HelpJobDestinations.SIGN_IN_ROUTE) {
+                inclusive = false  // SIGN_IN은 유지
+            }
         }
     }
 
@@ -157,19 +165,24 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
      * 🆕 메인 앱으로 진입 (백스택 전체 제거)
      *
      * 사용 상황:
-     * - 스플래시 화면에서 앱 최초 진입
+     * - 로그인 완료 후 메인 앱 진입
      * - 온보딩 완료 후 메인 앱 진입
-     * - 기타 초기화 완료 후 메인 앱 진입
      *
      * 효과:
-     * - 모든 이전 화면들을 백스택에서 완전 제거
+     * - SIGN_IN을 포함한 모든 인증 화면을 백스택에서 완전 제거
      * - MAIN_GRAPH가 새로운 백스택의 루트가 됨 (내부적으로 HOME이 startDestination)
      * - 뒤로가기 시 앱 종료
      */
     fun navigateToAppHome() {
         navController.navigate(HelpJobDestinations.MAIN_GRAPH_ROUTE) {
-            popUpTo(navController.graph.startDestinationId) {
-                inclusive = true  // SPLASH 포함 모든 이전 화면 완전 제거
+            // 🔥 popUpTo(SIGN_IN) inclusive=true
+            // → SIGN_IN을 찾아서, SIGN_IN부터 이동 전 현재 화면까지 모두 제거
+            //
+            // 예시:
+            // - [SIGN_IN] → MAIN: SIGN_IN 제거 → [MAIN_GRAPH]
+            // - [SIGN_IN, ONBOARDING] → MAIN: SIGN_IN~ONBOARDING 모두 제거 → [MAIN_GRAPH]
+            popUpTo(HelpJobDestinations.SIGN_IN_ROUTE) {
+                inclusive = true
             }
             launchSingleTop = true
         }
@@ -177,7 +190,12 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSignInAfterLogout() {
         navController.navigate(HelpJobDestinations.SIGN_IN_ROUTE) {
-            popUpTo(0) { inclusive = true }
+            // 🔥 MAIN_GRAPH를 백스택에서 완전 제거 (로그아웃 시 이전 화면으로 돌아갈 수 없도록)
+            // SPLASH는 navigateToAppHome에서 이미 제거되었으므로
+            // MAIN_GRAPH만 타겟으로 지정
+            popUpTo(HelpJobDestinations.MAIN_GRAPH_ROUTE) {
+                inclusive = true
+            }
             launchSingleTop = true
         }
     }
