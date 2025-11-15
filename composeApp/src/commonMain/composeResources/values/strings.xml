@@ -34,7 +34,7 @@
     <string name="sign_up_next_button">Continue</string>
     <string name="sign_up_failed">Sign up failed</string>
     <string name="sign_up_email_exists">ⓘ Email already in use</string>
-    <string name="signup_success_title">You\'re in!</string>
+    <string name="signup_success_title">You're in!</string>
     <string name="signup_success_subtitle">Are you ready to prepare together?</string>
     <string name="signup_success_go_to_login">Go to Login</string>
 
@@ -76,7 +76,7 @@
 
 
     <!-- Home Screen -->
-    <string name="welcome_message">Nice to meet you, %1$s!\nLet\'s achieve our goals together!</string>
+    <string name="welcome_message">Nice to meet you, %1$s!\nLet's achieve our goals together!</string>
     <string name="category_documents">Required Documents</string>
     <string name="category_precautions">Precautions</string>
     <string name="step_warning_dialog_title">Are there any documents\nyou forgot?</string>
