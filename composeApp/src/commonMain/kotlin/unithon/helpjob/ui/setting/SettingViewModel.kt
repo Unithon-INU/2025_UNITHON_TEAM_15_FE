@@ -9,10 +9,12 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.ui.base.BaseViewModel
 
 class SettingViewModel(
     private val employmentCheckRepository: EmploymentCheckRepository,
+    private val homeStateRepository: HomeStateRepository,
     private val authRepository: AuthRepository
 ) : BaseViewModel() {
 
@@ -23,6 +25,7 @@ class SettingViewModel(
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 employmentCheckRepository.resetProgress()
+                homeStateRepository.loadHomeInfo()
                 println("[SettingViewModel] 진행 상황 초기화 성공")
             } catch (e: Exception) {
                 _snackbarMessage.emit(Res.string.reset_progress_error)

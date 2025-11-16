@@ -177,7 +177,7 @@ val androidViewModelModule = module {
     viewModel { ProfileViewModel(get()) }
     viewModel { LanguageSettingViewModel(get()) }
     viewModel { PrivacyPolicyViewModel(get()) }
-    viewModel { SettingViewModel(get(), get()) }
+    viewModel { SettingViewModel(get(), get(), get()) }
     viewModel { TermsOfServiceViewModel(get()) }
     viewModel { SplashViewModel(get()) }
 }
