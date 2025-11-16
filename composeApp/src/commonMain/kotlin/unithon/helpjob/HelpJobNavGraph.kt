@@ -27,6 +27,7 @@ import unithon.helpjob.ui.setting.LanguageSettingScreen
 import unithon.helpjob.ui.setting.PrivacyPolicyScreen
 import unithon.helpjob.ui.setting.SettingScreen
 import unithon.helpjob.ui.setting.TermsOfServiceScreen
+import unithon.helpjob.ui.setting.WithdrawalScreen
 import unithon.helpjob.ui.splash.SplashScreen
 
 @Composable
@@ -177,6 +178,7 @@ fun HelpJobNavGraph(
                     onLanguageSettingClick = navActions::navigateToLanguageSetting,
                     onPrivacyPolicyClick = navActions::navigateToPrivacyPolicy,
                     onTermsOfServiceClick = navActions::navigateToTermsOfService,
+                    onWithdrawalClick = navActions::navigateToWithdrawal,
                     onLogoutClick = navActions::navigateToSignInAfterLogout,
                     snackbarHostState = snackbarHostState,
                     modifier = modifier
@@ -200,6 +202,12 @@ fun HelpJobNavGraph(
 
         composable(route = HelpJobDestinations.TERMS_OF_SERVICE_ROUTE) {
             TermsOfServiceScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = HelpJobDestinations.WITHDRAWAL_ROUTE) {
+            WithdrawalScreen(
                 onBack = { navController.popBackStack() }
             )
         }

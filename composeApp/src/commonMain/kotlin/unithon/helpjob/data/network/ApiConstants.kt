@@ -3,7 +3,7 @@ package unithon.helpjob.data.network
 object ApiConstants {
     // BASE URL은 BuildConfig에서 관리
 
-    // member-controller Endpoint
+    // API Endpoint
     const val SIGN_IN = "api/member/sign-in"
     const val SIGN_UP = "api/member/sign-up"
     const val SET_NICKNAME = "api/member/me/nickname"
@@ -18,4 +18,7 @@ object ApiConstants {
     const val POST_CERTIFICATION = "api/cert"
     const val PRIVACY_POLICY = "privacy"
     const val TERMS_OF_SERVICE = "terms"
+
+    // 외부 URL
+    const val WITHDRAWAL_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScBgUH8_jGwGdGxkzCjsgI_n1-NQ8RtXeR6npjSZCa37u-rWg/viewform"
 }

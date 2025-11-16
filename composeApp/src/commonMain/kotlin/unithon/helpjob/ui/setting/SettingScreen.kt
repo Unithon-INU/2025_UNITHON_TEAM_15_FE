@@ -61,6 +61,7 @@ fun SettingScreen(
     onLanguageSettingClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onTermsOfServiceClick: () -> Unit,
+    onWithdrawalClick: () -> Unit,
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
@@ -186,7 +187,7 @@ fun SettingScreen(
 
             SettingItem(
                 title = Res.string.setting_withdrawal,
-                onClick = { /* 아직 구현하지 않음 */ },
+                onClick = onWithdrawalClick,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
 

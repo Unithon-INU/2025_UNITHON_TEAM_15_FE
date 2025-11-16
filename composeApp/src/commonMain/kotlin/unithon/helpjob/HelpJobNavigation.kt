@@ -33,6 +33,7 @@ object HelpJobScreens {
     const val LANGUAGE_SETTING_SCREEN = "language_setting"
     const val PRIVACY_POLICY_SCREEN = "privacy_policy"
     const val TERMS_OF_SERVICE_SCREEN = "terms_of_service"
+    const val WITHDRAWAL_SCREEN = "withdrawal"
 }
 
 /**
@@ -56,6 +57,7 @@ object HelpJobDestinations {
     const val LANGUAGE_SETTING_ROUTE = HelpJobScreens.LANGUAGE_SETTING_SCREEN
     const val PRIVACY_POLICY_ROUTE = HelpJobScreens.PRIVACY_POLICY_SCREEN
     const val TERMS_OF_SERVICE_ROUTE = HelpJobScreens.TERMS_OF_SERVICE_SCREEN
+    const val WITHDRAWAL_ROUTE = HelpJobScreens.WITHDRAWAL_SCREEN
 }
 
 /**
@@ -164,6 +166,10 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToTermsOfService() {
         navController.navigate(HelpJobDestinations.TERMS_OF_SERVICE_ROUTE)
+    }
+
+    fun navigateToWithdrawal() {
+        navController.navigate(HelpJobDestinations.WITHDRAWAL_ROUTE)
     }
 
     /**
