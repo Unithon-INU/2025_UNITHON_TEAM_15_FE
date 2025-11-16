@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
+import com.codingfeline.buildkonfig.compiler.FieldSpec
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,6 +9,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.buildkonfig)
 }
 
 val localProperties = Properties()
@@ -129,8 +131,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
-        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
+        buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
 
 //        Room 사용시 적용
 //        javaCompileOptions {
@@ -142,9 +143,6 @@ android {
 
     buildTypes {
         debug {
-            val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
-            buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
-            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
             // debug/release 동시 설치 가능하도록 (권장)
             applicationIdSuffix = ".debug"
             // 빌드 속도 향상
@@ -158,9 +156,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
-            buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
-            buildConfigField("String", "VERSION_NAME", "\"${defaultConfig.versionName}\"")
             isCrunchPngs = true
 
             ndk {
@@ -200,6 +195,25 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+buildkonfig {
+    packageName = "unithon.helpjob"
+    objectName = "BuildKonfig"
+
+    defaultConfigs {
+        val apiBaseUrl = localProperties.getProperty("API_BASE_URL")
+            ?: throw GradleException("API_BASE_URL이 local.properties에 설정되지 않았습니다")
+        buildConfigField(FieldSpec.Type.STRING, "API_BASE_URL", apiBaseUrl)
+        buildConfigField(FieldSpec.Type.BOOLEAN, "DEBUG", "false")
+    }
+
+    targetConfigs {
+        create("android") {
+            buildConfigField(FieldSpec.Type.BOOLEAN, "DEBUG", "true")
+        }
+    }
+}
+
 apply(plugin = "com.google.android.gms.oss-licenses-plugin")
 
 //// Compiler Reports 생성 (최적화 분석용)
