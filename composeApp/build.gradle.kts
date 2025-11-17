@@ -12,6 +12,11 @@ plugins {
     alias(libs.plugins.buildkonfig)
 }
 
+composeCompiler {
+    enableStrongSkippingMode = true
+    includeSourceInformation = true
+}
+
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -30,6 +35,17 @@ kotlin {
                     "-Xexpect-actual-classes"  // Beta 경고 억제
                 )
             )
+        }
+    }
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
         }
     }
 
@@ -62,47 +78,59 @@ kotlin {
 
                 // KMP Navigation (JetBrains multiplatform)
                 implementation(libs.navigation.compose)
+
+                // Koin (공통)
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose.viewmodel)
             }
         }
 
-        val androidMain by getting {
-            dependencies {
-                // Android 전용 의존성
-                implementation(libs.androidx.annotation)
-                implementation(libs.kotlinx.coroutines.android)
-                implementation(libs.timber)
-                implementation(libs.androidx.lifecycle.runtimeCompose)
-                // viewModelCompose는 commonMain에서 제공 (KMP용)
+        androidMain.dependencies {
+            // Android 전용 의존성
+            implementation(libs.androidx.annotation)
+            implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.timber)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
+            // viewModelCompose는 commonMain에서 제공 (KMP용)
 
-                // Koin
-                implementation(libs.koin.core)
-                implementation(libs.koin.android)
-                implementation(libs.koin.compose.viewmodel)
-                implementation(libs.koin.compose.viewmodel.navigation)
+            // Koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.android)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
 
-                // Ktor & Network (Android 엔진만)
-                implementation(libs.ktor.client.okhttp)
+            // Ktor & Network (Android 엔진만)
+            implementation(libs.ktor.client.okhttp)
 
-                // Jetpack Compose (Android)
-                implementation(libs.androidx.appcompat)
-                implementation(libs.androidx.activity.compose)
-                val composeBom = project.dependencies.platform(libs.androidx.compose.bom)
-                implementation(composeBom)
-                implementation(libs.androidx.compose.foundation.core)
-                implementation(libs.androidx.compose.foundation.layout)
-                implementation(libs.androidx.compose.animation)
-                implementation(libs.androidx.compose.material3)
-                implementation(libs.androidx.compose.material.iconsExtended)
-                implementation(libs.androidx.compose.ui.tooling.preview)
-                implementation(libs.accompanist.appcompat.theme)
-                implementation(libs.accompanist.swiperefresh)
+            // Jetpack Compose (Android)
+            implementation(libs.androidx.appcompat)
+            implementation(libs.androidx.activity.compose)
+            val composeBom = project.dependencies.platform(libs.androidx.compose.bom)
+            implementation(composeBom)
+            implementation(libs.androidx.compose.foundation.core)
+            implementation(libs.androidx.compose.foundation.layout)
+            implementation(libs.androidx.compose.animation)
+            implementation(libs.androidx.compose.material3)
+            implementation(libs.androidx.compose.material.iconsExtended)
+            implementation(libs.androidx.compose.ui.tooling.preview)
+            implementation(libs.accompanist.appcompat.theme)
+            implementation(libs.accompanist.swiperefresh)
 
-                // Firebase
-                implementation(project.dependencies.platform(libs.firebase.bom))
-                implementation(libs.firebase.analytics)
-                implementation(libs.play.services.oss.licenses)
-                implementation(libs.androidx.ui.viewbinding)
-            }
+            // Firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
+            implementation(libs.play.services.oss.licenses)
+            implementation(libs.androidx.ui.viewbinding)
+        }
+
+        iosMain.dependencies {
+            // Koin
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
+
+
+            // Ktor & Network (iOS Darwin 엔진)
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -209,6 +237,9 @@ buildkonfig {
 
     targetConfigs {
         create("android") {
+            buildConfigField(FieldSpec.Type.BOOLEAN, "DEBUG", "true")
+        }
+        create("ios") {
             buildConfigField(FieldSpec.Type.BOOLEAN, "DEBUG", "true")
         }
     }
