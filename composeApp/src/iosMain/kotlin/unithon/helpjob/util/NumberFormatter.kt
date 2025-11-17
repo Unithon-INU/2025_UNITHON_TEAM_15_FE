@@ -13,7 +13,14 @@ actual object NumberFormatter {
         val formatter = NSNumberFormatter().apply {
             numberStyle = NSNumberFormatterDecimalStyle
         }
-        val formattedNumber = formatter.stringFromNumber(NSNumber(value)) ?: value.toString()
+        val formattedNumber = formatter.stringFromNumber(NSNumber(longLong = value)) ?: value.toString()
         return "${formattedNumber}원"
+    }
+
+    actual fun formatNumber(value: Int): String {
+        val formatter = NSNumberFormatter().apply {
+            numberStyle = NSNumberFormatterDecimalStyle
+        }
+        return formatter.stringFromNumber(NSNumber(int = value)) ?: value.toString()
     }
 }
