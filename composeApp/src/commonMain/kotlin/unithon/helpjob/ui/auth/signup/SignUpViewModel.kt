@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
@@ -196,7 +196,7 @@ class SignUpViewModel(
                     it.copy(isSendingEmail = false)
                 }
                 _snackbarMessage.emit(Res.string.email_send_failed)
-                Timber.e(e, "Email send failed - unexpected error")
+                Logger.e(e, "Email send failed - unexpected error")
             }
         }
     }
@@ -247,7 +247,7 @@ class SignUpViewModel(
                     it.copy(isVerifyingCode = false)
                 }
                 _snackbarMessage.emit(Res.string.verification_failed)
-                Timber.e(e, "Verification failed - unexpected error")
+                Logger.e(e, "Verification failed - unexpected error")
             }
         }
     }

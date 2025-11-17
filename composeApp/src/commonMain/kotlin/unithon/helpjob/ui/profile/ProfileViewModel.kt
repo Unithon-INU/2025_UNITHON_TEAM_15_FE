@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
 
@@ -48,7 +48,7 @@ class ProfileViewModel(
                     isLoading = false
                 )
             } catch (e: Exception) {
-                Timber.e(e, "프로필 로딩 실패")
+                Logger.e(e, "프로필 로딩 실패")
                 _snackbarMessage.emit(Res.string.error_profile_load_failed)  // 이 줄 추가
                 _uiState.value = _uiState.value.copy(
                     isLoading = false

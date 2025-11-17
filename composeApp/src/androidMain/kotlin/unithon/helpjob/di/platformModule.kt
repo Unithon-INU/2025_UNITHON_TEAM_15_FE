@@ -123,7 +123,7 @@ val androidNetworkModule = module {
             // 로깅
             install(Logging) {
                 logger = Logger.DEFAULT
-                level = if (AppConfig.DEBUG) LogLevel.ALL else LogLevel.NONE
+                level = if (AppConfig.IS_DEBUG) LogLevel.ALL else LogLevel.NONE
             }
 
             // 🔑 커스텀 인증 플러그인 적용

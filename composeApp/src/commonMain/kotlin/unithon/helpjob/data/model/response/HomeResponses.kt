@@ -54,7 +54,9 @@ data class StepInfoRes(
 )
 
 @Serializable
-class TipResponse : ArrayList<TipResponseItem>()
+data class TipResponse(
+    val tips: List<TipResponseItem> = emptyList()
+)
 
 @Serializable
 data class TipResponseItem(

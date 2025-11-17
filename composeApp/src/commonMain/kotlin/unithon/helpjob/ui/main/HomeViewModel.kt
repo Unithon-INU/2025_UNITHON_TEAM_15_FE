@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.response.DocumentInfoRes
 import unithon.helpjob.data.model.response.EmploymentCheckRes
@@ -67,7 +67,7 @@ class HomeViewModel(
             languageRepository.currentLanguage
                 .drop(1)  // 첫 값 무시 (중복 방지)
                 .collect { language ->
-                    Timber.d("🌐 언어 변경 감지: ${language.code}")
+                    Logger.d("🌐 언어 변경 감지: ${language.code}")
                     homeStateRepository.loadHomeInfo(language.code)
                     // 선택된 단계가 있으면 팁도 다시 로드
                     _uiState.value.selectedStep?.let { selectedStep ->
@@ -93,25 +93,25 @@ class HomeViewModel(
 
             val isStepCompleted = stepData?.documentInfoRes?.all { it.isChecked } ?: false
             if (!isStepCompleted) {
-                Timber.d("${stepToCheck.uiStep}이 완료되지 않았습니다.")
+                Logger.d("${stepToCheck.uiStep}이 완료되지 않았습니다.")
                 return false
             }
         }
 
-        Timber.d("${targetStep.uiStep} 이전의 모든 단계가 완료되었습니다.")
+        Logger.d("${targetStep.uiStep} 이전의 모든 단계가 완료되었습니다.")
         return true
     }
 
     fun selectStep(step: EmploymentCheckRes) {
-        Timber.d("🔍 selectStep 호출: ${step.checkStep}")
+        Logger.d("🔍 selectStep 호출: ${step.checkStep}")
         if (_uiState.value.selectedStep?.checkStep == step.checkStep) {
-            Timber.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
+            Logger.d("이미 같은 step이 선택되어 있습니다: ${step.checkStep}")
             return
         }
         _uiState.update {
             it.copy(selectedStep = step)
         }
-        Timber.d("✅ selectedStep 업데이트 완료: ${_uiState.value.selectedStep?.checkStep}")
+        Logger.d("✅ selectedStep 업데이트 완료: ${_uiState.value.selectedStep?.checkStep}")
         getTips(Steps.valueOf(step.checkStep))
     }
 
@@ -187,13 +187,13 @@ class HomeViewModel(
                     checkStep = Steps.valueOf(stepCheckStep),
                     isChecked = isChecked
                 )
-                Timber.d("체크리스트 업데이트 성공")
+                Logger.d("체크리스트 업데이트 성공")
                 Analytics.logEvent(
                     "checklist_updated",
                     mapOf("step" to stepCheckStep)
                 )
             } catch (e: Exception) {
-                Timber.e(e, "체크리스트 업데이트 실패")
+                Logger.e(e, "체크리스트 업데이트 실패")
                 _snackbarMessage.emit(Res.string.error_update_checklist)
             }
         }
@@ -203,12 +203,12 @@ class HomeViewModel(
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(language = language, step)
-                Timber.d(response.toString())
+                Logger.d(response.toString())
                 _uiState.update {
                     it.copy(tips = response)
                 }
             } catch (e: Exception) {
-                Timber.e(e, "팁 정보 조회 실패")
+                Logger.e(e, "팁 정보 조회 실패")
             }
         }
     }
@@ -217,12 +217,12 @@ class HomeViewModel(
         viewModelScope.launch(crashPreventionHandler) {
             try {
                 val response = employmentCheckRepository.getTips(step)
-                Timber.d(response.toString())
+                Logger.d(response.toString())
                 _uiState.update {
                     it.copy(tips = response)
                 }
             } catch (e: Exception) {
-                Timber.e(e, "팁 정보 조회 실패")
+                Logger.e(e, "팁 정보 조회 실패")
             }
         }
     }
