@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.model.TopikLevel
@@ -58,30 +58,35 @@ class OnboardingViewModel(
             get() = inLanguageValid && isFullAgreementValid && isKoreanLevelValid && isVisaValid && isBusinessValid
     }
 
-    private val _uiState = MutableStateFlow(OnboardingUiState())
+    private val _uiState = MutableStateFlow(
+        OnboardingUiState(
+            // 🔥 초기화 시 GlobalLanguageState에서 현재 언어를 가져와 설정
+            language = unithon.helpjob.data.repository.GlobalLanguageState.currentLanguage.value.displayName
+        )
+    )
     val uiState: StateFlow<OnboardingUiState> = _uiState.asStateFlow()
 
     private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     fun updateLanguage(language: String) {
+        Logger.d("🌐 언어 업데이트 시작: $language")
+
+        val selectedLanguage = AppLanguage.fromDisplayName(language)
+        Logger.d("선택된 언어: ${selectedLanguage.displayName} (${selectedLanguage.code})")
+
+        // UI 상태 즉시 업데이트
+        _uiState.value = _uiState.value.copy(language = language)
+
         viewModelScope.launch(crashPreventionHandler) {
-            Timber.d("🌐 언어 업데이트 시작: $language")
-
-            val selectedLanguage = AppLanguage.fromDisplayName(language)
-            Timber.d("선택된 언어: ${selectedLanguage.displayName} (${selectedLanguage.code})")
-
-            // UI 상태 즉시 업데이트
-            _uiState.value = _uiState.value.copy(language = language)
-
             try {
                 // 🆕 AppLocaleManager로 언어 설정 (즉시 적용됨)
                 languageRepository.setLanguage(selectedLanguage)
 
-                Timber.d("✅ 언어 설정 완료: ${selectedLanguage.code}")
+                Logger.d("✅ 언어 설정 완료: ${selectedLanguage.code}")
 
             } catch (e: Exception) {
-                Timber.e(e, "❌ 언어 설정 실패")
+                Logger.e(e, "❌ 언어 설정 실패")
             }
         }
     }
@@ -130,7 +135,7 @@ class OnboardingViewModel(
     }
 
     fun updateBusiness(business: String) {
-        Timber.d("🏢 업무 직종 업데이트: $business")
+        Logger.d("🏢 업무 직종 업데이트: $business")
 
         val currentBusinesses = _uiState.value.businesses.toMutableList()
         val currentIndustries = _uiState.value.selectedBusinesses.toMutableList()
@@ -143,7 +148,7 @@ class OnboardingViewModel(
             val industryToRemove = Business.fromDisplayText(business)
             if (industryToRemove != null) {
                 currentIndustries.remove(industryToRemove)
-                Timber.d("업종 제거: ${industryToRemove.name} -> API값: ${industryToRemove.apiValue}")
+                Logger.d("업종 제거: ${industryToRemove.name} -> API값: ${industryToRemove.apiValue}")
             }
         } else {
             // 새로운 업종 추가
@@ -153,7 +158,7 @@ class OnboardingViewModel(
             val industryToAdd = Business.fromDisplayText(business)
             if (industryToAdd != null && industryToAdd !in currentIndustries) {
                 currentIndustries.add(industryToAdd)
-                Timber.d("업종 추가: ${industryToAdd.name} -> API값: ${industryToAdd.apiValue}")
+                Logger.d("업종 추가: ${industryToAdd.name} -> API값: ${industryToAdd.apiValue}")
             }
         }
 
@@ -164,7 +169,7 @@ class OnboardingViewModel(
 
         // 현재 선택된 업종들의 API 값 로그
         val apiValues = Business.toApiValues(currentIndustries)
-        Timber.d("현재 선택된 업종 API 값: $apiValues")
+        Logger.d("현재 선택된 업종 API 값: $apiValues")
     }
 
     fun completeOnboarding() {
@@ -193,7 +198,7 @@ class OnboardingViewModel(
                 }
 
             } catch (e: UnauthorizedException){
-                Timber.e(e, "인증 오류 발생")
+                Logger.e(e, "인증 오류 발생")
                 _snackbarMessage.emit(Res.string.error_authentication_required)
                 _uiState.update {
                     it.copy(
@@ -201,7 +206,7 @@ class OnboardingViewModel(
                     )
                 }
             } catch (e: Exception) {  // 다른 예외 처리 추가
-                Timber.e(e, "프로필 설정 오류 발생")
+                Logger.e(e, "프로필 설정 오류 발생")
                 _snackbarMessage.emit(Res.string.onboarding_error_message)
                 _uiState.update {
                     it.copy(

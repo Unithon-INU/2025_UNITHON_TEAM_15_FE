@@ -229,7 +229,6 @@ private fun OnboardingPageContainer(
                     selectedLanguage = uiState.language,
                     onLanguageSelected = { language ->
                         viewModel.updateLanguage(language)
-                        GlobalLanguageState.updateLanguage(AppLanguage.fromDisplayName(language))
                     }
                 )
                 1 -> AgreementContent(
