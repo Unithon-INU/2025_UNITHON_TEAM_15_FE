@@ -19,7 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_workplace_info_4_end_time_placeholder
@@ -58,9 +60,10 @@ fun WorkplaceInfo4Screen(
     enabled: Boolean,
     onNext: () -> Unit
 ){
+    val context = LocalContext.current
     val timeList = (0..23).flatMap { hour ->
         listOf("00", "30").map { minute ->
-            "${hour.toString().padStart(2, '0')}:$minute"
+            String.format("%02d:%s", hour, minute)
         }
     }
     val scrollState = rememberScrollState()
@@ -119,7 +122,8 @@ fun WorkplaceInfo4Screen(
                         modifier = Modifier.weight(1f),
                         workDay = workDay,
                         isSelected = workDays.contains(workDay),
-                        onClick = { onWorkDayChange(workDay) }
+                        onClick = { onWorkDayChange(workDay) },
+                        context = context
                     )
                 }
             }
@@ -246,7 +250,8 @@ private fun WorkDayCard(
     modifier: Modifier = Modifier,
     workDay: WorkDay,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    context: android.content.Context
 ) {
     Card(
         modifier = modifier.noRippleClickable { onClick() },
@@ -271,4 +276,27 @@ private fun WorkDayCard(
     }
 }
 
-// Preview functions moved to androidMain for Android-only preview support
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo4Preview(){
+    HelpJobTheme {
+        WorkplaceInfo4Screen(
+            modifier = Modifier.fillMaxSize(),
+            step = 2,
+            title = "취업 예정 근무처 정보를\n입력해주세요",
+            enabled = false,
+            onNext = {},
+            workDays = listOf(WorkDay.MONDAY),
+            onWorkDayChange = {},
+            workDayTimes = mapOf(
+                WorkDay.MONDAY to DocumentViewModel.WorkDayTime("01:30", "5:00")
+            ),
+            onWorkDayStartTimeChange = { _, _ -> },
+            onWorkDayEndTimeChange = { _, _ -> },
+            isAllDaysSelected = false,
+            onToggleAllDays = {},
+            isSameTimeForAll = false,
+            onToggleSameTimeForAll = {}
+        )
+    }
+}

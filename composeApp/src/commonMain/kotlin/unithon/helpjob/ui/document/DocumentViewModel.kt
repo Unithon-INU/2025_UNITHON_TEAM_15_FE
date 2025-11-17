@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import timber.log.Timber
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.request.DocumentRequest
@@ -290,16 +290,16 @@ class DocumentViewModel(
                 _isSubmitting.value = true
 
                 val documentRequest = createDocumentRequest(currentState)
-                Timber.d("Document data : $documentRequest")
+                Logger.d("Document data : $documentRequest")
 
                 documentRepository.postCertification(documentRequest)
 
-                Timber.d("Document submitted successfully")
+                Logger.d("Document submitted successfully")
                 _snackbarMessage.emit(Res.string.document_submit_success) // 성공 이벤트 발생
 
                 Analytics.logEvent("certificate_sent")
             } catch (e: Exception) {
-                Timber.e(e, "Failed to submit document")
+                Logger.e(e, "Failed to submit document")
 
 //                val errorMessage = when {
 //                    e.message?.contains("400") == true -> "입력 정보가 올바르지 않습니다."

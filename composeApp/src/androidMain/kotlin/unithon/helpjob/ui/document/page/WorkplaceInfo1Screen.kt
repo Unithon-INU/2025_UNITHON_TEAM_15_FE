@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_step_2_title
@@ -36,6 +38,7 @@ fun WorkplaceInfo1Screen(
     enabled: Boolean,
     onNext: () -> Unit
 ){
+    val context = LocalContext.current
     val businessList = Business.entries
     val selectedBusiness = Business.fromApiValue(categoryOfBusinessValue)
     // 🆕 미리 displayName 맵 생성 (@Composable 컨텍스트에서)
@@ -87,4 +90,40 @@ fun WorkplaceInfo1Screen(
     }
 }
 
-// Preview functions moved to androidMain for Android-only preview support
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo1ScreenPreview(){
+    HelpJobTheme {
+        WorkplaceInfo1Screen(
+            step = 1,
+            title = stringResource(Res.string.document_step_2_title),
+            companyNameValue = "",
+            onCompanyNameValueChange = {},
+            businessRegisterNumberValue = "",
+            onBusinessRegisterNumberValueChange = {},
+            categoryOfBusinessValue = "",
+            onCategoryOfBusinessValueChange = {},
+            enabled = false,
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo1ScreenFilledPreview(){
+    HelpJobTheme {
+        WorkplaceInfo1Screen(
+            step = 1,
+            title = stringResource(Res.string.document_step_2_title),
+            companyNameValue = "오토그룹",
+            onCompanyNameValueChange = {},
+            businessRegisterNumberValue = "1234567890",
+            onBusinessRegisterNumberValueChange = {},
+            categoryOfBusinessValue = "RESTAURANT",
+            onCategoryOfBusinessValueChange = {},
+            enabled = true,
+            onNext = {}
+        )
+    }
+}

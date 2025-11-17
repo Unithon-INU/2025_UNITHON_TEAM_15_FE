@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_workplace_info_2_company_address_label
@@ -69,4 +70,40 @@ fun WorkplaceInfo2Screen(
     }
 }
 
-// Preview functions moved to androidMain for Android-only preview support
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+private fun WorkplaceInfo2ScreenPreview() {
+    HelpJobTheme {
+        WorkplaceInfo2Screen(
+            step = 2,
+            title = "근무지 정보 2",
+            companyAddressValue = "서울시 강남구 테헤란로 123",
+            onCompanyAddressValueChange = {},
+            employerNameValue = "김사장",
+            onEmployerNameValueChange = {},
+            employerPhoneNumberValue = "01012345678",
+            onEmployerPhoneNumberValueChange = {},
+            enabled = true,
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Composable
+private fun WorkplaceInfo2ScreenEmptyPreview() {
+    HelpJobTheme {
+        WorkplaceInfo2Screen(
+            step = 2,
+            title = "근무지 정보 2",
+            companyAddressValue = "",
+            onCompanyAddressValueChange = {},
+            employerNameValue = "",
+            onEmployerNameValueChange = {},
+            employerPhoneNumberValue = "",
+            onEmployerPhoneNumberValueChange = {},
+            enabled = false,
+            onNext = {}
+        )
+    }
+}

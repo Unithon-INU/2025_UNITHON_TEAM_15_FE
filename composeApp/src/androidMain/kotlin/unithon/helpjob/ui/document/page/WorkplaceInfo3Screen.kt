@@ -15,6 +15,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_workplace_info_3_hourly_wage_label
@@ -287,4 +288,30 @@ fun WorkplaceInfo3Screen(
     }
 }
 
-// Preview functions moved to androidMain for Android-only preview support
+@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF, locale = "ko")
+@Composable
+fun WorkplaceInfo3Preview() {
+    HelpJobTheme {
+        WorkplaceInfo3Screen(
+            modifier = Modifier.fillMaxSize(),
+            step = 2,
+            title = "취업 예정 근무처 정보를 입력해주세요",
+            enabled = false,
+            onNext = {},
+            hourlyWageValue = "",
+            onHourlyWageValueChange = {},
+            workStartYearValue = "2025",
+            onWorkStartYearValueChange = {},
+            workStartMonthValue = "2",
+            onWorkStartMonthValueChange = {},
+            workStartDayValue = "",
+            onWorkStartDayValueChange = {},
+            workEndYearValue = "2025",
+            onWorkEndYearValueChange = {},
+            workEndMonthValue = "2",
+            onWorkEndMonthValueChange = {},
+            workEndDayValue = "",
+            onWorkEndDayValueChange = {},
+        )
+    }
+}
