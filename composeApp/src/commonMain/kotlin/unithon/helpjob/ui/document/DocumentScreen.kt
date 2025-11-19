@@ -40,6 +40,12 @@ import unithon.helpjob.ui.document.page.WorkplaceInfo3Screen
 import unithon.helpjob.ui.document.page.WorkplaceInfo4Screen
 
 /**
+ * 플랫폼별 뒤로가기 처리 (Android: BackHandler, iOS: no-op)
+ */
+@Composable
+expect fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit)
+
+/**
  * 서류 생성 화면 (KMP 공통)
  */
 @Composable
@@ -73,6 +79,13 @@ private fun DocumentScreenImpl(
     LaunchedEffect(Unit) {
         viewModel.snackbarMessage.collect {
             pagerState.animateScrollToPage(9) // 완료 화면으로 이동
+        }
+    }
+
+    // 시스템 뒤로가기 처리 - TopBar 뒤로가기와 동일하게 작동
+    PlatformBackHandler(enabled = pagerState.currentPage > 0) {
+        scope.launch {
+            pagerState.animateScrollToPage(pagerState.currentPage - 1)
         }
     }
 
