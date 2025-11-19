@@ -13,7 +13,7 @@ plugins {
 }
 
 composeCompiler {
-    enableStrongSkippingMode = true
+    // enableStrongSkippingMode = true  // Deprecated: Kotlin 2.0.20부터 기본 활성화
     includeSourceInformation = true
 }
 
