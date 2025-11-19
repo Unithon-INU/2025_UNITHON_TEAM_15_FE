@@ -12,15 +12,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.compose.koinInject
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
 import unithon.helpjob.ui.auth.signup.SignUpSuccessScreen
 import unithon.helpjob.ui.calculator.CalculatorScreen
-import unithon.helpjob.ui.calculator.CalculatorViewModel
 import unithon.helpjob.ui.document.DocumentScreen
-import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.main.HomeScreen
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.main.page.StepDetailScreen
@@ -138,27 +135,12 @@ fun HelpJobNavGraph(
             }
 
             composable(route = BottomNavDestination.CALCULATE.route) {
-                val calculatorViewModel = koinInject<CalculatorViewModel>()
-                CalculatorScreen(
-                    viewModel = calculatorViewModel,
-                    onBackClick = { navController.popBackStack() }
-                )
+                CalculatorScreen()
             }
 
             composable(route = BottomNavDestination.CONTENT.route) {
-                val documentViewModel = koinInject<DocumentViewModel>()
                 DocumentScreen(
-                    viewModel = documentViewModel,
-                    onBackClick = { navController.popBackStack() },
-                    onNavigateToEmailVerification = { /* TODO */ },
-                    onNavigateToPersonalInfo = { /* TODO */ },
-                    onNavigateToWorkplaceInfo1 = { /* TODO */ },
-                    onNavigateToWorkplaceInfo2 = { /* TODO */ },
-                    onNavigateToWorkplaceInfo3 = { /* TODO */ },
-                    onNavigateToWorkplaceInfo4 = { /* TODO */ },
-                    onNavigateToWorkingHours = { /* TODO */ },
-                    onNavigateToConfirmation = { /* TODO */ },
-                    onNavigateToCompletion = { /* TODO */ }
+                    snackbarHostState = snackbarHostState
                 )
             }
 
