@@ -26,16 +26,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.calculator_2025
 import helpjob.composeapp.generated.resources.calculator_calculate_salary
-import helpjob.composeapp.generated.resources.calculator_days_format_plural
-import helpjob.composeapp.generated.resources.calculator_days_format_singular
-import helpjob.composeapp.generated.resources.calculator_hours_format_plural
-import helpjob.composeapp.generated.resources.calculator_hours_format_singular
-import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_plural_plural
-import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_plural_singular
-import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_plural
-import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_singular
-import helpjob.composeapp.generated.resources.calculator_minute_plural
-import helpjob.composeapp.generated.resources.calculator_minute_singular
 import helpjob.composeapp.generated.resources.calculator_select_time
 import helpjob.composeapp.generated.resources.calculator_title_per_hour
 import helpjob.composeapp.generated.resources.calculator_wage_example
@@ -244,44 +234,5 @@ private fun MinimumWageCard(
     }
 }
 
-@Composable
-private fun formatWorkTime(time: Float): String {
-    val hours = time.toInt()
-    val minutes = ((time - hours) * 60).toInt()
-
-    return if (minutes == 0) {
-        val hourUnit = if (hours == 1) {
-            stringResource(Res.string.calculator_hours_format_singular)
-        } else {
-            stringResource(Res.string.calculator_hours_format_plural)
-        }
-        "$hours $hourUnit"
-    } else {
-        val hourUnit = when {
-            hours == 1 && minutes == 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_singular_singular)
-            hours == 1 && minutes > 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_singular_plural)
-            hours > 1 && minutes == 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_plural_singular)
-            else ->
-                stringResource(Res.string.calculator_hours_minutes_format_plural_plural)
-        }
-        val minuteUnit = if (minutes == 1) {
-            stringResource(Res.string.calculator_minute_singular)
-        } else {
-            stringResource(Res.string.calculator_minute_plural)
-        }
-        "$hours $hourUnit $minutes $minuteUnit"
-    }
-}
-
-@Composable
-private fun formatWorkDays(days: Int): String {
-    val dayUnit = if (days == 1) {
-        stringResource(Res.string.calculator_days_format_singular)
-    } else {
-        stringResource(Res.string.calculator_days_format_plural)
-    }
-    return "$days $dayUnit"
-}
+// formatWorkTime, formatWorkDays는 플랫폼별 구현으로 이동됨
+// CalculatorStringFormatter.kt (expect/actual 패턴 사용)

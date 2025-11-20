@@ -131,16 +131,16 @@
     <string name="onboarding_business_setup_event">Event Staff / Promotional Support</string>
 
     <!-- Calculator Time/Day Format Strings -->
-    <string name="calculator_hours_format_singular">hour</string>
-    <string name="calculator_hours_format_plural">hours</string>
-    <string name="calculator_hours_minutes_format_singular_singular">hour</string>
-    <string name="calculator_hours_minutes_format_singular_plural">hour</string>
-    <string name="calculator_hours_minutes_format_plural_singular">hours</string>
-    <string name="calculator_hours_minutes_format_plural_plural">hours</string>
+    <string name="calculator_hours_format_singular">%d hour</string>
+    <string name="calculator_hours_format_plural">%d hours</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%1$d hour %2$d minute</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%1$d hour %2$d minutes</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%1$d hours %2$d minute</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%1$d hours %2$d minutes</string>
     <string name="calculator_minute_singular">minute</string>
     <string name="calculator_minute_plural">minutes</string>
-    <string name="calculator_days_format_singular">day</string>
-    <string name="calculator_days_format_plural">days</string>
+    <string name="calculator_days_format_singular">%d day</string>
+    <string name="calculator_days_format_plural">%d days</string>
 
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
