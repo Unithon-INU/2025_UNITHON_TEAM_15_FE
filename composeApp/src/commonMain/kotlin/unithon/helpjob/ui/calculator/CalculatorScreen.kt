@@ -34,6 +34,8 @@ import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_pl
 import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_plural_singular
 import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_plural
 import helpjob.composeapp.generated.resources.calculator_hours_minutes_format_singular_singular
+import helpjob.composeapp.generated.resources.calculator_minute_plural
+import helpjob.composeapp.generated.resources.calculator_minute_singular
 import helpjob.composeapp.generated.resources.calculator_select_time
 import helpjob.composeapp.generated.resources.calculator_title_per_hour
 import helpjob.composeapp.generated.resources.calculator_wage_example
@@ -247,33 +249,39 @@ private fun formatWorkTime(time: Float): String {
     val hours = time.toInt()
     val minutes = ((time - hours) * 60).toInt()
 
-    // Compose Multiplatform Resources 공식 방식: stringResource(resource, ...args)
     return if (minutes == 0) {
-        if (hours == 1) {
-            stringResource(Res.string.calculator_hours_format_singular, hours)
+        val hourUnit = if (hours == 1) {
+            stringResource(Res.string.calculator_hours_format_singular)
         } else {
-            stringResource(Res.string.calculator_hours_format_plural, hours)
+            stringResource(Res.string.calculator_hours_format_plural)
         }
+        "$hours $hourUnit"
     } else {
-        when {
+        val hourUnit = when {
             hours == 1 && minutes == 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_singular_singular, hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_singular_singular)
             hours == 1 && minutes > 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_singular_plural, hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_singular_plural)
             hours > 1 && minutes == 1 ->
-                stringResource(Res.string.calculator_hours_minutes_format_plural_singular, hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_plural_singular)
             else ->
-                stringResource(Res.string.calculator_hours_minutes_format_plural_plural, hours, minutes)
+                stringResource(Res.string.calculator_hours_minutes_format_plural_plural)
         }
+        val minuteUnit = if (minutes == 1) {
+            stringResource(Res.string.calculator_minute_singular)
+        } else {
+            stringResource(Res.string.calculator_minute_plural)
+        }
+        "$hours $hourUnit $minutes $minuteUnit"
     }
 }
 
 @Composable
 private fun formatWorkDays(days: Int): String {
-    // Compose Multiplatform Resources 공식 방식
-    return if (days == 1) {
-        stringResource(Res.string.calculator_days_format_singular, days)
+    val dayUnit = if (days == 1) {
+        stringResource(Res.string.calculator_days_format_singular)
     } else {
-        stringResource(Res.string.calculator_days_format_plural, days)
+        stringResource(Res.string.calculator_days_format_plural)
     }
+    return "$days $dayUnit"
 }

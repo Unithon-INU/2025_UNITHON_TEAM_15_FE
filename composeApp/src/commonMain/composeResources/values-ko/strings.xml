@@ -130,14 +130,16 @@
     <string name="error_update_checklist">ⓘ 체크리스트 저장에 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- English plural forms (not used in Korean but needed for compilation) -->
-    <string name="calculator_hours_format_singular">%d시간</string>
-    <string name="calculator_hours_format_plural">%d시간</string>
-    <string name="calculator_hours_minutes_format_singular_singular">%1$d시간 %2$d분</string>
-    <string name="calculator_hours_minutes_format_singular_plural">%1$d시간 %2$d분</string>
-    <string name="calculator_hours_minutes_format_plural_singular">%1$d시간 %2$d분</string>
-    <string name="calculator_hours_minutes_format_plural_plural">%1$d시간 %2$d분</string>
-    <string name="calculator_days_format_singular">%d일</string>
-    <string name="calculator_days_format_plural">%d일</string>
+    <string name="calculator_hours_format_singular">시간</string>
+    <string name="calculator_hours_format_plural">시간</string>
+    <string name="calculator_hours_minutes_format_singular_singular">시간</string>
+    <string name="calculator_hours_minutes_format_singular_plural">시간</string>
+    <string name="calculator_hours_minutes_format_plural_singular">시간</string>
+    <string name="calculator_hours_minutes_format_plural_plural">시간</string>
+    <string name="calculator_minute_singular">분</string>
+    <string name="calculator_minute_plural">분</string>
+    <string name="calculator_days_format_singular">일</string>
+    <string name="calculator_days_format_plural">일</string>
 
     <!-- Calculator Screen -->
     <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
