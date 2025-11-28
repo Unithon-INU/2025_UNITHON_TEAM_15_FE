@@ -175,6 +175,8 @@ android {
             applicationIdSuffix = ".debug"
             // 빌드 속도 향상
             isCrunchPngs = false
+            // 앱 이름 구분
+            resValue("string", "app_name", "CHECKMATE (Dev)")
         }
         release {
             signingConfig = signingConfigs.getByName("release")
@@ -189,6 +191,8 @@ android {
             ndk {
                 debugSymbolLevel = "FULL"
             }
+            // 앱 이름
+            resValue("string", "app_name", "CHECKMATE")
         }
     }
     compileOptions {
