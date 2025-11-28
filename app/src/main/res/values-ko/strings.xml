@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CHECKMATE</string>
+    <!-- app_name은 build.gradle.kts에서 빌드별로 설정 -->
 
     <!-- SignIn Screen -->
     <string name="sign_in_welcome_main">환영해요!</string>
