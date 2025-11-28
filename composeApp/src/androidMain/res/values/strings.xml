@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        ⚠️ AndroidManifest 및 Android 시스템에서만 사용하는 리소스
+        UI 문자열은 Compose Multiplatform Resources (composeResources)를 사용합니다.
+    -->
+    <string name="app_name">CHECKMATE</string>
+</resources>

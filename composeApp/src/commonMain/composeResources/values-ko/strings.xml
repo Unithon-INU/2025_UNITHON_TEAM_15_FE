@@ -1,0 +1,340 @@
+<resources>
+    <!-- app_name은 build.gradle.kts에서 빌드별로 설정 -->
+
+    <!-- SignIn Screen -->
+    <string name="sign_in_welcome_main">환영해요!</string>
+    <string name="sign_in_welcome_sub">계정을 입력해주세요</string>
+    <string name="sign_in_email_label">이메일</string>
+    <string name="sign_in_email_hint">이메일을 입력해주세요</string>
+    <string name="sign_in_password_label">비밀번호</string>
+    <string name="sign_in_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_in_button">로그인</string>
+    <string name="sign_in_or_divider">또는</string>
+    <string name="sign_in_no_account">아직 회원이 아니신가요?</string>
+    <string name="sign_in_go_to_sign_up">회원가입</string>
+
+    <!-- Password Visibility -->
+    <string name="show_password">비밀번호 보기</string>
+    <string name="hide_password">비밀번호 숨기기</string>
+
+    <!-- SignIn Error Messages -->
+    <string name="sign_in_email_not_found">ⓘ 해당 회원이 존재하지 않습니다.</string>
+    <string name="sign_in_password_wrong">ⓘ 비밀번호가 일치하지 않습니다.</string>
+    <string name="sign_in_failed">ⓘ 로그인에 실패했습니다. 다시 시도해주세요.</string>
+
+    <!-- SignUp Screen -->
+    <string name="sign_up_title">회원가입</string>
+    <string name="sign_up_subtitle">간단한 정보를 입력해주세요!</string>
+    <string name="sign_up_email_label">이메일</string>
+    <string name="sign_up_email_hint">이메일을 입력해주세요</string>
+    <string name="sign_up_password_label">비밀번호</string>
+    <string name="sign_up_password_hint">비밀번호를 입력해주세요</string>
+    <string name="sign_up_confirm_password_label">비밀번호 확인</string>
+    <string name="sign_up_confirm_password_hint">비밀번호를 다시 입력해주세요</string>
+    <string name="sign_up_next_button">다음</string>
+    <string name="sign_up_failed">회원가입에 실패했습니다</string>
+    <string name="sign_up_email_exists">ⓘ 이미 사용 중인 이메일입니다</string>
+    <string name="signup_success_title">가입 완료!</string>
+    <string name="signup_success_subtitle">함께 준비할 준비가 되셨나요?</string>
+    <string name="signup_success_go_to_login">로그인하러 가기</string>
+
+    <!-- 🆕 이메일 인증 -->
+    <string name="send_button">send</string>
+    <string name="verify_button">verify</string>
+    <string name="resend_button">Resend</string>
+    <string name="verification_code_hint">인증번호 입력</string>
+    <string name="verification_code_instruction">이메일로 전송된 인증번호를 입력해주세요</string>
+    <string name="verification_code_completed">✓ 이메일 인증이 완료되었습니다</string>
+    <string name="verification_code_expired">ⓘ 인증번호가 만료되었습니다</string>
+    <string name="verification_code_invalid">ⓘ 인증번호가 올바르지 않습니다</string>
+    <string name="email_send_failed">인증 이메일 전송에 실패했습니다</string>
+    <string name="verification_failed">인증에 실패했습니다</string>
+    <string name="email_verification_required">이메일 인증이 필요합니다</string>
+    <string name="error_empty_verification_code">인증번호를 입력해주세요</string>
+
+    <!-- Nickname Setup Screen -->
+    <string name="nickname_setup_title">닉네임을\n입력해주세요</string>
+    <string name="nickname_placeholder">닉네임 입력</string>
+    <string name="nickname_character_count">%1$d / 10</string>
+    <string name="nickname_duplicate_error">ⓘ 이미 사용 중인 닉네임이에요.</string>
+    <string name="nickname_complete_button">완료</string>
+    <string name="nickname_empty_error">닉네임을 입력해주세요</string>
+    <string name="nickname_too_short_error">ⓘ 닉네임은 2자 이상이어야 합니다</string>
+    <string name="nickname_too_long_error">ⓘ 닉네임은 10자 이하여야 합니다</string>
+    <string name="nickname_setup_failed">닉네임 설정에 실패했습니다</string>
+
+    <!-- Common Error Messages -->
+    <string name="error_empty_email">ⓘ 이메일을 입력해주세요</string>
+    <string name="error_invalid_email">ⓘ 올바른 이메일 형식이 아닙니다</string>
+    <string name="error_empty_password">ⓘ 비밀번호를 입력해주세요</string>
+    <string name="error_short_password">ⓘ 비밀번호는 6자 이상이어야 합니다</string>
+    <string name="error_password_mismatch">ⓘ 비밀번호가 일치하지 않습니다</string>
+    <string name="error_authentication_required">ⓘ 인증이 필요합니다. 다시 로그인해주세요.</string>
+    <string name="error_lower_than_minimun_wage">ⓘ 최저 시급보다 낮은 금액이에요 </string>
+    <string name="error_unknown">ⓘ 알 수 없는 오류가 발생했습니다.</string>
+    <string name="network_error">네트워크 오류가 발생했습니다. 연결을 확인하고 다시 시도해주세요.</string>
+
+    <!-- Onboarding Screen -->
+    <string name="onboarding_next_button">다음</string>
+    <string name="onboarding_done_button">완료</string>
+    <string name="onboarding_error_message">ⓘ 온보딩 설정에 실패했습니다</string>
+
+    <!-- Onboarding Screen(Language) -->
+    <string name="onboarding_language_setup_title">CHECKMATE에서 사용할\n언어를 선택해 주세요</string>
+    <string name="onboarding_language_setup_korean">한국어</string>
+    <string name="onboarding_language_setup_english">English</string>
+
+    <!-- Onboarding Screen(Agreement) -->
+    <string name="onboarding_agreement_setup_title">CHECKMATE 이용을 위해\n필수 약관에 동의해 주세요</string>
+    <string name="onboarding_agreement_setup_full_agreement">전체동의</string>
+    <string name="onboarding_agreement_setup_service_agreement">(필수) 서비스 이용약관 동의</string>
+    <string name="onboarding_agreement_setup_info_agreement">(필수) 개인정보 수집·이용 동의</string>
+    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 14세 이상입니다.</string>
+    <string name="onboarding_agreement_setup_more">더보기</string>
+
+    <!-- Onboarding Screen(visa) -->
+    <string name="onboarding_visa_setup_title">사용자님의 비자 종류를\n선택해 주세요</string>
+    <string name="onboarding_visa_setup_d2_title">D-2</string>
+    <string name="onboarding_visa_setup_d2_description">유학 비자</string>
+    <string name="onboarding_visa_setup_d4_title">D-4</string>
+    <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
+
+    <!-- Onboarding Screen(korean level) -->
+    <string name="onboarding_korean_level_setup_title">사용자님의 한국어 능력을\n선택해 주세요</string>
+    <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
+    <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
+    <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
+
+    <!-- Onboarding Screen(business) -->
+    <string name="onboarding_business_setup_title">사용자님이 희망하는\n업종은 무엇인가요?</string>
+    <string name="onboarding_business_setup_restaurant">음식점/카페</string>
+    <string name="onboarding_business_setup_mart">편의점/마트</string>
+    <string name="onboarding_business_setup_logistics">물류/창고 작업 보조</string>
+    <string name="onboarding_business_setup_office">사무보조/문서정리</string>
+    <string name="onboarding_business_setup_translation">통역/번역</string>
+    <string name="onboarding_business_setup_learn">과외/학습 보조</string>
+    <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
+
+    <!-- Home Screen -->
+    <string name="welcome_message">반가워요 %1$s님\n함께 목표를 달성해요!</string>
+    <string name="category_documents">제출 서류</string>
+    <string name="category_precautions">유의사항</string>
+    <string name="step_warning_dialog_title">잊으신 서류는 없나요?</string>
+    <string name="step_warning_dialog_message">전단계를 완료하지 않아도 진행할 수 있어요.\n이전 단계에서 잊으신 서류는 없는지 확인해주세요.</string>
+    <string name="step_warning_dialog_cancel">취소</string>
+    <string name="step_warning_dialog_continue">계속 진행</string>
+    <string name="step_detail_screen_subtitle">이런 것들을 알고가면 좋아요</string>
+
+    <!-- HomeScreen Error Messages -->
+    <string name="error_load_home_data">ⓘ 홈 정보를 불러올 수 없습니다. 다시 시도해주세요.</string>
+    <string name="error_update_checklist">ⓘ 체크리스트 저장에 실패했습니다. 다시 시도해주세요.</string>
+
+    <!-- English plural forms (not used in Korean but needed for compilation) -->
+    <string name="calculator_hours_format_singular">%d시간</string>
+    <string name="calculator_hours_format_plural">%d시간</string>
+    <string name="calculator_hours_minutes_format_singular_singular">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_singular_plural">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_plural_singular">%1$d시간 %2$d분</string>
+    <string name="calculator_hours_minutes_format_plural_plural">%1$d시간 %2$d분</string>
+    <string name="calculator_minute_singular">분</string>
+    <string name="calculator_minute_plural">분</string>
+    <string name="calculator_days_format_singular">%d일</string>
+    <string name="calculator_days_format_plural">%d일</string>
+
+    <!-- Calculator Screen -->
+    <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
+    <string name="calculator_wage_label">시급 입력</string>
+    <string name="calculator_work_time_label">일일 근무 시간</string>
+    <string name="calculator_weekly_work_time_label">일주 근무 시간</string>
+    <string name="calculator_wage_example">예) 10,030</string>
+    <string name="calculator_select_time">시간선택</string>
+    <string name="calculator_calculate_salary">계산하기</string>
+    <string name="calculator_2025">2025 기준</string>
+    <string name="calculator_won">원</string>
+
+    <!-- Calculator Result Dialog -->
+    <string name="calculator_result_work_hours_label">근로시간</string>
+    <string name="calculator_result_weekly_allowance_label">주휴수당</string>
+    <string name="calculator_result_expected_salary_label">예상 월급</string>
+    <string name="calculator_result_hours_unit">시간</string>
+    <string name="calculator_result_won_unit">원</string>
+    <string name="calculator_result_included">포함</string>
+    <string name="calculator_result_not_included">미포함</string>
+    <string name="calculator_result_weekly_allowance_condition_met">주휴수당 지급 조건인 15시간 근무에 해당</string>
+    <string name="calculator_result_weekly_allowance_condition_not_met">주휴수당 지급 조건인 15시간 근무에 미달</string>
+    <string name="calculator_result_disclaimer">복리후생비 및 시간외 근로수당 등은 \n반영되지 않은 금액이며 규정에 따라 \n주휴수당도 다르기 때문에 실제 \n주급/월급과는 차이가 있습니다.</string>
+
+
+    <!-- Document Screen(Onboarding) -->
+    <string name="document_onboarding_next">다음</string>
+    <string name="document_onboarding_title">체크메이트가 \n쉽고 빠른 서류 작성을 \n도와드릴게요!</string>
+    <string name="document_onboarding_description_1">지금은 시간제 취업 확인서 작성부터 이용하실 수 있어요.\n앞으로 더 다양한 기능이 추가될 예정이에요.</string>
+    <string name="document_onboarding_description_2">작성된 서류는 이메일 주소로 보내드려요.\n메일창을 꼭 확인해주세요!</string>
+
+    <!-- Document Screen(Title) -->
+    <string name="document_step_1_title">기본 정보를 입력해주세요</string>
+    <string name="document_step_2_title">취업 예정 근무처 정보를 \n입력해주세요</string>
+
+    <!-- DocumentScreen(BasicInfo1) -->
+    <string name="document_basic_info_1_name_label">이름</string>
+    <string name="document_basic_info_1_name_placeholder">예) 유니톤</string>
+    <string name="document_basic_info_1_foreigner_register_number_label">외국인 등록번호</string>
+    <string name="document_basic_info_1_foreigner_register_number_placeholder">예) 123456-1234567</string>
+    <string name="document_basic_info_1_major_label">학과 및 전공</string>
+    <string name="document_basic_info_1_major_placeholder">예) 무역학부</string>
+
+    <!-- DocumentScreen(BasicInfo2) -->
+    <string name="document_basic_info_2_semester_label">이수학기</string>
+    <string name="semester_1_1">1학년 1학기</string>
+    <string name="semester_1_2">1학년 2학기</string>
+    <string name="semester_2_1">2학년 1학기</string>
+    <string name="semester_2_2">2학년 2학기</string>
+    <string name="semester_3_1">3학년 1학기</string>
+    <string name="semester_3_2">3학년 2학기</string>
+    <string name="semester_4_1">4학년 1학기</string>
+    <string name="semester_4_2">4학년 2학기</string>
+    <string name="document_basic_info_2_semester_placeholder">선택</string>
+    <string name="document_basic_info_2_phone_number_label">전화번호</string>
+    <string name="document_basic_info_2_phone_number_placeholder">예) 010-1234-5678</string>
+    <string name="document_basic_info_2_email_address_label">이메일 주소</string>
+    <string name="document_basic_info_2_email_address_placeholder">예) unithon@gmail.com</string>
+
+    <!-- DocumentScreen(WorkplaceInfo1) -->
+    <string name="document_workplace_info_1_company_name_label">업체명</string>
+    <string name="document_workplace_info_1_company_name_placeholder">예) 오토그룹</string>
+    <string name="document_workplace_info_1_business_number_label">사업자 등록번호</string>
+    <string name="document_workplace_info_1_business_number_placeholder">예) 123-45-67890</string>
+    <string name="document_workplace_info_1_category_of_business_label">업종</string>
+    <string name="document_workplace_info_1_category_of_business_placeholder">선택</string>
+
+    <!-- DocumentScreen(WorkplaceInfo2) -->
+    <string name="document_workplace_info_2_company_address_label">업체 주소</string>
+    <string name="document_workplace_info_2_company_address_placeholder">주소</string>
+    <string name="document_workplace_info_2_employer_name_label">고용주 성명</string>
+    <string name="document_workplace_info_2_employer_name_placeholder">예) 김길동</string>
+    <string name="document_workplace_info_2_employer_phone_number_label">고용주 전화번호</string>
+    <string name="document_workplace_info_2_employer_phone_number_placeholder">예) 010-1234-5678</string>
+
+    <!-- DocumentScreen(WorkplaceInfo3) -->
+    <string name="document_workplace_info_3_hourly_wage_label">시급 입력</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,030</string>
+    <string name="document_workplace_info_3_work_start_date_label">근무 시작일</string>
+    <string name="document_workplace_info_3_work_start_year_placeholder">예) 2024</string>
+    <string name="document_workplace_info_3_work_start_year_trailing_text">년</string>
+    <string name="document_workplace_info_3_work_start_month_placeholder">예) 01</string>
+    <string name="document_workplace_info_3_work_start_month_trailing_text">월</string>
+    <string name="document_workplace_info_3_work_start_day_placeholder">예) 01</string>
+    <string name="document_workplace_info_3_work_start_day_trailing_text">일</string>
+    <string name="document_workplace_info_3_work_end_day_label">근무 종료일</string>
+    <string name="document_workplace_info_3_work_end_year_placeholder">예) 2024</string>
+    <string name="document_workplace_info_3_work_end_year_trailing_text">년</string>
+    <string name="document_workplace_info_3_work_end_month_placeholder">예) 01</string>
+    <string name="document_workplace_info_3_work_end_day_placeholder">예) 01</string>
+    <string name="document_workplace_info_3_work_end_month_trailing_text">월</string>
+    <string name="document_workplace_info_3_work_end_day_trailing_text">일</string>
+
+    <!-- DocumentScreen(WorkplaceInfo4) -->
+    <string name="document_workplace_info_4_work_days_label">주간 근무 요일</string>
+    <string name="document_workplace_info_4_everyday">매일</string>
+    <string name="document_workplace_info_4_work_time_label">시작/종료 시간</string>
+    <string name="document_workplace_info_4_same_time">시간 모두 같음</string>
+    <string name="document_workplace_info_4_start_time_placeholder">예) 01</string>
+    <string name="document_workplace_info_4_end_time_placeholder">예) 05</string>
+    <string name="document_workplace_info_4_time_unit">시/분</string>
+    <string name="workday_monday">월</string>
+    <string name="workday_tuesday">화</string>
+    <string name="workday_wednesday">수</string>
+    <string name="workday_thursday">목</string>
+    <string name="workday_friday">금</string>
+    <string name="workday_saturday">토</string>
+    <string name="workday_sunday">일</string>
+
+    <!-- DocumentScreen(EmailCheck) -->
+    <string name="document_email_check_title">마지막이에요!\n입력한 이메일 주소가 맞나요?</string>
+    <string name="document_email_check_label">이메일 주소</string>
+
+    <!-- DocumentScreen(Finish) -->
+    <string name="document_finish_title">서류 전송 완료!</string>
+    <string name="document_finish_description">메일함을 확인해주세요</string>
+    <string name="document_finish_button">완료</string>
+
+    <!-- Document Error Messages -->
+    <string name="error_fill_all_fields">ⓘ 입력 정보를 다시 확인해주세요</string>
+    <string name="error_invalid_foreigner_number">ⓘ 외국인등록번호는 13자리여야 합니다</string>
+    <string name="error_invalid_work_start_date">ⓘ 근무 시작일이 올바르지 않습니다</string>
+    <string name="error_invalid_work_end_date">ⓘ 근무 종료일이 올바르지 않습니다</string>
+    <string name="document_submit_success">ⓘ 서류가 성공적으로 제출되었습니다</string>
+    <string name="error_document_submit_failed">서류 제출에 실패했습니다</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_greeting">안녕하세요 \n%1$s님</string>
+    <string name="profile_nickname_default">유니톤</string>
+    <string name="profile_email_default">temp@naver.com</string>
+    <string name="profile_email_signup_type">이메일 가입</string>
+    <string name="profile_visa_type">비자 종류</string>
+    <string name="profile_visa_default">D-?</string>
+    <string name="profile_korean_level">한국어 능력</string>
+    <string name="profile_korean_default">TOPIK ?급</string>
+    <string name="profile_preferred_job">희망 업종</string>
+    <string name="profile_job_default">임시</string>
+
+    <!-- Profile Document Management - 분리된 문자열들 -->
+    <string name="profile_documents_title">내 서류 관리</string>
+
+    <!-- 누락 서류가 있을 때 사용할 분리된 문자열들 -->
+    <string name="profile_documents_current">현재</string>
+    <string name="profile_documents_count_format">%1$d가지 서류</string>
+    <string name="profile_documents_not_checked">를 체크하지 않았어요</string>
+
+    <!-- 모든 서류 완료 시 사용할 분리된 문자열들 -->
+    <string name="profile_documents_all">모든 서류</string>
+    <string name="profile_documents_completed">를 준비했어요!</string>
+
+    <!-- 기타 -->
+    <string name="profile_documents_no_unchecked">누락된 서류가 없어요.</string>
+
+    <!-- Profile Error Messages 섹션 추가 -->
+    <string name="error_profile_load_failed">프로필 정보를 불러오는데 실패했습니다</string>
+
+    <!-- Setting Screen -->
+    <string name="setting_top_bar_title">설정</string>
+    <string name="setting_section_config">설정</string>
+    <string name="setting_section_info">정보</string>
+    <string name="setting_section_account">계정</string>
+    <string name="setting_app_language">앱 언어 설정</string>
+    <string name="setting_reset_progress">진행 상황 초기화</string>
+    <string name="setting_terms_of_service">서비스 이용약관</string>
+    <string name="setting_privacy_policy">개인정보 처리 방침</string>
+    <string name="setting_open_source_license">오픈소스 라이선스</string>
+    <string name="setting_logout">로그아웃</string>
+    <string name="setting_withdrawal">탈퇴</string>
+    <string name="setting_app_version">앱 버전</string>
+
+    <!-- Setting Error Messages -->
+    <string name="reset_progress_error">진행 상황을 초기화하지 못했습니다. 다시 시도해 주세요.</string>
+
+    <!-- Language Setting Screen -->
+    <string name="language_setting_current_language">현재 언어</string>
+    <string name="language_change_failed">ⓘ 언어 변경에 실패했습니다. 다시 시도해주세요.</string>
+
+    <!-- Reset Progress Dialog -->
+    <string name="reset_progress_dialog_title">정말 초기화 하시겠어요?</string>
+    <string name="reset_progress_dialog_message">지금까지 작성한 정보들이 모두 초기화 되며 \n삭제된 정보들은 복구할 수 없어요.</string>
+    <string name="reset_progress_dialog_cancel">취소</string>
+    <string name="reset_progress_dialog_confirm">초기화</string>
+
+    <!-- Bottom Bar -->
+    <string name="bottom_nav_home">홈</string>
+    <string name="bottom_nav_calculate">계산기</string>
+    <string name="bottom_nav_content">서류작성</string>
+    <string name="bottom_nav_profile">프로필</string>
+
+    <!-- Top App Bar -->
+    <string name="back_button">뒤로</string>
+    <string name="sign_up_top_bar_title">회원가입</string>
+    <string name="nickname_setup_top_bar_title">회원가입</string>
+    <string name="onboarding_top_bar_title">이용정보</string>
+    <string name="document_top_bar_title">서류작성</string>
+    <string name="settings_button">설정</string>
+
+</resources>
