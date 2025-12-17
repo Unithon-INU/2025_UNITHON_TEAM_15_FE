@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +57,7 @@ fun AuthTextField(
     placeholderText: String = "",
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null,
     showPasswordToggle: Boolean = false,
@@ -138,6 +140,10 @@ fun AuthTextField(
                 keyboardType = keyboardType,
                 imeAction = imeAction
             ),
+            keyboardActions = KeyboardActions(
+                onDone = { onImeAction?.invoke() }
+                // onNext는 기본 동작 유지 (다음 필드로 포커스 이동)
+            ),
             isError = isError
         )
 
@@ -190,7 +196,8 @@ fun AuthEmailTextField(
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
-    imeAction: ImeAction = ImeAction.Next
+    imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null
 ) = AuthTextField(
     value = value,
     onValueChange = onValueChange,
@@ -199,6 +206,7 @@ fun AuthEmailTextField(
     placeholderText = placeholderText,
     keyboardType = KeyboardType.Email,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )
@@ -215,7 +223,8 @@ fun AuthPasswordTextField(
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
-    imeAction: ImeAction = ImeAction.Next
+    imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null
 ) = AuthTextField(
     value = value,
     onValueChange = onValueChange,
@@ -224,6 +233,7 @@ fun AuthPasswordTextField(
     placeholderText = placeholderText,
     keyboardType = KeyboardType.Password,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage,
     showPasswordToggle = true
@@ -240,7 +250,8 @@ fun AuthVerificationCodeTextField(
     placeholderText: String = "",
     isError: Boolean = false,
     errorMessage: String? = null,
-    imeAction: ImeAction = ImeAction.Done
+    imeAction: ImeAction = ImeAction.Done,
+    onImeAction: (() -> Unit)? = null
 ) = AuthTextField(
     value = value,
     onValueChange = onValueChange,
@@ -248,6 +259,7 @@ fun AuthVerificationCodeTextField(
     placeholderText = placeholderText,
     keyboardType = KeyboardType.Text,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )
@@ -264,7 +276,8 @@ fun AuthNicknameTextField(
     maxLength: Int = 10, // 닉네임 최대 길이 (기본값 10자)
     isError: Boolean = false,
     errorMessage: String? = null,
-    imeAction: ImeAction = ImeAction.Done
+    imeAction: ImeAction = ImeAction.Done,
+    onImeAction: (() -> Unit)? = null
 ) = AuthTextField(
     value = value,
     onValueChange = onValueChange,
@@ -272,6 +285,7 @@ fun AuthNicknameTextField(
     placeholderText = placeholderText,
     keyboardType = KeyboardType.Text,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage,
     maxLength = maxLength,

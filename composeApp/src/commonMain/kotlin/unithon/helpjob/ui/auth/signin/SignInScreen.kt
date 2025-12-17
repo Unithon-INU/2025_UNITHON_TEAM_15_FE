@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
@@ -137,6 +138,8 @@ internal fun SignInContent(
             placeholderText = stringResource(Res.string.sign_in_password_hint),
             isError = uiState.passwordError,
             errorMessage = uiState.passwordErrorMessage?.let { stringResource(it) },
+            imeAction = ImeAction.Done,
+            onImeAction = if (uiState.isInputValid) onSignInClick else null,
             modifier = Modifier.fillMaxWidth()
         )
 

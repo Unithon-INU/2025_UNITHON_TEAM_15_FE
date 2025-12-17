@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
@@ -105,6 +106,8 @@ internal fun NicknameSetupScreenContent(
                 placeholderText = stringResource(Res.string.nickname_placeholder),
                 isError = uiState.nicknameError,
                 errorMessage = uiState.nicknameErrorMessage?.let { stringResource(it) },
+                imeAction = ImeAction.Done,
+                onImeAction = if (uiState.isInputValid) onCompleteClick else null,
                 modifier = Modifier.fillMaxWidth()
             )
 

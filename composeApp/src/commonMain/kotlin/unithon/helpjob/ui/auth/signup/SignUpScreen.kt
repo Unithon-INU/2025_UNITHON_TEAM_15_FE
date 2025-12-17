@@ -26,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -114,6 +115,16 @@ private fun SignUpScreenContent(
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // 키보드 컨트롤러
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // 인증 성공 시 키보드 숨김
+    LaunchedEffect(uiState.isCodeVerified) {
+        if (uiState.isCodeVerified) {
+            keyboardController?.hide()
+        }
+    }
+
     // 레이블 텍스트 높이를 동적으로 계산 + 레이블과 텍스트필드 사이 간격
     val labelHeight = with(LocalDensity.current) {
         MaterialTheme.typography.titleSmall.lineHeight.toDp()
@@ -158,6 +169,8 @@ private fun SignUpScreenContent(
                     placeholderText = stringResource(Res.string.sign_up_email_hint),
                     isError = uiState.emailError,
                     errorMessage = uiState.emailErrorMessage?.let { stringResource(it) },
+                    imeAction = ImeAction.Done,
+                    onImeAction = if (uiState.isEmailValid && !uiState.isSendingEmail && !uiState.isEmailSent) onSendEmailVerification else null,
                     modifier = Modifier.weight(1f),
                 )
 
@@ -212,6 +225,7 @@ private fun SignUpScreenContent(
                             placeholderText = stringResource(Res.string.verification_code_hint),
                             isError = uiState.verificationCodeError,
                             errorMessage = uiState.verificationCodeErrorMessage?.let { stringResource(it) },
+                            onImeAction = if (uiState.verificationCode.isNotBlank() && !uiState.isVerifyingCode && !uiState.isCodeVerified) onVerifyEmailCode else null,
                             modifier = Modifier.fillMaxWidth(),
                         )
 
@@ -304,7 +318,8 @@ private fun SignUpScreenContent(
                 placeholderText = stringResource(Res.string.sign_up_confirm_password_hint),
                 isError = uiState.confirmPasswordError,
                 errorMessage = uiState.confirmPasswordErrorMessage?.let { stringResource(it) },
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
+                onImeAction = if (uiState.isInputValid) onProceedToNickname else null
             )
 
             Spacer(modifier = Modifier.weight(1f))
