@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +43,7 @@ fun DocumentTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null
 ) {
@@ -78,6 +80,10 @@ fun DocumentTextField(
                 keyboardType = keyboardType,
                 imeAction = imeAction
             ),
+            keyboardActions = KeyboardActions(
+                onDone = { onImeAction?.invoke() }
+                // onNext는 기본 동작 유지 (다음 필드로 포커스 이동)
+            ),
             isError = isError
         )
 
@@ -108,6 +114,7 @@ fun DocumentTextTextField(
     placeholderText: String = "",
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null
 ) = DocumentTextField(
@@ -117,6 +124,7 @@ fun DocumentTextTextField(
     placeholderText = placeholderText,
     modifier = modifier,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )
@@ -132,6 +140,7 @@ fun DocumentEmailTextField(
     placeholderText: String = "",
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null
 ) = DocumentTextField(
@@ -142,6 +151,7 @@ fun DocumentEmailTextField(
     keyboardType = KeyboardType.Email,
     modifier = modifier,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )
@@ -157,6 +167,7 @@ fun DocumentPhoneNumberTextField(
     placeholderText: String = "",
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null
 ) = DocumentTextField(
@@ -168,6 +179,7 @@ fun DocumentPhoneNumberTextField(
     keyboardType = KeyboardType.Number,
     modifier = modifier,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )
@@ -209,6 +221,7 @@ fun DocumentBusinessNumberTextField(
     placeholderText: String = "",
     modifier: Modifier = Modifier,
     imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null,
     isError: Boolean = false,
     errorMessage: String? = null
 ) = DocumentTextField(
@@ -220,6 +233,7 @@ fun DocumentBusinessNumberTextField(
     keyboardType = KeyboardType.Number,
     modifier = modifier,
     imeAction = imeAction,
+    onImeAction = onImeAction,
     isError = isError,
     errorMessage = errorMessage
 )

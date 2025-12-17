@@ -78,7 +78,8 @@ fun BasicInfoStep2Screen(
                 onValueChange = onEmailAddressValueChange,
                 labelText = stringResource(Res.string.document_basic_info_2_email_address_label),
                 placeholderText = stringResource(Res.string.document_basic_info_2_email_address_placeholder),
-                imeAction = ImeAction.Next,
+                imeAction = ImeAction.Done,
+                onImeAction = if (enabled) onNext else null,
                 isError = emailError,  // 추가
                 errorMessage = emailErrorMessage?.let { stringResource(it) }  // 수정: StringResource 사용
             )

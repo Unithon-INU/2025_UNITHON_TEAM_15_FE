@@ -63,7 +63,8 @@ fun WorkplaceInfo2Screen(
                 onValueChange = onEmployerPhoneNumberValueChange,
                 labelText = stringResource(Res.string.document_workplace_info_2_employer_phone_number_label),
                 placeholderText = stringResource(Res.string.document_workplace_info_2_employer_phone_number_placeholder),
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done,
+                onImeAction = if (enabled) onNext else null
             )
         }
     }

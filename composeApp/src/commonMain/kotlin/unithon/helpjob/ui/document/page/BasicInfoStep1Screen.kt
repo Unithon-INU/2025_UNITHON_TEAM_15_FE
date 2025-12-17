@@ -64,7 +64,8 @@ fun BasicInfoStep1Screen(
                 onValueChange = onMajorValueChange,
                 labelText = stringResource(Res.string.document_basic_info_1_major_label),
                 placeholderText = stringResource(Res.string.document_basic_info_1_major_placeholder),
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done,
+                onImeAction = if (enabled) onNext else null
             )
         }
 

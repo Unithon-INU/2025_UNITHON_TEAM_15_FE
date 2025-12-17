@@ -64,7 +64,8 @@ fun WorkplaceInfo1Screen(
                 onValueChange = onBusinessRegisterNumberValueChange,
                 labelText = stringResource(Res.string.document_workplace_info_1_business_number_label),
                 placeholderText = stringResource(Res.string.document_workplace_info_1_business_number_placeholder),
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done,
+                onImeAction = if (enabled) onNext else null
             )
 
             Spacer(Modifier.height(27.dp))
