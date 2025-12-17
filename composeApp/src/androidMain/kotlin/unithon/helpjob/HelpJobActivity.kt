@@ -1,28 +1,35 @@
 package unithon.helpjob
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.WindowCompat
 import unithon.helpjob.data.repository.GlobalLanguageState
 import java.util.Locale
 
 /**
  * Android 진입점 Activity
  * - EdgeToEdge 설정
- * - 상태바 아이콘 색상 설정
+ * - 시스템 바 스타일 설정 (라이트 모드 고정)
  * - App() 호출 (플랫폼별 래퍼)
  * - onResume()에서 언어 설정 복원 (OSS Activity 등에서 복귀 시)
  */
 class HelpJobActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        // 상태바 아이콘을 항상 검정색으로 고정
-        WindowCompat.getInsetsController(window, window.decorView).apply {
-            isAppearanceLightStatusBars = true  // 검정 아이콘 (라이트 모드)
-        }
+        // 시스템 바(상태바, 네비게이션 바)를 라이트 모드로 고정
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                Color.TRANSPARENT,  // Light 모드 색상
+                Color.TRANSPARENT   // Dark 모드 색상 (앱이 라이트 모드 고정이므로 동일)
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                Color.TRANSPARENT,  // Light 모드 색상
+                Color.TRANSPARENT   // Dark 모드 색상 (앱이 라이트 모드 고정이므로 동일)
+            )
+        )
         setContent {
             App()  // Android 특화 래퍼 → commonMain HelpJobApp() 호출
         }
