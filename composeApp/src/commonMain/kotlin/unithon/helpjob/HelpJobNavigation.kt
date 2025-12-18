@@ -124,9 +124,7 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
     }
 
     fun navigateToNicknameSetup() {
-        navController.navigate(HelpJobDestinations.NICKNAME_SETUP_ROUTE) {
-            popUpTo(HelpJobDestinations.SIGN_UP_ROUTE) { inclusive = true }
-        }
+        navController.navigate(HelpJobDestinations.NICKNAME_SETUP_ROUTE)
     }
 
     fun navigateToSignUpSuccess() {

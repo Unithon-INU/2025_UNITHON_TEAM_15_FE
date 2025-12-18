@@ -83,6 +83,7 @@ fun SignUpScreen(
     LaunchedEffect(uiState.isSignUpSuccessful) {
         if (uiState.isSignUpSuccessful) {
             onNavigateToNicknameSetup()
+            viewModel.resetNavigationState()
         }
     }
 

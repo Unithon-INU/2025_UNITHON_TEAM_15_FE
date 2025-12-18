@@ -317,4 +317,10 @@ class SignUpViewModel(
             it.copy(isSignUpSuccessful = true)
         }
     }
+
+    fun resetNavigationState() {
+        _uiState.update {
+            it.copy(isSignUpSuccessful = false)
+        }
+    }
 }
