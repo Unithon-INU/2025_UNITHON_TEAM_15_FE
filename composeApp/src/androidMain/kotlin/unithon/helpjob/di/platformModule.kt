@@ -107,6 +107,9 @@ val androidNetworkModule = module {
         }
 
         HttpClient(OkHttp) {
+            // 비정상 응답(4xx, 5xx)을 예외로 처리 (Ktor 공식 베스트 프랙티스)
+            expectSuccess = true
+
             // Base URL 설정
             defaultRequest {
                 url(AppConfig.API_BASE_URL)
