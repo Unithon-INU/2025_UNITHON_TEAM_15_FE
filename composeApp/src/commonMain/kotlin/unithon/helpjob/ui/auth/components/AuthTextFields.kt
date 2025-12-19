@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -65,6 +66,7 @@ fun AuthTextField(
     showCharacterCount: Boolean = false, // 글자수 카운터 표시 여부
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     var passwordVisible by remember { mutableStateOf(false) }
 
     // 패스워드 토글이 활성화된 경우 전용 아이콘 사용, 아니면 전달받은 trailingIcon 사용
@@ -141,7 +143,10 @@ fun AuthTextField(
                 imeAction = imeAction
             ),
             keyboardActions = KeyboardActions(
-                onDone = { onImeAction?.invoke() }
+                onDone = {
+                    keyboardController?.hide()  // 무조건 키보드 숨김
+                    onImeAction?.invoke()  // 콜백 실행 (있으면)
+                }
                 // onNext는 기본 동작 유지 (다음 필드로 포커스 이동)
             ),
             isError = isError

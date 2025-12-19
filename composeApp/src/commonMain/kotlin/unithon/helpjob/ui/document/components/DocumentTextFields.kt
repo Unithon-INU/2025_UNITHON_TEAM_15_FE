@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -47,6 +48,8 @@ fun DocumentTextField(
     isError: Boolean = false,
     errorMessage: String? = null
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(modifier = modifier) {
         // 🎯 Label을 TextField 외부에 별도로 배치
         if (labelText.isNotBlank()) {
@@ -81,7 +84,10 @@ fun DocumentTextField(
                 imeAction = imeAction
             ),
             keyboardActions = KeyboardActions(
-                onDone = { onImeAction?.invoke() }
+                onDone = {
+                    keyboardController?.hide()  // 무조건 키보드 숨김
+                    onImeAction?.invoke()  // 콜백 실행 (있으면)
+                }
                 // onNext는 기본 동작 유지 (다음 필드로 포커스 이동)
             ),
             isError = isError
