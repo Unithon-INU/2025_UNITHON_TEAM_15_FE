@@ -1,6 +1,7 @@
 package unithon.helpjob
 
 import android.app.Application
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -9,6 +10,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import unithon.helpjob.data.analytics.AnalyticsService
 import unithon.helpjob.data.analytics.AndroidAnalyticsService
+import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
@@ -26,12 +28,19 @@ class HelpJobApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // ✅ Phase 1: 시스템 언어로 즉시 초기화 (Progressive Enhancement)
+        val systemLanguage = Locale.getDefault().language
+        GlobalLanguageState.initializeLanguage(
+            AppLanguage.fromCode(systemLanguage)
+        )
+
         // Koin 초기화 (가장 먼저!)
         unithon.helpjob.di.initKoin(this)
 
         // UnCaughtExceptionHandler 설정 (최후 방어선)
         setupUncaughtExceptionHandler()
-        // 저장된 언어 설정이 있으면 적용, 없으면 시스템 언어 그대로
+
+        // ✅ Phase 2: DataStore에서 저장된 언어 비동기 로딩 (정확한 값으로 업그레이드)
         initializeLanguage()
 
         analytics = AndroidAnalyticsService()
