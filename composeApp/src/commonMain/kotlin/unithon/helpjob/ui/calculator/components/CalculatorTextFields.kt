@@ -53,7 +53,6 @@ fun CalculatorWageTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            label = null,
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

@@ -1,12 +1,21 @@
 package unithon.helpjob.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -14,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
+import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Primary500
@@ -26,7 +36,6 @@ fun HelpJobTextField(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
-    label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -35,40 +44,66 @@ fun HelpJobTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     isError: Boolean = false
 ) {
-    OutlinedTextField(
+    val interactionSource = remember { MutableInteractionSource() }
+
+    BasicTextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
-        label = label,
-        placeholder = placeholder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        isError = isError,
-        singleLine = true,
-        shape = RoundedCornerShape(10.dp),
         textStyle = TextStyle(
             fontSize = 14.sp,
             lineHeight = 17.sp,
             fontFamily = PretendardFontFamily,
             fontWeight = FontWeight.Bold,
-            color = Grey700
+            color = if (enabled) Grey700 else Grey400
         ),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = if (isError) Warning else Grey200,
-            focusedBorderColor = if (isError) Warning else Grey200,
-            errorBorderColor = Warning,
-            cursorColor = Primary500,
-            unfocusedContainerColor = Grey000,
-            focusedContainerColor = Grey000,
-            errorContainerColor = Grey000,
-            unfocusedTextColor = Grey700,
-            focusedTextColor = Grey700,
-            errorTextColor = Grey700
-        )
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        singleLine = true,
+        visualTransformation = visualTransformation,
+        interactionSource = interactionSource,
+        cursorBrush = SolidColor(Primary500),
+        decorationBox = @Composable { innerTextField ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = Grey000,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = if (isError) Warning else Grey200,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(
+                        start = 16.dp,
+                        top = 10.dp,
+                        end = 16.dp,
+                        bottom = 10.dp
+                    ),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Leading Icon
+                leadingIcon?.invoke()
+
+                Box(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    // Placeholder
+                    if (value.isEmpty() && placeholder != null) {
+                        placeholder()
+                    }
+
+                    // Inner TextField
+                    innerTextField()
+                }
+
+                // Trailing Icon
+                trailingIcon?.invoke()
+            }
+        }
     )
 }

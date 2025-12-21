@@ -68,7 +68,6 @@ fun DocumentTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            label = null, // 🎯 floating label 비활성화
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.auth.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,11 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -72,21 +71,19 @@ fun AuthTextField(
     // 패스워드 토글이 활성화된 경우 전용 아이콘 사용, 아니면 전달받은 trailingIcon 사용
     val finalTrailingIcon: @Composable (() -> Unit)? = if (showPasswordToggle) {
         {
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                Icon(
-                    painter = painterResource(
-                        if (passwordVisible) Res.drawable.eyeon
-                        else Res.drawable.eyeoff
-                    ),
-                    contentDescription = if (passwordVisible) {
-                        stringResource(Res.string.hide_password)
-                    } else {
-                        stringResource(Res.string.show_password)
-                    },
-                    tint = Grey400,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
+            Icon(
+                painter = painterResource(
+                    if (passwordVisible) Res.drawable.eyeon
+                    else Res.drawable.eyeoff
+                ),
+                contentDescription = if (passwordVisible) {
+                    stringResource(Res.string.hide_password)
+                } else {
+                    stringResource(Res.string.show_password)
+                },
+                tint = Grey400,
+                modifier = Modifier.clickable { passwordVisible = !passwordVisible }
+            )
         }
     } else {
         trailingIcon
@@ -126,7 +123,6 @@ fun AuthTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
-            label = null, // 🎯 floating label 비활성화
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(
