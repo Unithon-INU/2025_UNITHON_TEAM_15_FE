@@ -189,7 +189,7 @@ private fun SignUpScreenContent(
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                     modifier = Modifier
                         .width(71.dp)
-                        .height(48.dp)
+                        .height(46.dp)
                         .offset(y = totalOffset)
                 ) {
                     if (uiState.isSendingEmail) {
@@ -235,7 +235,7 @@ private fun SignUpScreenContent(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(48.dp),
+                                    .height(46.dp),
                                 horizontalArrangement = Arrangement.End,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
@@ -265,7 +265,7 @@ private fun SignUpScreenContent(
                         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 12.dp),
                         modifier = Modifier
                             .width(80.dp)
-                            .height(48.dp)
+                            .height(46.dp)
                     ) {
                         if (uiState.isVerifyingCode) {
                             Text(

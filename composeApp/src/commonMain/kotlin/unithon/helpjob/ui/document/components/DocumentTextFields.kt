@@ -67,7 +67,7 @@ fun DocumentTextField(
             onValueChange = onValueChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(46.dp),
             placeholder = if (placeholderText.isNotBlank()) {
                 {
                     Text(

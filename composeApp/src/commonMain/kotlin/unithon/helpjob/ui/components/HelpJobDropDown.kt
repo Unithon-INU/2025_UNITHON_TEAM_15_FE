@@ -206,7 +206,7 @@ private fun CustomScrollbar(
 ) {
     val density = LocalDensity.current
     val scrollbarHeight = dropdownHeight * visibleItems / totalItems
-    val maxScrollOffsetPx = with(density) { (48.dp * (totalItems - visibleItems)).toPx() }
+    val maxScrollOffsetPx = with(density) { (46.dp * (totalItems - visibleItems)).toPx() }
 
     val scrollProgress = if (maxScrollOffsetPx > 0) {
         (scrollState.value / maxScrollOffsetPx).coerceIn(0f, 1f)
