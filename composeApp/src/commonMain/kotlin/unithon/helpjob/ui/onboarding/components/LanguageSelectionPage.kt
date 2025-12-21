@@ -23,7 +23,7 @@ fun LanguageSelectionPage(
         title = stringResource(Res.string.onboarding_language_setup_title), // ✅ 직접 호출
         content = {
             languageList.forEachIndexed { index, language ->
-                OnboardingButton(
+                OnboardingCard(
                     modifier = Modifier
                         .height(46.dp)
                         .fillMaxWidth(),

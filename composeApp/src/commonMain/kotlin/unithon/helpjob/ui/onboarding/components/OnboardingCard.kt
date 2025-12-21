@@ -31,7 +31,7 @@ import unithon.helpjob.ui.theme.Primary300
 import unithon.helpjob.util.noRippleClickable
 
 @Composable
-fun OnboardingButton(
+fun OnboardingCard(
     modifier: Modifier = Modifier,
     icon: DrawableResource? = null,
     mainTitle: String,

@@ -49,7 +49,7 @@ fun AgreementSection(
             .fillMaxWidth()
     ) {
         // 전체동의 버튼 - OnboardingButton 사용
-        OnboardingButton(
+        OnboardingCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(46.dp),

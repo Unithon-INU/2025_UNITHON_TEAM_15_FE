@@ -59,7 +59,7 @@ import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
 import unithon.helpjob.ui.onboarding.components.AgreementSection
-import unithon.helpjob.ui.onboarding.components.OnboardingButton
+import unithon.helpjob.ui.onboarding.components.OnboardingCard
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Primary500
@@ -288,7 +288,7 @@ private fun LanguageSelectionContent(
     onLanguageSelected: (String) -> Unit
 ) {
     languageList.forEachIndexed { index, language ->
-        OnboardingButton(
+        OnboardingCard(
             modifier = Modifier
                 .height(46.dp)
                 .fillMaxWidth(),
@@ -351,7 +351,7 @@ private fun VisaSelectionContent(
                     stringResource(Res.string.onboarding_visa_setup_d4_description)
         }
 
-        OnboardingButton(
+        OnboardingCard(
             modifier = Modifier
                 .height(62.dp)
                 .fillMaxWidth(),
@@ -381,7 +381,7 @@ private fun KoreanLevelContent(
     )
 
     koreanLevelTitles.forEachIndexed { index, title ->
-        OnboardingButton(
+        OnboardingCard(
             modifier = Modifier
                 .height(62.dp)
                 .fillMaxWidth(),
@@ -411,7 +411,7 @@ private fun BusinessSelectionContent(
     LazyColumn {
         itemsIndexed(businessList) { index, business ->
             val displayName = business.getDisplayName()
-            OnboardingButton(
+            OnboardingCard(
                 modifier = Modifier
                     .height(46.dp)
                     .fillMaxWidth(),
