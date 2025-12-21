@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.auth.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -71,6 +72,7 @@ fun AuthTextField(
     // 패스워드 토글이 활성화된 경우 전용 아이콘 사용, 아니면 전달받은 trailingIcon 사용
     val finalTrailingIcon: @Composable (() -> Unit)? = if (showPasswordToggle) {
         {
+            val interactionSource = remember { MutableInteractionSource() }
             Icon(
                 painter = painterResource(
                     if (passwordVisible) Res.drawable.eyeon
@@ -82,7 +84,10 @@ fun AuthTextField(
                     stringResource(Res.string.show_password)
                 },
                 tint = Grey400,
-                modifier = Modifier.clickable { passwordVisible = !passwordVisible }
+                modifier = Modifier.clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) { passwordVisible = !passwordVisible }
             )
         }
     } else {
