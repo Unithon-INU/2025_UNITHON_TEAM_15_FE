@@ -1,26 +1,17 @@
 package unithon.helpjob.util
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import unithon.helpjob.data.analytics.AnalyticsService
+
 /**
  * iOS 플랫폼 Analytics 구현
- *
- * TODO: Firebase Analytics iOS SDK 연동 시 구현
- * 1. Firebase iOS SDK 추가 (CocoaPods 또는 SPM)
- * 2. GoogleService-Info.plist 추가
- * 3. FirebaseAnalytics.logEvent() 호출
- *
- * 현재는 콘솔 로그만 출력하는 stub 구현
+ * Koin을 통해 주입받은 AnalyticsService 사용
  */
-actual object Analytics {
-    actual fun logEvent(eventName: String, params: Map<String, Any>?) {
-        // iOS Firebase Analytics 연동 예시:
-        // FirebaseAnalytics.Analytics.logEvent(
-        //     name = eventName,
-        //     parameters = params?.mapValues { it.value as NSObject }
-        // )
+actual object Analytics : KoinComponent {
+    private val analyticsService: AnalyticsService by inject()
 
-        println("📊 Analytics [iOS]: $eventName")
-        params?.forEach { (key, value) ->
-            println("   - $key: $value")
-        }
+    actual fun logEvent(eventName: String, params: Map<String, Any>?) {
+        analyticsService.logEvent(eventName, params)
     }
 }
