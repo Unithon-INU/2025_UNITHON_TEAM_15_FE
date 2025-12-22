@@ -21,3 +21,13 @@ GoogleService-Info.plist
 GEMINI.md
 CLAUDE.md
 .claude/
+
+# Xcode 사용자 설정 파일
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+project.xcworkspace/xcuserdata/
+
+# SPM (Swift Package Manager)
+.swiftpm/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
