@@ -4,21 +4,25 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.context.startKoin
+import unithon.helpjob.data.analytics.FirebaseAnalyticsWrapper
 import unithon.helpjob.data.repository.IosLanguageRepository
 import unithon.helpjob.data.repository.LanguageRepository
 
 /**
  * iOS Koin 초기화 함수
  * iOSApp.swift에서 호출
+ * @param analyticsWrapper Swift에서 구현한 Firebase Analytics Wrapper
  */
 @OptIn(DelicateCoroutinesApi::class)
-fun initKoin() {
+fun initKoin(analyticsWrapper: FirebaseAnalyticsWrapper) {
     val koinApp = startKoin {
         modules(
             // iOS 전용
             iosDataModule,
             iosNetworkModule,
             iosViewModelModule,
+            // Analytics 모듈 (Swift wrapper 주입)
+            createIosAnalyticsModule(analyticsWrapper),
 
             // 공통
             commonDataModule,

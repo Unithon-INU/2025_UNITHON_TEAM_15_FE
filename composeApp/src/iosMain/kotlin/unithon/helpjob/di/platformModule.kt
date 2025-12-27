@@ -45,6 +45,9 @@ import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.SettingViewModel
 import unithon.helpjob.ui.setting.TermsOfServiceViewModel
 import unithon.helpjob.ui.splash.SplashViewModel
+import unithon.helpjob.data.analytics.AnalyticsService
+import unithon.helpjob.data.analytics.FirebaseAnalyticsWrapper
+import unithon.helpjob.data.analytics.IOSAnalyticsService
 import unithon.helpjob.util.AppConfig
 import unithon.helpjob.util.createDataStore
 
@@ -57,6 +60,15 @@ val iosDataModule = module {
 
     // LanguageRepository (iOS 구현체)
     single<LanguageRepository> { IosLanguageRepository(get()) }
+}
+
+/**
+ * iOS Analytics 모듈 생성 함수
+ * Swift에서 전달받은 FirebaseAnalyticsWrapper를 주입
+ */
+fun createIosAnalyticsModule(analyticsWrapper: FirebaseAnalyticsWrapper) = module {
+    single<FirebaseAnalyticsWrapper> { analyticsWrapper }
+    single<AnalyticsService> { IOSAnalyticsService(get()) }
 }
 
 /**
