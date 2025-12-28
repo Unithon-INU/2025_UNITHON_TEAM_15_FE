@@ -64,6 +64,12 @@ import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Primary500
 
+/**
+ * 플랫폼별 뒤로가기 처리 (Android: BackHandler, iOS: no-op)
+ */
+@Composable
+expect fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit)
+
 @Composable
 fun OnboardingScreen(
     modifier: Modifier = Modifier,
@@ -100,6 +106,13 @@ fun OnboardingScreen(
 
     val pagerState = rememberPagerState(pageCount = { 5 }) // 페이지 수 고정
     val scope = rememberCoroutineScope()
+
+    // 시스템 뒤로가기 처리 - TopBar 뒤로가기와 동일하게 작동
+    PlatformBackHandler(enabled = pagerState.currentPage > 0) {
+        scope.launch {
+            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+        }
+    }
 
     // 현재 페이지에 따른 유효성 검사 결과 계산
     val isCurrentPageValid = when (pagerState.currentPage) {
