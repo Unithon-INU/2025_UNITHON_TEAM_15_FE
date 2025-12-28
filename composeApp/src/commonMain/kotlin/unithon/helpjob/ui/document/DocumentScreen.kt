@@ -12,10 +12,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_login_required_description
+import helpjob.composeapp.generated.resources.document_login_required_title
 import helpjob.composeapp.generated.resources.document_onboarding_description_1
 import helpjob.composeapp.generated.resources.document_onboarding_description_2
 import helpjob.composeapp.generated.resources.document_onboarding_title
@@ -29,6 +32,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.ui.components.HelpJobTopAppBar
+import unithon.helpjob.ui.components.LoginRequiredScreen
 import unithon.helpjob.ui.document.page.BasicInfoStep1Screen
 import unithon.helpjob.ui.document.page.BasicInfoStep2Screen
 import unithon.helpjob.ui.document.page.DocumentOnboardingScreen
@@ -51,18 +55,31 @@ expect fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit)
 @Composable
 fun DocumentScreen(
     viewModel: DocumentViewModel = koinViewModel(),
+    onNavigateToSignIn: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
-    DocumentScreenImpl(viewModel, snackbarHostState)
+    DocumentScreenImpl(viewModel, onNavigateToSignIn, snackbarHostState)
 }
 
 @Composable
 private fun DocumentScreenImpl(
     viewModel: DocumentViewModel,
+    onNavigateToSignIn: () -> Unit,
     snackbarHostState: SnackbarHostState
 ){
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isSubmitting by viewModel.isSubmitting.collectAsStateWithLifecycle()
+
+    // 🆕 Guest Mode 체크 - ViewModel State 사용
+    if (uiState.isGuest) {
+        LoginRequiredScreen(
+            title = stringResource(Res.string.document_login_required_title),
+            description = stringResource(Res.string.document_login_required_description),
+            onLoginClick = onNavigateToSignIn
+        )
+        return
+    }
+
     val pagerState = rememberPagerState(pageCount = { 10 })
     val scope = rememberCoroutineScope()
 

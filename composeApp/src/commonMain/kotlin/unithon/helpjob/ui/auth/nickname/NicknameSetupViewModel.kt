@@ -15,13 +15,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.data.repository.AuthRepository
+import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.data.repository.NicknameDuplicateException
 import unithon.helpjob.data.repository.SignUpDataRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class NicknameSetupViewModel(
     private val authRepository: AuthRepository,
-    private val signUpDataRepository: SignUpDataRepository
+    private val signUpDataRepository: SignUpDataRepository,
+    private val employmentCheckRepository: EmploymentCheckRepository
 ) : BaseViewModel() {
 
     data class NicknameSetupUiState(
@@ -97,9 +100,26 @@ class NicknameSetupViewModel(
                 authRepository.signUp(signUpData.email, signUpData.password)
                 authRepository.setNickname(currentState.nickname)
 
-                // 3. 임시 데이터 정리
+                // 🆕 3. Guest 온보딩 데이터 동기화 (새 계정의 초기 데이터)
+                val guestProfile = authRepository.getGuestProfile()
+                if (guestProfile != null) {
+                    authRepository.setProfile(
+                        language = guestProfile.language,
+                        topikLevel = guestProfile.topikLevel,
+                        visaType = guestProfile.visaType,
+                        industry = guestProfile.industry
+                    )
+                    Logger.d("✅ Guest 온보딩 데이터 동기화 완료")
+                }
+
+                // 🆕 4. Guest 체크리스트 동기화 (완료 대기)
+                employmentCheckRepository.syncGuestDataToServer()
+                Logger.d("✅ Guest 체크리스트 동기화 완료")
+
+                // 5. 임시 데이터 정리
                 signUpDataRepository.clearSignUpData()
 
+                // 6. 모든 동기화 완료 후 UI 업데이트
                 _uiState.update {
                     it.copy(
                         isLoading = false,

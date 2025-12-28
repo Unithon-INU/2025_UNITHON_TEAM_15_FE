@@ -12,6 +12,7 @@ import unithon.helpjob.data.repository.DefaultEmploymentCheckRepository
 import unithon.helpjob.data.repository.DefaultPolicyRepository
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
+import unithon.helpjob.data.repository.GuestMockDataSource
 import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.data.repository.SignUpDataRepository
@@ -23,9 +24,19 @@ val commonDataModule = module {
     // SignUpDataRepository (단일 구현체)
     single { SignUpDataRepository() }
 
+    // 🆕 Guest Mode 관련
+    single { GuestMockDataSource(get()) }
+
     // Repository 인터페이스 → 구현체 바인딩
     single<AuthRepository> { DefaultAuthRepository(get(), get(), getKoin()) }
-    single<EmploymentCheckRepository> { DefaultEmploymentCheckRepository(get(), get()) }
+    single<EmploymentCheckRepository> {
+        DefaultEmploymentCheckRepository(
+            apiService = get(),
+            languageRepository = get(),
+            authRepository = get(),  // 🆕 Guest Mode 분기용
+            guestDataSource = get()  // 🆕 Guest Mock Data
+        )
+    }
     single<DocumentRepository> { DefaultDocumentRepository(get(), get()) }
     single<PolicyRepository> { DefaultPolicyRepository(get()) }
 

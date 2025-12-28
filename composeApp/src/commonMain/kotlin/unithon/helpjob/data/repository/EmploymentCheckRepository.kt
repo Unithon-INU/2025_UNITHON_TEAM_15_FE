@@ -25,4 +25,10 @@ interface EmploymentCheckRepository {
     ) : List<TipResponseItem>
 
     suspend fun resetProgress()
+
+    /**
+     * 🆕 Guest → Member 전환 시 Guest 데이터를 서버로 동기화
+     * NonCancellable + supervisorScope로 안전하게 백그라운드 실행
+     */
+    suspend fun syncGuestDataToServer()
 }

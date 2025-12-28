@@ -35,6 +35,7 @@ import helpjob.composeapp.generated.resources.sign_in_password_hint
 import helpjob.composeapp.generated.resources.sign_in_password_label
 import helpjob.composeapp.generated.resources.sign_in_welcome_main
 import helpjob.composeapp.generated.resources.sign_in_welcome_sub
+import helpjob.composeapp.generated.resources.sign_in_continue_as_guest
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,6 +53,7 @@ fun SignInScreen(
     onNavigateToSignUp: () -> Unit,
     onNavigateToOnboarding: () -> Unit,
     onNavigateToHome: () -> Unit,
+    onContinueAsGuest: () -> Unit,
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     viewModel: SignInViewModel = koinViewModel()
@@ -84,6 +86,10 @@ fun SignInScreen(
         onPasswordChange = viewModel::updatePassword,
         onSignInClick = viewModel::signIn,
         onNavigateToSignUp = onNavigateToSignUp,
+        onContinueAsGuest = {
+            viewModel.continueAsGuest()
+            onContinueAsGuest()
+        },
         modifier = modifier
     )
 }
@@ -95,6 +101,7 @@ internal fun SignInContent(
     onPasswordChange: (String) -> Unit,
     onSignInClick: () -> Unit,
     onNavigateToSignUp: () -> Unit,
+    onContinueAsGuest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -195,5 +202,15 @@ internal fun SignInContent(
                 modifier = Modifier.noRippleClickable { onNavigateToSignUp() }
             )
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 🆕 Guest Mode 버튼 - Apple Guideline 5.1.1 대응
+        HelpJobButton(
+            text = stringResource(Res.string.sign_in_continue_as_guest),
+            onClick = onContinueAsGuest,
+            enabled = true,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

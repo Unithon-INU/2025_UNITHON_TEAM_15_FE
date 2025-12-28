@@ -58,7 +58,8 @@ fun HelpJobNavGraph(
                 onNavigateToSignUp = navActions::navigateToSignUp,
                 onNavigateToOnboarding = navActions::navigateToOnboarding,
                 snackbarHostState = snackbarHostState,
-                onNavigateToHome = navActions::navigateToAppHome
+                onNavigateToHome = navActions::navigateToAppHome,
+                onContinueAsGuest = navActions::navigateToOnboarding  // 🆕 Guest Mode: 온보딩으로 이동
             )
         }
 
@@ -140,6 +141,7 @@ fun HelpJobNavGraph(
 
             composable(route = BottomNavDestination.CONTENT.route) {
                 DocumentScreen(
+                    onNavigateToSignIn = navActions::navigateToSignInAfterLogout,  // 🆕 Guest → Member 전환
                     snackbarHostState = snackbarHostState
                 )
             }
@@ -167,6 +169,7 @@ fun HelpJobNavGraph(
                             }
                         }
                     },
+                    onNavigateToSignIn = navActions::navigateToSignInAfterLogout,  // 🆕 Guest → Member 전환
                     homeViewModel = homeViewModel,
                     snackbarHostState = snackbarHostState,
                 )

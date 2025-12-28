@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.util.Logger
@@ -18,7 +19,8 @@ data class ProfileUiState(
     val visaType: String? = null,
     val topikLevel: String? = null,
     val industry: String? = null,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isGuest: Boolean = false  // 🆕 Guest Mode 여부
 )
 
 class ProfileViewModel(
@@ -32,7 +34,19 @@ class ProfileViewModel(
     val snackbarMessage = _snackbarMessage.asSharedFlow()
 
     init {
-        loadUserProfile()
+        // 🆕 Guest Mode 실시간 구독 (로그인/로그아웃 시 자동 갱신)
+        viewModelScope.launch {
+            authRepository.observeGuestMode()
+                .distinctUntilChanged()  // 🔑 실제로 값이 변경될 때만
+                .collect { isGuest ->
+                    _uiState.value = _uiState.value.copy(isGuest = isGuest)
+
+                    if (!isGuest) {
+                        // Member로 전환 시 프로필 로드
+                        loadUserProfile()
+                    }
+                }
+        }
     }
 
     private fun loadUserProfile() {
