@@ -1,7 +1,6 @@
 package unithon.helpjob.data.repository
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
@@ -62,13 +61,11 @@ class DefaultEmploymentCheckRepository(
     /**
      * 🆕 Guest → Member 백그라운드 동기화
      *
-     * ⚠️ 중요: NonCancellable 컨텍스트 사용으로 화면 전환 시에도 동기화 보장
-     * - ViewModel이 destroy되어도 동기화 작업은 계속 실행됨
+     * - Structured Concurrency 준수: 호출자가 취소를 제어
      * - supervisorScope로 개별 실패 시에도 다른 항목은 계속 동기화
      */
     override suspend fun syncGuestDataToServer() {
-        // NonCancellable: 화면 전환 시에도 취소되지 않도록 보장
-        withContext(Dispatchers.Default + NonCancellable) {
+        withContext(Dispatchers.Default) {
             val guestChecklist = authRepository.getGuestChecklist()
 
             if (guestChecklist == null || guestChecklist.checkedItems.isEmpty()) {
