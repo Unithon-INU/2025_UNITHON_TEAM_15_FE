@@ -1,8 +1,6 @@
 package unithon.helpjob.data.repository
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
@@ -61,8 +59,8 @@ class DefaultEmploymentCheckRepository(
     /**
      * 🆕 Guest → Member 백그라운드 동기화
      *
+     * - Batch API로 한 번에 모든 체크리스트 전송
      * - Structured Concurrency 준수: 호출자가 취소를 제어
-     * - supervisorScope로 개별 실패 시에도 다른 항목은 계속 동기화
      */
     override suspend fun syncGuestDataToServer() {
         withContext(Dispatchers.Default) {
@@ -73,27 +71,19 @@ class DefaultEmploymentCheckRepository(
                 return@withContext
             }
 
-            Logger.d("[Sync]", "Guest 데이터 동기화 시작: ${guestChecklist.checkedItems.size} 단계")
+            // Map<String, List<Int>>을 List<UpdateEmploymentCheckRequest>로 변환
+            val requests = guestChecklist.checkedItems.flatMap { (step, indices) ->
+                indices.map { idx ->
+                    UpdateEmploymentCheckRequest(step, idx)
+                }
+            }
+
+            Logger.d("[Sync]", "Guest 데이터 동기화 시작: ${requests.size}개 항목")
 
             try {
-                // supervisorScope: 하나가 실패해도 나머지는 계속 진행
-                supervisorScope {
-                    guestChecklist.checkedItems.forEach { (step, indices) ->
-                        indices.forEach { idx ->
-                            launch {
-                                try {
-                                    apiService.updateChecklist(
-                                        UpdateEmploymentCheckRequest(step, idx)
-                                    )
-                                    Logger.d("[Sync]", "성공: $step-$idx")
-                                } catch (e: Exception) {
-                                    // 개별 실패는 로그만 기록 (사용자에게 알리지 않음)
-                                    Logger.e("[Sync]", "실패: $step-$idx - ${e.message}")
-                                }
-                            }
-                        }
-                    }
-                }
+                // 🆕 Batch API 호출 (한 번에 모든 체크리스트 전송)
+                apiService.updateChecklistBatch(requests)
+                Logger.d("[Sync]", "Guest 체크리스트 동기화 성공: ${requests.size}개 항목")
 
                 // 성공적으로 전송 완료 후 Guest 데이터 삭제
                 authRepository.clearGuestData()

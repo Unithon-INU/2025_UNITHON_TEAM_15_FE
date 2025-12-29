@@ -82,6 +82,14 @@ class HelpJobApiService(private val client: HttpClient) {
         }.body()
     }
 
+    // 🆕 Batch 체크리스트 업데이트 (Guest 동기화용)
+    suspend fun updateChecklistBatch(requests: List<UpdateEmploymentCheckRequest>): UpdateEmploymentCheckResponse {
+        return client.patch(ApiConstants.UPDATE_CHECKLIST) {
+            contentType(ContentType.Application.Json)
+            setBody(requests)
+        }.body()
+    }
+
     suspend fun getHomeInfo(language: String): HomeInfoResponse {
         return client.get(ApiConstants.GET_HOME_INFO) {
             headers {
