@@ -21,7 +21,7 @@ class DefaultEmploymentCheckRepository(
         return if (authRepository.isGuestMode()) {
             guestDataSource.updateGuestChecklist(request)
         } else {
-            apiService.updateChecklist(request)
+            apiService.updateChecklist(listOf(request))
         }
     }
 
@@ -82,7 +82,7 @@ class DefaultEmploymentCheckRepository(
 
             try {
                 // 🆕 Batch API 호출 (한 번에 모든 체크리스트 전송)
-                apiService.updateChecklistBatch(requests)
+                apiService.updateChecklist(requests)
                 Logger.d("[Sync]", "Guest 체크리스트 동기화 성공: ${requests.size}개 항목")
 
                 // 성공적으로 전송 완료 후 Guest 데이터 삭제

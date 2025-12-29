@@ -74,16 +74,8 @@ class HelpJobApiService(private val client: HttpClient) {
         }
     }
 
-    // 시간제 취업 확인 관련 API
-    suspend fun updateChecklist(request: UpdateEmploymentCheckRequest): UpdateEmploymentCheckResponse {
-        return client.patch(ApiConstants.UPDATE_CHECKLIST) {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }.body()
-    }
-
-    // 🆕 Batch 체크리스트 업데이트 (Guest 동기화용)
-    suspend fun updateChecklistBatch(requests: List<UpdateEmploymentCheckRequest>): UpdateEmploymentCheckResponse {
+    // 시간제 취업 확인 관련 API (서버가 배열 형식만 받도록 변경됨)
+    suspend fun updateChecklist(requests: List<UpdateEmploymentCheckRequest>): UpdateEmploymentCheckResponse {
         return client.patch(ApiConstants.UPDATE_CHECKLIST) {
             contentType(ContentType.Application.Json)
             setBody(requests)
