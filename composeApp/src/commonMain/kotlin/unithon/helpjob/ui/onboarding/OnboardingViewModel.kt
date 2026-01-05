@@ -15,6 +15,7 @@ import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.GuestProfile
 import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
@@ -174,15 +175,35 @@ class OnboardingViewModel(
 
     fun completeOnboarding() {
         if (!uiState.value.isAllChecked) return
+
         viewModelScope.launch(crashPreventionHandler) {
             _uiState.update { it.copy(isLoading = true) }
+
             try {
-                authRepository.setProfile(
-                    language = _uiState.value.language,
-                    topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
-                    visaType = _uiState.value.visa,
-                    industry = Business.toApiValues(_uiState.value.selectedBusinesses)
-                )
+                val isGuest = authRepository.isGuestMode()
+
+                if (isGuest) {
+                    // 🆕 Guest: 로컬 저장
+                    val guestProfile = GuestProfile(
+                        language = _uiState.value.language,
+                        topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
+                        visaType = _uiState.value.visa,
+                        industry = Business.toApiValues(_uiState.value.selectedBusinesses)
+                    )
+
+                    authRepository.saveGuestProfile(guestProfile)
+                    Logger.d("✅ Guest 프로필 로컬 저장 완료")
+
+                } else {
+                    // 기존: Member API 호출
+                    authRepository.setProfile(
+                        language = _uiState.value.language,
+                        topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
+                        visaType = _uiState.value.visa,
+                        industry = Business.toApiValues(_uiState.value.selectedBusinesses)
+                    )
+                    Logger.d("✅ Member 프로필 서버 저장 완료")
+                }
 
                 _uiState.update {
                     it.copy(
@@ -191,30 +212,21 @@ class OnboardingViewModel(
                         visa = "",
                         businesses = emptyList(),
                         isOnboardingSuccess = true,
-                        isLoading = false,  // 로딩 상태 해제
-                        userProfileError = false,  // 에러 상태 초기화
-                        userProfileErrorMessage = null  // 에러 메시지 초기화
+                        isLoading = false,
+                        userProfileError = false,
+                        userProfileErrorMessage = null
                     )
                 }
 
-            } catch (e: UnauthorizedException){
+            } catch (e: UnauthorizedException) {
                 Logger.e(e, "인증 오류 발생")
                 _snackbarMessage.emit(Res.string.error_authentication_required)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false  // 로딩 상태 해제
-                    )
-                }
-            } catch (e: Exception) {  // 다른 예외 처리 추가
+                _uiState.update { it.copy(isLoading = false) }
+            } catch (e: Exception) {
                 Logger.e(e, "프로필 설정 오류 발생")
                 _snackbarMessage.emit(Res.string.onboarding_error_message)
-                _uiState.update {
-                    it.copy(
-                        isLoading = false  // 로딩 상태 해제
-                    )
-                }
+                _uiState.update { it.copy(isLoading = false) }
             }
-
         }
     }
 }

@@ -2,12 +2,19 @@ package unithon.helpjob.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.koin.core.Koin
 import unithon.helpjob.data.model.AppLanguage
+import unithon.helpjob.data.model.GuestChecklist
+import unithon.helpjob.data.model.GuestProfile
+import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
@@ -25,6 +32,11 @@ class DefaultAuthRepository(
 ) : AuthRepository {
 
     private val tokenKey = stringPreferencesKey("auth_token")
+
+    // 🆕 Guest Mode 관련 키
+    private val guestModeKey = booleanPreferencesKey("is_guest_mode")
+    private val guestProfileKey = stringPreferencesKey("guest_profile")
+    private val guestChecklistKey = stringPreferencesKey("guest_checklist")
 
     override suspend fun signIn(email: String, password: String): TokenResponse {
         println("🔥 [Auth] 로그인 시도: $email")
@@ -120,5 +132,80 @@ class DefaultAuthRepository(
         } catch (e: Exception) {
             false // 프로필 조회 실패 시 온보딩 미완료로 처리
         }
+    }
+
+    // 🆕 Guest Mode 관련 메서드 구현
+    override suspend fun setGuestMode(isGuest: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[guestModeKey] = isGuest
+        }
+        Logger.d("[Auth]", "Guest Mode 설정: $isGuest")
+    }
+
+    override suspend fun isGuestMode(): Boolean {
+        return dataStore.data
+            .map { preferences -> preferences[guestModeKey] ?: false }
+            .firstOrNull() ?: false
+    }
+
+    override fun observeGuestMode(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[guestModeKey] ?: false
+        }
+    }
+
+    override suspend fun saveGuestProfile(profile: GuestProfile) {
+        val json = Json.encodeToString(profile)
+        dataStore.edit { preferences ->
+            preferences[guestProfileKey] = json
+        }
+        Logger.d("[Auth]", "Guest 프로필 로컬 저장 완료: ${profile.language}, ${profile.industry}")
+    }
+
+    override suspend fun getGuestProfile(): GuestProfile? {
+        return dataStore.data
+            .map { prefs ->
+                prefs[guestProfileKey]?.let { json ->
+                    try {
+                        Json.decodeFromString<GuestProfile>(json)
+                    } catch (e: Exception) {
+                        Logger.e("[Auth]", "Guest 프로필 파싱 실패: ${e.message}")
+                        null
+                    }
+                }
+            }
+            .firstOrNull()
+    }
+
+    override suspend fun saveGuestChecklist(checklist: GuestChecklist) {
+        val json = Json.encodeToString(checklist)
+        dataStore.edit { preferences ->
+            preferences[guestChecklistKey] = json
+        }
+        Logger.d("[Auth]", "Guest 체크리스트 저장 완료: ${checklist.checkedItems.size} 항목")
+    }
+
+    override suspend fun getGuestChecklist(): GuestChecklist? {
+        return dataStore.data
+            .map { prefs ->
+                prefs[guestChecklistKey]?.let { json ->
+                    try {
+                        Json.decodeFromString<GuestChecklist>(json)
+                    } catch (e: Exception) {
+                        Logger.e("[Auth]", "Guest 체크리스트 파싱 실패: ${e.message}")
+                        null
+                    }
+                }
+            }
+            .firstOrNull()
+    }
+
+    override suspend fun clearGuestData() {
+        dataStore.edit { prefs ->
+            prefs.remove(guestModeKey)
+            prefs.remove(guestProfileKey)
+            prefs.remove(guestChecklistKey)
+        }
+        Logger.d("[Auth]", "Guest 데이터 삭제 완료")
     }
 }

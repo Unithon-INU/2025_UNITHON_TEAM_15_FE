@@ -338,5 +338,17 @@
     <string name="document_top_bar_title">Document</string>
     <string name="settings_button">Setting</string>
 
+    <!-- 🆕 Guest Mode (Apple Guideline 5.1.1 Compliance) -->
+    <string name="sign_in_continue_as_guest">Continue without login</string>
+    <string name="guest_mode_title">Sign in to save your data</string>
+    <string name="guest_mode_description">Create an account to save your progress securely and access it from other devices.</string>
+    <string name="guest_mode_login_button">Sign In</string>
+    <string name="login_required_title">Login required</string>
+    <string name="login_required_description">This feature is available for members only. Please sign in to continue.</string>
+    <string name="profile_login_required_title">Profile requires login</string>
+    <string name="profile_login_required_description">Sign up and manage your own profile.</string>
+    <string name="document_login_required_title">Employment certificate requires login</string>
+    <string name="document_login_required_description">Only members can use this feature to protect personal information.</string>
+    <string name="go_to_login">Sign In</string>
 
 </resources>

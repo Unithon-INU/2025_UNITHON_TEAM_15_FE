@@ -79,7 +79,7 @@ val androidNetworkModule = module {
         val tokenDataStore: DataStore<Preferences> = get()
 
         // 🔑 커스텀 인증 플러그인: 매 요청마다 DataStore에서 최신 토큰 읽기
-        val TokenAuthPlugin = createClientPlugin("TokenAuth") {
+        val tokenAuthPlugin = createClientPlugin("TokenAuth") {
             onRequest { request, _ ->
                 val noAuthEndpoints = listOf(
                     ApiConstants.SIGN_IN,
@@ -130,7 +130,7 @@ val androidNetworkModule = module {
             }
 
             // 🔑 커스텀 인증 플러그인 적용
-            install(TokenAuthPlugin)
+            install(tokenAuthPlugin)
 
             // 🚨 전역 에러 처리 (공식 패턴)
             HttpResponseValidator {
@@ -170,11 +170,11 @@ val androidNetworkModule = module {
  * Android ViewModel 모듈
  */
 val androidViewModelModule = module {
-    viewModel { NicknameSetupViewModel(get(), get()) }
-    viewModel { SignInViewModel(get()) }
+    viewModel { NicknameSetupViewModel(get(), get(), get()) }
+    viewModel { SignInViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { CalculatorViewModel() }
-    viewModel { DocumentViewModel(get()) }
+    viewModel { DocumentViewModel(get(), get()) }  // 🆕 AuthRepository 추가
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }

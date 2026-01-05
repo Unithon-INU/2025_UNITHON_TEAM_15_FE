@@ -53,6 +53,8 @@ import helpjob.composeapp.generated.resources.profile_nickname_default
 import helpjob.composeapp.generated.resources.profile_preferred_job
 import helpjob.composeapp.generated.resources.profile_visa_default
 import helpjob.composeapp.generated.resources.profile_visa_type
+import helpjob.composeapp.generated.resources.profile_login_required_title
+import helpjob.composeapp.generated.resources.profile_login_required_description
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -73,6 +75,7 @@ import unithon.helpjob.ui.theme.body2
 import unithon.helpjob.ui.theme.body4
 import unithon.helpjob.ui.theme.headline2
 import unithon.helpjob.ui.theme.title2
+import unithon.helpjob.ui.components.LoginRequiredScreen
 import unithon.helpjob.util.noRippleClickable
 
 /**
@@ -89,12 +92,16 @@ data class UncheckedDocument(
 fun ProfileScreen(
     onNavigateToSettings: () -> Unit = {},
     onNavigateToHomeWithStep: (String) -> Unit = {},
+    onNavigateToSignIn: () -> Unit = {},
     homeViewModel: HomeViewModel,
     snackbarHostState: SnackbarHostState,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val homeState by homeViewModel.homeState.collectAsState()
+
+    // 🆕 Guest Mode 체크 - ViewModel State 사용
+    val isGuest = uiState.isGuest
 
     // 🔥 언어 변경은 HomeViewModel에서 자동 처리 (여기서는 불필요)
 
@@ -106,6 +113,17 @@ fun ProfileScreen(
         }
     }
 
+    // 🆕 Guest Mode일 경우 로그인 필요 화면 표시
+    if (isGuest) {
+        LoginRequiredScreen(
+            title = stringResource(Res.string.profile_login_required_title),
+            description = stringResource(Res.string.profile_login_required_description),
+            onLoginClick = onNavigateToSignIn
+        )
+        return
+    }
+
+    // 기존 Member용 Profile UI
     Column(
         modifier = Modifier
         .fillMaxSize()

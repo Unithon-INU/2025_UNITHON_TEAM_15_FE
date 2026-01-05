@@ -25,4 +25,10 @@ interface EmploymentCheckRepository {
     ) : List<TipResponseItem>
 
     suspend fun resetProgress()
+
+    /**
+     * 🆕 Guest → Member 전환 시 Guest 데이터를 서버로 동기화
+     * Batch API로 한 번에 모든 체크리스트 전송
+     */
+    suspend fun syncGuestDataToServer()
 }

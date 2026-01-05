@@ -24,6 +24,7 @@ import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
+import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.DocumentRepository
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
@@ -31,7 +32,8 @@ import unithon.helpjob.util.EmailValidator
 import unithon.helpjob.util.NumberFormatter
 
 class DocumentViewModel(
-    private val documentRepository: DocumentRepository
+    private val documentRepository: DocumentRepository,
+    private val authRepository: AuthRepository  // 🆕 추가
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(DocumentUiState())
@@ -43,6 +45,15 @@ class DocumentViewModel(
     // 🆕 Snackbar용 에러 이벤트 - SharedFlow 사용
     private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage: SharedFlow<StringResource> = _snackbarMessage.asSharedFlow()
+
+    init {
+        // 🆕 Guest Mode 실시간 구독 (로그인/로그아웃 시 자동 갱신)
+        viewModelScope.launch {
+            authRepository.observeGuestMode().collect { isGuest ->
+                _uiState.update { it.copy(isGuest = isGuest) }
+            }
+        }
+    }
 
 
     // 기본 정보 입력 함수들 (VisualTransformation 사용으로 숫자만 저장)
@@ -499,6 +510,7 @@ class DocumentViewModel(
         val workDayTimes: Map<WorkDay, WorkDayTime> = emptyMap(),
         val isAllDaysSelected: Boolean = false,
         val isSameTimeForAll: Boolean = false,
+        val isGuest: Boolean = false,  // 🆕 Guest Mode 여부
         @Deprecated("Use workDayTimes instead")
         val workStartTime: String = "",
         @Deprecated("Use workDayTimes instead")

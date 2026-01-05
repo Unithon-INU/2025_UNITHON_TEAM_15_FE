@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class SplashViewModel(
     private val authRepository: AuthRepository,
@@ -28,15 +29,16 @@ class SplashViewModel(
             // 동시에 앱 상태 체크
             val appStateCheck = async {
                 val token = authRepository.getToken()
+                val guestProfile = authRepository.getGuestProfile()
 
                 when {
-                    token == null -> NavigationTarget.Login
-                    else -> {
+                    // Case 1: Member (토큰 있음)
+                    token != null -> {
                         try {
-                            // 🆕 토큰 유효성을 먼저 체크
+                            // 토큰 유효성 체크
                             val profile = authRepository.getMemberProfile()
 
-                            // 토큰이 유효하면 온보딩 완료 여부 판단
+                            // 온보딩 완료 여부 판단
                             if (profile.language.isNotEmpty() &&
                                 profile.visaType.isNotEmpty() &&
                                 profile.topikLevel.isNotEmpty() &&
@@ -46,12 +48,22 @@ class SplashViewModel(
                                 NavigationTarget.Onboarding
                             }
                         } catch (e: Exception) {
-                            // 모든 예외: 로그인으로
-                            println("프로필 조회 실패 - 로그인으로 이동: ${e.message}")
-                            authRepository.clearToken()  // 토큰도 클리어
+                            // 프로필 조회 실패 (토큰 만료 등)
+                            Logger.e("[Splash]", "프로필 조회 실패 - 로그인으로 이동: ${e.message}")
+                            authRepository.clearToken()
                             NavigationTarget.Login
                         }
                     }
+
+                    // 🆕 Case 2: Guest (온보딩 완료)
+                    guestProfile != null -> {
+                        authRepository.setGuestMode(true)
+                        Logger.d("[Splash]", "Guest Mode 활성화: ${guestProfile.language}, ${guestProfile.industry}")
+                        NavigationTarget.Main
+                    }
+
+                    // Case 3: 신규 유저
+                    else -> NavigationTarget.Login
                 }
             }
 
