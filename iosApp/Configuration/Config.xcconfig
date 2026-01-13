@@ -7,7 +7,7 @@ TEAM_ID = YOUR_TEAM_ID_HERE
 // 앱 정보
 APP_NAME = HelpJob
 BUNDLE_ID = unithon.helpjob
-VERSION = 1.0.0
+VERSION = 1.0.1
 BUILD_NUMBER = 1
 
 // iOS 최소 버전 (15.0 권장)
