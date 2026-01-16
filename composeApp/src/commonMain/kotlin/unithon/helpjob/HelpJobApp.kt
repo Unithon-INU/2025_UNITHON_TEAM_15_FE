@@ -1,5 +1,6 @@
 package unithon.helpjob
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import unithon.helpjob.ui.components.HelpJobBottomBar
@@ -27,9 +30,16 @@ fun HelpJobApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val snackbarHostState = remember { SnackbarHostState() }
+    val focusManager = LocalFocusManager.current
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit){
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },

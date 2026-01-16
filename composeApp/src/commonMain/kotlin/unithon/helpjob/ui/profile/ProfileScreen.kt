@@ -27,9 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
@@ -69,7 +67,6 @@ import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.ui.theme.body2
 import unithon.helpjob.ui.theme.body4
@@ -144,12 +141,9 @@ fun ProfileScreen(
                     Res.string.profile_greeting,
                     homeState.nickname.ifEmpty { stringResource(Res.string.profile_nickname_default) }
                 ),
-                style = TextStyle(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontSize = 22.sp,
-                    lineHeight = 32.sp,
-                    fontFamily = PretendardFontFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = Grey700
+                    lineHeight = 32.sp
                 )
             )
 
