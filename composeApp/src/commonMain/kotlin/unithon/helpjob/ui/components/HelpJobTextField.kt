@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,7 +26,6 @@ import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey700
-import unithon.helpjob.ui.theme.PretendardFontFamily
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.ui.theme.Warning
 
@@ -52,11 +52,7 @@ fun HelpJobTextField(
         modifier = modifier,
         enabled = enabled,
         readOnly = readOnly,
-        textStyle = TextStyle(
-            fontSize = 14.sp,
-            lineHeight = 17.sp,
-            fontFamily = PretendardFontFamily,
-            fontWeight = FontWeight.Bold,
+        textStyle =  MaterialTheme.typography.titleSmall.copy(
             color = if (enabled) Grey700 else Grey400
         ),
         keyboardOptions = keyboardOptions,
