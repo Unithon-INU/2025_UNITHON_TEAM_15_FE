@@ -23,7 +23,7 @@ fun HelpJobTheme(
             onSurface = Grey400,        // 추가 예정
             error = Warning            // 에러 메시지
         ),
-        typography = Typography,
+        typography = getTypography(),
         content = content
     )
 }
