@@ -89,7 +89,7 @@
     <string name="onboarding_agreement_setup_full_agreement">전체동의</string>
     <string name="onboarding_agreement_setup_service_agreement">(필수) 서비스 이용약관 동의</string>
     <string name="onboarding_agreement_setup_info_agreement">(필수) 개인정보 수집·이용 동의</string>
-    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 14세 이상입니다.</string>
+    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 18세 이상입니다.</string>
     <string name="onboarding_agreement_setup_more">더보기</string>
 
     <!-- Onboarding Screen(visa) -->

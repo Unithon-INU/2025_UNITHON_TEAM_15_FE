@@ -94,7 +94,9 @@ fun HelpJobNavGraph(
         composable(route = HelpJobDestinations.ONBOARDING_ROUTE) {
             OnboardingScreen(
                 onOnboardingComplete = navActions::navigateToAppHome,
-                snackbarHostState = snackbarHostState
+                snackbarHostState = snackbarHostState,
+                onNavigateToTermsOfService = navActions::navigateToTermsOfService,
+                onNavigateToPrivacyPolicy = navActions::navigateToPrivacyPolicy
             )
         }
 

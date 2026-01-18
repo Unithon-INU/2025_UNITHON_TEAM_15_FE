@@ -42,6 +42,8 @@ fun AgreementSection(
     onServiceCheckedChange: (Boolean) -> Unit,
     onPrivacyCheckedChange: (Boolean) -> Unit,
     onAgeCheckedChange: (Boolean) -> Unit,
+    onServiceViewDetail: () -> Unit,
+    onPrivacyViewDetail: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -68,7 +70,7 @@ fun AgreementSection(
             text = stringResource(Res.string.onboarding_agreement_setup_service_agreement),
             isChecked = isServiceChecked,
             onCheckedChange = onServiceCheckedChange,
-            onViewDetail = { /* 세부내용 보기 구현 */ }
+            onViewDetail = onServiceViewDetail
         )
 
 
@@ -77,16 +79,16 @@ fun AgreementSection(
             text = stringResource(Res.string.onboarding_agreement_setup_info_agreement),
             isChecked = isPrivacyChecked,
             onCheckedChange = onPrivacyCheckedChange,
-            onViewDetail = { /* 세부내용 보기 구현 */ }
+            onViewDetail = onPrivacyViewDetail
         )
 
 
-        // 만 14세 이상 확인
+        // 만 18세 이상 확인
         AgreementItem(
             text = stringResource(Res.string.onboarding_agreement_setup_age_agreement),
             isChecked = isAgeChecked,
             onCheckedChange = onAgeCheckedChange,
-            onViewDetail = { /* 세부내용 보기 구현 */ }
+            showViewDetail = false
         )
     }
 }
@@ -96,7 +98,8 @@ fun AgreementItem(
     text: String,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    onViewDetail: () -> Unit
+    onViewDetail: () -> Unit = {},
+    showViewDetail: Boolean = true
 ) {
     Row(
         modifier = Modifier
@@ -127,16 +130,18 @@ fun AgreementItem(
             )
         }
 
-        Text(
-            text = stringResource(Res.string.onboarding_agreement_setup_more),
-            modifier = Modifier
-                .noRippleClickable { onViewDetail() }
-                .padding(horizontal = 8.dp),
-            style = MaterialTheme.typography.labelMedium.copy(
-                color = Color(0xFF70737D),
-                textDecoration = TextDecoration.Underline,
-                lineHeight = 18.sp
+        if (showViewDetail) {
+            Text(
+                text = stringResource(Res.string.onboarding_agreement_setup_more),
+                modifier = Modifier
+                    .noRippleClickable { onViewDetail() }
+                    .padding(horizontal = 8.dp),
+                style = MaterialTheme.typography.labelMedium.copy(
+                    color = Color(0xFF70737D),
+                    textDecoration = TextDecoration.Underline,
+                    lineHeight = 18.sp
+                )
             )
-        )
+        }
     }
 }
