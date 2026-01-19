@@ -83,6 +83,19 @@ private fun DocumentScreenImpl(
     val pagerState = rememberPagerState(pageCount = { 10 })
     val scope = rememberCoroutineScope()
 
+    // 공통 뒤로가기 처리 로직
+    val handleBack: () -> Unit = {
+        scope.launch {
+            if (pagerState.currentPage == 9) {
+                // 완료 화면에서 뒤로가기 시 처음으로 초기화
+                viewModel.resetUiState()
+                pagerState.animateScrollToPage(0)
+            } else if (pagerState.currentPage > 0) {
+                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+            }
+        }
+    }
+
     // 🆕 에러 이벤트 처리 - Snackbar 표시
     LaunchedEffect(viewModel.snackbarMessage) {
         viewModel.snackbarMessage.collect { messageRes  ->
@@ -100,11 +113,7 @@ private fun DocumentScreenImpl(
     }
 
     // 시스템 뒤로가기 처리 - TopBar 뒤로가기와 동일하게 작동
-    PlatformBackHandler(enabled = pagerState.currentPage > 0) {
-        scope.launch {
-            pagerState.animateScrollToPage(pagerState.currentPage - 1)
-        }
-    }
+    PlatformBackHandler(enabled = pagerState.currentPage > 0, onBack = handleBack)
 
     val pages = listOf(
         // 온보딩1
@@ -333,13 +342,7 @@ private fun DocumentScreenImpl(
         if (pagerState.currentPage >= 2) {
             HelpJobTopAppBar(
                 title = Res.string.document_top_bar_title,
-                onBack = {
-                    if (pagerState.currentPage > 0) {
-                        scope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                        }
-                    }
-                }
+                onBack = handleBack
             )
         }
 
