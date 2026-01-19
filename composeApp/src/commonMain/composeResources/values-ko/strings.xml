@@ -142,14 +142,14 @@
     <string name="calculator_days_format_plural">%d일</string>
 
     <!-- Calculator Screen -->
-    <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
+    <string name="calculator_title_per_hour">최저임금은 시간당\n10,320원</string>
     <string name="calculator_wage_label">시급 입력</string>
     <string name="calculator_work_time_label">일일 근무 시간</string>
     <string name="calculator_weekly_work_time_label">일주 근무 시간</string>
-    <string name="calculator_wage_example">예) 10,030</string>
+    <string name="calculator_wage_example">예) 10,320</string>
     <string name="calculator_select_time">시간선택</string>
     <string name="calculator_calculate_salary">계산하기</string>
-    <string name="calculator_2025">2025 기준</string>
+    <string name="calculator_2026">2026 기준</string>
     <string name="calculator_won">원</string>
 
     <!-- Calculator Result Dialog -->

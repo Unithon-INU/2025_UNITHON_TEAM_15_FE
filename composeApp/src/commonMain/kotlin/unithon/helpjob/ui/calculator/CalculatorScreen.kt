@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
-import helpjob.composeapp.generated.resources.calculator_2025
+import helpjob.composeapp.generated.resources.calculator_2026
 import helpjob.composeapp.generated.resources.calculator_calculate_salary
 import helpjob.composeapp.generated.resources.calculator_select_time
 import helpjob.composeapp.generated.resources.calculator_title_per_hour
@@ -215,7 +215,7 @@ private fun MinimumWageCard(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text(
-                    text = stringResource(Res.string.calculator_2025),
+                    text = stringResource(Res.string.calculator_2026),
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = Grey600
                     ),

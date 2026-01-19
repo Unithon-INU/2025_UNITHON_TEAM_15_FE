@@ -143,14 +143,14 @@
     <string name="calculator_days_format_plural">%d days</string>
 
     <!-- Calculator Screen -->
-    <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
+    <string name="calculator_title_per_hour">Minimum wage is\n10,320 won per hour</string>
     <string name="calculator_wage_label">Enter hourly wage</string>
     <string name="calculator_work_time_label">Daily work hours</string>
     <string name="calculator_weekly_work_time_label">Weekly work hours</string>
-    <string name="calculator_wage_example">ex) 10,030</string>
+    <string name="calculator_wage_example">ex) 10,320</string>
     <string name="calculator_select_time">Select time</string>
     <string name="calculator_calculate_salary">Calculate</string>
-    <string name="calculator_2025">2025 Standard</string>
+    <string name="calculator_2026">2026 Standard</string>
     <string name="calculator_won">won</string>
 
     <!-- Calculator Result Dialog (Shortened English) -->
