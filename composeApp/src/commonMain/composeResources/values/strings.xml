@@ -218,7 +218,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">Hourly Wage</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">ex)10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">ex)10,320</string>
     <string name="document_workplace_info_3_work_start_date_label">Work Start Date</string>
     <string name="document_workplace_info_3_work_start_year_placeholder">ex)2024</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">Y</string>

@@ -217,7 +217,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">시급 입력</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,320</string>
     <string name="document_workplace_info_3_work_start_date_label">근무 시작일</string>
     <string name="document_workplace_info_3_work_start_year_placeholder">예) 2024</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">년</string>
