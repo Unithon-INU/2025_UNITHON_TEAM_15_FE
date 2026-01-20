@@ -290,6 +290,10 @@ private fun DocumentScreenImpl(
                     onToggleAllDays = { viewModel.toggleAllDays() },
                     isSameTimeForAll = uiState.isSameTimeForAll,
                     onToggleSameTimeForAll = { viewModel.toggleSameTimeForAll() },
+                    weekdayTotalHours = uiState.weekdayTotalHours,
+                    weekendTotalHours = uiState.weekendTotalHours,
+                    isWeekdayOvertime = uiState.isWeekdayOvertime,
+                    isWeekendOvertime = uiState.isWeekendOvertime,
                     enabled = uiState.isWorkplaceInfo4Valid,
                     onNext = {
                         scope.launch {

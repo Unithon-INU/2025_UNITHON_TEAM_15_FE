@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.document_work_hours_format_hours
+import helpjob.composeapp.generated.resources.document_work_hours_format_hours_minutes
+import helpjob.composeapp.generated.resources.document_work_hours_format_minutes
+import helpjob.composeapp.generated.resources.document_work_hours_overtime_warning
+import helpjob.composeapp.generated.resources.document_work_hours_weekday
+import helpjob.composeapp.generated.resources.document_work_hours_weekend
 import helpjob.composeapp.generated.resources.document_workplace_info_4_end_time_placeholder
 import helpjob.composeapp.generated.resources.document_workplace_info_4_everyday
 import helpjob.composeapp.generated.resources.document_workplace_info_4_same_time
@@ -29,6 +37,8 @@ import helpjob.composeapp.generated.resources.document_workplace_info_4_start_ti
 import helpjob.composeapp.generated.resources.document_workplace_info_4_time_unit
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_days_label
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_time_label
+import helpjob.composeapp.generated.resources.exclamation_mark
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.ui.components.HelpJobCheckbox
@@ -39,6 +49,9 @@ import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary300
+import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.ui.theme.body4
+import unithon.helpjob.ui.theme.title1
 import unithon.helpjob.util.noRippleClickable
 
 @Composable
@@ -55,6 +68,10 @@ fun WorkplaceInfo4Screen(
     onToggleAllDays: () -> Unit,
     isSameTimeForAll: Boolean,
     onToggleSameTimeForAll: () -> Unit,
+    weekdayTotalHours: Float,
+    weekendTotalHours: Float,
+    isWeekdayOvertime: Boolean,
+    isWeekendOvertime: Boolean,
     enabled: Boolean,
     onNext: () -> Unit
 ){
@@ -64,13 +81,14 @@ fun WorkplaceInfo4Screen(
         }
     }
     val scrollState = rememberScrollState()
+    val hasWorkHours = weekdayTotalHours > 0 || weekendTotalHours > 0
 
     DocumentInfoScreen(
         modifier = modifier,
         step = step,
         title = title,
         enabled = enabled,
-        contentPadding = 28.dp,
+        contentPadding = if (hasWorkHours) 9.dp else 28.dp,
         verticalScrollable = false,
         onNext = onNext
     ) {
@@ -79,6 +97,17 @@ fun WorkplaceInfo4Screen(
                 .fillMaxSize()
                 .verticalScroll(scrollState)
         ) {
+            // 주중/주말 시간 요약 (시간 입력이 있을 때만 표시)
+            if (hasWorkHours) {
+                WorkHoursSummary(
+                    weekdayTotalHours = weekdayTotalHours,
+                    weekendTotalHours = weekendTotalHours,
+                    isWeekdayOvertime = isWeekdayOvertime,
+                    isWeekendOvertime = isWeekendOvertime
+                )
+                Spacer(modifier = Modifier.height(28.dp))
+            }
+
             // 주간 근무 요일 섹션
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -268,6 +297,85 @@ private fun WorkDayCard(
                 style = MaterialTheme.typography.titleMedium,
             )
         }
+    }
+}
+
+// 주중/주말 근무 시간 요약 컴포넌트
+@Composable
+private fun WorkHoursSummary(
+    weekdayTotalHours: Float,
+    weekendTotalHours: Float,
+    isWeekdayOvertime: Boolean,
+    isWeekendOvertime: Boolean
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        // 주중 시간 (있을 때만)
+        if (weekdayTotalHours > 0) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // 주중 초과 시에만 느낌표 표시
+                if (isWeekdayOvertime) {
+                    Icon(
+                        painter = painterResource(Res.drawable.exclamation_mark),
+                        contentDescription = null,
+                        tint = Warning,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                }
+                Text(
+                    text = stringResource(Res.string.document_work_hours_weekday, formatHours(weekdayTotalHours)),
+                    style = MaterialTheme.typography.title1,
+                    color = if (isWeekdayOvertime) Warning else Grey600
+                )
+            }
+        }
+
+        // 주말 시간 (있을 때만)
+        if (weekendTotalHours > 0) {
+            if (weekdayTotalHours > 0) {
+                Spacer(modifier = Modifier.height(8.dp))  // 주중-주말 간격
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // 주말 초과 시에만 느낌표 표시
+                if (isWeekendOvertime) {
+                    Icon(
+                        painter = painterResource(Res.drawable.exclamation_mark),
+                        contentDescription = null,
+                        tint = Warning,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                }
+                Text(
+                    text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
+                    style = MaterialTheme.typography.title1,
+                    color = if (isWeekendOvertime) Warning else Grey600
+                )
+            }
+        }
+
+        // 초과 경고 메시지 (어느 하나라도 초과 시)
+        if (isWeekdayOvertime || isWeekendOvertime) {
+            Spacer(modifier = Modifier.height(4.dp))  // 시간-경고 간격
+            Text(
+                text = stringResource(Res.string.document_work_hours_overtime_warning),
+                style = MaterialTheme.typography.body4,
+                color = Warning
+            )
+        }
+    }
+}
+
+// 시간 포맷팅 헬퍼 함수 (KMP 호환, 다국어 지원)
+@Composable
+private fun formatHours(hours: Float): String {
+    val totalMinutes = (hours * 60).toInt()
+    val h = totalMinutes / 60
+    val m = totalMinutes % 60
+    return when {
+        h > 0 && m > 0 -> stringResource(Res.string.document_work_hours_format_hours_minutes, h, m)
+        h > 0 -> stringResource(Res.string.document_work_hours_format_hours, h)
+        else -> stringResource(Res.string.document_work_hours_format_minutes, m)
     }
 }
 

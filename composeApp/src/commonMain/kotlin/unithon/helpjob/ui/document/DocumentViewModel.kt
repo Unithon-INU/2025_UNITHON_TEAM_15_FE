@@ -590,6 +590,57 @@ class DocumentViewModel(
                 dayTime != null && dayTime.startTime.isNotBlank() && dayTime.endTime.isNotBlank()
             }
 
+        // 최대 허용 시간 상수 (추후 서버/함수로 교체 가능)
+        companion object {
+            const val MAX_WEEKDAY_HOURS = 20f  // 임시 고정값
+            const val MAX_WEEKEND_HOURS = 10f  // 임시 고정값
+        }
+
+        // 시간 문자열을 분 단위로 변환
+        private fun parseTimeToMinutes(time: String): Int {
+            if (time.isBlank()) return 0
+            val parts = time.split(":")
+            return if (parts.size == 2) {
+                (parts[0].toIntOrNull() ?: 0) * 60 + (parts[1].toIntOrNull() ?: 0)
+            } else 0
+        }
+
+        // 요일별 근무 시간 계산 (분 단위)
+        private fun calculateDayMinutes(workDay: WorkDay): Int {
+            val dayTime = workDayTimes[workDay] ?: return 0
+            if (dayTime.startTime.isBlank() || dayTime.endTime.isBlank()) return 0
+            val start = parseTimeToMinutes(dayTime.startTime)
+            val end = parseTimeToMinutes(dayTime.endTime)
+            return if (end > start) end - start else 0
+        }
+
+        // 주중 총 근무 시간 (시간 단위, Float)
+        val weekdayTotalHours: Float
+            get() {
+                val weekdays = listOf(WorkDay.MONDAY, WorkDay.TUESDAY, WorkDay.WEDNESDAY,
+                    WorkDay.THURSDAY, WorkDay.FRIDAY)
+                val totalMinutes = workDays.filter { it in weekdays }
+                    .sumOf { calculateDayMinutes(it) }
+                return totalMinutes / 60f
+            }
+
+        // 주말 총 근무 시간 (시간 단위, Float)
+        val weekendTotalHours: Float
+            get() {
+                val weekends = listOf(WorkDay.SATURDAY, WorkDay.SUNDAY)
+                val totalMinutes = workDays.filter { it in weekends }
+                    .sumOf { calculateDayMinutes(it) }
+                return totalMinutes / 60f
+            }
+
+        // 주중 초과 여부
+        val isWeekdayOvertime: Boolean
+            get() = weekdayTotalHours > MAX_WEEKDAY_HOURS
+
+        // 주말 초과 여부
+        val isWeekendOvertime: Boolean
+            get() = weekendTotalHours > MAX_WEEKEND_HOURS
+
         val isBasicInfo1Valid: Boolean
             get() = isNameValid && isForeignerNumberValid && isMajorValid
 

@@ -250,6 +250,14 @@
     <string name="workday_saturday">S</string>
     <string name="workday_sunday">S</string>
 
+    <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
+    <string name="document_work_hours_weekday">Weekday: %1$s</string>
+    <string name="document_work_hours_weekend">Weekend: %1$s</string>
+    <string name="document_work_hours_overtime_warning">Working hours exceeded</string>
+    <string name="document_work_hours_format_hours_minutes">%1$d hours %2$d minutes</string>
+    <string name="document_work_hours_format_hours">%1$d hours</string>
+    <string name="document_work_hours_format_minutes">%1$d minutes</string>
+
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">Almost done!\nIs your email address correct?</string>
     <string name="document_email_check_label">Email Address</string>

@@ -249,6 +249,14 @@
     <string name="workday_saturday">토</string>
     <string name="workday_sunday">일</string>
 
+    <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
+    <string name="document_work_hours_weekday">주중: %1$s</string>
+    <string name="document_work_hours_weekend">주말: %1$s</string>
+    <string name="document_work_hours_overtime_warning">근무시간을 초과하였어요</string>
+    <string name="document_work_hours_format_hours_minutes">%1$d시간 %2$d분</string>
+    <string name="document_work_hours_format_hours">%1$d시간</string>
+    <string name="document_work_hours_format_minutes">%1$d분</string>
+
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">마지막이에요!\n입력한 이메일 주소가 맞나요?</string>
     <string name="document_email_check_label">이메일 주소</string>
