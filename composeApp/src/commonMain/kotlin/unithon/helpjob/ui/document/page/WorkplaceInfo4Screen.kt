@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -323,10 +322,9 @@ private fun WorkHoursSummary(
                     Icon(
                         painter = painterResource(Res.drawable.exclamation_mark),
                         contentDescription = null,
-                        tint = Warning,
-                        modifier = Modifier.size(16.dp)
+                        tint = Warning
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
                     text = stringResource(Res.string.document_work_hours_weekday, formatHours(weekdayTotalHours)),
@@ -347,10 +345,9 @@ private fun WorkHoursSummary(
                     Icon(
                         painter = painterResource(Res.drawable.exclamation_mark),
                         contentDescription = null,
-                        tint = Warning,
-                        modifier = Modifier.size(16.dp)
+                        tint = Warning
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
                     text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
