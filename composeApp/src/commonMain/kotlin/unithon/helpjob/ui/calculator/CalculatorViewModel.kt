@@ -28,7 +28,7 @@ class CalculatorViewModel: BaseViewModel() {
             get() {
                 // 입력이 유효하고 숫자로 변환 가능할 때만 비교
                 val wageInt = wage.toIntOrNull()
-                return wageInt != null && wageInt < 10030
+                return wageInt != null && wageInt < 10320
             }
     }
 

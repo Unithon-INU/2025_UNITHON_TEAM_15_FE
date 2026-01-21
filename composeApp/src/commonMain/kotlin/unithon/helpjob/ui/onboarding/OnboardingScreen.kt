@@ -75,7 +75,9 @@ fun OnboardingScreen(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = koinViewModel(),
     snackbarHostState: SnackbarHostState,
-    onOnboardingComplete: () -> Unit = {}
+    onOnboardingComplete: () -> Unit = {},
+    onNavigateToTermsOfService: () -> Unit = {},
+    onNavigateToPrivacyPolicy: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentLanguage by GlobalLanguageState.currentLanguage
@@ -168,7 +170,9 @@ fun OnboardingScreen(
                         },
                         onGetStarted = {
                             viewModel.completeOnboarding()
-                        }
+                        },
+                        onNavigateToTermsOfService = onNavigateToTermsOfService,
+                        onNavigateToPrivacyPolicy = onNavigateToPrivacyPolicy
                     )
                 }
 
@@ -192,7 +196,9 @@ private fun OnboardingPageContainer(
     languageList: List<OnboardingData>,
     isValid: Boolean,
     onNextPage: () -> Unit,
-    onGetStarted: () -> Unit
+    onGetStarted: () -> Unit,
+    onNavigateToTermsOfService: () -> Unit,
+    onNavigateToPrivacyPolicy: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -246,7 +252,9 @@ private fun OnboardingPageContainer(
                 )
                 1 -> AgreementContent(
                     uiState = uiState,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    onNavigateToTermsOfService = onNavigateToTermsOfService,
+                    onNavigateToPrivacyPolicy = onNavigateToPrivacyPolicy
                 )
                 2 -> VisaSelectionContent(
                     currentLanguage = currentLanguage,
@@ -320,7 +328,9 @@ private fun LanguageSelectionContent(
 @Composable
 private fun AgreementContent(
     uiState: OnboardingViewModel.OnboardingUiState,
-    viewModel: OnboardingViewModel
+    viewModel: OnboardingViewModel,
+    onNavigateToTermsOfService: () -> Unit,
+    onNavigateToPrivacyPolicy: () -> Unit
 ) {
     AgreementSection(
         isAllChecked = uiState.fullAgreement,
@@ -331,6 +341,8 @@ private fun AgreementContent(
         onServiceCheckedChange = viewModel::updateServiceAgreement,
         onPrivacyCheckedChange = viewModel::updatePrivacyAgreement,
         onAgeCheckedChange = viewModel::updateAgeAgreement,
+        onServiceViewDetail = onNavigateToTermsOfService,
+        onPrivacyViewDetail = onNavigateToPrivacyPolicy,
         modifier = Modifier.fillMaxWidth()
     )
 }

@@ -89,7 +89,7 @@
     <string name="onboarding_agreement_setup_full_agreement">전체동의</string>
     <string name="onboarding_agreement_setup_service_agreement">(필수) 서비스 이용약관 동의</string>
     <string name="onboarding_agreement_setup_info_agreement">(필수) 개인정보 수집·이용 동의</string>
-    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 14세 이상입니다.</string>
+    <string name="onboarding_agreement_setup_age_agreement">(필수) 만 18세 이상입니다.</string>
     <string name="onboarding_agreement_setup_more">더보기</string>
 
     <!-- Onboarding Screen(visa) -->
@@ -142,14 +142,14 @@
     <string name="calculator_days_format_plural">%d일</string>
 
     <!-- Calculator Screen -->
-    <string name="calculator_title_per_hour">최저임금은 시간당\n10,030원</string>
+    <string name="calculator_title_per_hour">최저임금은 시간당\n10,320원</string>
     <string name="calculator_wage_label">시급 입력</string>
     <string name="calculator_work_time_label">일일 근무 시간</string>
     <string name="calculator_weekly_work_time_label">일주 근무 시간</string>
-    <string name="calculator_wage_example">예) 10,030</string>
+    <string name="calculator_wage_example">예) 10,320</string>
     <string name="calculator_select_time">시간선택</string>
     <string name="calculator_calculate_salary">계산하기</string>
-    <string name="calculator_2025">2025 기준</string>
+    <string name="calculator_2026">2026 기준</string>
     <string name="calculator_won">원</string>
 
     <!-- Calculator Result Dialog -->
@@ -217,7 +217,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">시급 입력</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,320</string>
     <string name="document_workplace_info_3_work_start_date_label">근무 시작일</string>
     <string name="document_workplace_info_3_work_start_year_placeholder">예) 2024</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">년</string>
@@ -248,6 +248,14 @@
     <string name="workday_friday">금</string>
     <string name="workday_saturday">토</string>
     <string name="workday_sunday">일</string>
+
+    <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
+    <string name="document_work_hours_weekday">주중: %1$s</string>
+    <string name="document_work_hours_weekend">주말: %1$s</string>
+    <string name="document_work_hours_overtime_warning">근무시간을 초과하였어요</string>
+    <string name="document_work_hours_format_hours_minutes">%1$d시간 %2$d분</string>
+    <string name="document_work_hours_format_hours">%1$d시간</string>
+    <string name="document_work_hours_format_minutes">%1$d분</string>
 
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">마지막이에요!\n입력한 이메일 주소가 맞나요?</string>

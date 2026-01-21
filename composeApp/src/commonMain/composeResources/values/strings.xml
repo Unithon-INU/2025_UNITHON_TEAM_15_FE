@@ -143,14 +143,14 @@
     <string name="calculator_days_format_plural">%d days</string>
 
     <!-- Calculator Screen -->
-    <string name="calculator_title_per_hour">Minimum wage is\n10,030 won per hour</string>
+    <string name="calculator_title_per_hour">Minimum wage is\n10,320 won per hour</string>
     <string name="calculator_wage_label">Enter hourly wage</string>
     <string name="calculator_work_time_label">Daily work hours</string>
     <string name="calculator_weekly_work_time_label">Weekly work hours</string>
-    <string name="calculator_wage_example">ex) 10,030</string>
+    <string name="calculator_wage_example">ex) 10,320</string>
     <string name="calculator_select_time">Select time</string>
     <string name="calculator_calculate_salary">Calculate</string>
-    <string name="calculator_2025">2025 Standard</string>
+    <string name="calculator_2026">2026 Standard</string>
     <string name="calculator_won">won</string>
 
     <!-- Calculator Result Dialog (Shortened English) -->
@@ -218,7 +218,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">Hourly Wage</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">ex)10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">ex)10,320</string>
     <string name="document_workplace_info_3_work_start_date_label">Work Start Date</string>
     <string name="document_workplace_info_3_work_start_year_placeholder">ex)2024</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">Y</string>
@@ -249,6 +249,14 @@
     <string name="workday_friday">F</string>
     <string name="workday_saturday">S</string>
     <string name="workday_sunday">S</string>
+
+    <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
+    <string name="document_work_hours_weekday">Weekday: %1$s</string>
+    <string name="document_work_hours_weekend">Weekend: %1$s</string>
+    <string name="document_work_hours_overtime_warning">Working hours exceeded</string>
+    <string name="document_work_hours_format_hours_minutes">%1$d hours %2$d minutes</string>
+    <string name="document_work_hours_format_hours">%1$d hours</string>
+    <string name="document_work_hours_format_minutes">%1$d minutes</string>
 
     <!-- DocumentScreen(EmailCheck) -->
     <string name="document_email_check_title">Almost done!\nIs your email address correct?</string>
