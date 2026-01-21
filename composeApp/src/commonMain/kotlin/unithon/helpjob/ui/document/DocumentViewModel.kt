@@ -660,7 +660,7 @@ class DocumentViewModel(
                     isWorkEndDayValid
 
         val isWorkplaceInfo4Valid: Boolean
-            get() = isWorkDayValid && isWorkTimeValid
+            get() = isWorkDayValid && isWorkTimeValid && !isWeekdayOvertime && !isWeekendOvertime
 
         val isAllValid: Boolean
             get() = isBasicInfo1Valid && isBasicInfo2Valid && isWorkplaceInfo1Valid &&
