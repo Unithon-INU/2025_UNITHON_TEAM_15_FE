@@ -3,25 +3,42 @@ package unithon.helpjob.ui.document.components
 import BusinessNumberVisualTransformation
 import ForeignerNumberVisualTransformation
 import PhoneNumberVisualTransformation
+import TimeVisualTransformation
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import unithon.helpjob.ui.components.HelpJobTextField
+import unithon.helpjob.ui.theme.Grey000
+import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Warning
+import unithon.helpjob.ui.theme.title1
+import unithon.helpjob.ui.theme.title2
 import unithon.helpjob.util.CurrencyVisualTransformation
 
 /**
@@ -268,3 +285,125 @@ fun DocumentWageTextField(
     isError = isError,
     errorMessage = errorMessage
 )
+
+/**
+ * 시간 입력용 (HH:MM 형식) - VisualTransformation 방식
+ * 입력: 4자리 숫자 (예: 1330)
+ * 표시: "13 : 30" 형식 (VisualTransformation으로 변환, 커서 정상 작동)
+ */
+@Composable
+fun DocumentTimeTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    hourPlaceholder: String = "00",
+    minutePlaceholder: String = "00",
+    modifier: Modifier = Modifier,
+    focusRequester: FocusRequester? = null,
+    nextFocusRequester: FocusRequester? = null,
+    imeAction: ImeAction = ImeAction.Next,
+    onImeAction: (() -> Unit)? = null
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    BasicTextField(
+        value = value,
+        onValueChange = { newValue ->
+            // 숫자만 허용, 최대 4자리
+            val filtered = newValue.filter { it.isDigit() }.take(4)
+
+            // 시간 검증 (HH: 0-23, MM: 0-59)
+            val isValid = if (filtered.length <= 2) {
+                val hour = filtered.toIntOrNull() ?: 0
+                hour <= 23 || filtered.length < 2
+            } else {
+                val hour = filtered.substring(0, 2).toIntOrNull() ?: 0
+                val minute = filtered.substring(2).toIntOrNull() ?: 0
+                hour <= 23 && (minute <= 59 || filtered.length < 4)
+            }
+
+            if (isValid) {
+                onValueChange(filtered)
+
+                // 4자리 입력 완료 시 다음 필드로 이동 또는 키보드 숨김
+                if (filtered.length == 4) {
+                    if (nextFocusRequester != null) {
+                        nextFocusRequester.requestFocus()
+                    } else if (imeAction == ImeAction.Done) {
+                        keyboardController?.hide()
+                    }
+                    onImeAction?.invoke()
+                }
+            }
+        },
+        modifier = modifier
+            .height(46.dp)
+            .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier),
+        textStyle = MaterialTheme.typography.title1.copy(
+            color = Grey700,
+            textAlign = TextAlign.Center
+        ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number,
+            imeAction = imeAction
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                onImeAction?.invoke()
+            }
+        ),
+        singleLine = true,
+        visualTransformation = TimeVisualTransformation(),
+        cursorBrush = SolidColor(Grey700),
+        decorationBox = { innerTextField ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = Grey000,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = Grey200,
+                        shape = RoundedCornerShape(10.dp)
+                    ),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                // Placeholder: 디자인 스펙 (18dp start, : 양쪽 12dp, title2)
+                if (value.isEmpty()) {
+                    Row(
+                        modifier = Modifier.padding(start = 18.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = hourPlaceholder,
+                            color = Grey300,
+                            style = MaterialTheme.typography.title2
+                        )
+                        Text(
+                            text = ":",
+                            color = Grey300,
+                            style = MaterialTheme.typography.title2,
+                            modifier = Modifier.padding(horizontal = 12.dp)
+                        )
+                        Text(
+                            text = minutePlaceholder,
+                            color = Grey300,
+                            style = MaterialTheme.typography.title2
+                        )
+                    }
+                }
+
+                // 입력 영역
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    innerTextField()
+                }
+            }
+        }
+    )
+}

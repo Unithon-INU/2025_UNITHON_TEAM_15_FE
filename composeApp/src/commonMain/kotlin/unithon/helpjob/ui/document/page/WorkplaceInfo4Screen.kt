@@ -1,6 +1,8 @@
 package unithon.helpjob.ui.document.page
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,8 +21,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import helpjob.composeapp.generated.resources.Res
@@ -30,24 +35,22 @@ import helpjob.composeapp.generated.resources.document_work_hours_format_minutes
 import helpjob.composeapp.generated.resources.document_work_hours_overtime_warning
 import helpjob.composeapp.generated.resources.document_work_hours_weekday
 import helpjob.composeapp.generated.resources.document_work_hours_weekend
-import helpjob.composeapp.generated.resources.document_workplace_info_4_end_time_placeholder
 import helpjob.composeapp.generated.resources.document_workplace_info_4_everyday
 import helpjob.composeapp.generated.resources.document_workplace_info_4_same_time
-import helpjob.composeapp.generated.resources.document_workplace_info_4_start_time_placeholder
-import helpjob.composeapp.generated.resources.document_workplace_info_4_time_unit
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_days_label
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_time_label
 import helpjob.composeapp.generated.resources.exclamation_mark
+import androidx.compose.ui.text.input.ImeAction
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.ui.components.HelpJobCheckbox
-import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.DocumentViewModel
+import unithon.helpjob.ui.document.components.DocumentTimeTextField
+import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Primary300
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.ui.theme.body4
@@ -75,11 +78,6 @@ fun WorkplaceInfo4Screen(
     enabled: Boolean,
     onNext: () -> Unit
 ){
-    val timeList = (0..23).flatMap { hour ->
-        listOf("00", "30").map { minute ->
-            "${hour.toString().padStart(2, '0')}:$minute"
-        }
-    }
     val scrollState = rememberScrollState()
     val hasWorkHours = weekdayTotalHours > 0 || weekendTotalHours > 0
 
@@ -189,80 +187,88 @@ fun WorkplaceInfo4Screen(
 
                 // 선택된 요일들의 시간 입력
                 workDays.forEach { workDay ->
-                    val dayTime = workDayTimes[workDay] ?: DocumentViewModel.WorkDayTime()
+                    key(workDay) {
+                        val dayTime = workDayTimes[workDay] ?: DocumentViewModel.WorkDayTime()
+                        val endTimeFocusRequester = remember { FocusRequester() }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        // 요일 표시
-                        Card(
-                            modifier = Modifier.width(40.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Primary300
-                            )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = workDay.getDisplayName(),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = Grey600,
-                                    modifier = Modifier.padding(vertical = 13.dp),
-                                    textAlign = TextAlign.Center
+                            // 요일 표시
+                            Card(
+                                modifier = Modifier.width(40.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = Primary300
                                 )
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = workDay.getDisplayName(),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = Grey600,
+                                        modifier = Modifier.padding(vertical = 13.dp),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
                             }
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            // 시작 시간 텍스트필드
+                            DocumentTimeTextField(
+                                value = dayTime.startTime.replace(":", ""),
+                                onValueChange = { raw ->
+                                    val formatted = if (raw.length > 2) {
+                                        "${raw.substring(0, 2)}:${raw.substring(2)}"
+                                    } else if (raw.isNotEmpty()) {
+                                        raw
+                                    } else ""
+                                    onWorkDayStartTimeChange(workDay, formatted)
+                                },
+                                hourPlaceholder = "예) 13",
+                                minutePlaceholder = "30",
+                                modifier = Modifier.weight(1f),
+                                nextFocusRequester = endTimeFocusRequester
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            // 시작-종료 구분자 (horizontal divider)
+                            Box(
+                                modifier = Modifier
+                                    .width(9.dp)
+                                    .height(2.dp)
+                                    .background(Grey400)
+                            )
+
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            // 종료 시간 텍스트필드
+                            DocumentTimeTextField(
+                                value = dayTime.endTime.replace(":", ""),
+                                onValueChange = { raw ->
+                                    val formatted = if (raw.length > 2) {
+                                        "${raw.substring(0, 2)}:${raw.substring(2)}"
+                                    } else if (raw.isNotEmpty()) {
+                                        raw
+                                    } else ""
+                                    onWorkDayEndTimeChange(workDay, formatted)
+                                },
+                                hourPlaceholder = "예) 16",
+                                minutePlaceholder = "30",
+                                modifier = Modifier.weight(1f),
+                                focusRequester = endTimeFocusRequester,
+                                imeAction = ImeAction.Done
+                            )
                         }
-
-                        Spacer(modifier = Modifier.width(16.dp))
-
-                        // 시작 시간 드롭다운
-                        HelpJobDropdown(
-                            modifier = Modifier.weight(1f),
-                            label = "",
-                            selectedItem = dayTime.startTime.ifEmpty { null },
-                            items = timeList,
-                            onItemSelected = { time ->
-                                onWorkDayStartTimeChange(workDay, time)
-                            },
-                            itemToString = { it },
-                            placeholder = stringResource(Res.string.document_workplace_info_4_start_time_placeholder),
-                            trailingText = stringResource(Res.string.document_workplace_info_4_time_unit),
-                            isUpward = true,
-                            showScrollbar = false
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        Text(
-                            text = "~",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Grey600
-                        )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        // 종료 시간 드롭다운
-                        HelpJobDropdown(
-                            modifier = Modifier.weight(1f),
-                            label = "",
-                            selectedItem = dayTime.endTime.ifEmpty { null },
-                            items = timeList,
-                            onItemSelected = { time ->
-                                onWorkDayEndTimeChange(workDay, time)
-                            },
-                            itemToString = { it },
-                            placeholder = stringResource(Res.string.document_workplace_info_4_end_time_placeholder),
-                            trailingText = stringResource(Res.string.document_workplace_info_4_time_unit),
-                            isUpward = true,
-                            showScrollbar = false
-                        )
+                        Spacer(Modifier.height(10.dp))
                     }
-                    Spacer(Modifier.height(10.dp))
                 }
             }
         }
