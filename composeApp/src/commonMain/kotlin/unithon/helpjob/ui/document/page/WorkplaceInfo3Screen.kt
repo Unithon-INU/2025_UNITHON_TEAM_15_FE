@@ -16,9 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_workplace_info_3_hourly_wage_label
 import helpjob.composeapp.generated.resources.document_workplace_info_3_hourly_wage_placeholder
@@ -90,12 +87,9 @@ fun WorkplaceInfo3Screen(
     enabled: Boolean,
     onNext: () -> Unit
 ){
-    val currentYear = remember {
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year
-    }
-    val yearList = remember(currentYear) {
-        ((currentYear - 1)..(currentYear + 4)).map { it.toString() }
-    }
+    val yearList = listOf(
+        "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030"
+    )
 
     val monthList = listOf(
         "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
