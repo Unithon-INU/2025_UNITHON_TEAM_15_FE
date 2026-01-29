@@ -18,7 +18,6 @@ import helpjob.composeapp.generated.resources.calculator_won
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey300
-import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.util.CurrencyVisualTransformation
@@ -43,7 +42,7 @@ fun CalculatorWageTextField(
             Text(
                 text = labelText,
                 style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
+                color = Grey600,
                 modifier = Modifier.padding(bottom = 9.dp)
             )
         }
