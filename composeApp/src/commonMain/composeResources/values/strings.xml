@@ -236,7 +236,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo4) -->
     <string name="document_workplace_info_4_work_days_label">Weekly Work Days</string>
-    <string name="document_workplace_info_4_everyday">Everyday</string>
+    <string name="document_workplace_info_4_vacation">Vacation</string>
     <string name="document_workplace_info_4_work_time_label">Start/End Time</string>
     <string name="document_workplace_info_4_same_time">Same Time for All</string>
     <string name="document_workplace_info_4_start_time_placeholder">ex)01</string>
@@ -254,6 +254,7 @@
     <string name="document_work_hours_weekday">Weekday: %1$s</string>
     <string name="document_work_hours_weekend">Weekend: %1$s</string>
     <string name="document_work_hours_overtime_warning">Working hours exceeded</string>
+    <string name="document_work_hours_vacation_info">No work hour limits during vacation!</string>
     <string name="document_work_hours_format_hours_minutes">%1$d hours %2$d minutes</string>
     <string name="document_work_hours_format_hours">%1$d hours</string>
     <string name="document_work_hours_format_minutes">%1$d minutes</string>

@@ -34,7 +34,8 @@ import helpjob.composeapp.generated.resources.document_work_hours_format_minutes
 import helpjob.composeapp.generated.resources.document_work_hours_overtime_warning
 import helpjob.composeapp.generated.resources.document_work_hours_weekday
 import helpjob.composeapp.generated.resources.document_work_hours_weekend
-import helpjob.composeapp.generated.resources.document_workplace_info_4_everyday
+import helpjob.composeapp.generated.resources.document_work_hours_vacation_info
+import helpjob.composeapp.generated.resources.document_workplace_info_4_vacation
 import helpjob.composeapp.generated.resources.document_workplace_info_4_same_time
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_days_label
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_time_label
@@ -66,8 +67,8 @@ fun WorkplaceInfo4Screen(
     workDayTimes: Map<WorkDay, DocumentViewModel.WorkDayTime>,
     onWorkDayStartTimeChange: (WorkDay, String) -> Unit,
     onWorkDayEndTimeChange: (WorkDay, String) -> Unit,
-    isAllDaysSelected: Boolean,
-    onToggleAllDays: () -> Unit,
+    isVacation: Boolean,
+    onToggleVacation: () -> Unit,
     isSameTimeForAll: Boolean,
     onToggleSameTimeForAll: () -> Unit,
     weekdayTotalHours: Float,
@@ -92,19 +93,25 @@ fun WorkplaceInfo4Screen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
         ) {
-            // 주중/주말 시간 요약 (시간 입력이 있을 때만 표시)
+            // [고정 영역] 주중/주말 시간 요약 - 스크롤 밖에 배치
             if (hasWorkHours) {
                 WorkHoursSummary(
                     weekdayTotalHours = weekdayTotalHours,
                     weekendTotalHours = weekendTotalHours,
                     isWeekdayOvertime = isWeekdayOvertime,
-                    isWeekendOvertime = isWeekendOvertime
+                    isWeekendOvertime = isWeekendOvertime,
+                    isVacation = isVacation
                 )
                 Spacer(modifier = Modifier.height(28.dp))
             }
 
+            // [스크롤 영역] 요일 선택 + 시간 입력
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(scrollState)
+            ) {
             // 주간 근무 요일 섹션
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -121,12 +128,12 @@ fun WorkplaceInfo4Screen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     HelpJobCheckbox(
-                        checked = isAllDaysSelected,
-                        onCheckedChange = { onToggleAllDays() }
+                        checked = isVacation,
+                        onCheckedChange = { onToggleVacation() }
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = stringResource(Res.string.document_workplace_info_4_everyday),
+                        text = stringResource(Res.string.document_workplace_info_4_vacation),
                         style = MaterialTheme.typography.titleSmall,
                         color = Grey600
                     )
@@ -270,6 +277,7 @@ fun WorkplaceInfo4Screen(
                     }
                 }
             }
+            }
         }
     }
 }
@@ -311,14 +319,14 @@ private fun WorkHoursSummary(
     weekdayTotalHours: Float,
     weekendTotalHours: Float,
     isWeekdayOvertime: Boolean,
-    isWeekendOvertime: Boolean
+    isWeekendOvertime: Boolean,
+    isVacation: Boolean
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        // 주중 시간 (있을 때만)
-        if (weekdayTotalHours > 0) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // 주중 초과 시에만 느낌표 표시
-                if (isWeekdayOvertime) {
+        // 주중/주말 시간 (가로 배치)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (weekdayTotalHours > 0) {
+                if (!isVacation && isWeekdayOvertime) {
                     Icon(
                         painter = painterResource(Res.drawable.exclamation_mark),
                         contentDescription = null,
@@ -329,19 +337,16 @@ private fun WorkHoursSummary(
                 Text(
                     text = stringResource(Res.string.document_work_hours_weekday, formatHours(weekdayTotalHours)),
                     style = MaterialTheme.typography.title1,
-                    color = if (isWeekdayOvertime) Warning else Grey600
+                    color = if (!isVacation && isWeekdayOvertime) Warning else Grey600
                 )
             }
-        }
 
-        // 주말 시간 (있을 때만)
-        if (weekendTotalHours > 0) {
-            if (weekdayTotalHours > 0) {
-                Spacer(modifier = Modifier.height(8.dp))  // 주중-주말 간격
+            if (weekdayTotalHours > 0 && weekendTotalHours > 0) {
+                Spacer(modifier = Modifier.width(16.dp))
             }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // 주말 초과 시에만 느낌표 표시
-                if (isWeekendOvertime) {
+
+            if (weekendTotalHours > 0) {
+                if (!isVacation && isWeekendOvertime) {
                     Icon(
                         painter = painterResource(Res.drawable.exclamation_mark),
                         contentDescription = null,
@@ -352,14 +357,21 @@ private fun WorkHoursSummary(
                 Text(
                     text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
                     style = MaterialTheme.typography.title1,
-                    color = if (isWeekendOvertime) Warning else Grey600
+                    color = if (!isVacation && isWeekendOvertime) Warning else Grey600
                 )
             }
         }
 
-        // 초과 경고 메시지 (어느 하나라도 초과 시)
-        if (isWeekdayOvertime || isWeekendOvertime) {
-            Spacer(modifier = Modifier.height(4.dp))  // 시간-경고 간격
+        // 하단 문구: 방학 안내 또는 초과 경고
+        if (isVacation) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(Res.string.document_work_hours_vacation_info),
+                style = MaterialTheme.typography.body4,
+                color = Grey600
+            )
+        } else if (isWeekdayOvertime || isWeekendOvertime) {
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = stringResource(Res.string.document_work_hours_overtime_warning),
                 style = MaterialTheme.typography.body4,

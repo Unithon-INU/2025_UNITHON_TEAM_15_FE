@@ -83,9 +83,6 @@ kotlin {
                 // Koin (공통)
                 implementation(libs.koin.core)
                 implementation(libs.koin.compose.viewmodel)
-
-                // DateTime (공통)
-                implementation(libs.kotlinx.datetime)
             }
         }
 

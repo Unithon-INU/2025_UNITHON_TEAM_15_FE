@@ -286,8 +286,8 @@ private fun DocumentScreenImpl(
                     onWorkDayEndTimeChange = { workDay, time ->
                         viewModel.updateWorkDayEndTime(workDay, time)
                     },
-                    isAllDaysSelected = uiState.isAllDaysSelected,
-                    onToggleAllDays = { viewModel.toggleAllDays() },
+                    isVacation = uiState.isVacation,
+                    onToggleVacation = { viewModel.toggleVacation() },
                     isSameTimeForAll = uiState.isSameTimeForAll,
                     onToggleSameTimeForAll = { viewModel.toggleSameTimeForAll() },
                     weekdayTotalHours = uiState.weekdayTotalHours,
