@@ -169,32 +169,19 @@ class DocumentViewModel(
                 newTimes.remove(selectedDay)
                 currentState.copy(
                     workDays = currentState.workDays - selectedDay,
-                    workDayTimes = newTimes,
-                    isAllDaysSelected = false
+                    workDayTimes = newTimes
                 )
             } else {
                 currentState.copy(
-                    workDays = currentState.workDays + selectedDay,
-                    isAllDaysSelected = false
+                    workDays = currentState.workDays + selectedDay
                 )
             }
         }
     }
 
-    fun toggleAllDays() {
+    fun toggleVacation() {
         _uiState.update { currentState ->
-            if (currentState.isAllDaysSelected) {
-                currentState.copy(
-                    isAllDaysSelected = false,
-                    workDays = emptyList(),
-                    workDayTimes = emptyMap()
-                )
-            } else {
-                currentState.copy(
-                    isAllDaysSelected = true,
-                    workDays = WorkDay.entries
-                )
-            }
+            currentState.copy(isVacation = !currentState.isVacation)
         }
     }
 
@@ -508,7 +495,7 @@ class DocumentViewModel(
         val workEndDay: String = "",
         val workDays: List<WorkDay> = emptyList(),
         val workDayTimes: Map<WorkDay, WorkDayTime> = emptyMap(),
-        val isAllDaysSelected: Boolean = false,
+        val isVacation: Boolean = false,
         val isSameTimeForAll: Boolean = false,
         val isGuest: Boolean = false,  // 🆕 Guest Mode 여부
         @Deprecated("Use workDayTimes instead")
@@ -660,7 +647,7 @@ class DocumentViewModel(
                     isWorkEndDayValid
 
         val isWorkplaceInfo4Valid: Boolean
-            get() = isWorkDayValid && isWorkTimeValid && !isWeekdayOvertime && !isWeekendOvertime
+            get() = isWorkDayValid && isWorkTimeValid && (isVacation || (!isWeekdayOvertime && !isWeekendOvertime))
 
         val isAllValid: Boolean
             get() = isBasicInfo1Valid && isBasicInfo2Valid && isWorkplaceInfo1Valid &&
