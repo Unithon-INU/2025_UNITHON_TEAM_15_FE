@@ -37,6 +37,7 @@ import helpjob.composeapp.generated.resources.calculator_result_included
 import helpjob.composeapp.generated.resources.calculator_result_not_included
 import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_condition_met
 import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_condition_not_met
+import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_excluded_by_user
 import helpjob.composeapp.generated.resources.calculator_result_weekly_allowance_label
 import helpjob.composeapp.generated.resources.calculator_result_won_unit
 import helpjob.composeapp.generated.resources.calculator_result_work_hours_label
@@ -198,6 +199,7 @@ fun CalculationResultDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (result.includesWeeklyAllowance) {
+                            // 케이스 1: 15시간 이상 + 포함 선택
                             Icon(
                                 painter = painterResource(Res.drawable.calculate_check),
                                 contentDescription = null,
@@ -210,7 +212,22 @@ fun CalculationResultDialog(
                                 style = MaterialTheme.typography.labelMedium,
                                 color = Blue500
                             )
+                        } else if (result.weeklyAllowanceExcludedByUser) {
+                            // 케이스 2: 15시간 이상이지만 미포함 선택
+                            Icon(
+                                painter = painterResource(Res.drawable.calculate_exclamation),
+                                contentDescription = null,
+                                tint = Warning,
+                                modifier = Modifier.height(15.dp)
+                            )
+                            Spacer(Modifier.width(5.dp))
+                            Text(
+                                text = stringResource(Res.string.calculator_result_weekly_allowance_excluded_by_user),
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Warning
+                            )
                         } else {
+                            // 케이스 3: 15시간 미달
                             Icon(
                                 painter = painterResource(Res.drawable.calculate_exclamation),
                                 contentDescription = null,

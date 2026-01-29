@@ -30,6 +30,10 @@ import helpjob.composeapp.generated.resources.calculator_select_time
 import helpjob.composeapp.generated.resources.calculator_title_per_hour
 import helpjob.composeapp.generated.resources.calculator_wage_example
 import helpjob.composeapp.generated.resources.calculator_wage_label
+import helpjob.composeapp.generated.resources.calculator_weekly_allowance_include_label
+import helpjob.composeapp.generated.resources.calculator_weekly_allowance_include_no
+import helpjob.composeapp.generated.resources.calculator_weekly_allowance_include_placeholder
+import helpjob.composeapp.generated.resources.calculator_weekly_allowance_include_yes
 import helpjob.composeapp.generated.resources.calculator_weekly_work_time_label
 import helpjob.composeapp.generated.resources.calculator_work_time_label
 import helpjob.composeapp.generated.resources.error_lower_than_minimun_wage
@@ -57,9 +61,11 @@ fun CalculatorScreen(
         uiState = uiState,
         workTimeOptions = viewModel.workTimeOptions,
         workDayOptions = viewModel.workDayOptions,
+        weeklyAllowanceOptions = viewModel.weeklyAllowanceOptions,
         onWageChange = viewModel::updateWage,
         onWorkTimeSelected = viewModel::updateSelectedWorkTime,
         onWorkDayCountSelected = viewModel::updateSelectedWorkDayCount,
+        onWeeklyAllowanceSelected = viewModel::updateIncludeWeeklyAllowance,
         onCalculateClick = viewModel::calculateSalary,
         onResultDialogDismiss = viewModel::dismissResultDialog,
         modifier = modifier
@@ -74,9 +80,11 @@ internal fun CalculatorScreenContent(
     uiState: CalculatorViewModel.CalculatorUiState,
     workTimeOptions: List<Float>,
     workDayOptions: List<Int>,
+    weeklyAllowanceOptions: List<Boolean>,
     onWageChange: (String) -> Unit,
     onWorkTimeSelected: (Float) -> Unit,
     onWorkDayCountSelected: (Int) -> Unit,
+    onWeeklyAllowanceSelected: (Boolean) -> Unit,
     onCalculateClick: () -> Unit,
     onResultDialogDismiss: () -> Unit,
     modifier: Modifier = Modifier
@@ -129,6 +137,11 @@ internal fun CalculatorScreenContent(
             // 미리 포맷된 문자열 맵 생성
             val workTimeDisplayMap = workTimeOptions.associateWith { formatWorkTime(it) }
             val workDayDisplayMap = workDayOptions.associateWith { formatWorkDays(it) }
+            val allowanceYesText = stringResource(Res.string.calculator_weekly_allowance_include_yes)
+            val allowanceNoText = stringResource(Res.string.calculator_weekly_allowance_include_no)
+            val weeklyAllowanceDisplayMap = weeklyAllowanceOptions.associateWith { include ->
+                if (include) allowanceYesText else allowanceNoText
+            }
 
             // 일일 근무시간 드롭다운
             HelpJobDropdown(
@@ -155,6 +168,21 @@ internal fun CalculatorScreenContent(
                 itemToString = { days -> workDayDisplayMap[days] ?: "" },
                 placeholder = stringResource(Res.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
+                isUpward = false
+            )
+
+            Spacer(Modifier.height(27.dp))
+
+            // 주휴수당 포함 여부 드롭다운
+            HelpJobDropdown(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(Res.string.calculator_weekly_allowance_include_label),
+                selectedItem = uiState.includeWeeklyAllowance,
+                items = weeklyAllowanceOptions,
+                onItemSelected = onWeeklyAllowanceSelected,
+                itemToString = { include -> weeklyAllowanceDisplayMap[include] ?: "" },
+                placeholder = stringResource(Res.string.calculator_weekly_allowance_include_placeholder),
+                labelTextFieldSpace = 9.dp,
                 isUpward = true
             )
 
@@ -176,7 +204,8 @@ internal fun CalculatorScreenContent(
             onClick = onCalculateClick,
             enabled = uiState.isWorkTimeInputValid &&
                     uiState.isWorkDayCountInputValid &&
-                    uiState.isWageInputValid
+                    uiState.isWageInputValid &&
+                    uiState.isWeeklyAllowanceInputValid
         )
     }
 

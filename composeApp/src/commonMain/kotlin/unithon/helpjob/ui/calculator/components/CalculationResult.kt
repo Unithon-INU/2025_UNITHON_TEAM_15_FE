@@ -4,5 +4,6 @@ data class CalculationResult(
     val workHours: Int,
     val weeklyAllowanceHours: Int,
     val totalAmount: Int,
-    val includesWeeklyAllowance: Boolean
+    val includesWeeklyAllowance: Boolean,
+    val weeklyAllowanceExcludedByUser: Boolean = false
 )
