@@ -38,12 +38,13 @@ import helpjob.composeapp.generated.resources.onboarding_agreement_setup_title
 import helpjob.composeapp.generated.resources.onboarding_business_setup_title
 import helpjob.composeapp.generated.resources.onboarding_done_button
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_no_topik
-import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_title
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik3
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik4_over
+import helpjob.composeapp.generated.resources.onboarding_language_level_setup_title
 import helpjob.composeapp.generated.resources.onboarding_language_setup_title
 import helpjob.composeapp.generated.resources.onboarding_next_button
 import helpjob.composeapp.generated.resources.onboarding_top_bar_title
+import helpjob.composeapp.generated.resources.onboarding_track_setup_title
 import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_description
 import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_title
 import helpjob.composeapp.generated.resources.onboarding_visa_setup_d4_description
@@ -55,6 +56,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.EnglishLevel
+import unithon.helpjob.data.model.LanguageTrack
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobButton
 import unithon.helpjob.ui.components.HelpJobTopAppBar
@@ -106,7 +109,7 @@ fun OnboardingScreen(
         }
     }
 
-    val pagerState = rememberPagerState(pageCount = { 5 }) // 페이지 수 고정
+    val pagerState = rememberPagerState(pageCount = { 6 }) // 페이지 수: 트랙 선택 추가
     val scope = rememberCoroutineScope()
 
     // 시스템 뒤로가기 처리 - TopBar 뒤로가기와 동일하게 작동
@@ -118,11 +121,12 @@ fun OnboardingScreen(
 
     // 현재 페이지에 따른 유효성 검사 결과 계산
     val isCurrentPageValid = when (pagerState.currentPage) {
-        0 -> uiState.inLanguageValid     // 언어 선택 페이지
+        0 -> uiState.inLanguageValid         // 언어 선택 페이지
         1 -> uiState.isFullAgreementValid    // 약관 동의 페이지
-        2 -> uiState.isVisaValid         // 비자 선택 페이지
-        3 -> uiState.isKoreanLevelValid  // 한국어 능력 선택 페이지
-        4 -> uiState.isBusinessValid     // 업종 선택 페이지
+        2 -> uiState.isVisaValid             // 비자 선택 페이지
+        3 -> uiState.isTrackValid            // 트랙 선택 페이지
+        4 -> uiState.isLanguageLevelValid    // 언어 능력 선택 페이지
+        5 -> uiState.isBusinessValid         // 업종 선택 페이지
         else -> false
     }
 
@@ -155,14 +159,14 @@ fun OnboardingScreen(
                 ) { position ->
                     OnboardingPageContainer(
                         pageIndex = position,
-                        pageCount = 5,
-                        currentLanguage = currentLanguage, // 🔥 언어 상태 전달
+                        pageCount = 6,
+                        currentLanguage = currentLanguage,
                         uiState = uiState,
                         viewModel = viewModel,
                         languageList = languageList,
                         isValid = isCurrentPageValid,
                         onNextPage = {
-                            if (position < 4) {
+                            if (position < 5) {
                                 scope.launch {
                                     pagerState.animateScrollToPage(position + 1)
                                 }
@@ -225,8 +229,9 @@ private fun OnboardingPageContainer(
                     0 -> Res.string.onboarding_language_setup_title
                     1 -> Res.string.onboarding_agreement_setup_title
                     2 -> Res.string.onboarding_visa_setup_title
-                    3 -> Res.string.onboarding_korean_level_setup_title
-                    4 -> Res.string.onboarding_business_setup_title
+                    3 -> Res.string.onboarding_track_setup_title
+                    4 -> Res.string.onboarding_language_level_setup_title
+                    5 -> Res.string.onboarding_business_setup_title
                     else -> Res.string.onboarding_language_setup_title
                 }
             }
@@ -261,12 +266,27 @@ private fun OnboardingPageContainer(
                     selectedVisa = uiState.visa,
                     onVisaSelected = viewModel::updateVisa
                 )
-                3 -> KoreanLevelContent(
+                3 -> TrackSelectionContent(
                     currentLanguage = currentLanguage,
-                    selectedLevel = uiState.koreanLevel,
-                    onLevelSelected = viewModel::updateKoreanLevel
+                    selectedTrack = uiState.selectedTrack,
+                    onTrackSelected = viewModel::updateTrack
                 )
-                4 -> BusinessSelectionContent(
+                4 -> {
+                    when (uiState.selectedTrack) {
+                        LanguageTrack.KOREAN -> KoreanLevelContent(
+                            currentLanguage = currentLanguage,
+                            selectedLevel = uiState.koreanLevel,
+                            onLevelSelected = viewModel::updateKoreanLevel
+                        )
+                        LanguageTrack.ENGLISH -> EnglishLevelContent(
+                            currentLanguage = currentLanguage,
+                            selectedLevel = uiState.englishLevel,
+                            onLevelSelected = viewModel::updateEnglishLevel
+                        )
+                        null -> { /* 트랙 미선택 시 도달 불가 (버튼 비활성) */ }
+                    }
+                }
+                5 -> BusinessSelectionContent(
                     currentLanguage = currentLanguage,
                     selectedBusinesses = uiState.businesses,
                     onBusinessSelected = viewModel::updateBusiness
@@ -392,6 +412,30 @@ private fun VisaSelectionContent(
     }
 }
 
+// 🔥 트랙 선택 컨텐츠
+@Composable
+private fun TrackSelectionContent(
+    currentLanguage: AppLanguage,
+    selectedTrack: LanguageTrack?,
+    onTrackSelected: (LanguageTrack) -> Unit
+) {
+    LanguageTrack.entries.forEachIndexed { index, track ->
+        val displayName = track.getDisplayName()
+        OnboardingCard(
+            modifier = Modifier
+                .height(62.dp)
+                .fillMaxWidth(),
+            mainTitle = displayName,
+            onClick = { onTrackSelected(track) },
+            contentPosition = Arrangement.Center,
+            enabled = selectedTrack == track,
+        )
+        if (index < LanguageTrack.entries.size - 1) {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+    }
+}
+
 // 🔥 한국어 레벨 선택 컨텐츠
 @Composable
 private fun KoreanLevelContent(
@@ -416,6 +460,31 @@ private fun KoreanLevelContent(
             enabled = selectedLevel == title,
         )
         if (index < koreanLevelTitles.size - 1) {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+    }
+}
+
+// 🔥 영어 레벨 선택 컨텐츠
+@Composable
+private fun EnglishLevelContent(
+    currentLanguage: AppLanguage,
+    selectedLevel: String,
+    onLevelSelected: (String) -> Unit
+) {
+    val englishLevelTitles = EnglishLevel.entries.map { it.getDisplayName() }
+
+    englishLevelTitles.forEachIndexed { index, title ->
+        OnboardingCard(
+            modifier = Modifier
+                .height(62.dp)
+                .fillMaxWidth(),
+            mainTitle = title,
+            onClick = { onLevelSelected(title) },
+            contentPosition = Arrangement.Center,
+            enabled = selectedLevel == title,
+        )
+        if (index < englishLevelTitles.size - 1) {
             Spacer(modifier = Modifier.height(15.dp))
         }
     }

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
@@ -76,6 +77,7 @@ fun OnboardingCard(
                 Text(
                     text = mainTitle,
                     style = mainTitleFontStyle,
+                    textAlign = TextAlign.Center,
                 )
             }
         } else {

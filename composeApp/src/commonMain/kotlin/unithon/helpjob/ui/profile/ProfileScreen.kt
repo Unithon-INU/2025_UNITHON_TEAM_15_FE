@@ -47,6 +47,7 @@ import helpjob.composeapp.generated.resources.profile_greeting
 import helpjob.composeapp.generated.resources.profile_job_default
 import helpjob.composeapp.generated.resources.profile_korean_default
 import helpjob.composeapp.generated.resources.profile_korean_level
+import helpjob.composeapp.generated.resources.profile_language_level
 import helpjob.composeapp.generated.resources.profile_nickname_default
 import helpjob.composeapp.generated.resources.profile_preferred_job
 import helpjob.composeapp.generated.resources.profile_visa_default
@@ -57,6 +58,7 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.EnglishLevel
 import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
@@ -198,7 +200,7 @@ fun ProfileScreen(
                     )
 
                     ProfileInfoColumn(
-                        label = stringResource(Res.string.profile_korean_level),
+                        label = stringResource(Res.string.profile_language_level),
                         value = formatTopikLevelForDisplay(uiState.topikLevel),
                         modifier = Modifier.weight(1f)
                     )
@@ -443,10 +445,17 @@ private fun formatIndustryForDisplay(industry: String?): String {
 
 @Composable
 private fun formatTopikLevelForDisplay(topikLevel: String?): String {
-    return topikLevel?.let { value ->
-        val level = TopikLevel.fromDisplayText(value)
-        stringResource(level.displayNameRes)
-    } ?: stringResource(Res.string.profile_korean_default)
+    if (topikLevel == null) return stringResource(Res.string.profile_korean_default)
+
+    // 영어 레벨 매칭 시도 (apiValue 기반)
+    val englishLevel = EnglishLevel.fromApiValue(topikLevel)
+    if (englishLevel != null) {
+        return stringResource(englishLevel.displayNameRes)
+    }
+
+    // 기존 TopikLevel 매칭 (기존 로직 유지)
+    val level = TopikLevel.fromDisplayText(topikLevel)
+    return stringResource(level.displayNameRes)
 }
 
 

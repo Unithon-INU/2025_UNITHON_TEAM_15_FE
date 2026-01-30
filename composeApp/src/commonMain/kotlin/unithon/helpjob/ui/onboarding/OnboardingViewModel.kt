@@ -15,7 +15,9 @@ import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.EnglishLevel
 import unithon.helpjob.data.model.GuestProfile
+import unithon.helpjob.data.model.LanguageTrack
 import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.LanguageRepository
@@ -41,7 +43,10 @@ class OnboardingViewModel(
         val userProfileError: Boolean = false,
         val userProfileErrorMessage: Int? = null,
         val selectedTopikLevel: TopikLevel? = null,
-        val selectedBusinesses: List<Business> = emptyList()
+        val selectedBusinesses: List<Business> = emptyList(),
+        val selectedTrack: LanguageTrack? = null,
+        val englishLevel: String = "",
+        val selectedEnglishLevel: EnglishLevel? = null
     ) {
         val inLanguageValid: Boolean
             get() = language.isNotBlank()
@@ -49,14 +54,20 @@ class OnboardingViewModel(
             get() = serviceAgreement && privacyAgreement && ageAgreement
         val isAllAgreementChecked: Boolean
             get() = serviceAgreement && privacyAgreement && ageAgreement
-        val isKoreanLevelValid: Boolean
-            get() = koreanLevel.isNotBlank()
+        val isTrackValid: Boolean
+            get() = selectedTrack != null
+        val isLanguageLevelValid: Boolean
+            get() = when (selectedTrack) {
+                LanguageTrack.KOREAN -> selectedTopikLevel != null
+                LanguageTrack.ENGLISH -> selectedEnglishLevel != null
+                null -> false
+            }
         val isVisaValid: Boolean
             get() = visa.isNotBlank()
         val isBusinessValid: Boolean
             get() = businesses.isNotEmpty()
         val isAllChecked: Boolean
-            get() = inLanguageValid && isFullAgreementValid && isKoreanLevelValid && isVisaValid && isBusinessValid
+            get() = inLanguageValid && isFullAgreementValid && isTrackValid && isLanguageLevelValid && isVisaValid && isBusinessValid
     }
 
     private val _uiState = MutableStateFlow(
@@ -123,12 +134,35 @@ class OnboardingViewModel(
     }
 
 
+    fun updateTrack(track: LanguageTrack) {
+        _uiState.update {
+            it.copy(
+                selectedTrack = track,
+                // 트랙 전환 시 이전 선택 초기화
+                koreanLevel = "",
+                selectedTopikLevel = null,
+                englishLevel = "",
+                selectedEnglishLevel = null
+            )
+        }
+    }
+
     fun updateKoreanLevel(level: String) {
         val topikLevel = TopikLevel.fromDisplayText(level)
         _uiState.value = _uiState.value.copy(
-            koreanLevel = level,  // UI 표시용 텍스트
-            selectedTopikLevel = topikLevel  // 🆕 enum 저장
+            koreanLevel = level,
+            selectedTopikLevel = topikLevel
         )
+    }
+
+    fun updateEnglishLevel(level: String) {
+        val englishLevel = EnglishLevel.fromDisplayText(level)
+        _uiState.update {
+            it.copy(
+                englishLevel = level,
+                selectedEnglishLevel = englishLevel
+            )
+        }
     }
 
     fun updateVisa(visa: String) {
@@ -182,11 +216,16 @@ class OnboardingViewModel(
             try {
                 val isGuest = authRepository.isGuestMode()
 
+                val topikLevelValue = when (_uiState.value.selectedTrack) {
+                    LanguageTrack.KOREAN -> _uiState.value.selectedTopikLevel?.apiValue ?: "없음"
+                    LanguageTrack.ENGLISH -> _uiState.value.selectedEnglishLevel?.apiValue ?: "자격증 없음"
+                    null -> "없음"
+                }
+
                 if (isGuest) {
-                    // 🆕 Guest: 로컬 저장
                     val guestProfile = GuestProfile(
                         language = _uiState.value.language,
-                        topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
+                        topikLevel = topikLevelValue,
                         visaType = _uiState.value.visa,
                         industry = Business.toApiValues(_uiState.value.selectedBusinesses)
                     )
@@ -195,10 +234,9 @@ class OnboardingViewModel(
                     Logger.d("✅ Guest 프로필 로컬 저장 완료")
 
                 } else {
-                    // 기존: Member API 호출
                     authRepository.setProfile(
                         language = _uiState.value.language,
-                        topikLevel = _uiState.value.selectedTopikLevel?.apiValue ?: "없음",
+                        topikLevel = topikLevelValue,
                         visaType = _uiState.value.visa,
                         industry = Business.toApiValues(_uiState.value.selectedBusinesses)
                     )

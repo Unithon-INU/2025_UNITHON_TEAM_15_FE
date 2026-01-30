@@ -99,11 +99,26 @@
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
 
+    <!-- Onboarding Screen(track selection) -->
+    <string name="onboarding_track_setup_title">사용자님의 트랙을\n선택해 주세요</string>
+    <string name="onboarding_track_korean">한국어 트랙</string>
+    <string name="onboarding_track_english">영어 트랙</string>
+
+    <!-- Onboarding Screen(language level - common title) -->
+    <string name="onboarding_language_level_setup_title">사용자님의 언어 능력을\n선택해 주세요</string>
+
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">사용자님의 한국어 능력을\n선택해 주세요</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
     <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
+
+    <!-- Onboarding Screen(english level) -->
+    <string name="onboarding_english_level_toefl">TOEFL 530(CBT 197, iBT 71) 이상</string>
+    <string name="onboarding_english_level_ielts">IELTS 5.5 이상</string>
+    <string name="onboarding_english_level_cefr">CEFR B2 이상</string>
+    <string name="onboarding_english_level_teps">TEPS 600점 이상</string>
+    <string name="onboarding_english_level_none">자격증 없음</string>
 
     <!-- Onboarding Screen(business) -->
     <string name="onboarding_business_setup_title">사용자님이 희망하는\n업종은 무엇인가요?</string>
@@ -287,6 +302,7 @@
     <string name="profile_email_signup_type">이메일 가입</string>
     <string name="profile_visa_type">비자 종류</string>
     <string name="profile_visa_default">D-?</string>
+    <string name="profile_language_level">언어 능력</string>
     <string name="profile_korean_level">한국어 능력</string>
     <string name="profile_korean_default">TOPIK ?급</string>
     <string name="profile_preferred_job">희망 업종</string>

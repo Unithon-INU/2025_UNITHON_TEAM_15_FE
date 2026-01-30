@@ -114,11 +114,26 @@
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">A general training visa</string>
 
+    <!-- Onboarding Screen(track selection) -->
+    <string name="onboarding_track_setup_title">Please select\nyour track</string>
+    <string name="onboarding_track_korean">Korean Track</string>
+    <string name="onboarding_track_english">English Track</string>
+
+    <!-- Onboarding Screen(language level - common title) -->
+    <string name="onboarding_language_level_setup_title">Please select\nyour language proficiency</string>
+
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">Please select\nyour topic rating</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK Level 3</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK Level 4 or higher</string>
     <string name="onboarding_korean_level_setup_no_topik">No TOPIK certification</string>
+
+    <!-- Onboarding Screen(english level) -->
+    <string name="onboarding_english_level_toefl">TOEFL 530 (CBT 197, iBT 71)\nor higher</string>
+    <string name="onboarding_english_level_ielts">IELTS 5.5 or higher</string>
+    <string name="onboarding_english_level_cefr">CEFR B2 or higher</string>
+    <string name="onboarding_english_level_teps">TEPS 600 or higher</string>
+    <string name="onboarding_english_level_none">No certification</string>
 
     <!-- Onboarding Screen(business) -->
     <string name="onboarding_business_setup_title">What kind of\nbusiness do you want?</string>
@@ -288,6 +303,7 @@
     <string name="profile_email_signup_type">Email Signup</string>
     <string name="profile_visa_type">Visa Type</string>
     <string name="profile_visa_default">D-2</string>
+    <string name="profile_language_level">Language Level</string>
     <string name="profile_korean_level">Korean Level</string>
     <string name="profile_korean_default">TOPIK Level 3</string>
     <string name="profile_preferred_job">Preferred Job</string>
