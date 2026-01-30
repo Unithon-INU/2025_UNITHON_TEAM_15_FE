@@ -62,7 +62,7 @@ fun HelpJobBottomBar(
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 24.dp, vertical = 7.dp)
             .selectableGroup(),
-        horizontalArrangement = Arrangement.SpaceEvenly,
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         destinations.forEach { destination ->
@@ -79,7 +79,7 @@ fun HelpJobBottomBar(
                         indication = ripple(bounded = false),
                         onClick = { onNavigateToDestination(destination) }
                     )
-                    .weight(1f),
+                    .padding(horizontal = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
