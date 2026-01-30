@@ -1,7 +1,7 @@
 package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.ui.draw.shadow
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +35,6 @@ import unithon.helpjob.BottomNavDestination
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Primary600
-import unithon.helpjob.ui.theme.borderColor
 
 @Composable
 fun HelpJobBottomBar(
@@ -52,9 +51,8 @@ fun HelpJobBottomBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                width = 0.5.dp,
-                color = borderColor,
+            .shadow(
+                elevation = 4.dp,
                 shape = bottomBarShape
             )
             .background(color = Grey000, shape = bottomBarShape)
