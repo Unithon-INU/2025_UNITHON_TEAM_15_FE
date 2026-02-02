@@ -17,7 +17,7 @@ interface AuthRepository {
     @Throws(UnauthorizedException::class, CancellationException::class)
     suspend fun setProfile(
         language: String,
-        topikLevel: String,
+        languageLevel: String,
         visaType: String,
         industry: String
     )

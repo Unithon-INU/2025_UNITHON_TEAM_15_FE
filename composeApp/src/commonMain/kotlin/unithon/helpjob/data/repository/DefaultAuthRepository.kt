@@ -60,11 +60,11 @@ class DefaultAuthRepository(
 
     override suspend fun setProfile(
         language: String,
-        topikLevel: String,
+        languageLevel: String,
         visaType: String,
         industry: String
     ) {
-        apiService.setProfile(MemberProfileSetReq(language, topikLevel, visaType, industry))
+        apiService.setProfile(MemberProfileSetReq(language, visaType, languageLevel, industry))
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
@@ -127,7 +127,7 @@ class DefaultAuthRepository(
             val profile = getMemberProfile()
             profile.language.isNotEmpty() &&
                     profile.visaType.isNotEmpty() &&
-                    profile.topikLevel.isNotEmpty() &&
+                    profile.languageLevel.isNotEmpty() &&
                     profile.industry.isNotEmpty()
         } catch (e: Exception) {
             false // 프로필 조회 실패 시 온보딩 미완료로 처리

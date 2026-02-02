@@ -31,8 +31,8 @@ data class MemberProfileSetReq(
     val language: String,
     @SerialName("visaType")
     val visaType: String,
-    @SerialName("topikLevel")
-    val topikLevel: String,
+    @SerialName("languageLevel")
+    val languageLevel: String,
     @SerialName("industry")
     val industry: String
 )

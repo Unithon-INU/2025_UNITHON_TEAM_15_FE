@@ -216,7 +216,7 @@ class OnboardingViewModel(
             try {
                 val isGuest = authRepository.isGuestMode()
 
-                val topikLevelValue = when (_uiState.value.selectedTrack) {
+                val languageLevelValue = when (_uiState.value.selectedTrack) {
                     LanguageTrack.KOREAN -> _uiState.value.selectedTopikLevel?.apiValue ?: "없음"
                     LanguageTrack.ENGLISH -> _uiState.value.selectedEnglishLevel?.apiValue ?: "자격증 없음"
                     null -> "없음"
@@ -225,7 +225,7 @@ class OnboardingViewModel(
                 if (isGuest) {
                     val guestProfile = GuestProfile(
                         language = _uiState.value.language,
-                        topikLevel = topikLevelValue,
+                        languageLevel = languageLevelValue,
                         visaType = _uiState.value.visa,
                         industry = Business.toApiValues(_uiState.value.selectedBusinesses)
                     )
@@ -236,7 +236,7 @@ class OnboardingViewModel(
                 } else {
                     authRepository.setProfile(
                         language = _uiState.value.language,
-                        topikLevel = topikLevelValue,
+                        languageLevel = languageLevelValue,
                         visaType = _uiState.value.visa,
                         industry = Business.toApiValues(_uiState.value.selectedBusinesses)
                     )

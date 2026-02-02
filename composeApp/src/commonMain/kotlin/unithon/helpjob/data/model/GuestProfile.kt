@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GuestProfile(
     val language: String,          // "한국어", "English"
-    val topikLevel: String,        // TopikLevel.apiValue (예: "TOPIK 3급 이상")
+    val languageLevel: String,      // TopikLevel/EnglishLevel의 apiValue
     val visaType: String,          // "D-2", "D-4" 등
     val industry: String           // "편의점,카페" (쉼표 구분, Business.toApiValues() 결과)
 )

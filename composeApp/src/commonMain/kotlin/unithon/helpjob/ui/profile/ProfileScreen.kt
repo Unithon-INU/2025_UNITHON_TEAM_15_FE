@@ -204,7 +204,7 @@ fun ProfileScreen(
 
                     ProfileInfoColumn(
                         label = stringResource(Res.string.profile_language_level),
-                        value = formatTopikLevelForDisplay(uiState.topikLevel),
+                        value = formatLanguageLevelForDisplay(uiState.languageLevel),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -486,17 +486,17 @@ private fun parseIndustries(industry: String?): List<String> {
 }
 
 @Composable
-private fun formatTopikLevelForDisplay(topikLevel: String?): String {
-    if (topikLevel == null) return stringResource(Res.string.profile_korean_default)
+private fun formatLanguageLevelForDisplay(languageLevel: String?): String {
+    if (languageLevel == null) return stringResource(Res.string.profile_korean_default)
 
     // 영어 레벨 매칭 시도 (apiValue 기반)
-    val englishLevel = EnglishLevel.fromApiValue(topikLevel)
+    val englishLevel = EnglishLevel.fromApiValue(languageLevel)
     if (englishLevel != null) {
         return stringResource(englishLevel.displayNameRes)
     }
 
     // 기존 TopikLevel 매칭 (기존 로직 유지)
-    val level = TopikLevel.fromDisplayText(topikLevel)
+    val level = TopikLevel.fromDisplayText(languageLevel)
     return stringResource(level.displayNameRes)
 }
 
