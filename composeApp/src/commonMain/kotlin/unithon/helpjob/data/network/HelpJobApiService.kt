@@ -15,6 +15,7 @@ import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
+import unithon.helpjob.data.model.request.MemberProfilePatchReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
@@ -57,6 +58,13 @@ class HelpJobApiService(private val client: HttpClient) {
 
     suspend fun getMemberProfile(): MemberProfileGetRes {
         return client.get(ApiConstants.GET_PROFILE).body()
+    }
+
+    suspend fun patchProfile(profileField: String, request: MemberProfilePatchReq) {
+        client.patch("${ApiConstants.PATCH_PROFILE}/$profileField") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
     }
 
     // 🆕 이메일 인증 관련 API

@@ -34,6 +34,7 @@ object HelpJobScreens {
     const val PRIVACY_POLICY_SCREEN = "privacy_policy"
     const val TERMS_OF_SERVICE_SCREEN = "terms_of_service"
     const val WITHDRAWAL_SCREEN = "withdrawal"
+    const val PROFILE_EDIT_SCREEN = "profile_edit"
 }
 
 /**
@@ -58,6 +59,7 @@ object HelpJobDestinations {
     const val PRIVACY_POLICY_ROUTE = HelpJobScreens.PRIVACY_POLICY_SCREEN
     const val TERMS_OF_SERVICE_ROUTE = HelpJobScreens.TERMS_OF_SERVICE_SCREEN
     const val WITHDRAWAL_ROUTE = HelpJobScreens.WITHDRAWAL_SCREEN
+    const val PROFILE_EDIT_ROUTE = HelpJobScreens.PROFILE_EDIT_SCREEN
 }
 
 /**
@@ -229,5 +231,9 @@ class HelpJobNavigationActions(private val navController: NavHostController) {
 
     fun navigateToStepDetail() {
         navController.navigate(STEP_DETAIL_ROUTE)
+    }
+
+    fun navigateToProfileEdit(profileField: String) {
+        navController.navigate("${HelpJobDestinations.PROFILE_EDIT_ROUTE}/$profileField")
     }
 }

@@ -51,3 +51,9 @@ data class EmailVerifyCodeReq(
     @SerialName("code")
     val code: String
 )
+
+@Serializable
+data class MemberProfilePatchReq(
+    @SerialName("value")
+    val value: String
+)

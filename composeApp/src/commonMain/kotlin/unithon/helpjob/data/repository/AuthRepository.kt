@@ -25,6 +25,9 @@ interface AuthRepository {
     @Throws(UnauthorizedException::class, CancellationException::class)
     suspend fun getMemberProfile(): MemberProfileGetRes
 
+    @Throws(UnauthorizedException::class, CancellationException::class)
+    suspend fun patchProfileField(profileField: String, value: String)
+
     // 🆕 이메일 인증 관련 메서드
     @Throws(EmailAlreadyInUseException::class, CancellationException::class)
     suspend fun sendEmailVerification(email: String)

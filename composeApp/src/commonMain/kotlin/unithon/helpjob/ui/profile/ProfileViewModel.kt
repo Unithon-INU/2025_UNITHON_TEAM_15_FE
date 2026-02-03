@@ -49,6 +49,10 @@ class ProfileViewModel(
         }
     }
 
+    fun refreshProfile() {
+        loadUserProfile()
+    }
+
     private fun loadUserProfile() {
         viewModelScope.launch(crashPreventionHandler) {
             _uiState.value = _uiState.value.copy(isLoading = true)

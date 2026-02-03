@@ -18,6 +18,7 @@ import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
+import unithon.helpjob.data.model.request.MemberProfilePatchReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
@@ -70,6 +71,11 @@ class DefaultAuthRepository(
 
     override suspend fun getMemberProfile(): MemberProfileGetRes {
         return apiService.getMemberProfile()
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
+    }
+
+    override suspend fun patchProfileField(profileField: String, value: String) {
+        apiService.patchProfile(profileField, MemberProfilePatchReq(value))
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 

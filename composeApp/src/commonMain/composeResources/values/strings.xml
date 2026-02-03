@@ -326,6 +326,7 @@
 
     <!-- Profile Error Messages 섹션 추가 -->
     <string name="error_profile_load_failed">Failed to load profile information</string>
+    <string name="error_profile_edit_failed">Failed to update profile</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">Settings</string>

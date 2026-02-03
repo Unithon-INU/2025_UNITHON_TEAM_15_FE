@@ -325,6 +325,7 @@
 
     <!-- Profile Error Messages 섹션 추가 -->
     <string name="error_profile_load_failed">프로필 정보를 불러오는데 실패했습니다</string>
+    <string name="error_profile_edit_failed">프로필 수정에 실패했습니다</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">설정</string>

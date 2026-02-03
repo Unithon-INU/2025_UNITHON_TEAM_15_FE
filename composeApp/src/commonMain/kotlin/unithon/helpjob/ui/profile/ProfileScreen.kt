@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,6 +62,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.model.EnglishLevel
+import unithon.helpjob.data.model.ProfileField
 import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
@@ -92,6 +94,7 @@ data class UncheckedDocument(
 @Composable
 fun ProfileScreen(
     onNavigateToSettings: () -> Unit = {},
+    onNavigateToProfileEdit: (ProfileField, String) -> Unit = { _, _ -> },
     onNavigateToHomeWithStep: (String) -> Unit = {},
     onNavigateToSignIn: () -> Unit = {},
     homeViewModel: HomeViewModel,
@@ -193,7 +196,14 @@ fun ProfileScreen(
                         label = stringResource(Res.string.profile_visa_type),
                         value = uiState.visaType
                             ?: stringResource(Res.string.profile_visa_default),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .noRippleClickable {
+                                onNavigateToProfileEdit(
+                                    ProfileField.VISA_TYPE,
+                                    uiState.visaType ?: ""
+                                )
+                            }
                     )
 
                     VerticalDivider(
@@ -205,7 +215,14 @@ fun ProfileScreen(
                     ProfileInfoColumn(
                         label = stringResource(Res.string.profile_language_level),
                         value = formatLanguageLevelForDisplay(uiState.languageLevel),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .noRippleClickable {
+                                onNavigateToProfileEdit(
+                                    ProfileField.LANGUAGE_LEVEL,
+                                    uiState.languageLevel ?: ""
+                                )
+                            }
                     )
                 }
             }
@@ -213,7 +230,15 @@ fun ProfileScreen(
             Spacer(Modifier.height(24.dp))
 
             // 희망 업종 섹션
-            PreferredJobSection(industry = uiState.industry)
+            PreferredJobSection(
+                industry = uiState.industry,
+                onEditClick = {
+                    onNavigateToProfileEdit(
+                        ProfileField.INDUSTRY,
+                        uiState.industry ?: ""
+                    )
+                }
+            )
 
             Spacer(Modifier.height(24.dp))
 
@@ -423,21 +448,26 @@ private fun UncheckedDocumentItem(
  * 희망 업종 섹션 - 개별 업종을 FlowRow 칩으로 표시
  */
 @Composable
-private fun PreferredJobSection(industry: String?) {
+private fun PreferredJobSection(
+    industry: String?,
+    onEditClick: () -> Unit = {}
+) {
     val industries = parseIndustries(industry)
 
     Column {
         // 헤더: "희망 업종" 라벨 + ">" 아이콘
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .noRippleClickable { onEditClick() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(Res.string.profile_preferred_job),
-                style = MaterialTheme.typography.headline2,
-                color = Grey700
+                style = MaterialTheme.typography.body2,
+                color = Grey600
             )
+            Spacer(Modifier.width(8.dp))
             Icon(
                 painter = painterResource(Res.drawable.arrow_forward),
                 contentDescription = null,
@@ -511,7 +541,6 @@ private fun formatLanguageLevelForDisplay(languageLevel: String?): String {
 }
 
 
-// 기존 ProfileInfoColumn 컴포넌트 (완전히 동일)
 @Composable
 private fun ProfileInfoColumn(
     label: String,
