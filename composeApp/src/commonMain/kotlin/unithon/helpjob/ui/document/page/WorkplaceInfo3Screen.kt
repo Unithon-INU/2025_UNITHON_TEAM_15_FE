@@ -37,6 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentWageTextField
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme
 
 /**
@@ -163,7 +164,7 @@ fun WorkplaceInfo3Screen(
                 Text(
                     text = stringResource(Res.string.document_workplace_info_3_work_start_date_label),
                     style = MaterialTheme.typography.titleSmall,
-                    color = Grey500,
+                    color = Grey600,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row {
@@ -227,7 +228,7 @@ fun WorkplaceInfo3Screen(
                 Text(
                     text = stringResource(Res.string.document_workplace_info_3_work_end_day_label),
                     style = MaterialTheme.typography.titleSmall,
-                    color = Grey500,
+                    color = Grey600,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Row {
