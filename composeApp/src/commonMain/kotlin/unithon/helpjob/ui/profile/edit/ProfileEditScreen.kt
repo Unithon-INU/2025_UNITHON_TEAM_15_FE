@@ -28,6 +28,7 @@ import helpjob.composeapp.generated.resources.onboarding_business_setup_title
 import helpjob.composeapp.generated.resources.onboarding_done_button
 import helpjob.composeapp.generated.resources.onboarding_language_level_setup_title
 import helpjob.composeapp.generated.resources.onboarding_next_button
+import helpjob.composeapp.generated.resources.onboarding_top_bar_title
 import helpjob.composeapp.generated.resources.onboarding_track_setup_title
 import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_description
 import helpjob.composeapp.generated.resources.onboarding_visa_setup_d2_title
@@ -87,7 +88,7 @@ fun ProfileEditScreen(
             .navigationBarsPadding()
     ) {
         HelpJobTopAppBar(
-            title = getTopAppBarTitle(uiState),
+            title = Res.string.onboarding_top_bar_title,
             onBack = onBackAction
         )
 
@@ -159,9 +160,7 @@ fun ProfileEditScreen(
                     ),
                     onClick = {
                         if (isLanguageTrackStep) {
-                            // 트랙 선택 후 자동으로 레벨 단계로 전환 (selectTrack에서 처리됨)
-                            // 이 버튼은 트랙이 이미 선택된 상태에서 "다음"을 누를 때 사용
-                            uiState.selectedTrack?.let { viewModel.selectTrack(it) }
+                            viewModel.proceedToLevelStep()
                         } else {
                             viewModel.save()
                         }
@@ -174,16 +173,6 @@ fun ProfileEditScreen(
             }
         }
     }
-}
-
-@Composable
-private fun getTopAppBarTitle(uiState: ProfileEditUiState) = when (uiState.profileField) {
-    ProfileField.VISA_TYPE -> Res.string.onboarding_visa_setup_title
-    ProfileField.LANGUAGE_LEVEL -> {
-        if (uiState.isTrackStep) Res.string.onboarding_track_setup_title
-        else Res.string.onboarding_language_level_setup_title
-    }
-    ProfileField.INDUSTRY -> Res.string.onboarding_business_setup_title
 }
 
 @Composable

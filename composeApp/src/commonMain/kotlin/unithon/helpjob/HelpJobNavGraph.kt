@@ -195,7 +195,9 @@ fun HelpJobNavGraph(
                 route = "${HelpJobDestinations.PROFILE_EDIT_ROUTE}/{field}",
                 arguments = listOf(navArgument("field") { type = NavType.StringType })
             ) { backStackEntry ->
-                val fieldName = backStackEntry.arguments?.getString("field") ?: return@composable
+                // KMP에서 Bundle.getString() IDE 해석 불가 → NavType.StringType으로 대체
+                val bundle = backStackEntry.arguments ?: return@composable
+                val fieldName = NavType.StringType[bundle, "field"] ?: return@composable
                 val profileField = ProfileField.valueOf(fieldName)
 
                 val parentEntry = remember(backStackEntry) {

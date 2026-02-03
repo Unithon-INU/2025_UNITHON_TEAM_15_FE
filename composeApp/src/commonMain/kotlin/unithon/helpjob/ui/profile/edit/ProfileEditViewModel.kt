@@ -122,9 +122,12 @@ class ProfileEditViewModel(
     }
 
     fun selectTrack(track: LanguageTrack) {
+        _uiState.update { it.copy(selectedTrack = track) }
+    }
+
+    fun proceedToLevelStep() {
         _uiState.update {
             it.copy(
-                selectedTrack = track,
                 selectedTopikLevel = null,
                 selectedEnglishLevel = null,
                 isTrackStep = false
