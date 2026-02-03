@@ -12,9 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -137,8 +136,9 @@ fun ProfileScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(top = 6.dp, start = 20.dp, end = 20.dp, bottom = 13.dp)
         ) {
             // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
             Text(
@@ -366,18 +366,27 @@ private fun DocumentManagementSection(
 
             Spacer(Modifier.height(24.dp))
 
-            // 🆕 LazyVerticalGrid로 2열 그리드 적용
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+            // 2열 그리드 (전체 스크롤을 위해 non-lazy 방식)
+            Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(uncheckedDocuments) { document ->
-                    UncheckedDocumentItem(
-                        document = document,
-                        onClick = { onDocumentClick(document) }
-                    )
+                uncheckedDocuments.chunked(2).forEach { rowItems ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        rowItems.forEach { document ->
+                            UncheckedDocumentItem(
+                                document = document,
+                                onClick = { onDocumentClick(document) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        if (rowItems.size < 2) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }
@@ -390,10 +399,11 @@ private fun DocumentManagementSection(
 @Composable
 private fun UncheckedDocumentItem(
     document: UncheckedDocument,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .noRippleClickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
             .padding(horizontal = 7.dp, vertical = 15.dp),
