@@ -65,7 +65,14 @@ class DefaultAuthRepository(
         visaType: String,
         industry: String
     ) {
-        apiService.setProfile(MemberProfileSetReq(language, visaType, languageLevel, industry))
+        apiService.setProfile(
+            MemberProfileSetReq(
+                language = language,
+                visaType = visaType,
+                languageLevel = languageLevel,
+                industry = industry
+            )
+        )
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
