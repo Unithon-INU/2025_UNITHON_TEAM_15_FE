@@ -161,8 +161,8 @@ private fun DocumentScreenImpl(
                     onNameValueChange = {viewModel.updateName(it)},
                     foreignerNumberValue = uiState.foreignerNumber,
                     onForeignerNumberValueChange = {viewModel.updateForeignerNumber(it)},
-                    majorValue = uiState.major,
-                    onMajorValueChange = {viewModel.updateMajor(it)},
+                    phoneNumberValue = uiState.phoneNumber,
+                    onPhoneNumberValueChange = {viewModel.updatePhoneNumber(it)},
                     enabled = uiState.isBasicInfo1Valid,
                     onNext = {
                         scope.launch {
@@ -177,16 +177,12 @@ private fun DocumentScreenImpl(
             content = {
                 BasicInfoStep2Screen(
                     modifier = Modifier.fillMaxSize(),
-                    emailError = uiState.emailError,  // 추가
-                    emailErrorMessage = uiState.emailErrorMessage,
                     step = 1,
                     title = stringResource(Res.string.document_step_1_title),
+                    majorValue = uiState.major,
+                    onMajorValueChange = {viewModel.updateMajor(it)},
                     semesterValue = uiState.semester,
                     onSemesterValueChange = {viewModel.updateSemester(it)},
-                    phoneNumberValue = uiState.phoneNumber,
-                    onPhoneNumberValueChange = {viewModel.updatePhoneNumber(it)},
-                    emailAddressValue = uiState.emailAddress,
-                    onEmailAddressValueChange = {viewModel.updateEmailAddress(it)},
                     enabled = uiState.isBasicInfo2Valid,
                     onNext = {
                         scope.launch {

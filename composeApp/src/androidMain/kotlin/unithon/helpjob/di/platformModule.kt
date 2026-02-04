@@ -175,7 +175,7 @@ val androidViewModelModule = module {
     viewModel { SignInViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { CalculatorViewModel() }
-    viewModel { DocumentViewModel(get(), get()) }
+    viewModel { DocumentViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }

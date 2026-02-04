@@ -26,6 +26,7 @@ import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
 import unithon.helpjob.util.EmailValidator
@@ -33,7 +34,8 @@ import unithon.helpjob.util.NumberFormatter
 
 class DocumentViewModel(
     private val documentRepository: DocumentRepository,
-    private val authRepository: AuthRepository  // 🆕 추가
+    private val authRepository: AuthRepository,
+    private val homeStateRepository: HomeStateRepository
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(DocumentUiState())
@@ -47,10 +49,18 @@ class DocumentViewModel(
     val snackbarMessage: SharedFlow<StringResource> = _snackbarMessage.asSharedFlow()
 
     init {
-        // 🆕 Guest Mode 실시간 구독 (로그인/로그아웃 시 자동 갱신)
+        // Guest Mode 실시간 구독 (로그인/로그아웃 시 자동 갱신)
         viewModelScope.launch {
             authRepository.observeGuestMode().collect { isGuest ->
                 _uiState.update { it.copy(isGuest = isGuest) }
+            }
+        }
+
+        // 가입 이메일(=로그인 ID)로 EmailCheck pre-fill
+        viewModelScope.launch {
+            val email = homeStateRepository.homeState.value.email
+            if (email.isNotBlank()) {
+                _uiState.update { it.copy(emailAddress = email) }
             }
         }
     }
@@ -629,10 +639,10 @@ class DocumentViewModel(
             get() = weekendTotalHours > MAX_WEEKEND_HOURS
 
         val isBasicInfo1Valid: Boolean
-            get() = isNameValid && isForeignerNumberValid && isMajorValid
+            get() = isNameValid && isForeignerNumberValid && isPhoneNumberValid
 
         val isBasicInfo2Valid: Boolean
-            get() = isSemesterValid && isPhoneNumberValid && isEmailAddressValid
+            get() = isMajorValid && isSemesterValid
 
         val isWorkplaceInfo1Valid: Boolean
             get() = isCompanyNameValid && isBusinessRegisterNumberValid &&
@@ -651,6 +661,7 @@ class DocumentViewModel(
 
         val isAllValid: Boolean
             get() = isBasicInfo1Valid && isBasicInfo2Valid && isWorkplaceInfo1Valid &&
-                    isWorkplaceInfo2Valid && isWorkplaceInfo3Valid && isWorkplaceInfo4Valid
+                    isWorkplaceInfo2Valid && isWorkplaceInfo3Valid && isWorkplaceInfo4Valid &&
+                    isEmailAddressValid
     }
 }
