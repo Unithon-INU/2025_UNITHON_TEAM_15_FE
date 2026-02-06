@@ -41,6 +41,7 @@ import unithon.helpjob.ui.document.page.FinishScreen
 import unithon.helpjob.ui.document.page.WorkplaceInfo1Screen
 import unithon.helpjob.ui.document.page.WorkplaceInfo2Screen
 import unithon.helpjob.ui.document.page.WorkplaceInfo3Screen
+import unithon.helpjob.data.model.Semester
 import unithon.helpjob.ui.document.page.WorkplaceInfo4Screen
 
 /**
@@ -105,9 +106,9 @@ private fun DocumentScreenImpl(
         }
     }
 
-    // 🆕 성공 이벤트 처리 - 완료 화면으로 이동
+    // 🆕 성공 이벤트 처리 - 완료 화면으로 이동 (서류 제출 성공 시에만)
     LaunchedEffect(Unit) {
-        viewModel.snackbarMessage.collect {
+        viewModel.submitSuccess.collect {
             pagerState.animateScrollToPage(9) // 완료 화면으로 이동
         }
     }
@@ -179,12 +180,26 @@ private fun DocumentScreenImpl(
                     modifier = Modifier.fillMaxSize(),
                     step = 1,
                     title = stringResource(Res.string.document_step_1_title),
-                    majorValue = uiState.major,
-                    onMajorValueChange = {viewModel.updateMajor(it)},
+                    // University
+                    universityQuery = uiState.universityQuery,
+                    onUniversityQueryChange = { viewModel.updateUniversityQuery(it) },
+                    onUniversitySearch = { viewModel.searchUniversity() },
+                    isUniversitySearching = uiState.isUniversitySearching,
+                    universityName = uiState.universityName,
+                    universitySearchError = uiState.universitySearchError,
+                    universitySearchErrorMessage = uiState.universitySearchErrorMessage,
+                    // Major
+                    majorItems = uiState.universityMajors,
+                    selectedMajor = uiState.major.ifBlank { null },
+                    onMajorSelected = { viewModel.selectMajor(it) },
+                    // Semester
+                    semesterItems = Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade),
                     semesterValue = uiState.semester,
-                    onSemesterValueChange = {viewModel.updateSemester(it)},
+                    onSemesterValueChange = { viewModel.updateSemester(it) },
+                    // Common
                     enabled = uiState.isBasicInfo2Valid,
                     onNext = {
+                        viewModel.onBasicInfo2Next()  // 근무시간 제한 API 호출
                         scope.launch {
                             pagerState.animateScrollToPage(4)
                         }
@@ -290,6 +305,9 @@ private fun DocumentScreenImpl(
                     weekendTotalHours = uiState.weekendTotalHours,
                     isWeekdayOvertime = uiState.isWeekdayOvertime,
                     isWeekendOvertime = uiState.isWeekendOvertime,
+                    weeklyHoursLimit = uiState.weeklyHoursLimit,
+                    maxWeekdayHours = uiState.maxWeekdayHours,
+                    isWeekendUnlimited = uiState.isWeekendUnlimited,
                     enabled = uiState.isWorkplaceInfo4Valid,
                     onNext = {
                         scope.launch {

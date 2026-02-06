@@ -24,7 +24,9 @@ import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.TokenResponse
+import unithon.helpjob.data.model.response.UniversityResponse
 import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
+import unithon.helpjob.data.model.response.WorkingTimeLimitResponse
 
 class HelpJobApiService(private val client: HttpClient) {
     // 회원 관련 API
@@ -119,6 +121,26 @@ class HelpJobApiService(private val client: HttpClient) {
             contentType(ContentType.Application.Json)
             setBody(documentRequest)
         }
+    }
+
+    // 대학교 검색 API
+    suspend fun searchUniversity(universityName: String): List<UniversityResponse> {
+        return client.get(ApiConstants.SEARCH_UNIVERSITY) {
+            parameter("universityName", universityName)
+        }.body()
+    }
+
+    // 시간제취업 근무 가능 시간 조회 API
+    suspend fun getWorkingTimeLimit(
+        university: String,
+        major: String,
+        year: String
+    ): WorkingTimeLimitResponse {
+        return client.get(ApiConstants.GET_WORKING_TIME_LIMIT) {
+            parameter("university", university)
+            parameter("major", major)
+            parameter("year", year)
+        }.body()
     }
 
     // 정책 및 약관 관련 API

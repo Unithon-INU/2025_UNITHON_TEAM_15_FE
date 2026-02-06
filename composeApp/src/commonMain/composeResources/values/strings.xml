@@ -214,6 +214,10 @@
     <string name="semester_3_2">3rd Year 2nd Semester</string>
     <string name="semester_4_1">4th Year 1st Semester</string>
     <string name="semester_4_2">4th Year 2nd Semester</string>
+    <string name="semester_graduate">Graduate</string>
+    <string name="document_basic_info_2_university_label">University</string>
+    <string name="document_basic_info_2_university_placeholder">Search university name</string>
+    <string name="document_basic_info_2_major_dropdown_placeholder">Select</string>
     <string name="document_basic_info_2_semester_placeholder">Select</string>
     <string name="document_basic_info_2_phone_number_label">Phone Number</string>
     <string name="document_basic_info_2_phone_number_placeholder">ex) 010-1234-5678</string>
@@ -273,7 +277,8 @@
     <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
     <string name="document_work_hours_weekday">Weekday: %1$s</string>
     <string name="document_work_hours_weekend">Weekend: %1$s</string>
-    <string name="document_work_hours_overtime_warning">Working hours exceeded</string>
+    <string name="document_work_hours_combined_overtime_warning">Combined weekday + weekend exceeds %1$d hours</string>
+    <string name="document_work_hours_weekday_overtime_weekend_unlimited">Weekday exceeds %1$d hours. No weekend work hour limits!</string>
     <string name="document_work_hours_vacation_info">No work hour limits during vacation!</string>
     <string name="document_work_hours_format_hours_minutes">%1$d hours %2$d minutes</string>
     <string name="document_work_hours_format_hours">%1$d hours</string>
@@ -295,6 +300,7 @@
     <string name="error_invalid_work_end_date">Invalid work end date</string>
     <string name="document_submit_success">Document submitted successfully</string>
     <string name="error_document_submit_failed">Failed to submit document</string>
+    <string name="error_university_search_failed">University not found. Please check the name.</string>
 
     <!-- Profile Screen -->
     <string name="profile_greeting">Hello\n%1$s</string>

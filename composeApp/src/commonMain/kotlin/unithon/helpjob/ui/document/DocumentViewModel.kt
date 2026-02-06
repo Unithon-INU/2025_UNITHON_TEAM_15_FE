@@ -9,6 +9,8 @@ import helpjob.composeapp.generated.resources.error_invalid_email
 import helpjob.composeapp.generated.resources.error_invalid_foreigner_number
 import helpjob.composeapp.generated.resources.error_invalid_work_end_date
 import helpjob.composeapp.generated.resources.error_invalid_work_start_date
+import helpjob.composeapp.generated.resources.error_university_search_failed
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -21,6 +23,7 @@ import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
+import unithon.helpjob.data.model.response.MajorInfo
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
@@ -44,9 +47,14 @@ class DocumentViewModel(
     private val _isSubmitting = MutableStateFlow(false)
     val isSubmitting: StateFlow<Boolean> = _isSubmitting.asStateFlow()
 
-    // 🆕 Snackbar용 에러 이벤트 - SharedFlow 사용
     private val _snackbarMessage = MutableSharedFlow<StringResource>()
     val snackbarMessage: SharedFlow<StringResource> = _snackbarMessage.asSharedFlow()
+
+    // 서류 제출 성공 전용 이벤트 (완료 페이지 이동 트리거)
+    private val _submitSuccess = MutableSharedFlow<Unit>()
+    val submitSuccess: SharedFlow<Unit> = _submitSuccess.asSharedFlow()
+
+    private var workingTimeLimitJob: Job? = null
 
     init {
         // Guest Mode 실시간 구독 (로그인/로그아웃 시 자동 갱신)
@@ -76,12 +84,124 @@ class DocumentViewModel(
         _uiState.value = _uiState.value.copy(foreignerNumber = numbersOnly)
     }
 
-    fun updateMajor(input: String) {
-        _uiState.value = _uiState.value.copy(major = input)
+    // 대학교 검색 입력 (Cascading: 검색어 변경 → 모든 하위 필드 초기화)
+    fun updateUniversityQuery(input: String) {
+        _uiState.update {
+            it.copy(
+                universityQuery = input,
+                universityName = null,
+                universityMajors = emptyList(),
+                universitySearchError = false,
+                universitySearchErrorMessage = null,
+                major = "",
+                semester = null,
+                selectedMajorMaxGrade = 4,
+                weeklyHoursLimit = null,
+                maxWeekdayHours = null,
+                isWorkingTimeLoaded = false
+            )
+        }
+    }
+
+    // 대학교 검색 실행 (검색 버튼 또는 IME Search)
+    fun searchUniversity() {
+        val query = _uiState.value.universityQuery.trim()
+        if (query.isBlank()) return
+
+        viewModelScope.launch(crashPreventionHandler) {
+            _uiState.update { it.copy(isUniversitySearching = true) }
+            try {
+                val responseList = documentRepository.searchUniversity(query)
+                val response = responseList.firstOrNull()
+                if (response != null) {
+                    _uiState.update {
+                        it.copy(
+                            universityName = response.university,
+                            universityMajors = response.majors,
+                            isUniversitySearching = false,
+                            universitySearchError = false,
+                            universitySearchErrorMessage = null
+                        )
+                    }
+                    Logger.d("University search success: ${response.university}, majors: ${response.majors.size}")
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isUniversitySearching = false,
+                            universitySearchError = true,
+                            universitySearchErrorMessage = Res.string.error_university_search_failed
+                        )
+                    }
+                    Logger.d("University search returned empty list for: $query")
+                }
+            } catch (e: Exception) {
+                Logger.e(e, "University search failed for: $query")
+                _uiState.update {
+                    it.copy(
+                        isUniversitySearching = false,
+                        universitySearchError = true,
+                        universitySearchErrorMessage = Res.string.error_university_search_failed
+                    )
+                }
+            }
+        }
+    }
+
+    // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
+    fun selectMajor(majorInfo: MajorInfo) {
+        _uiState.update {
+            it.copy(
+                major = majorInfo.major,
+                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.lssnTerm),
+                semester = null,
+                weeklyHoursLimit = null,
+                maxWeekdayHours = null,
+                isWorkingTimeLoaded = false
+            )
+        }
     }
 
     fun updateSemester(semester: Semester) {
-        _uiState.value = _uiState.value.copy(semester = semester)
+        _uiState.update {
+            it.copy(
+                semester = semester,
+                isWorkingTimeLoaded = false  // 학기 변경 시 근무시간 제한 초기화
+            )
+        }
+    }
+
+    // Step2 다음 버튼 클릭 시 호출 (근무시간 제한 API 조회)
+    fun onBasicInfo2Next() {
+        fetchWorkingTimeLimit()
+    }
+
+    // 근무시간 제한 조회 (대학교 + 학과 + 학기 모두 선택 시)
+    private fun fetchWorkingTimeLimit() {
+        val state = _uiState.value
+        val university = state.universityName ?: return
+        val major = state.major.ifBlank { return }
+        val semester = state.semester ?: return
+
+        val isAssociate = state.selectedMajorMaxGrade <= 2
+        val year = semester.toAcademicYear(isAssociate)
+
+        workingTimeLimitJob?.cancel()
+        workingTimeLimitJob = viewModelScope.launch(crashPreventionHandler) {
+            try {
+                val response = documentRepository.getWorkingTimeLimit(university, major, year)
+                _uiState.update {
+                    it.copy(
+                        weeklyHoursLimit = response.weeklyHours,
+                        maxWeekdayHours = response.weekdayHours?.toFloat(),
+                        isWorkingTimeLoaded = true
+                    )
+                }
+                Logger.d("Working time limit: weekly=${response.weeklyHours}, weekday=${response.weekdayHours}")
+            } catch (e: Exception) {
+                Logger.e(e, "Failed to fetch working time limit")
+                _uiState.update { it.copy(isWorkingTimeLoaded = false) }
+            }
+        }
     }
 
     fun updatePhoneNumber(input: String) {
@@ -303,7 +423,8 @@ class DocumentViewModel(
                 documentRepository.postCertification(documentRequest)
 
                 Logger.d("Document submitted successfully")
-                _snackbarMessage.emit(Res.string.document_submit_success) // 성공 이벤트 발생
+                _snackbarMessage.emit(Res.string.document_submit_success)
+                _submitSuccess.emit(Unit)  // 완료 페이지 이동 트리거
 
                 Analytics.logEvent("certificate_sent")
             } catch (e: Exception) {
@@ -490,6 +611,19 @@ class DocumentViewModel(
         val emailAddress: String = "",
         val emailError: Boolean = false,
         val emailErrorMessage: StringResource? = null,
+        // 대학교 검색
+        val universityQuery: String = "",
+        val universityName: String? = null,
+        val universityMajors: List<MajorInfo> = emptyList(),
+        val isUniversitySearching: Boolean = false,
+        val universitySearchError: Boolean = false,
+        val universitySearchErrorMessage: StringResource? = null,
+        val selectedMajorMaxGrade: Int = 4,
+        // 근무시간 제한 (서버 응답)
+        val weeklyHoursLimit: Int? = null,
+        val maxWeekdayHours: Float? = null,
+        val isWorkingTimeLoaded: Boolean = false,
+        // 회사 정보
         val companyName: String = "",
         val businessRegisterNumber: String = "",
         val categoryOfBusiness: String = "",
@@ -507,14 +641,12 @@ class DocumentViewModel(
         val workDayTimes: Map<WorkDay, WorkDayTime> = emptyMap(),
         val isVacation: Boolean = false,
         val isSameTimeForAll: Boolean = false,
-        val isGuest: Boolean = false,  // 🆕 Guest Mode 여부
+        val isGuest: Boolean = false,
         @Deprecated("Use workDayTimes instead")
         val workStartTime: String = "",
         @Deprecated("Use workDayTimes instead")
         val workEndTime: String = "",
     ) {
-        // ... 기존 유효성 검사 함수들은 그대로 유지 ...
-
         private val isNameValid: Boolean
             get() = name.isNotBlank()
 
@@ -587,11 +719,9 @@ class DocumentViewModel(
                 dayTime != null && dayTime.startTime.isNotBlank() && dayTime.endTime.isNotBlank()
             }
 
-        // 최대 허용 시간 상수 (추후 서버/함수로 교체 가능)
-        companion object {
-            const val MAX_WEEKDAY_HOURS = 20f  // 임시 고정값
-            const val MAX_WEEKEND_HOURS = 10f  // 임시 고정값
-        }
+        // 주말 무제한 여부 (weekdayHours 모드 = 항상 주말 무제한)
+        val isWeekendUnlimited: Boolean
+            get() = isWorkingTimeLoaded && weeklyHoursLimit == null
 
         // 시간 문자열을 분 단위로 변환
         private fun parseTimeToMinutes(time: String): Int {
@@ -630,19 +760,33 @@ class DocumentViewModel(
                 return totalMinutes / 60f
             }
 
-        // 주중 초과 여부
+        // 주중 초과 여부 (API 미호출 시 검증 건너뜀)
         val isWeekdayOvertime: Boolean
-            get() = weekdayTotalHours > MAX_WEEKDAY_HOURS
+            get() {
+                if (!isWorkingTimeLoaded) return false
+                return if (weeklyHoursLimit != null) {
+                    (weekdayTotalHours + weekendTotalHours) > weeklyHoursLimit
+                } else {
+                    maxWeekdayHours?.let { weekdayTotalHours > it } ?: false
+                }
+            }
 
-        // 주말 초과 여부
+        // 주말 초과 여부 (API 미호출 시 검증 건너뜀)
         val isWeekendOvertime: Boolean
-            get() = weekendTotalHours > MAX_WEEKEND_HOURS
+            get() {
+                if (!isWorkingTimeLoaded) return false
+                return if (weeklyHoursLimit != null) {
+                    (weekdayTotalHours + weekendTotalHours) > weeklyHoursLimit
+                } else {
+                    false  // weekdayHours 모드 → 주말 무제한
+                }
+            }
 
         val isBasicInfo1Valid: Boolean
             get() = isNameValid && isForeignerNumberValid && isPhoneNumberValid
 
         val isBasicInfo2Valid: Boolean
-            get() = isMajorValid && isSemesterValid
+            get() = universityName != null && isMajorValid && isSemesterValid
 
         val isWorkplaceInfo1Valid: Boolean
             get() = isCompanyNameValid && isBusinessRegisterNumberValid &&
