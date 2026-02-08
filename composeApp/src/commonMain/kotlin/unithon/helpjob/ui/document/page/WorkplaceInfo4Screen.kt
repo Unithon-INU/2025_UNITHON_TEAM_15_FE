@@ -31,7 +31,8 @@ import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_work_hours_format_hours
 import helpjob.composeapp.generated.resources.document_work_hours_format_hours_minutes
 import helpjob.composeapp.generated.resources.document_work_hours_format_minutes
-import helpjob.composeapp.generated.resources.document_work_hours_overtime_warning
+import helpjob.composeapp.generated.resources.document_work_hours_combined_overtime_warning
+import helpjob.composeapp.generated.resources.document_work_hours_weekday_overtime_weekend_unlimited
 import helpjob.composeapp.generated.resources.document_work_hours_weekday
 import helpjob.composeapp.generated.resources.document_work_hours_weekend
 import helpjob.composeapp.generated.resources.document_work_hours_vacation_info
@@ -75,6 +76,9 @@ fun WorkplaceInfo4Screen(
     weekendTotalHours: Float,
     isWeekdayOvertime: Boolean,
     isWeekendOvertime: Boolean,
+    weeklyHoursLimit: Int? = null,
+    maxWeekdayHours: Float? = null,
+    isWeekendUnlimited: Boolean = false,
     enabled: Boolean,
     onNext: () -> Unit
 ){
@@ -101,7 +105,10 @@ fun WorkplaceInfo4Screen(
                     weekendTotalHours = weekendTotalHours,
                     isWeekdayOvertime = isWeekdayOvertime,
                     isWeekendOvertime = isWeekendOvertime,
-                    isVacation = isVacation
+                    isVacation = isVacation,
+                    weeklyHoursLimit = weeklyHoursLimit,
+                    maxWeekdayHours = maxWeekdayHours,
+                    isWeekendUnlimited = isWeekendUnlimited
                 )
                 Spacer(modifier = Modifier.height(28.dp))
             }
@@ -320,7 +327,10 @@ private fun WorkHoursSummary(
     weekendTotalHours: Float,
     isWeekdayOvertime: Boolean,
     isWeekendOvertime: Boolean,
-    isVacation: Boolean
+    isVacation: Boolean,
+    weeklyHoursLimit: Int? = null,
+    maxWeekdayHours: Float? = null,
+    isWeekendUnlimited: Boolean = false
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         // 주중/주말 시간 (가로 배치)
@@ -346,7 +356,8 @@ private fun WorkHoursSummary(
             }
 
             if (weekendTotalHours > 0) {
-                if (!isVacation && isWeekendOvertime) {
+                // 주말 무제한이면 ⚠️ 아이콘 숨김
+                if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) {
                     Icon(
                         painter = painterResource(Res.drawable.exclamation_mark),
                         contentDescription = null,
@@ -357,7 +368,7 @@ private fun WorkHoursSummary(
                 Text(
                     text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
                     style = MaterialTheme.typography.title1,
-                    color = if (!isVacation && isWeekendOvertime) Warning else Grey600
+                    color = if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) Warning else Grey600
                 )
             }
         }
@@ -370,10 +381,22 @@ private fun WorkHoursSummary(
                 style = MaterialTheme.typography.body4,
                 color = Grey600
             )
-        } else if (isWeekdayOvertime || isWeekendOvertime) {
+        } else if (weeklyHoursLimit != null && (isWeekdayOvertime || isWeekendOvertime)) {
+            // 합산 모드 초과
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(Res.string.document_work_hours_overtime_warning),
+                text = stringResource(Res.string.document_work_hours_combined_overtime_warning, weeklyHoursLimit),
+                style = MaterialTheme.typography.body4,
+                color = Warning
+            )
+        } else if (isWeekdayOvertime && isWeekendUnlimited) {
+            // weekdayHours 모드: 주중만 초과 + 주말 무제한
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = stringResource(
+                    Res.string.document_work_hours_weekday_overtime_weekend_unlimited,
+                    maxWeekdayHours?.toInt() ?: 0
+                ),
                 style = MaterialTheme.typography.body4,
                 color = Warning
             )

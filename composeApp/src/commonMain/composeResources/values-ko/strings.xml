@@ -99,11 +99,26 @@
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">일반 연수 비자</string>
 
+    <!-- Onboarding Screen(track selection) -->
+    <string name="onboarding_track_setup_title">사용자님의 트랙을\n선택해 주세요</string>
+    <string name="onboarding_track_korean">한국어 트랙</string>
+    <string name="onboarding_track_english">영어 트랙</string>
+
+    <!-- Onboarding Screen(language level - common title) -->
+    <string name="onboarding_language_level_setup_title">사용자님의 언어 능력을\n선택해 주세요</string>
+
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">사용자님의 한국어 능력을\n선택해 주세요</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
     <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
+
+    <!-- Onboarding Screen(english level) -->
+    <string name="onboarding_english_level_toefl">TOEFL 530(CBT 197, iBT 71) 이상</string>
+    <string name="onboarding_english_level_ielts">IELTS 5.5 이상</string>
+    <string name="onboarding_english_level_cefr">CEFR B2 이상</string>
+    <string name="onboarding_english_level_teps">TEPS 600점 이상</string>
+    <string name="onboarding_english_level_none">자격증 없음</string>
 
     <!-- Onboarding Screen(business) -->
     <string name="onboarding_business_setup_title">사용자님이 희망하는\n업종은 무엇인가요?</string>
@@ -151,6 +166,10 @@
     <string name="calculator_calculate_salary">계산하기</string>
     <string name="calculator_2026">2026 기준</string>
     <string name="calculator_won">원</string>
+    <string name="calculator_weekly_allowance_include_label">주휴수당 포함 여부</string>
+    <string name="calculator_weekly_allowance_include_placeholder">포함 여부</string>
+    <string name="calculator_weekly_allowance_include_yes">포함</string>
+    <string name="calculator_weekly_allowance_include_no">미포함</string>
 
     <!-- Calculator Result Dialog -->
     <string name="calculator_result_work_hours_label">근로시간</string>
@@ -162,6 +181,7 @@
     <string name="calculator_result_not_included">미포함</string>
     <string name="calculator_result_weekly_allowance_condition_met">주휴수당 지급 조건인 15시간 근무에 해당</string>
     <string name="calculator_result_weekly_allowance_condition_not_met">주휴수당 지급 조건인 15시간 근무에 미달</string>
+    <string name="calculator_result_weekly_allowance_excluded_by_user">주휴수당 미포함 선택</string>
     <string name="calculator_result_disclaimer">복리후생비 및 시간외 근로수당 등은 \n반영되지 않은 금액이며 규정에 따라 \n주휴수당도 다르기 때문에 실제 \n주급/월급과는 차이가 있습니다.</string>
 
 
@@ -193,6 +213,10 @@
     <string name="semester_3_2">3학년 2학기</string>
     <string name="semester_4_1">4학년 1학기</string>
     <string name="semester_4_2">4학년 2학기</string>
+    <string name="semester_graduate">석박사</string>
+    <string name="document_basic_info_2_university_label">대학교</string>
+    <string name="document_basic_info_2_university_placeholder">대학교명을 검색하세요</string>
+    <string name="document_basic_info_2_major_dropdown_placeholder">선택</string>
     <string name="document_basic_info_2_semester_placeholder">선택</string>
     <string name="document_basic_info_2_phone_number_label">전화번호</string>
     <string name="document_basic_info_2_phone_number_placeholder">예) 010-1234-5678</string>
@@ -252,7 +276,8 @@
     <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
     <string name="document_work_hours_weekday">주중: %1$s</string>
     <string name="document_work_hours_weekend">주말: %1$s</string>
-    <string name="document_work_hours_overtime_warning">근무시간을 초과하였어요</string>
+    <string name="document_work_hours_combined_overtime_warning">주중 + 주말 합계 %1$d시간을 초과하였어요</string>
+    <string name="document_work_hours_weekday_overtime_weekend_unlimited">주중 %1$d시간을 초과하였어요. 주말은 근무시간 제한이 없어요!</string>
     <string name="document_work_hours_vacation_info">방학 중에는 근무시간에 제한이 없어요!</string>
     <string name="document_work_hours_format_hours_minutes">%1$d시간 %2$d분</string>
     <string name="document_work_hours_format_hours">%1$d시간</string>
@@ -274,6 +299,7 @@
     <string name="error_invalid_work_end_date">ⓘ 근무 종료일이 올바르지 않습니다</string>
     <string name="document_submit_success">ⓘ 서류가 성공적으로 제출되었습니다</string>
     <string name="error_document_submit_failed">서류 제출에 실패했습니다</string>
+    <string name="error_university_search_failed">대학교를 찾을 수 없어요. 대학교명을 확인해주세요.</string>
 
     <!-- Profile Screen -->
     <string name="profile_greeting">안녕하세요 \n%1$s님</string>
@@ -282,6 +308,7 @@
     <string name="profile_email_signup_type">이메일 가입</string>
     <string name="profile_visa_type">비자 종류</string>
     <string name="profile_visa_default">D-?</string>
+    <string name="profile_language_level">언어 능력</string>
     <string name="profile_korean_level">한국어 능력</string>
     <string name="profile_korean_default">TOPIK ?급</string>
     <string name="profile_preferred_job">희망 업종</string>
@@ -304,6 +331,7 @@
 
     <!-- Profile Error Messages 섹션 추가 -->
     <string name="error_profile_load_failed">프로필 정보를 불러오는데 실패했습니다</string>
+    <string name="error_profile_edit_failed">프로필 수정에 실패했습니다</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">설정</string>

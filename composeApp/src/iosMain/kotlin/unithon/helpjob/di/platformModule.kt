@@ -20,6 +20,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import unithon.helpjob.data.model.response.ErrorResponse
@@ -40,6 +41,7 @@ import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.onboarding.OnboardingViewModel
 import unithon.helpjob.ui.profile.ProfileViewModel
+import unithon.helpjob.ui.profile.edit.ProfileEditViewModel
 import unithon.helpjob.ui.setting.LanguageSettingViewModel
 import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.SettingViewModel
@@ -183,6 +185,7 @@ val iosViewModelModule = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::OnboardingViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModel { params -> ProfileEditViewModel(params.get(), params.get(), get()) }
     viewModelOf(::LanguageSettingViewModel)
     viewModelOf(::PrivacyPolicyViewModel)
     viewModelOf(::SettingViewModel)

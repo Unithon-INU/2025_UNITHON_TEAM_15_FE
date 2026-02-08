@@ -18,6 +18,7 @@ import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.request.EmailSendReq
 import unithon.helpjob.data.model.request.EmailVerifyCodeReq
 import unithon.helpjob.data.model.request.MemberNicknameReq
+import unithon.helpjob.data.model.request.MemberProfilePatchReq
 import unithon.helpjob.data.model.request.MemberProfileSetReq
 import unithon.helpjob.data.model.request.MemberSignInReq
 import unithon.helpjob.data.model.request.MemberSignUpReq
@@ -60,16 +61,28 @@ class DefaultAuthRepository(
 
     override suspend fun setProfile(
         language: String,
-        topikLevel: String,
+        languageLevel: String,
         visaType: String,
         industry: String
     ) {
-        apiService.setProfile(MemberProfileSetReq(language, topikLevel, visaType, industry))
+        apiService.setProfile(
+            MemberProfileSetReq(
+                language = language,
+                visaType = visaType,
+                languageLevel = languageLevel,
+                industry = industry
+            )
+        )
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
     override suspend fun getMemberProfile(): MemberProfileGetRes {
         return apiService.getMemberProfile()
+        // ✅ HttpResponseValidator가 자동으로 에러 처리
+    }
+
+    override suspend fun patchProfileField(profileField: String, value: String) {
+        apiService.patchProfile(profileField, MemberProfilePatchReq(value))
         // ✅ HttpResponseValidator가 자동으로 에러 처리
     }
 
@@ -127,7 +140,7 @@ class DefaultAuthRepository(
             val profile = getMemberProfile()
             profile.language.isNotEmpty() &&
                     profile.visaType.isNotEmpty() &&
-                    profile.topikLevel.isNotEmpty() &&
+                    profile.languageLevel.isNotEmpty() &&
                     profile.industry.isNotEmpty()
         } catch (e: Exception) {
             false // 프로필 조회 실패 시 온보딩 미완료로 처리

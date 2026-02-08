@@ -9,6 +9,7 @@ object ApiConstants {
     const val SET_NICKNAME = "api/member/me/nickname"
     const val SET_PROFILE = "api/member/me/profile"
     const val GET_PROFILE = "api/member/me/profile"
+    const val PATCH_PROFILE = "api/member/me/profile"
     const val EMAIL_SEND = "api/email/send"
     const val EMAIL_VERIFY = "api/email/verify"
     const val UPDATE_CHECKLIST = "api/employment"
@@ -16,6 +17,8 @@ object ApiConstants {
     const val GET_TIPS = "api/employment/tips"
     const val RESET_PROGRESS = "api/employment/progress"
     const val POST_CERTIFICATION = "api/cert"
+    const val SEARCH_UNIVERSITY = "api/university"
+    const val GET_WORKING_TIME_LIMIT = "api/cert/working-time"
     const val PRIVACY_POLICY = "privacy"
     const val TERMS_OF_SERVICE = "terms"
 

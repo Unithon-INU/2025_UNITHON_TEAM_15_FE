@@ -45,6 +45,7 @@ import unithon.helpjob.ui.document.DocumentViewModel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.onboarding.OnboardingViewModel
 import unithon.helpjob.ui.profile.ProfileViewModel
+import unithon.helpjob.ui.profile.edit.ProfileEditViewModel
 import unithon.helpjob.ui.setting.LanguageSettingViewModel
 import unithon.helpjob.ui.setting.PrivacyPolicyViewModel
 import unithon.helpjob.ui.setting.SettingViewModel
@@ -174,10 +175,11 @@ val androidViewModelModule = module {
     viewModel { SignInViewModel(get(), get()) }
     viewModel { SignUpViewModel(get(), get()) }
     viewModel { CalculatorViewModel() }
-    viewModel { DocumentViewModel(get(), get()) }  // 🆕 AuthRepository 추가
+    viewModel { DocumentViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { OnboardingViewModel(get(), get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { params -> ProfileEditViewModel(params.get(), params.get(), get()) }
     viewModel { LanguageSettingViewModel(get()) }
     viewModel { PrivacyPolicyViewModel(get()) }
     viewModel { SettingViewModel(get(), get(), get()) }

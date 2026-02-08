@@ -17,7 +17,7 @@ import unithon.helpjob.ui.base.BaseViewModel
 
 data class ProfileUiState(
     val visaType: String? = null,
-    val topikLevel: String? = null,
+    val languageLevel: String? = null,
     val industry: String? = null,
     val isLoading: Boolean = false,
     val isGuest: Boolean = false  // 🆕 Guest Mode 여부
@@ -49,6 +49,10 @@ class ProfileViewModel(
         }
     }
 
+    fun refreshProfile() {
+        loadUserProfile()
+    }
+
     private fun loadUserProfile() {
         viewModelScope.launch(crashPreventionHandler) {
             _uiState.value = _uiState.value.copy(isLoading = true)
@@ -57,7 +61,7 @@ class ProfileViewModel(
 
                 _uiState.value = _uiState.value.copy(
                     visaType = memberProfile.visaType,
-                    topikLevel = memberProfile.topikLevel,
+                    languageLevel = memberProfile.languageLevel,
                     industry = memberProfile.industry,
                     isLoading = false
                 )

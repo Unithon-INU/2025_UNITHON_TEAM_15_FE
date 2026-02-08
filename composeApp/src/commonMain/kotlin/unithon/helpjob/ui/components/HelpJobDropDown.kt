@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,7 +45,6 @@ import androidx.compose.ui.window.Popup
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
-import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Primary500
 import unithon.helpjob.util.noRippleClickable
@@ -73,7 +73,7 @@ fun <T> HelpJobDropdown(
             Text(
                 text = label,
                 style = MaterialTheme.typography.titleSmall,
-                color = Grey500
+                color = Grey600
             )
 
             Spacer(modifier = Modifier.height(labelTextFieldSpace))
@@ -140,7 +140,7 @@ fun <T> HelpJobDropdown(
                 onDismissRequest = { expanded = false },
                 modifier = Modifier
                     .width(with(LocalDensity.current) { rowSize.width.toDp() })
-                    .height(240.dp),
+                    .heightIn(max = 240.dp),
                 border = BorderStroke(
                     width = 1.dp,
                     color = Grey200,

@@ -7,11 +7,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import unithon.helpjob.ui.auth.nickname.NicknameSetupScreen
 import unithon.helpjob.ui.auth.signin.SignInScreen
 import unithon.helpjob.ui.auth.signup.SignUpScreen
@@ -23,6 +26,10 @@ import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.main.page.StepDetailScreen
 import unithon.helpjob.ui.onboarding.OnboardingScreen
 import unithon.helpjob.ui.profile.ProfileScreen
+import unithon.helpjob.ui.profile.ProfileViewModel
+import unithon.helpjob.ui.profile.edit.ProfileEditScreen
+import unithon.helpjob.ui.profile.edit.ProfileEditViewModel
+import unithon.helpjob.data.model.ProfileField
 import unithon.helpjob.ui.setting.LanguageSettingScreen
 import unithon.helpjob.ui.setting.PrivacyPolicyScreen
 import unithon.helpjob.ui.setting.SettingScreen
@@ -155,9 +162,15 @@ fun HelpJobNavGraph(
                 val homeViewModel = koinViewModel<HomeViewModel>(
                     viewModelStoreOwner = parentEntry
                 )
+                val profileViewModel = koinViewModel<ProfileViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
                 ProfileScreen(
                     onNavigateToSettings = navActions::navigateToSettings,
+                    onNavigateToProfileEdit = { profileField, _ ->
+                        navActions.navigateToProfileEdit(profileField.name)
+                    },
                     onNavigateToHomeWithStep = { stepId ->
                         val targetStep = homeViewModel.homeState.value.steps.find { it.checkStep == stepId }
                         targetStep?.let { step ->
@@ -174,6 +187,44 @@ fun HelpJobNavGraph(
                     onNavigateToSignIn = navActions::navigateToSignInAfterLogout,  // 🆕 Guest → Member 전환
                     homeViewModel = homeViewModel,
                     snackbarHostState = snackbarHostState,
+                    viewModel = profileViewModel
+                )
+            }
+
+            composable(
+                route = "${HelpJobDestinations.PROFILE_EDIT_ROUTE}/{field}",
+                arguments = listOf(navArgument("field") { type = NavType.StringType })
+            ) { backStackEntry ->
+                // KMP에서 Bundle.getString() IDE 해석 불가 → NavType.StringType으로 대체
+                val bundle = backStackEntry.arguments ?: return@composable
+                val fieldName = NavType.StringType[bundle, "field"] ?: return@composable
+                val profileField = ProfileField.valueOf(fieldName)
+
+                val parentEntry = remember(backStackEntry) {
+                    navController.getBackStackEntry(HelpJobDestinations.MAIN_GRAPH_ROUTE)
+                }
+                val profileViewModel = koinViewModel<ProfileViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
+
+                val currentValue = when (profileField) {
+                    ProfileField.VISA_TYPE -> profileViewModel.uiState.value.visaType ?: ""
+                    ProfileField.LANGUAGE_LEVEL -> profileViewModel.uiState.value.languageLevel ?: ""
+                    ProfileField.INDUSTRY -> profileViewModel.uiState.value.industry ?: ""
+                }
+
+                val editViewModel = koinViewModel<ProfileEditViewModel>(
+                    key = fieldName
+                ) { parametersOf(profileField, currentValue) }
+
+                ProfileEditScreen(
+                    viewModel = editViewModel,
+                    snackbarHostState = snackbarHostState,
+                    onBack = { navController.popBackStack() },
+                    onSaveSuccess = {
+                        profileViewModel.refreshProfile()
+                        navController.popBackStack()
+                    }
                 )
             }
 

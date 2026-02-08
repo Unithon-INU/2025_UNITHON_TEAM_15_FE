@@ -35,6 +35,7 @@ import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey500
+import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.ui.theme.title1
@@ -73,7 +74,7 @@ fun DocumentTextField(
             Text(
                 text = labelText,
                 style = MaterialTheme.typography.titleSmall,
-                color = Grey500,
+                color = Grey600,
                 modifier = Modifier.padding(bottom = 9.dp)
             )
         }

@@ -105,7 +105,7 @@ class NicknameSetupViewModel(
                 if (guestProfile != null) {
                     authRepository.setProfile(
                         language = guestProfile.language,
-                        topikLevel = guestProfile.topikLevel,
+                        languageLevel = guestProfile.languageLevel,
                         visaType = guestProfile.visaType,
                         industry = guestProfile.industry
                     )

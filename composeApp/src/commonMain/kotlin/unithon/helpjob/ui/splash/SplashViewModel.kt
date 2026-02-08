@@ -41,7 +41,7 @@ class SplashViewModel(
                             // 온보딩 완료 여부 판단
                             if (profile.language.isNotEmpty() &&
                                 profile.visaType.isNotEmpty() &&
-                                profile.topikLevel.isNotEmpty() &&
+                                profile.languageLevel.isNotEmpty() &&
                                 profile.industry.isNotEmpty()) {
                                 NavigationTarget.Main
                             } else {

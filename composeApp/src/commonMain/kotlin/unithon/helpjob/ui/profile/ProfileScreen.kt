@@ -6,15 +6,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -44,9 +46,10 @@ import helpjob.composeapp.generated.resources.profile_documents_title
 import helpjob.composeapp.generated.resources.profile_email_default
 import helpjob.composeapp.generated.resources.profile_email_signup_type
 import helpjob.composeapp.generated.resources.profile_greeting
-import helpjob.composeapp.generated.resources.profile_job_default
+import helpjob.composeapp.generated.resources.arrow_forward
 import helpjob.composeapp.generated.resources.profile_korean_default
 import helpjob.composeapp.generated.resources.profile_korean_level
+import helpjob.composeapp.generated.resources.profile_language_level
 import helpjob.composeapp.generated.resources.profile_nickname_default
 import helpjob.composeapp.generated.resources.profile_preferred_job
 import helpjob.composeapp.generated.resources.profile_visa_default
@@ -54,9 +57,12 @@ import helpjob.composeapp.generated.resources.profile_visa_type
 import helpjob.composeapp.generated.resources.profile_login_required_title
 import helpjob.composeapp.generated.resources.profile_login_required_description
 import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import unithon.helpjob.data.model.Business
+import unithon.helpjob.data.model.EnglishLevel
+import unithon.helpjob.data.model.ProfileField
 import unithon.helpjob.data.model.TopikLevel
 import unithon.helpjob.ui.main.HomeViewModel
 import unithon.helpjob.ui.profile.components.ProfileTopAppBar
@@ -88,6 +94,7 @@ data class UncheckedDocument(
 @Composable
 fun ProfileScreen(
     onNavigateToSettings: () -> Unit = {},
+    onNavigateToProfileEdit: (ProfileField, String) -> Unit = { _, _ -> },
     onNavigateToHomeWithStep: (String) -> Unit = {},
     onNavigateToSignIn: () -> Unit = {},
     homeViewModel: HomeViewModel,
@@ -132,8 +139,9 @@ fun ProfileScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 6.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(top = 6.dp, start = 20.dp, end = 20.dp, bottom = 13.dp)
         ) {
             // 인사말 - 22sp Bold 커스텀 스타일 (기존과 동일)
             Text(
@@ -147,7 +155,7 @@ fun ProfileScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // 이메일 정보 Row - 양끝 정렬 (기존과 동일)
             Row(
@@ -167,9 +175,9 @@ fun ProfileScreen(
                 )
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(16.dp))
 
-            // 사용자 정보 카드 (기존과 동일)
+            // 사용자 정보 카드
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -188,7 +196,14 @@ fun ProfileScreen(
                         label = stringResource(Res.string.profile_visa_type),
                         value = uiState.visaType
                             ?: stringResource(Res.string.profile_visa_default),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier
+                            .weight(1f)
+                            .noRippleClickable {
+                                onNavigateToProfileEdit(
+                                    ProfileField.VISA_TYPE,
+                                    uiState.visaType ?: ""
+                                )
+                            }
                     )
 
                     VerticalDivider(
@@ -198,28 +213,36 @@ fun ProfileScreen(
                     )
 
                     ProfileInfoColumn(
-                        label = stringResource(Res.string.profile_korean_level),
-                        value = formatTopikLevelForDisplay(uiState.topikLevel),
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    VerticalDivider(
-                        modifier = Modifier.height(71.dp),
-                        thickness = 1.dp,
-                        color = Grey300
-                    )
-
-                    ProfileInfoColumn(
-                        label = stringResource(Res.string.profile_preferred_job),
-                        value = formatIndustryForDisplay(uiState.industry),
-                        modifier = Modifier.weight(1f)
+                        label = stringResource(Res.string.profile_language_level),
+                        value = formatLanguageLevelForDisplay(uiState.languageLevel),
+                        modifier = Modifier
+                            .weight(1f)
+                            .noRippleClickable {
+                                onNavigateToProfileEdit(
+                                    ProfileField.LANGUAGE_LEVEL,
+                                    uiState.languageLevel ?: ""
+                                )
+                            }
                     )
                 }
             }
 
-            Spacer(Modifier.height(39.dp))
+            Spacer(Modifier.height(24.dp))
 
-            // 내 서류 관리 타이틀 (기존과 동일)
+            // 희망 업종 섹션
+            PreferredJobSection(
+                industry = uiState.industry,
+                onEditClick = {
+                    onNavigateToProfileEdit(
+                        ProfileField.INDUSTRY,
+                        uiState.industry ?: ""
+                    )
+                }
+            )
+
+            Spacer(Modifier.height(24.dp))
+
+            // 내 서류 관리 타이틀
             Text(
                 text = stringResource(Res.string.profile_documents_title),
                 style = MaterialTheme.typography.headline2, // 15sp Bold
@@ -368,18 +391,27 @@ private fun DocumentManagementSection(
 
             Spacer(Modifier.height(24.dp))
 
-            // 🆕 LazyVerticalGrid로 2열 그리드 적용
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+            // 2열 그리드 (전체 스크롤을 위해 non-lazy 방식)
+            Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(uncheckedDocuments) { document ->
-                    UncheckedDocumentItem(
-                        document = document,
-                        onClick = { onDocumentClick(document) }
-                    )
+                uncheckedDocuments.chunked(2).forEach { rowItems ->
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        rowItems.forEach { document ->
+                            UncheckedDocumentItem(
+                                document = document,
+                                onClick = { onDocumentClick(document) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        if (rowItems.size < 2) {
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                    }
                 }
             }
         }
@@ -392,10 +424,11 @@ private fun DocumentManagementSection(
 @Composable
 private fun UncheckedDocumentItem(
     document: UncheckedDocument,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .noRippleClickable { onClick() }
             .background(Grey100, RoundedCornerShape(10.dp))
             .padding(horizontal = 7.dp, vertical = 15.dp),
@@ -411,46 +444,103 @@ private fun UncheckedDocumentItem(
     }
 }
 
+/**
+ * 희망 업종 섹션 - 개별 업종을 FlowRow 칩으로 표시
+ */
 @Composable
-private fun formatIndustryForDisplay(industry: String?): String {
-    if (industry.isNullOrEmpty()) {
-        return stringResource(Res.string.profile_job_default)
-    }
+private fun PreferredJobSection(
+    industry: String?,
+    onEditClick: () -> Unit = {}
+) {
+    val industries = parseIndustries(industry)
 
-    // 1. 기존 로직: 쉼표로 구분된 여러 업종 처리
-    val industries = industry.split(",").map { it.trim() }
-
-    return when {
-        industries.size <= 1 -> {
-            // 2. 단일 업종인 경우: enum 매핑 적용
-            val business = Business.fromDisplayText(industry)
-            business?.displayNameRes?.let { res ->
-                stringResource(res)
-            } ?: industry
+    Column {
+        // 헤더: "희망 업종" 라벨 + ">" 아이콘
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .noRippleClickable { onEditClick() },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(Res.string.profile_preferred_job),
+                style = MaterialTheme.typography.body2,
+                color = Grey600
+            )
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                painter = painterResource(Res.drawable.arrow_forward),
+                contentDescription = null,
+                tint = Grey400
+            )
         }
-        else -> {
-            // 3. 여러 업종인 경우: 첫 번째만 enum 매핑하고 "..." 추가
-            val firstIndustry = industries.first()
-            val business = Business.fromDisplayText(firstIndustry)
-            val displayName = business?.displayNameRes?.let { res ->
-                stringResource(res)
-            } ?: firstIndustry
 
-            "$displayName ..."
+        if (industries.isNotEmpty()) {
+            Spacer(Modifier.height(12.dp))
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                industries.forEach { displayName ->
+                    JobCategoryChip(text = displayName)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 개별 업종 칩 - FlowRow 내부에서 사용
+ */
+@Composable
+private fun JobCategoryChip(text: String) {
+    Box(
+        modifier = Modifier
+            .background(Grey100, RoundedCornerShape(10.dp))
+            .padding(horizontal = 16.dp, vertical = 10.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.title2,
+            color = Grey600
+        )
+    }
+}
+
+/**
+ * 쉼표로 구분된 업종 문자열을 현재 언어에 맞는 표시명 리스트로 변환
+ */
+@Composable
+private fun parseIndustries(industry: String?): List<String> {
+    if (industry.isNullOrEmpty()) return emptyList()
+
+    return industry.split(",").map { it.trim() }.mapNotNull { apiValue ->
+        val business = Business.fromApiValue(apiValue)
+        if (business != null) {
+            stringResource(business.displayNameRes)
+        } else {
+            apiValue.ifEmpty { null }
         }
     }
 }
 
 @Composable
-private fun formatTopikLevelForDisplay(topikLevel: String?): String {
-    return topikLevel?.let { value ->
-        val level = TopikLevel.fromDisplayText(value)
-        stringResource(level.displayNameRes)
-    } ?: stringResource(Res.string.profile_korean_default)
+private fun formatLanguageLevelForDisplay(languageLevel: String?): String {
+    if (languageLevel == null) return stringResource(Res.string.profile_korean_default)
+
+    // 영어 레벨 매칭 시도 (apiValue 기반)
+    val englishLevel = EnglishLevel.fromApiValue(languageLevel)
+    if (englishLevel != null) {
+        return stringResource(englishLevel.displayNameRes)
+    }
+
+    // 기존 TopikLevel 매칭 (기존 로직 유지)
+    val level = TopikLevel.fromDisplayText(languageLevel)
+    return stringResource(level.displayNameRes)
 }
 
 
-// 기존 ProfileInfoColumn 컴포넌트 (완전히 동일)
 @Composable
 private fun ProfileInfoColumn(
     label: String,

@@ -114,11 +114,26 @@
     <string name="onboarding_visa_setup_d4_title">D-4</string>
     <string name="onboarding_visa_setup_d4_description">A general training visa</string>
 
+    <!-- Onboarding Screen(track selection) -->
+    <string name="onboarding_track_setup_title">Please select\nyour track</string>
+    <string name="onboarding_track_korean">Korean Track</string>
+    <string name="onboarding_track_english">English Track</string>
+
+    <!-- Onboarding Screen(language level - common title) -->
+    <string name="onboarding_language_level_setup_title">Please select\nyour language proficiency</string>
+
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">Please select\nyour topic rating</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK Level 3</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK Level 4 or higher</string>
     <string name="onboarding_korean_level_setup_no_topik">No TOPIK certification</string>
+
+    <!-- Onboarding Screen(english level) -->
+    <string name="onboarding_english_level_toefl">TOEFL 530 (CBT 197, iBT 71)\nor higher</string>
+    <string name="onboarding_english_level_ielts">IELTS 5.5 or higher</string>
+    <string name="onboarding_english_level_cefr">CEFR B2 or higher</string>
+    <string name="onboarding_english_level_teps">TEPS 600 or higher</string>
+    <string name="onboarding_english_level_none">No certification</string>
 
     <!-- Onboarding Screen(business) -->
     <string name="onboarding_business_setup_title">What kind of\nbusiness do you want?</string>
@@ -152,6 +167,10 @@
     <string name="calculator_calculate_salary">Calculate</string>
     <string name="calculator_2026">2026 Standard</string>
     <string name="calculator_won">won</string>
+    <string name="calculator_weekly_allowance_include_label">Include Holiday Pay</string>
+    <string name="calculator_weekly_allowance_include_placeholder">Select</string>
+    <string name="calculator_weekly_allowance_include_yes">Include</string>
+    <string name="calculator_weekly_allowance_include_no">Exclude</string>
 
     <!-- Calculator Result Dialog (Shortened English) -->
     <string name="calculator_result_work_hours_label">Hours</string>
@@ -163,6 +182,7 @@
     <string name="calculator_result_not_included">No</string>
     <string name="calculator_result_weekly_allowance_condition_met">15+ hrs: Gets holiday pay</string>
     <string name="calculator_result_weekly_allowance_condition_not_met">Under 15 hrs: No holiday pay</string>
+    <string name="calculator_result_weekly_allowance_excluded_by_user">Holiday pay excluded</string>
     <string name="calculator_result_disclaimer">Excludes benefits and overtime. Actual pay may vary depending on benefits and overtime.</string>
 
 
@@ -194,6 +214,10 @@
     <string name="semester_3_2">3rd Year 2nd Semester</string>
     <string name="semester_4_1">4th Year 1st Semester</string>
     <string name="semester_4_2">4th Year 2nd Semester</string>
+    <string name="semester_graduate">Graduate</string>
+    <string name="document_basic_info_2_university_label">University</string>
+    <string name="document_basic_info_2_university_placeholder">Search university name</string>
+    <string name="document_basic_info_2_major_dropdown_placeholder">Select</string>
     <string name="document_basic_info_2_semester_placeholder">Select</string>
     <string name="document_basic_info_2_phone_number_label">Phone Number</string>
     <string name="document_basic_info_2_phone_number_placeholder">ex) 010-1234-5678</string>
@@ -253,7 +277,8 @@
     <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
     <string name="document_work_hours_weekday">Weekday: %1$s</string>
     <string name="document_work_hours_weekend">Weekend: %1$s</string>
-    <string name="document_work_hours_overtime_warning">Working hours exceeded</string>
+    <string name="document_work_hours_combined_overtime_warning">Combined weekday + weekend exceeds %1$d hours</string>
+    <string name="document_work_hours_weekday_overtime_weekend_unlimited">Weekday exceeds %1$d hours. No weekend work hour limits!</string>
     <string name="document_work_hours_vacation_info">No work hour limits during vacation!</string>
     <string name="document_work_hours_format_hours_minutes">%1$d hours %2$d minutes</string>
     <string name="document_work_hours_format_hours">%1$d hours</string>
@@ -275,6 +300,7 @@
     <string name="error_invalid_work_end_date">Invalid work end date</string>
     <string name="document_submit_success">Document submitted successfully</string>
     <string name="error_document_submit_failed">Failed to submit document</string>
+    <string name="error_university_search_failed">University not found. Please check the name.</string>
 
     <!-- Profile Screen -->
     <string name="profile_greeting">Hello\n%1$s</string>
@@ -283,6 +309,7 @@
     <string name="profile_email_signup_type">Email Signup</string>
     <string name="profile_visa_type">Visa Type</string>
     <string name="profile_visa_default">D-2</string>
+    <string name="profile_language_level">Language Level</string>
     <string name="profile_korean_level">Korean Level</string>
     <string name="profile_korean_default">TOPIK Level 3</string>
     <string name="profile_preferred_job">Preferred Job</string>
@@ -305,6 +332,7 @@
 
     <!-- Profile Error Messages 섹션 추가 -->
     <string name="error_profile_load_failed">Failed to load profile information</string>
+    <string name="error_profile_edit_failed">Failed to update profile</string>
 
     <!-- Setting Screen -->
     <string name="setting_top_bar_title">Settings</string>

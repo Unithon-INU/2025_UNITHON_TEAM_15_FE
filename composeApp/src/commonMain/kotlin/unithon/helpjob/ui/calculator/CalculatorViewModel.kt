@@ -14,6 +14,7 @@ class CalculatorViewModel: BaseViewModel() {
         val wage: String = "",
         val selectedWorkTime: Float? = null, // 선택된 일일 근무시간 (시간 단위)
         val selectedWorkDayCount: Int? = null, // 선택된 주간 근무일수
+        val includeWeeklyAllowance: Boolean? = null, // 주휴수당 포함 여부
         val salary: String = "",
         val calculationResult: CalculationResult? = null,
         val showResultDialog: Boolean = false
@@ -24,6 +25,8 @@ class CalculatorViewModel: BaseViewModel() {
             get() = selectedWorkTime != null
         val isWorkDayCountInputValid: Boolean
             get() = selectedWorkDayCount != null
+        val isWeeklyAllowanceInputValid: Boolean
+            get() = includeWeeklyAllowance != null
         val isLowerThanMinimumWage: Boolean
             get() {
                 // 입력이 유효하고 숫자로 변환 가능할 때만 비교
@@ -41,6 +44,9 @@ class CalculatorViewModel: BaseViewModel() {
 
     // 주간 근무일수 옵션들 (1일부터 7일까지)
     val workDayOptions = (1..7).toList()
+
+    // 주휴수당 포함 여부 옵션들
+    val weeklyAllowanceOptions = listOf(true, false)
 
     private val _uiState = MutableStateFlow(CalculatorUiState())
     val uiState: StateFlow<CalculatorUiState> = _uiState.asStateFlow()
@@ -65,34 +71,43 @@ class CalculatorViewModel: BaseViewModel() {
         }
     }
 
+    fun updateIncludeWeeklyAllowance(include: Boolean) {
+        _uiState.update {
+            it.copy(includeWeeklyAllowance = include)
+        }
+    }
+
     fun calculateSalary() {
         val wage = _uiState.value.wage.toIntOrNull() ?: 0
         val workTime = _uiState.value.selectedWorkTime ?: 0f
         val workDayCount = _uiState.value.selectedWorkDayCount ?: 0
+        val userIncludesAllowance = _uiState.value.includeWeeklyAllowance ?: false
 
         val weeklyWorkHours = workTime * workDayCount
-        val includesWeeklyAllowance = weeklyWorkHours >= 15f
-
+        val meetsLegalCondition = weeklyWorkHours >= 15f
+        // 법적 조건(15시간 이상) AND 사용자 선택이 "포함"일 때만 주휴수당 적용
+        val includesWeeklyAllowance = meetsLegalCondition && userIncludesAllowance
 
         val (monthlySalary, weeklyAllowanceAmount) = if (includesWeeklyAllowance) {
-            // 15시간 이상: 실제 입력값 기반 계산
+            // 15시간 이상 + 포함 선택: 실제 입력값 기반 계산
             val weeklyAllowanceAmount = (workTime * wage).toInt() // 1일 평균 근무시간 × 시급
             val basicMonthlySalary = (weeklyWorkHours * 4 * wage).toInt() // 기본 월급
             val totalMonthlySalary = basicMonthlySalary + (weeklyAllowanceAmount * 4) // 주휴수당 4주분 추가
 
             Pair(totalMonthlySalary, weeklyAllowanceAmount)
         } else {
-            // 15시간 미만: 실제근무시간 × 4주
+            // 15시간 미만 또는 미포함 선택: 실제근무시간 × 4주
             val salary = (wage * weeklyWorkHours * 4).toInt()
             Pair(salary, 0)
         }
 
-        // CalculationResult 객체 생성 (기존 구조 그대로 사용)
+        // CalculationResult 객체 생성
         val calculationResult = CalculationResult(
             workHours = weeklyWorkHours.toInt(),
             weeklyAllowanceHours = weeklyAllowanceAmount, // 기존 필드명 유지, 금액 저장
             totalAmount = monthlySalary,
-            includesWeeklyAllowance = includesWeeklyAllowance
+            includesWeeklyAllowance = includesWeeklyAllowance,
+            weeklyAllowanceExcludedByUser = meetsLegalCondition && !userIncludesAllowance
         )
 
         _uiState.update {
