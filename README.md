@@ -77,9 +77,9 @@ composeApp/
 
 ## 개발 과정 & 회고
 
-### nowinandroid 기반 Android 앱 → KMP 전체 마이그레이션
+### architecture-samples 기반 Android 앱 → KMP 전체 마이그레이션
 
-초기에 Google의 [Now in Android](https://github.com/android/nowinandroid) 아키텍처 패턴을 참고하여 Android 단독 앱으로 개발 및 출시했습니다. 이후 iOS 동시 출시가 필요해지면서 Kotlin Multiplatform으로 전체 마이그레이션을 결정했고, 기술 스택을 전면 전환했습니다.
+초기에 Google의 [architecture-samples](https://github.com/android/architecture-samples)를 토대로 Navigation, NavGraph, DI 모듈 구성 등 앱의 기본 아키텍처를 설계했고, 이후 [Now in Android](https://github.com/android/nowinandroid)를 참고하여 하단 네비게이션 등 UI 구성을 보완했습니다. 이후 iOS 동시 출시가 필요해지면서 Kotlin Multiplatform으로 전체 마이그레이션을 결정했고, 기술 스택을 전면 전환했습니다.
 
 - Retrofit → **Ktor Client** (suspend 네이티브 지원)
 - Hilt → **Koin** (KMP 호환)
