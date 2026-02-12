@@ -24,7 +24,7 @@
 
 외국인 유학생이 한국에서 시간제 취업을 하려면 복잡한 행정 절차를 거쳐야 합니다. 어떤 서류가 필요한지, 양식은 어떻게 작성하는지, 급여는 제대로 받고 있는지 — 한국어가 익숙하지 않은 유학생에게는 큰 장벽입니다.
 
-**CHECKMATE**는 교내 연합 해커톤 유니톤 우승작을 기반으로, 실제 서비스까지 발전시킨 크로스플랫폼 앱입니다. 체크리스트, 서류 자동 작성, 급여 계산기로 원스톱 지원하며, Kotlin Multiplatform으로 Android/iOS **양 스토어 출시**를 달성하고 **94% 코드 공유율**을 유지하고 있습니다.
+**CHECKMATE**는 교내 연합 해커톤 유니톤 우승작을 기반으로, 실제 서비스까지 발전시킨 크로스플랫폼 앱입니다. 체크리스트, 서류 자동 작성, 급여 계산기로 원스톱 지원하며, Kotlin Multiplatform으로 Android/iOS **양 스토어 출시**를 달성하고 **약 90% 코드 공유율**을 유지하고 있습니다.
 
 ## 스크린샷
 
@@ -45,7 +45,7 @@
 
 ## 기술적 성과
 
-**94%** 크로스플랫폼 코드 공유율 (commonMain 기준, Android/iOS 간 공유)
+**약 90%** 크로스플랫폼 코드 공유율 (commonMain 기준, Android/iOS 간 공유)
 
 ## 기술 스택
 
@@ -67,7 +67,7 @@ MVVM 2계층 구조를 채택하고, 불필요한 도메인 계층(UseCase 등)�
 
 ```
 composeApp/
-├── commonMain/    (94% - 공유 코드)
+├── commonMain/    (약 90% - 공유 코드)
 │   ├── data/      (Repository, Network, Model)
 │   ├── ui/        (Screen + ViewModel)
 │   └── di/        (Koin 공통 모듈)
@@ -87,7 +87,7 @@ composeApp/
 
 ### Ktor 전환 시 이메일 검증 장애 해결
 
-Retrofit에서 Ktor로 전환 후 이메일 중복 검사가 동작하지 않는 이슈가 발생했습니다. Retrofit은 HTTP 400 응답을 Exception으로 throw하지만, Ktor는 기본적으로 정상 응답으로 처리하는 차이가 원인이었습니다. `expectSuccess` 설정을 통해 해결했으며, 라이브러리 전환 시 **동작 방식의 차이를 반드시 파악해야 한다**는 교훈을 얻었습니다.
+Retrofit에서 Ktor로 전환하면서 에러 처리 방식의 차이를 간과하여 이메일 검증이 항상 성공으로 처리되는 버그가 발생했습니다. Ktor는 기본적으로 4xx/5xx 응답을 예외로 throw하지 않아(`expectSuccess = false`), 기존 Repository의 에러 처리 로직이 동작하지 않았던 것이 원인이었습니다. `expectSuccess = true` 설정을 통해 해결했으며, 라이브러리 전환 시 **동작 방식의 차이를 반드시 파악해야 한다**는 교훈을 얻었습니다.
 
 ### 리소스 시스템: Moko → Compose Multiplatform Resources 교정
 
@@ -95,11 +95,7 @@ KMP 리소스 관리를 위해 처음에 Moko Resources(서드파티 라이브�
 
 ### 에러 처리 체계 구축
 
-프로젝트 초기에는 에러 처리가 전혀 없어 크래시가 그대로 발생했습니다. 단계적으로 개선했습니다.
-
-1. `CoroutineExceptionHandler` + `UncaughtExceptionHandler` 도입으로 크래시 방지
-2. `launch` 등 비동기 코드에 try-catch 적용
-3. `BaseViewModel` 추상화로 일관된 패턴 적용 — **사용자에게 알려야 할 에러는 UI에 표시하고, 내부 실패는 로깅만 수행**하는 원칙을 정립
+프로젝트 초기에는 에러 처리가 전혀 없어 크래시가 그대로 발생했습니다. Application 레벨에 `UncaughtExceptionHandler`를 최후 방어선으로 설치하고, `BaseViewModel` + `CoroutineExceptionHandler`를 도입하여 전체 ViewModel에 순차 적용했습니다. **사용자에게 알려야 할 에러는 UI에 표시하고, 내부 실패는 로깅만 수행**하는 원칙을 정립했습니다.
 
 ### 컴포넌트 추상화 설계
 
