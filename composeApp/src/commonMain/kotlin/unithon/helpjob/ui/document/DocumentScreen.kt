@@ -186,6 +186,9 @@ private fun DocumentScreenImpl(
                     onUniversitySearch = { viewModel.searchUniversity() },
                     isUniversitySearching = uiState.isUniversitySearching,
                     universityName = uiState.universityName,
+                    universitySearchResults = uiState.universitySearchResults,
+                    onUniversitySelected = { viewModel.selectUniversity(it) },
+                    onDismissUniversityResults = { viewModel.dismissUniversitySearchResults() },
                     universitySearchError = uiState.universitySearchError,
                     universitySearchErrorMessage = uiState.universitySearchErrorMessage,
                     // Major

@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class UniversityResponse(
     @SerialName("university")
     val university: String,
+    @SerialName("universityType")
+    val universityType: String,
     @SerialName("majors")
     val majors: List<MajorInfo>
 )
@@ -15,6 +17,6 @@ data class UniversityResponse(
 data class MajorInfo(
     @SerialName("major")
     val major: String,
-    @SerialName("lssnTerm")
-    val lssnTerm: String
+    @SerialName("studyPeriod")
+    val studyPeriod: String
 )

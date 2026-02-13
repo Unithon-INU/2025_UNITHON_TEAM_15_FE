@@ -24,6 +24,7 @@ import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.response.MajorInfo
+import unithon.helpjob.data.model.response.UniversityResponse
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
@@ -89,7 +90,9 @@ class DocumentViewModel(
         _uiState.update {
             it.copy(
                 universityQuery = input,
+                universitySearchResults = emptyList(),
                 universityName = null,
+                universityType = null,
                 universityMajors = emptyList(),
                 universitySearchError = false,
                 universitySearchErrorMessage = null,
@@ -112,21 +115,20 @@ class DocumentViewModel(
             _uiState.update { it.copy(isUniversitySearching = true) }
             try {
                 val responseList = documentRepository.searchUniversity(query)
-                val response = responseList.firstOrNull()
-                if (response != null) {
+                if (responseList.isNotEmpty()) {
                     _uiState.update {
                         it.copy(
-                            universityName = response.university,
-                            universityMajors = response.majors,
+                            universitySearchResults = responseList,
                             isUniversitySearching = false,
                             universitySearchError = false,
                             universitySearchErrorMessage = null
                         )
                     }
-                    Logger.d("University search success: ${response.university}, majors: ${response.majors.size}")
+                    Logger.d("University search success: ${responseList.size} results for '$query'")
                 } else {
                     _uiState.update {
                         it.copy(
+                            universitySearchResults = emptyList(),
                             isUniversitySearching = false,
                             universitySearchError = true,
                             universitySearchErrorMessage = Res.string.error_university_search_failed
@@ -147,12 +149,39 @@ class DocumentViewModel(
         }
     }
 
+    // 검색 결과 드롭다운 닫기 (선택 없이 바깥 탭 시)
+    fun dismissUniversitySearchResults() {
+        _uiState.update {
+            it.copy(universitySearchResults = emptyList())
+        }
+    }
+
+    // 대학교 선택 (Cascading: 대학 변경 → 학과/학기/근무시간 초기화)
+    fun selectUniversity(university: UniversityResponse) {
+        _uiState.update {
+            it.copy(
+                universityQuery = university.university,
+                universityName = university.university,
+                universityType = university.universityType,
+                universityMajors = university.majors,
+                universitySearchResults = emptyList(),
+                major = "",
+                semester = null,
+                selectedMajorMaxGrade = 4,
+                weeklyHoursLimit = null,
+                maxWeekdayHours = null,
+                isWorkingTimeLoaded = false
+            )
+        }
+        Logger.d("University selected: ${university.university}, type: ${university.universityType}")
+    }
+
     // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
     fun selectMajor(majorInfo: MajorInfo) {
         _uiState.update {
             it.copy(
                 major = majorInfo.major,
-                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.lssnTerm),
+                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.studyPeriod),
                 semester = null,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
@@ -182,7 +211,7 @@ class DocumentViewModel(
         val major = state.major.ifBlank { return }
         val semester = state.semester ?: return
 
-        val isAssociate = state.selectedMajorMaxGrade <= 2
+        val isAssociate = state.universityType == "ASSOCIATE"
         val year = semester.toAcademicYear(isAssociate)
 
         workingTimeLimitJob?.cancel()
@@ -613,7 +642,9 @@ class DocumentViewModel(
         val emailErrorMessage: StringResource? = null,
         // 대학교 검색
         val universityQuery: String = "",
+        val universitySearchResults: List<UniversityResponse> = emptyList(),
         val universityName: String? = null,
+        val universityType: String? = null,
         val universityMajors: List<MajorInfo> = emptyList(),
         val isUniversitySearching: Boolean = false,
         val universitySearchError: Boolean = false,

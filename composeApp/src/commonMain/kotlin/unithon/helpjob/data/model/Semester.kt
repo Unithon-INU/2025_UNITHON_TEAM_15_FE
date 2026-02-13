@@ -134,10 +134,10 @@ enum class Semester(
         }
 
         /**
-         * lssnTerm에서 최대 학년 추출 ("4학년" → 4, "2학년" → 2)
+         * studyPeriod에서 최대 학년 추출 ("4년" → 4, "2년" → 2)
          */
-        fun parseMaxGrade(lssnTerm: String): Int {
-            return lssnTerm.filter { it.isDigit() }.toIntOrNull() ?: 4
+        fun parseMaxGrade(studyPeriod: String): Int {
+            return studyPeriod.filter { it.isDigit() }.toIntOrNull() ?: 4
         }
 
         /**

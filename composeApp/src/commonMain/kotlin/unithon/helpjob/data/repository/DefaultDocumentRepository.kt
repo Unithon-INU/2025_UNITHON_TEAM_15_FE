@@ -16,8 +16,8 @@ class DefaultDocumentRepository(
         )
     }
 
-    override suspend fun searchUniversity(universityName: String): List<UniversityResponse> {
-        return apiService.searchUniversity(universityName)
+    override suspend fun searchUniversity(university: String): List<UniversityResponse> {
+        return apiService.searchUniversity(university)
     }
 
     override suspend fun getWorkingTimeLimit(

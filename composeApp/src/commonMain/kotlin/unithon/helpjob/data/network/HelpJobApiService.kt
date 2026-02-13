@@ -124,9 +124,9 @@ class HelpJobApiService(private val client: HttpClient) {
     }
 
     // 대학교 검색 API
-    suspend fun searchUniversity(universityName: String): List<UniversityResponse> {
+    suspend fun searchUniversity(university: String): List<UniversityResponse> {
         return client.get(ApiConstants.SEARCH_UNIVERSITY) {
-            parameter("universityName", universityName)
+            parameter("university", university)
         }.body()
     }
 
