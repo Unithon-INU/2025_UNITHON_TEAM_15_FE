@@ -134,17 +134,17 @@ enum class Semester(
         }
 
         /**
-         * lssnTerm에서 최대 학년 추출 ("4학년" → 4, "2학년" → 2)
+         * studyPeriod에서 최대 학년 추출 ("4년" → 4, "2년" → 2)
          */
-        fun parseMaxGrade(lssnTerm: String): Int {
-            return lssnTerm.filter { it.isDigit() }.toIntOrNull() ?: 4
+        fun parseMaxGrade(studyPeriod: String): Int {
+            return studyPeriod.filter { it.isDigit() }.toIntOrNull() ?: 4
         }
 
         /**
-         * maxGrade 기준으로 선택 가능한 학기 필터링 (항상 GRADUATE 포함)
+         * maxGrade 기준으로 선택 가능한 학기 필터링 (studyPeriod 기반)
          */
         fun filteredByMaxGrade(maxGrade: Int): List<Semester> {
-            return entries.filter { it.year in 1..maxGrade || it == GRADUATE }
+            return entries.filter { it.year in 1..maxGrade }
         }
     }
 }

@@ -6,7 +6,9 @@ import helpjob.composeapp.generated.resources.document_submit_success
 import helpjob.composeapp.generated.resources.error_document_submit_failed
 import helpjob.composeapp.generated.resources.error_fill_all_fields
 import helpjob.composeapp.generated.resources.error_invalid_email
+import helpjob.composeapp.generated.resources.error_invalid_employer_phone_number
 import helpjob.composeapp.generated.resources.error_invalid_foreigner_number
+import helpjob.composeapp.generated.resources.error_invalid_phone_number
 import helpjob.composeapp.generated.resources.error_invalid_work_end_date
 import helpjob.composeapp.generated.resources.error_invalid_work_start_date
 import helpjob.composeapp.generated.resources.error_university_search_failed
@@ -24,6 +26,7 @@ import unithon.helpjob.util.Logger
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.response.MajorInfo
+import unithon.helpjob.data.model.response.UniversityResponse
 import unithon.helpjob.data.model.request.DocumentRequest
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
@@ -89,7 +92,9 @@ class DocumentViewModel(
         _uiState.update {
             it.copy(
                 universityQuery = input,
+                universitySearchResults = emptyList(),
                 universityName = null,
+                universityType = null,
                 universityMajors = emptyList(),
                 universitySearchError = false,
                 universitySearchErrorMessage = null,
@@ -112,21 +117,20 @@ class DocumentViewModel(
             _uiState.update { it.copy(isUniversitySearching = true) }
             try {
                 val responseList = documentRepository.searchUniversity(query)
-                val response = responseList.firstOrNull()
-                if (response != null) {
+                if (responseList.isNotEmpty()) {
                     _uiState.update {
                         it.copy(
-                            universityName = response.university,
-                            universityMajors = response.majors,
+                            universitySearchResults = responseList,
                             isUniversitySearching = false,
                             universitySearchError = false,
                             universitySearchErrorMessage = null
                         )
                     }
-                    Logger.d("University search success: ${response.university}, majors: ${response.majors.size}")
+                    Logger.d("University search success: ${responseList.size} results for '$query'")
                 } else {
                     _uiState.update {
                         it.copy(
+                            universitySearchResults = emptyList(),
                             isUniversitySearching = false,
                             universitySearchError = true,
                             universitySearchErrorMessage = Res.string.error_university_search_failed
@@ -147,13 +151,41 @@ class DocumentViewModel(
         }
     }
 
+    // 검색 결과 드롭다운 닫기 (선택 없이 바깥 탭 시)
+    fun dismissUniversitySearchResults() {
+        _uiState.update {
+            it.copy(universitySearchResults = emptyList())
+        }
+    }
+
+    // 대학교 선택 (Cascading: 대학 변경 → 학과/학기/근무시간 초기화)
+    fun selectUniversity(university: UniversityResponse) {
+        _uiState.update {
+            it.copy(
+                universityQuery = university.university,
+                universityName = university.university,
+                universityType = university.universityType,
+                universityMajors = university.majors,
+                universitySearchResults = emptyList(),
+                major = "",
+                semester = null,
+                selectedMajorMaxGrade = 4,
+                weeklyHoursLimit = null,
+                maxWeekdayHours = null,
+                isWorkingTimeLoaded = false
+            )
+        }
+        Logger.d("University selected: ${university.university}, type: ${university.universityType}")
+    }
+
     // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
     fun selectMajor(majorInfo: MajorInfo) {
+        val isGraduate = _uiState.value.universityType == "GRADUATE"
         _uiState.update {
             it.copy(
                 major = majorInfo.major,
-                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.lssnTerm),
-                semester = null,
+                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.studyPeriod),
+                semester = if (isGraduate) Semester.GRADUATE else null,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
                 isWorkingTimeLoaded = false
@@ -182,7 +214,7 @@ class DocumentViewModel(
         val major = state.major.ifBlank { return }
         val semester = state.semester ?: return
 
-        val isAssociate = state.selectedMajorMaxGrade <= 2
+        val isAssociate = state.universityType == "ASSOCIATE"
         val year = semester.toAcademicYear(isAssociate)
 
         workingTimeLimitJob?.cancel()
@@ -206,7 +238,22 @@ class DocumentViewModel(
 
     fun updatePhoneNumber(input: String) {
         val numbersOnly = input.filter { it.isDigit() }.take(11)
-        _uiState.value = _uiState.value.copy(phoneNumber = numbersOnly)
+        _uiState.update { currentState ->
+            currentState.copy(
+                phoneNumber = numbersOnly,
+                phoneError = false,
+                phoneErrorMessage = null
+            )
+        }
+
+        if (numbersOnly.isNotBlank() && !numbersOnly.matches(Regex("^010\\d{8}$"))) {
+            _uiState.update {
+                it.copy(
+                    phoneError = true,
+                    phoneErrorMessage = Res.string.error_invalid_phone_number
+                )
+            }
+        }
     }
 
     fun updateEmailAddress(input: String) {
@@ -253,7 +300,22 @@ class DocumentViewModel(
 
     fun updateEmployerPhoneNumber(input: String) {
         val numbersOnly = input.filter { it.isDigit() }.take(11)
-        _uiState.value = _uiState.value.copy(employerPhoneNumber = numbersOnly)
+        _uiState.update { currentState ->
+            currentState.copy(
+                employerPhoneNumber = numbersOnly,
+                employerPhoneError = false,
+                employerPhoneErrorMessage = null
+            )
+        }
+
+        if (numbersOnly.isNotBlank() && !numbersOnly.matches(Regex("^0\\d{9,10}$"))) {
+            _uiState.update {
+                it.copy(
+                    employerPhoneError = true,
+                    employerPhoneErrorMessage = Res.string.error_invalid_employer_phone_number
+                )
+            }
+        }
     }
 
     // 근무 조건 입력 함수들
@@ -608,12 +670,16 @@ class DocumentViewModel(
         val major: String = "",
         val semester: Semester? = null,
         val phoneNumber: String = "",
+        val phoneError: Boolean = false,
+        val phoneErrorMessage: StringResource? = null,
         val emailAddress: String = "",
         val emailError: Boolean = false,
         val emailErrorMessage: StringResource? = null,
         // 대학교 검색
         val universityQuery: String = "",
+        val universitySearchResults: List<UniversityResponse> = emptyList(),
         val universityName: String? = null,
+        val universityType: String? = null,
         val universityMajors: List<MajorInfo> = emptyList(),
         val isUniversitySearching: Boolean = false,
         val universitySearchError: Boolean = false,
@@ -630,6 +696,8 @@ class DocumentViewModel(
         val addressOfCompany: String = "",
         val employerName: String = "",
         val employerPhoneNumber: String = "",
+        val employerPhoneError: Boolean = false,
+        val employerPhoneErrorMessage: StringResource? = null,
         val hourlyWage: String = "",
         val workStartYear: String = "",
         val workStartMonth: String = "",
@@ -647,6 +715,9 @@ class DocumentViewModel(
         @Deprecated("Use workDayTimes instead")
         val workEndTime: String = "",
     ) {
+        val isGraduate: Boolean
+            get() = universityType == "GRADUATE"
+
         private val isNameValid: Boolean
             get() = name.isNotBlank()
 
@@ -795,10 +866,24 @@ class DocumentViewModel(
         val isWorkplaceInfo2Valid: Boolean
             get() = isAddressOfCompanyValid && isEmployerNameValid && isEmployerPhoneNumberValid
 
+        val isWorkDateOrderValid: Boolean
+            get() {
+                val startYear = workStartYear.toIntOrNull() ?: return true
+                val startMonth = workStartMonth.toIntOrNull() ?: return true
+                val startDay = workStartDay.toIntOrNull() ?: return true
+                val endYear = workEndYear.toIntOrNull() ?: return true
+                val endMonth = workEndMonth.toIntOrNull() ?: return true
+                val endDay = workEndDay.toIntOrNull() ?: return true
+
+                val startDate = startYear * 10000 + startMonth * 100 + startDay
+                val endDate = endYear * 10000 + endMonth * 100 + endDay
+                return startDate <= endDate
+            }
+
         val isWorkplaceInfo3Valid: Boolean
             get() = isHourlyWageValid && isWorkStartYearValid && isWorkStartMonthValid &&
                     isWorkStartDayValid && isWorkEndYearValid && isWorkEndMonthValid &&
-                    isWorkEndDayValid
+                    isWorkEndDayValid && isWorkDateOrderValid
 
         val isWorkplaceInfo4Valid: Boolean
             get() = isWorkDayValid && isWorkTimeValid && (isVacation || (!isWeekdayOvertime && !isWeekendOvertime))

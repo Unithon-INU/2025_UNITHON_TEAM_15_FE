@@ -39,6 +39,8 @@ import unithon.helpjob.ui.document.components.DocumentWageTextField
 import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme
+import unithon.helpjob.ui.theme.Warning
+import helpjob.composeapp.generated.resources.error_work_date_order
 
 /**
  * 윤년 판별 함수
@@ -85,11 +87,12 @@ fun WorkplaceInfo3Screen(
     onWorkEndMonthValueChange: (String) -> Unit,
     workEndDayValue: String,
     onWorkEndDayValueChange: (String) -> Unit,
+    isDateOrderError: Boolean,
     enabled: Boolean,
     onNext: () -> Unit
 ){
     val yearList = listOf(
-        "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030"
+        "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034", "2035"
     )
 
     val monthList = listOf(
@@ -181,6 +184,7 @@ fun WorkplaceInfo3Screen(
                         itemToString = { it },
                         placeholder = stringResource(Res.string.document_workplace_info_3_work_start_year_placeholder),
                         trailingText = stringResource(Res.string.document_workplace_info_3_work_start_year_trailing_text),
+                        isUpward = true,
                         showScrollbar = false
                     )
 
@@ -199,6 +203,7 @@ fun WorkplaceInfo3Screen(
                         itemToString = { it },
                         placeholder = stringResource(Res.string.document_workplace_info_3_work_start_month_placeholder),
                         trailingText = stringResource(Res.string.document_workplace_info_3_work_start_month_trailing_text),
+                        isUpward = true,
                         showScrollbar = false
                     )
 
@@ -216,6 +221,7 @@ fun WorkplaceInfo3Screen(
                         itemToString = { it },
                         placeholder = stringResource(Res.string.document_workplace_info_3_work_start_day_placeholder),
                         trailingText = stringResource(Res.string.document_workplace_info_3_work_start_day_trailing_text),
+                        isUpward = true,
                         showScrollbar = false
                     )
                 }
@@ -281,6 +287,15 @@ fun WorkplaceInfo3Screen(
                         placeholder = stringResource(Res.string.document_workplace_info_3_work_end_day_placeholder),
                         trailingText = stringResource(Res.string.document_workplace_info_3_work_end_day_trailing_text),
                         isUpward = true
+                    )
+                }
+
+                if (isDateOrderError) {
+                    Text(
+                        text = stringResource(Res.string.error_work_date_order),
+                        color = Warning,
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(top = 8.dp)
                     )
                 }
             }

@@ -6,6 +6,6 @@ import unithon.helpjob.data.model.response.WorkingTimeLimitResponse
 
 interface DocumentRepository {
     suspend fun postCertification(documentRequest: DocumentRequest)
-    suspend fun searchUniversity(universityName: String): List<UniversityResponse>
+    suspend fun searchUniversity(university: String): List<UniversityResponse>
     suspend fun getWorkingTimeLimit(university: String, major: String, year: String): WorkingTimeLimitResponse
 }

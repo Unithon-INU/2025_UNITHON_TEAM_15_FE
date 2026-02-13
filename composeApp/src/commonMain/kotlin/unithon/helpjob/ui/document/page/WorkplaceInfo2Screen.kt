@@ -14,6 +14,7 @@ import helpjob.composeapp.generated.resources.document_workplace_info_2_employer
 import helpjob.composeapp.generated.resources.document_workplace_info_2_employer_name_placeholder
 import helpjob.composeapp.generated.resources.document_workplace_info_2_employer_phone_number_label
 import helpjob.composeapp.generated.resources.document_workplace_info_2_employer_phone_number_placeholder
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.document.components.DocumentPhoneNumberTextField
 import unithon.helpjob.ui.document.components.DocumentTextTextField
@@ -30,6 +31,8 @@ fun WorkplaceInfo2Screen(
     onEmployerNameValueChange: (String) -> Unit,
     employerPhoneNumberValue: String,
     onEmployerPhoneNumberValueChange: (String) -> Unit,
+    employerPhoneError: Boolean = false,
+    employerPhoneErrorMessage: StringResource? = null,
     enabled: Boolean,
     onNext: () -> Unit
 ){
@@ -64,7 +67,9 @@ fun WorkplaceInfo2Screen(
                 labelText = stringResource(Res.string.document_workplace_info_2_employer_phone_number_label),
                 placeholderText = stringResource(Res.string.document_workplace_info_2_employer_phone_number_placeholder),
                 imeAction = ImeAction.Done,
-                onImeAction = if (enabled) onNext else null
+                onImeAction = if (enabled) onNext else null,
+                isError = employerPhoneError,
+                errorMessage = employerPhoneErrorMessage?.let { stringResource(it) }
             )
         }
     }

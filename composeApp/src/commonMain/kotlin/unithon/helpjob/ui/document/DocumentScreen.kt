@@ -164,6 +164,8 @@ private fun DocumentScreenImpl(
                     onForeignerNumberValueChange = {viewModel.updateForeignerNumber(it)},
                     phoneNumberValue = uiState.phoneNumber,
                     onPhoneNumberValueChange = {viewModel.updatePhoneNumber(it)},
+                    phoneError = uiState.phoneError,
+                    phoneErrorMessage = uiState.phoneErrorMessage,
                     enabled = uiState.isBasicInfo1Valid,
                     onNext = {
                         scope.launch {
@@ -186,6 +188,9 @@ private fun DocumentScreenImpl(
                     onUniversitySearch = { viewModel.searchUniversity() },
                     isUniversitySearching = uiState.isUniversitySearching,
                     universityName = uiState.universityName,
+                    universitySearchResults = uiState.universitySearchResults,
+                    onUniversitySelected = { viewModel.selectUniversity(it) },
+                    onDismissUniversityResults = { viewModel.dismissUniversitySearchResults() },
                     universitySearchError = uiState.universitySearchError,
                     universitySearchErrorMessage = uiState.universitySearchErrorMessage,
                     // Major
@@ -193,7 +198,11 @@ private fun DocumentScreenImpl(
                     selectedMajor = uiState.major.ifBlank { null },
                     onMajorSelected = { viewModel.selectMajor(it) },
                     // Semester
-                    semesterItems = Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade),
+                    semesterItems = if (uiState.isGraduate) {
+                        listOf(Semester.GRADUATE)
+                    } else {
+                        Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade)
+                    },
                     semesterValue = uiState.semester,
                     onSemesterValueChange = { viewModel.updateSemester(it) },
                     // Common
@@ -242,6 +251,8 @@ private fun DocumentScreenImpl(
                     onEmployerNameValueChange = {viewModel.updateEmployerName(it)},
                     employerPhoneNumberValue = uiState.employerPhoneNumber,
                     onEmployerPhoneNumberValueChange = {viewModel.updateEmployerPhoneNumber(it)},
+                    employerPhoneError = uiState.employerPhoneError,
+                    employerPhoneErrorMessage = uiState.employerPhoneErrorMessage,
                     enabled = uiState.isWorkplaceInfo2Valid,
                     onNext = {
                         scope.launch {
@@ -272,6 +283,7 @@ private fun DocumentScreenImpl(
                     onWorkEndMonthValueChange = {viewModel.updateWorkEndMonth(it)},
                     workEndDayValue = uiState.workEndDay,
                     onWorkEndDayValueChange = {viewModel.updateWorkEndDay(it)},
+                    isDateOrderError = !uiState.isWorkDateOrderValid,
                     enabled = uiState.isWorkplaceInfo3Valid,
                     onNext = {
                         scope.launch {
