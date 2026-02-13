@@ -279,6 +279,7 @@ private fun DocumentScreenImpl(
                     onWorkEndMonthValueChange = {viewModel.updateWorkEndMonth(it)},
                     workEndDayValue = uiState.workEndDay,
                     onWorkEndDayValueChange = {viewModel.updateWorkEndDay(it)},
+                    isDateOrderError = !uiState.isWorkDateOrderValid,
                     enabled = uiState.isWorkplaceInfo3Valid,
                     onNext = {
                         scope.launch {

@@ -830,10 +830,24 @@ class DocumentViewModel(
         val isWorkplaceInfo2Valid: Boolean
             get() = isAddressOfCompanyValid && isEmployerNameValid && isEmployerPhoneNumberValid
 
+        val isWorkDateOrderValid: Boolean
+            get() {
+                val startYear = workStartYear.toIntOrNull() ?: return true
+                val startMonth = workStartMonth.toIntOrNull() ?: return true
+                val startDay = workStartDay.toIntOrNull() ?: return true
+                val endYear = workEndYear.toIntOrNull() ?: return true
+                val endMonth = workEndMonth.toIntOrNull() ?: return true
+                val endDay = workEndDay.toIntOrNull() ?: return true
+
+                val startDate = startYear * 10000 + startMonth * 100 + startDay
+                val endDate = endYear * 10000 + endMonth * 100 + endDay
+                return startDate <= endDate
+            }
+
         val isWorkplaceInfo3Valid: Boolean
             get() = isHourlyWageValid && isWorkStartYearValid && isWorkStartMonthValid &&
                     isWorkStartDayValid && isWorkEndYearValid && isWorkEndMonthValid &&
-                    isWorkEndDayValid
+                    isWorkEndDayValid && isWorkDateOrderValid
 
         val isWorkplaceInfo4Valid: Boolean
             get() = isWorkDayValid && isWorkTimeValid && (isVacation || (!isWeekdayOvertime && !isWeekendOvertime))

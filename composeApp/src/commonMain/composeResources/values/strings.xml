@@ -298,6 +298,7 @@
     <string name="error_invalid_foreigner_number">Alien registration number must be 13 digits</string>
     <string name="error_invalid_work_start_date">Invalid work start date</string>
     <string name="error_invalid_work_end_date">Invalid work end date</string>
+    <string name="error_work_date_order">ⓘ Work end date cannot be earlier than start date</string>
     <string name="document_submit_success">Document submitted successfully</string>
     <string name="error_document_submit_failed">Failed to submit document</string>
     <string name="error_university_search_failed">University not found. Please check the name.</string>
