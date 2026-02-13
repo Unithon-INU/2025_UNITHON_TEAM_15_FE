@@ -6,7 +6,9 @@ import helpjob.composeapp.generated.resources.document_submit_success
 import helpjob.composeapp.generated.resources.error_document_submit_failed
 import helpjob.composeapp.generated.resources.error_fill_all_fields
 import helpjob.composeapp.generated.resources.error_invalid_email
+import helpjob.composeapp.generated.resources.error_invalid_employer_phone_number
 import helpjob.composeapp.generated.resources.error_invalid_foreigner_number
+import helpjob.composeapp.generated.resources.error_invalid_phone_number
 import helpjob.composeapp.generated.resources.error_invalid_work_end_date
 import helpjob.composeapp.generated.resources.error_invalid_work_start_date
 import helpjob.composeapp.generated.resources.error_university_search_failed
@@ -236,7 +238,22 @@ class DocumentViewModel(
 
     fun updatePhoneNumber(input: String) {
         val numbersOnly = input.filter { it.isDigit() }.take(11)
-        _uiState.value = _uiState.value.copy(phoneNumber = numbersOnly)
+        _uiState.update { currentState ->
+            currentState.copy(
+                phoneNumber = numbersOnly,
+                phoneError = false,
+                phoneErrorMessage = null
+            )
+        }
+
+        if (numbersOnly.isNotBlank() && !numbersOnly.matches(Regex("^010\\d{8}$"))) {
+            _uiState.update {
+                it.copy(
+                    phoneError = true,
+                    phoneErrorMessage = Res.string.error_invalid_phone_number
+                )
+            }
+        }
     }
 
     fun updateEmailAddress(input: String) {
@@ -283,7 +300,22 @@ class DocumentViewModel(
 
     fun updateEmployerPhoneNumber(input: String) {
         val numbersOnly = input.filter { it.isDigit() }.take(11)
-        _uiState.value = _uiState.value.copy(employerPhoneNumber = numbersOnly)
+        _uiState.update { currentState ->
+            currentState.copy(
+                employerPhoneNumber = numbersOnly,
+                employerPhoneError = false,
+                employerPhoneErrorMessage = null
+            )
+        }
+
+        if (numbersOnly.isNotBlank() && !numbersOnly.matches(Regex("^0\\d{9,10}$"))) {
+            _uiState.update {
+                it.copy(
+                    employerPhoneError = true,
+                    employerPhoneErrorMessage = Res.string.error_invalid_employer_phone_number
+                )
+            }
+        }
     }
 
     // 근무 조건 입력 함수들
@@ -638,6 +670,8 @@ class DocumentViewModel(
         val major: String = "",
         val semester: Semester? = null,
         val phoneNumber: String = "",
+        val phoneError: Boolean = false,
+        val phoneErrorMessage: StringResource? = null,
         val emailAddress: String = "",
         val emailError: Boolean = false,
         val emailErrorMessage: StringResource? = null,
@@ -662,6 +696,8 @@ class DocumentViewModel(
         val addressOfCompany: String = "",
         val employerName: String = "",
         val employerPhoneNumber: String = "",
+        val employerPhoneError: Boolean = false,
+        val employerPhoneErrorMessage: StringResource? = null,
         val hourlyWage: String = "",
         val workStartYear: String = "",
         val workStartMonth: String = "",

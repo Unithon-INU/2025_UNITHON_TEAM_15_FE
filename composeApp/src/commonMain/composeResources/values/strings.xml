@@ -296,6 +296,8 @@
     <!-- Document Error Messages -->
     <string name="error_fill_all_fields">Please check your input information</string>
     <string name="error_invalid_foreigner_number">Alien registration number must be 13 digits</string>
+    <string name="error_invalid_phone_number">ⓘ Phone number must be 11 digits starting with 010</string>
+    <string name="error_invalid_employer_phone_number">ⓘ Phone number must be 10-11 digits starting with 0</string>
     <string name="error_invalid_work_start_date">Invalid work start date</string>
     <string name="error_invalid_work_end_date">Invalid work end date</string>
     <string name="error_work_date_order">ⓘ Work end date cannot be earlier than start date</string>

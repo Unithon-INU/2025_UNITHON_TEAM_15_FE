@@ -14,6 +14,7 @@ import helpjob.composeapp.generated.resources.document_basic_info_1_name_label
 import helpjob.composeapp.generated.resources.document_basic_info_1_name_placeholder
 import helpjob.composeapp.generated.resources.document_basic_info_2_phone_number_label
 import helpjob.composeapp.generated.resources.document_basic_info_2_phone_number_placeholder
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.document.components.DocumentForeignerNumberTextField
 import unithon.helpjob.ui.document.components.DocumentPhoneNumberTextField
@@ -30,6 +31,8 @@ fun BasicInfoStep1Screen(
     onForeignerNumberValueChange: (String) -> Unit,
     phoneNumberValue: String,
     onPhoneNumberValueChange: (String) -> Unit,
+    phoneError: Boolean = false,
+    phoneErrorMessage: StringResource? = null,
     enabled: Boolean,
     onNext: () -> Unit
 ){
@@ -66,7 +69,9 @@ fun BasicInfoStep1Screen(
                 labelText = stringResource(Res.string.document_basic_info_2_phone_number_label),
                 placeholderText = stringResource(Res.string.document_basic_info_2_phone_number_placeholder),
                 imeAction = ImeAction.Done,
-                onImeAction = if (enabled) onNext else null
+                onImeAction = if (enabled) onNext else null,
+                isError = phoneError,
+                errorMessage = phoneErrorMessage?.let { stringResource(it) }
             )
         }
 

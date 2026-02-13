@@ -164,6 +164,8 @@ private fun DocumentScreenImpl(
                     onForeignerNumberValueChange = {viewModel.updateForeignerNumber(it)},
                     phoneNumberValue = uiState.phoneNumber,
                     onPhoneNumberValueChange = {viewModel.updatePhoneNumber(it)},
+                    phoneError = uiState.phoneError,
+                    phoneErrorMessage = uiState.phoneErrorMessage,
                     enabled = uiState.isBasicInfo1Valid,
                     onNext = {
                         scope.launch {
@@ -249,6 +251,8 @@ private fun DocumentScreenImpl(
                     onEmployerNameValueChange = {viewModel.updateEmployerName(it)},
                     employerPhoneNumberValue = uiState.employerPhoneNumber,
                     onEmployerPhoneNumberValueChange = {viewModel.updateEmployerPhoneNumber(it)},
+                    employerPhoneError = uiState.employerPhoneError,
+                    employerPhoneErrorMessage = uiState.employerPhoneErrorMessage,
                     enabled = uiState.isWorkplaceInfo2Valid,
                     onNext = {
                         scope.launch {
