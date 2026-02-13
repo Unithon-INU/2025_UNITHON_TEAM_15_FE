@@ -61,7 +61,7 @@ fun <T> HelpJobDropdown(
     labelTextFieldSpace: Dp = 8.dp,
     trailingText: String? = null,
     isUpward: Boolean = false,
-    showScrollbar: Boolean = true // 🆕 스크롤바 표시 여부 파라미터
+    showScrollbar: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
     var rowSize by remember { mutableStateOf(Size.Zero) }

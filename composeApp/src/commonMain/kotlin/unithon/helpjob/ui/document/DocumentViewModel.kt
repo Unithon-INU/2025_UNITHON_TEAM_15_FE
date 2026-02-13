@@ -178,11 +178,12 @@ class DocumentViewModel(
 
     // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
     fun selectMajor(majorInfo: MajorInfo) {
+        val isGraduate = _uiState.value.universityType == "GRADUATE"
         _uiState.update {
             it.copy(
                 major = majorInfo.major,
                 selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.studyPeriod),
-                semester = null,
+                semester = if (isGraduate) Semester.GRADUATE else null,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
                 isWorkingTimeLoaded = false
@@ -678,6 +679,9 @@ class DocumentViewModel(
         @Deprecated("Use workDayTimes instead")
         val workEndTime: String = "",
     ) {
+        val isGraduate: Boolean
+            get() = universityType == "GRADUATE"
+
         private val isNameValid: Boolean
             get() = name.isNotBlank()
 

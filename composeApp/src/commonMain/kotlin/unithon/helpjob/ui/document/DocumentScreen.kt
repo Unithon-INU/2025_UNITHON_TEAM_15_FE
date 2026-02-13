@@ -196,7 +196,11 @@ private fun DocumentScreenImpl(
                     selectedMajor = uiState.major.ifBlank { null },
                     onMajorSelected = { viewModel.selectMajor(it) },
                     // Semester
-                    semesterItems = Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade),
+                    semesterItems = if (uiState.isGraduate) {
+                        listOf(Semester.GRADUATE)
+                    } else {
+                        Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade)
+                    },
                     semesterValue = uiState.semester,
                     onSemesterValueChange = { viewModel.updateSemester(it) },
                     // Common

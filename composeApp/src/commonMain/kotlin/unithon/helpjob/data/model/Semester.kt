@@ -141,10 +141,10 @@ enum class Semester(
         }
 
         /**
-         * maxGrade 기준으로 선택 가능한 학기 필터링 (항상 GRADUATE 포함)
+         * maxGrade 기준으로 선택 가능한 학기 필터링 (studyPeriod 기반)
          */
         fun filteredByMaxGrade(maxGrade: Int): List<Semester> {
-            return entries.filter { it.year in 1..maxGrade || it == GRADUATE }
+            return entries.filter { it.year in 1..maxGrade }
         }
     }
 }
