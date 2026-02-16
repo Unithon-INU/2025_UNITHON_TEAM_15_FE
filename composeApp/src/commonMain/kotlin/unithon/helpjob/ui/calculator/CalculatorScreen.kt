@@ -168,7 +168,7 @@ internal fun CalculatorScreenContent(
                 itemToString = { days -> workDayDisplayMap[days] ?: "" },
                 placeholder = stringResource(Res.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
-                isUpward = false
+                isUpward = true
             )
 
             Spacer(Modifier.height(27.dp))
