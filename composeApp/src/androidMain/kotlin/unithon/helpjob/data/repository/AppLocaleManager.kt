@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -105,17 +106,24 @@ fun DynamicLanguageProvider(
         // ✅ 프리뷰 환경에서는 언어 변경 로직을 우회하고 기본 Context 사용
         content()
     } else {
-        // 🔥 실제 앱에서만 언어별로 새로운 Context 생성
-        val languageContext = remember(currentLanguage) {
+        // baseContext도 key에 추가 → Configuration change 시 languageContext 재생성
+        val languageContext = remember(currentLanguage, baseContext) {
             createLanguageContext(baseContext, currentLanguage.code, isInPreview)
         }
 
-        // 🔥 추가: Configuration 변경을 강제로 감지시키기
-        val configuration = remember(currentLanguage) {
+        val configuration = remember(currentLanguage, baseContext) {
             Configuration(languageContext.resources.configuration)
         }
 
-        // 새로운 Context로 Composition 제공
+        // 매 recomposition마다 Locale.setDefault() 보호
+        // WebView, 서드파티 라이브러리가 Locale.setDefault()를 덮어쓰는 경우 복원
+        SideEffect {
+            val locale = Locale.forLanguageTag(currentLanguage.code)
+            if (Locale.getDefault() != locale) {
+                Locale.setDefault(locale)
+            }
+        }
+
         CompositionLocalProvider(
             LocalContext provides languageContext,
             LocalConfiguration provides configuration
