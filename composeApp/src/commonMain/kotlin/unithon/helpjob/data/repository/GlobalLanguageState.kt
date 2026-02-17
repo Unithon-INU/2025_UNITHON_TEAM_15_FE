@@ -3,6 +3,7 @@ package unithon.helpjob.data.repository
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import unithon.helpjob.data.model.AppLanguage
+import unithon.helpjob.util.Logger
 
 /**
  * 앱 전역 언어 상태 관리
@@ -15,11 +16,11 @@ object GlobalLanguageState {
 
     fun updateLanguage(language: AppLanguage) {
         _currentLanguage.value = language
-        println("🌐 [GlobalLanguageState] 전역 언어 상태 업데이트: ${language.displayName}")
+        Logger.d("GlobalLanguageState", "전역 언어 상태 업데이트: ${language.displayName}")
     }
 
     fun initializeLanguage(language: AppLanguage) {
         _currentLanguage.value = language
-        println("🌐 [GlobalLanguageState] 전역 언어 초기화: ${language.displayName}")
+        Logger.d("GlobalLanguageState", "전역 언어 초기화: ${language.displayName}")
     }
 }

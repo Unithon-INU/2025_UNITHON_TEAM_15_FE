@@ -233,7 +233,8 @@ fun BasicInfoStep2Screen(
                 placeholder = stringResource(Res.string.document_basic_info_2_semester_placeholder),
                 itemToString = { semester ->
                     semesterDisplayMap[semester] ?: ""
-                }
+                },
+                isUpward = true
             )
         }
     }
