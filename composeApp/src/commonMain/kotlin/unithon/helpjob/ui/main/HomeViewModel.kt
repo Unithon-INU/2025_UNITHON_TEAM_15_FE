@@ -68,10 +68,10 @@ class HomeViewModel(
                 .drop(1)  // 첫 값 무시 (중복 방지)
                 .collect { language ->
                     Logger.d("🌐 언어 변경 감지: ${language.code}")
-                    homeStateRepository.loadHomeInfo(language.code)
-                    // 선택된 단계가 있으면 팁도 다시 로드
+                    // Accept-Language 헤더는 글로벌 플러그인이 자동 처리
+                    homeStateRepository.loadHomeInfo()
                     _uiState.value.selectedStep?.let { selectedStep ->
-                        getTips(language.code, Steps.valueOf(selectedStep.checkStep))
+                        getTips(Steps.valueOf(selectedStep.checkStep))
                     }
                 }
         }
@@ -195,20 +195,6 @@ class HomeViewModel(
             } catch (e: Exception) {
                 Logger.e(e, "체크리스트 업데이트 실패")
                 _snackbarMessage.emit(Res.string.error_update_checklist)
-            }
-        }
-    }
-
-    private fun getTips(language: String, step: Steps) {
-        viewModelScope.launch(crashPreventionHandler) {
-            try {
-                val response = employmentCheckRepository.getTips(language = language, step)
-                Logger.d(response.toString())
-                _uiState.update {
-                    it.copy(tips = response)
-                }
-            } catch (e: Exception) {
-                Logger.e(e, "팁 정보 조회 실패")
             }
         }
     }
