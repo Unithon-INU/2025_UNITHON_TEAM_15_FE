@@ -3,7 +3,6 @@ package unithon.helpjob.data.network
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.patch
 import io.ktor.client.request.post
@@ -92,19 +91,12 @@ class HelpJobApiService(private val client: HttpClient) {
         }.body()
     }
 
-    suspend fun getHomeInfo(language: String): HomeInfoResponse {
-        return client.get(ApiConstants.GET_HOME_INFO) {
-            headers {
-                append("Accept-Language", language)
-            }
-        }.body()
+    suspend fun getHomeInfo(): HomeInfoResponse {
+        return client.get(ApiConstants.GET_HOME_INFO).body()
     }
 
-    suspend fun getTips(language: String, checkStep: String): List<TipResponseItem> {
+    suspend fun getTips(checkStep: String): List<TipResponseItem> {
         return client.get(ApiConstants.GET_TIPS) {
-            headers {
-                append("Accept-Language", language)
-            }
             parameter("checkStep", checkStep)
         }.body()
     }
@@ -113,11 +105,8 @@ class HelpJobApiService(private val client: HttpClient) {
         client.put(ApiConstants.RESET_PROGRESS)
     }
 
-    suspend fun postCertification(language: String, documentRequest: DocumentRequest) {
+    suspend fun postCertification(documentRequest: DocumentRequest) {
         client.post(ApiConstants.POST_CERTIFICATION) {
-            headers {
-                append("Accept-Language", language)
-            }
             contentType(ContentType.Application.Json)
             setBody(documentRequest)
         }

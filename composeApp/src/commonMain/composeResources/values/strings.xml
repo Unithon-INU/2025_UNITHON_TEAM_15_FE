@@ -391,4 +391,7 @@
     <string name="document_login_required_description">Only members can use this feature to protect personal information.</string>
     <string name="go_to_login">Sign In</string>
 
+    <!-- Searchable Dropdown -->
+    <string name="searchable_dropdown_no_results">No results found</string>
+
 </resources>

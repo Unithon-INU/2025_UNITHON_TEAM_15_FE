@@ -1,6 +1,7 @@
 package unithon.helpjob.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -198,8 +199,8 @@ fun <T> HelpJobDropdown(
 }
 
 @Composable
-private fun CustomScrollbar(
-    scrollState: androidx.compose.foundation.ScrollState,
+internal fun CustomScrollbar(
+    scrollState: ScrollState,
     dropdownHeight: Dp,
     totalItems: Int,
     visibleItems: Int

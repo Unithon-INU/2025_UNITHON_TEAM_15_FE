@@ -32,17 +32,13 @@ class HomeStateRepository(
 
     /**
      * 홈 정보 로드 (서버에서 데이터 가져오기)
-     * @param language 언어 코드 (null이면 기본 언어 사용)
+     * Accept-Language 헤더는 글로벌 플러그인이 자동 처리
      * @throws Exception 네트워크 오류 또는 서버 오류 시
      */
-    suspend fun loadHomeInfo(language: String? = null) {
+    suspend fun loadHomeInfo() {
         println("🔥 [HomeStateRepository] loadHomeInfo() 시작")
 
-        val response = if (language != null) {
-            employmentCheckRepository.getHomeInfo(language)
-        } else {
-            employmentCheckRepository.getHomeInfo()
-        }
+        val response = employmentCheckRepository.getHomeInfo()
 
         println("🔥 [HomeStateRepository] API 응답: nickname=${response.nickname}, email=${response.email}, progress=${response.progress}")
 

@@ -10,10 +10,8 @@ class DefaultDocumentRepository(
     private val languageRepository: LanguageRepository
 ) : DocumentRepository {
     override suspend fun postCertification(documentRequest: DocumentRequest) {
-        apiService.postCertification(
-            language = languageRepository.getCurrentLanguage().code,
-            documentRequest = documentRequest
-        )
+        // Accept-Language 헤더는 글로벌 플러그인이 자동 처리
+        apiService.postCertification(documentRequest)
     }
 
     override suspend fun searchUniversity(university: String): List<UniversityResponse> {

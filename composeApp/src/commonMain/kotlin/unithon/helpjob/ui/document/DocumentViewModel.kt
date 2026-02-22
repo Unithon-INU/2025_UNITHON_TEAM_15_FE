@@ -68,6 +68,10 @@ class DocumentViewModel(
         }
 
         // 가입 이메일(=로그인 ID)로 EmailCheck pre-fill
+        prefillEmail()
+    }
+
+    private fun prefillEmail() {
         viewModelScope.launch {
             val email = homeStateRepository.homeState.value.email
             if (email.isNotBlank()) {
@@ -434,10 +438,9 @@ class DocumentViewModel(
         }
     }
 
-    fun resetUiState(){
-        _uiState.update {
-            DocumentUiState()
-        }
+    fun resetUiState() {
+        _uiState.update { DocumentUiState() }
+        prefillEmail()
     }
 
     // 서류 제출 함수 구현

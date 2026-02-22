@@ -26,29 +26,21 @@ class DefaultEmploymentCheckRepository(
     }
 
     override suspend fun getHomeInfo(): HomeInfoResponse {
-        return getHomeInfo(languageRepository.getCurrentLanguage().code)
-    }
-
-    override suspend fun getHomeInfo(language: String): HomeInfoResponse {
         // 🆕 Hybrid Pattern: Guest/Member 분기
         return if (authRepository.isGuestMode()) {
-            guestDataSource.getGuestHomeInfo(language)
+            // Guest 모드는 로컬 Mock이므로 language를 직접 전달
+            guestDataSource.getGuestHomeInfo(
+                languageRepository.getCurrentLanguage().code
+            )
         } else {
-            apiService.getHomeInfo(language)
+            // Accept-Language 헤더는 글로벌 플러그인이 자동 처리
+            apiService.getHomeInfo()
         }
     }
 
-    override suspend fun getTips(language: String, checkStep: Steps): List<TipResponseItem> {
-        return apiService.getTips(language = language, checkStep.apiStep)
-        // ✅ HttpResponseValidator가 자동으로 에러 처리
-    }
-
     override suspend fun getTips(checkStep: Steps): List<TipResponseItem> {
-        return apiService.getTips(
-            language = languageRepository.getCurrentLanguage().code,
-            checkStep.apiStep
-        )
-        // ✅ HttpResponseValidator가 자동으로 에러 처리
+        // Accept-Language 헤더는 글로벌 플러그인이 자동 처리
+        return apiService.getTips(checkStep.apiStep)
     }
 
     override suspend fun resetProgress() {

@@ -29,6 +29,7 @@ import timber.log.Timber
 import unithon.helpjob.data.model.response.ErrorResponse
 import unithon.helpjob.data.network.ApiConstants
 import unithon.helpjob.data.repository.AndroidLanguageRepository
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.EmailAlreadyInUseException
 import unithon.helpjob.data.repository.EmailCodeExpiredException
@@ -107,6 +108,16 @@ val androidNetworkModule = module {
             }
         }
 
+        // 🌐 Accept-Language 플러그인: 매 요청마다 현재 언어 설정 반영
+        val acceptLanguagePlugin = createClientPlugin("AcceptLanguage") {
+            onRequest { request, _ ->
+                val languageCode = GlobalLanguageState.currentLanguage.value.code
+                if (!request.headers.contains("Accept-Language")) {
+                    request.headers.append("Accept-Language", languageCode)
+                }
+            }
+        }
+
         HttpClient(OkHttp) {
             // 비정상 응답(4xx, 5xx)을 예외로 처리 (Ktor 공식 베스트 프랙티스)
             expectSuccess = true
@@ -132,6 +143,9 @@ val androidNetworkModule = module {
 
             // 🔑 커스텀 인증 플러그인 적용
             install(tokenAuthPlugin)
+
+            // 🌐 Accept-Language 플러그인 적용
+            install(acceptLanguagePlugin)
 
             // 🚨 전역 에러 처리 (공식 패턴)
             HttpResponseValidator {
