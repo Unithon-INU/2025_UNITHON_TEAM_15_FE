@@ -1,5 +1,6 @@
 package unithon.helpjob.ui.document.page
 
+import kotlin.math.roundToInt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -417,7 +418,7 @@ private fun WorkHoursSummary(
 // 시간 포맷팅 헬퍼 함수 (KMP 호환, 다국어 지원)
 @Composable
 private fun formatHours(hours: Float): String {
-    val totalMinutes = (hours * 60).toInt()
+    val totalMinutes = (hours * 60).roundToInt()
     val h = totalMinutes / 60
     val m = totalMinutes % 60
     return when {
