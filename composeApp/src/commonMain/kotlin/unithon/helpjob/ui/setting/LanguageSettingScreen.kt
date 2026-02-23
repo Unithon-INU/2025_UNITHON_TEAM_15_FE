@@ -169,7 +169,7 @@ private fun <T> LanguageDropdown(
             containerColor = Grey000,
             shadowElevation = 0.dp,
             offset = DpOffset(
-                y = 6.dp,
+                y = 0.dp,
                 x = with(LocalDensity.current) {
                     (rowSize.width.toDp() - 110.dp)
                 }

@@ -38,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -151,10 +150,6 @@ fun <T> HelpJobDropdown(
                 shape = RoundedCornerShape(10.dp),
                 containerColor = Grey000,
                 shadowElevation = 0.dp,
-                offset = DpOffset(
-                    y = 0.dp,
-                    x = 0.dp
-                ),
                 scrollState = scrollState
             ) {
                 Box {

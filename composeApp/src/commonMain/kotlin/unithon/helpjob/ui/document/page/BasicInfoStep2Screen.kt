@@ -39,7 +39,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
@@ -191,7 +190,6 @@ fun BasicInfoStep2Screen(
                         shape = RoundedCornerShape(10.dp),
                         containerColor = Grey000,
                         shadowElevation = 0.dp,
-                        offset = DpOffset(x = 0.dp, y = 6.dp)
                     ) {
                         universitySearchResults.forEach { university ->
                             DropdownMenuItem(
@@ -280,13 +278,12 @@ private fun <T> MajorSearchDropdown(
                 layoutDirection: LayoutDirection,
                 popupContentSize: IntSize
             ): IntOffset {
-                val gap = with(density) { 6.dp.roundToPx() }
                 return IntOffset(
                     x = anchorBounds.left,
                     y = if (isKeyboardVisible)
-                        anchorBounds.top - popupContentSize.height - gap
+                        anchorBounds.top - popupContentSize.height
                     else
-                        anchorBounds.bottom + gap
+                        anchorBounds.bottom
                 )
             }
         }
@@ -428,9 +425,9 @@ private fun <T> MajorSearchDropdown(
                     IntOffset(
                         x = (rowSize.width.toDp() + ((-10).dp)).toPx().toInt(),
                         y = if (isKeyboardVisible)
-                            (-(6 + 235)).dp.toPx().toInt()   // upward: HelpJobDropDown isUpward 패턴과 동일
+                            (-235).dp.toPx().toInt()
                         else
-                            (6 + 46 + 5).dp.toPx().toInt()  // downward
+                            (46 + 5).dp.toPx().toInt()
                     )
                 }
 
