@@ -266,13 +266,13 @@
     <string name="document_workplace_info_4_start_time_placeholder">ex)01</string>
     <string name="document_workplace_info_4_end_time_placeholder">ex)05</string>
     <string name="document_workplace_info_4_time_unit">Hr/Min</string>
-    <string name="workday_monday">M</string>
-    <string name="workday_tuesday">T</string>
-    <string name="workday_wednesday">W</string>
-    <string name="workday_thursday">T</string>
-    <string name="workday_friday">F</string>
-    <string name="workday_saturday">S</string>
-    <string name="workday_sunday">S</string>
+    <string name="workday_monday">Mo</string>
+    <string name="workday_tuesday">Tu</string>
+    <string name="workday_wednesday">We</string>
+    <string name="workday_thursday">Th</string>
+    <string name="workday_friday">Fr</string>
+    <string name="workday_saturday">Sa</string>
+    <string name="workday_sunday">Su</string>
 
     <!-- DocumentScreen(WorkplaceInfo4) Work Hours Summary -->
     <string name="document_work_hours_weekday">Weekday: %1$s</string>

@@ -371,7 +371,7 @@ class DocumentViewModel(
                 )
             } else {
                 currentState.copy(
-                    workDays = currentState.workDays + selectedDay
+                    workDays = (currentState.workDays + selectedDay).sortedBy { it.ordinal }
                 )
             }
         }
