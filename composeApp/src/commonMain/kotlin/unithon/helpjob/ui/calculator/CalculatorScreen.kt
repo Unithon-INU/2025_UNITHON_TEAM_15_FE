@@ -153,7 +153,6 @@ internal fun CalculatorScreenContent(
                 itemToString = { time -> workTimeDisplayMap[time] ?: "" },
                 placeholder = stringResource(Res.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
-                isUpward = false
             )
 
             Spacer(Modifier.height(27.dp))
@@ -168,7 +167,6 @@ internal fun CalculatorScreenContent(
                 itemToString = { days -> workDayDisplayMap[days] ?: "" },
                 placeholder = stringResource(Res.string.calculator_select_time),
                 labelTextFieldSpace = 9.dp,
-                isUpward = true
             )
 
             Spacer(Modifier.height(27.dp))
@@ -183,7 +181,6 @@ internal fun CalculatorScreenContent(
                 itemToString = { include -> weeklyAllowanceDisplayMap[include] ?: "" },
                 placeholder = stringResource(Res.string.calculator_weekly_allowance_include_placeholder),
                 labelTextFieldSpace = 9.dp,
-                isUpward = true
             )
 
             // 버튼을 위한 여백

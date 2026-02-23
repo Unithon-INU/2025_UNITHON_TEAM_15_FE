@@ -39,10 +39,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.Popup
 import unithon.helpjob.ui.theme.Grey000
 import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey400
@@ -61,12 +59,14 @@ fun <T> HelpJobDropdown(
     placeholder: String = "",
     labelTextFieldSpace: Dp = 8.dp,
     trailingText: String? = null,
-    isUpward: Boolean = false,
     showScrollbar: Boolean = true
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var rowSize by remember { mutableStateOf(Size.Zero) }
+    var rowSize by remember { mutableStateOf(Size.Zero)
+    }
     val scrollState = rememberScrollState()
+
+    val density = LocalDensity.current
 
     Column(modifier = modifier) {
         // Label
@@ -89,6 +89,7 @@ fun <T> HelpJobDropdown(
                     .onGloballyPositioned { layoutCoordinates ->
                         rowSize = layoutCoordinates.size.toSize()
                     }
+
                     .border(
                         width = 1.dp,
                         color = if (expanded) Primary500 else Grey200,
@@ -150,56 +151,75 @@ fun <T> HelpJobDropdown(
                 containerColor = Grey000,
                 shadowElevation = 0.dp,
                 offset = DpOffset(
-                    y = if (isUpward) (-(6)).dp else (6).dp,
+                    y = 6.dp,
                     x = 0.dp
                 ),
                 scrollState = scrollState
             ) {
-                items.forEach { item ->
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = itemToString(item),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Grey600
+                Box {
+                    Column {
+                        items.forEach { item ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text =
+                                            itemToString(item),
+                                        style =
+                                            MaterialTheme.typography.titleSmall,
+                                        color = Grey600
+                                    )
+                                },
+                                onClick = {
+                                    onItemSelected(item)
+                                    expanded = false
+                                },
+                                contentPadding = PaddingValues(
+                                    vertical = (11.5).dp,
+                                    horizontal = 12.dp
+                                ),
                             )
-                        },
-                        onClick = {
-                            onItemSelected(item)
-                            expanded = false
-                        },
-                        contentPadding = PaddingValues(
-                            vertical = (11.5).dp,
-                            horizontal = 12.dp
-                        ),
-                    )
+                        }
+                    }
+                    if (items.size > 5 && showScrollbar) {
+                        CustomScrollbar(
+                            modifier =
+                                Modifier.align(Alignment.TopEnd).padding(end =
+                                    4.dp),
+                            scrollState = scrollState,
+                            dropdownHeight = 230.dp,
+                            totalItems = items.size,
+                            visibleItems = 5
+                        )
+                    }
                 }
+
             }
 
             // 🆕 Custom Scrollbar - showScrollbar 파라미터로 제어
-            if (expanded && items.size > 5 && showScrollbar) {
-                val scrollbarOffset = with(LocalDensity.current) {
-                    IntOffset(
-                        x = (rowSize.width.toDp() + (-10.dp)).toPx().toInt(),
-                        y = if (isUpward) (-(6 + 235)).dp.toPx().toInt() else (6 + 46 + 5).dp.toPx().toInt()
-                    )
-                }
-
-                Popup(offset = scrollbarOffset) {
-                    CustomScrollbar(
-                        scrollState = scrollState,
-                        dropdownHeight = 230.dp,
-                        totalItems = items.size,
-                        visibleItems = 5
-                    )
-                }
-            }
+//            if (expanded && items.size > 5 && showScrollbar) {
+//                val scrollbarOffset = with(LocalDensity.current) {
+//                    IntOffset(
+//                        x = (rowSize.width.toDp() + (-10.dp)).toPx().toInt(),
+//                        y = if (isUpward) (-(6 + 235)).dp.toPx().toInt() else (6 + 46 + 5).dp.toPx().toInt()
+//                    )
+//                }
+//
+//                Popup(offset = scrollbarOffset) {
+//                    CustomScrollbar(
+//                        scrollState = scrollState,
+//                        dropdownHeight = 230.dp,
+//                        totalItems = items.size,
+//                        visibleItems = 5
+//                    )
+//                }
+//            }
         }
     }
 }
 
 @Composable
 internal fun CustomScrollbar(
+    modifier: Modifier = Modifier,
     scrollState: ScrollState,
     dropdownHeight: Dp,
     totalItems: Int,
@@ -216,7 +236,7 @@ internal fun CustomScrollbar(
     val scrollbarOffset = (dropdownHeight - scrollbarHeight) * scrollProgress
 
     // 외부 컨테이너 (DropdownMenu와 동일한 범위)
-    Box(modifier = Modifier.width(5.dp).height(dropdownHeight)) {
+    Box(modifier = modifier.width(5.dp).height(dropdownHeight)) {
         // 실제 스크롤바
         Box(
             modifier = Modifier

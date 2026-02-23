@@ -82,7 +82,6 @@ fun WorkplaceInfo1Screen(
                     // 미리 생성된 맵에서 가져오기
                     businessDisplayMap[business] ?: ""
                 },
-                isUpward = true
             )
         }
     }

@@ -250,7 +250,6 @@ fun BasicInfoStep2Screen(
                 itemToString = { semester ->
                     semesterDisplayMap[semester] ?: ""
                 },
-                isUpward = true
             )
         }
     }
