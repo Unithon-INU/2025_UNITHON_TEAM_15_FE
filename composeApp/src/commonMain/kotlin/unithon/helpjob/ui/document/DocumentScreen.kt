@@ -198,11 +198,7 @@ private fun DocumentScreenImpl(
                     selectedMajor = uiState.major.ifBlank { null },
                     onMajorSelected = { viewModel.selectMajor(it) },
                     // Semester
-                    semesterItems = if (uiState.isGraduate) {
-                        listOf(Semester.GRADUATE)
-                    } else {
-                        Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade)
-                    },
+                    semesterItems = Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade),
                     semesterValue = uiState.semester,
                     onSemesterValueChange = { viewModel.updateSemester(it) },
                     // Common
@@ -227,8 +223,8 @@ private fun DocumentScreenImpl(
                     onCompanyNameValueChange = {viewModel.updateCompanyName(it)},
                     businessRegisterNumberValue = uiState.businessRegisterNumber,
                     onBusinessRegisterNumberValueChange = {viewModel.updateBusinessRegisterNumber(it)},
-                    categoryOfBusinessValue = uiState.categoryOfBusiness,
-                    onCategoryOfBusinessValueChange = {viewModel.updateCategoryOfBusiness(it)},
+                    categoryOfBusinessValue = uiState.selectedBusiness,
+                    onCategoryOfBusinessValueChange = { viewModel.updateCategoryOfBusiness(it) },
                     enabled = uiState.isWorkplaceInfo1Valid,
                     onNext = {
                         scope.launch {

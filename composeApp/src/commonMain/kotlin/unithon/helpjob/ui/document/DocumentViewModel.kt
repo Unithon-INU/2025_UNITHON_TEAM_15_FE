@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.util.Logger
+import unithon.helpjob.data.model.AppLanguage
+import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
 import unithon.helpjob.data.model.response.MajorInfo
@@ -32,6 +34,7 @@ import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.DocumentRepository
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Analytics
@@ -184,12 +187,11 @@ class DocumentViewModel(
 
     // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
     fun selectMajor(majorInfo: MajorInfo) {
-        val isGraduate = _uiState.value.universityType == "GRADUATE"
         _uiState.update {
             it.copy(
                 major = majorInfo.major,
                 selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.studyPeriod),
-                semester = if (isGraduate) Semester.GRADUATE else null,
+                semester = null,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
                 isWorkingTimeLoaded = false
@@ -219,7 +221,7 @@ class DocumentViewModel(
         val semester = state.semester ?: return
 
         val isAssociate = state.universityType == "ASSOCIATE"
-        val year = semester.toAcademicYear(isAssociate)
+        val year = semester.toAcademicYear(isAssociate, state.isGraduate)
 
         workingTimeLimitJob?.cancel()
         workingTimeLimitJob = viewModelScope.launch(crashPreventionHandler) {
@@ -290,8 +292,8 @@ class DocumentViewModel(
         _uiState.value = _uiState.value.copy(businessRegisterNumber = numbersOnly)
     }
 
-    fun updateCategoryOfBusiness(input: String) {
-        _uiState.value = _uiState.value.copy(categoryOfBusiness = input)
+    fun updateCategoryOfBusiness(business: Business) {
+        _uiState.value = _uiState.value.copy(selectedBusiness = business)
     }
 
     fun updateAddressOfCompany(input: String) {
@@ -540,23 +542,28 @@ class DocumentViewModel(
 
     // DocumentRequest 생성 함수
     private fun createDocumentRequest(state: DocumentUiState): DocumentRequest {
+        val language = GlobalLanguageState.currentLanguage.value
+        val completedSemesters = (state.semester?.semesterIndex ?: 1) - 1
         return DocumentRequest(
             name = state.name,
             regNum = formatForeignerNumber(state.foreignerNumber),
             major = state.major,
             phoneNum = formatPhoneNumber(state.phoneNumber),
             email = state.emailAddress,
-            semester = state.semester?.apiValue ?: "",
+            semester = when (language) {
+                AppLanguage.KOREAN -> "${completedSemesters}학기"
+                AppLanguage.ENGLISH -> if (completedSemesters == 1) "1 term" else "$completedSemesters terms"
+            },
             companyName = state.companyName,
             bizRegNum = formatBusinessNumber(state.businessRegisterNumber),
-            industry = state.categoryOfBusiness,
+            industry = state.selectedBusiness?.apiValue(language) ?: "",
             address = state.addressOfCompany,
             companyPhoneNum = formatPhoneNumber(state.employerPhoneNumber),
             workingStartDate = formatDate(state.workStartYear, state.workStartMonth, state.workStartDay),
             workingEndDate = formatDate(state.workEndYear, state.workEndMonth, state.workEndDay),
-            hourlyWage = formatHourlyWage(state.hourlyWage),
-            weekdayWorkTimes = createWeekdayWorkTimes(state),
-            weekendWorkTimes = createWeekendWorkTimes(state)
+            hourlyWage = formatHourlyWage(state.hourlyWage, language),
+            weekdayWorkTimes = createWeekdayWorkTimes(state, language),
+            weekendWorkTimes = createWeekendWorkTimes(state, language)
         )
     }
 
@@ -598,10 +605,12 @@ class DocumentViewModel(
         return "$year-$paddedMonth-$paddedDay"
     }
 
-    private fun formatHourlyWage(wage: String): String {
-        // 10030 -> 10,030원
+    private fun formatHourlyWage(wage: String, language: AppLanguage): String {
         val number = wage.toLongOrNull() ?: 0L
-        return NumberFormatter.formatCurrency(number)
+        return when (language) {
+            AppLanguage.KOREAN -> NumberFormatter.formatCurrency(number)
+            AppLanguage.ENGLISH -> "KRW ${NumberFormatter.formatNumber(number.toInt())}"
+        }
     }
 
     private fun formatTime(time: String): String {
@@ -612,7 +621,7 @@ class DocumentViewModel(
     }
 
     // 평일 근무시간 생성
-    private fun createWeekdayWorkTimes(state: DocumentUiState): List<WeekdayWorkTime> {
+    private fun createWeekdayWorkTimes(state: DocumentUiState, language: AppLanguage): List<WeekdayWorkTime> {
         val weekdays = listOf(WorkDay.MONDAY, WorkDay.TUESDAY, WorkDay.WEDNESDAY, WorkDay.THURSDAY, WorkDay.FRIDAY)
         val selectedWeekdays = state.workDays.filter { it in weekdays }
 
@@ -631,13 +640,13 @@ class DocumentViewModel(
             WeekdayWorkTime(
                 workingStartTime = formatTime(dayTime.startTime),
                 workingEndTime = formatTime(dayTime.endTime),
-                day = workDaysGroup.map { it.apiValue }
+                day = workDaysGroup.map { it.apiValue(language) }
             )
         }
     }
 
     // 주말 근무시간 생성
-    private fun createWeekendWorkTimes(state: DocumentUiState): List<WeekendWorkTime> {
+    private fun createWeekendWorkTimes(state: DocumentUiState, language: AppLanguage): List<WeekendWorkTime> {
         val weekends = listOf(WorkDay.SATURDAY, WorkDay.SUNDAY)
         val selectedWeekends = state.workDays.filter { it in weekends }
 
@@ -656,7 +665,7 @@ class DocumentViewModel(
             WeekendWorkTime(
                 workingStartTime = formatTime(dayTime.startTime),
                 workingEndTime = formatTime(dayTime.endTime),
-                day = workDaysGroup.map { it.apiValue }
+                day = workDaysGroup.map { it.apiValue(language) }
             )
         }
     }
@@ -695,7 +704,7 @@ class DocumentViewModel(
         // 회사 정보
         val companyName: String = "",
         val businessRegisterNumber: String = "",
-        val categoryOfBusiness: String = "",
+        val selectedBusiness: Business? = null,
         val addressOfCompany: String = "",
         val employerName: String = "",
         val employerPhoneNumber: String = "",
@@ -748,7 +757,7 @@ class DocumentViewModel(
             get() = businessRegisterNumber.matches(Regex("^\\d{10}$"))
 
         private val isCategoryOfBusinessValid: Boolean
-            get() = categoryOfBusiness.isNotBlank()
+            get() = selectedBusiness != null
 
         private val isAddressOfCompanyValid: Boolean
             get() = addressOfCompany.isNotBlank()

@@ -16,40 +16,53 @@ import org.jetbrains.compose.resources.stringResource
 /**
  * 업무 직종 관리 Enum
  * - UI 표시용 String Resource (Compose Multiplatform Resources)
- * - API 전송용 한글 값
+ * - API 전송용 언어별 값
  */
 enum class Business(
     val displayNameRes: StringResource,
-    val apiValue: String  // API에는 항상 한글로 전송
+    val apiValueKo: String,
+    val apiValueEn: String
 ) {
     RESTAURANT(
         displayNameRes = Res.string.onboarding_business_setup_restaurant,
-        apiValue = "음식점/카페"
+        apiValueKo = "음식점/카페",
+        apiValueEn = "Restaurant/Cafe"
     ),
     MART(
         displayNameRes = Res.string.onboarding_business_setup_mart,
-        apiValue = "편의점/마트"
+        apiValueKo = "편의점/마트",
+        apiValueEn = "Convenience Store/Mart"
     ),
     LOGISTICS(
         displayNameRes = Res.string.onboarding_business_setup_logistics,
-        apiValue = "물류/창고작업"
+        apiValueKo = "물류/창고작업",
+        apiValueEn = "Logistics / Warehouse Assistant"
     ),
     OFFICE(
         displayNameRes = Res.string.onboarding_business_setup_office,
-        apiValue = "사무보조/문서정리"
+        apiValueKo = "사무보조/문서정리",
+        apiValueEn = "Office Assistant"
     ),
     TRANSLATION(
         displayNameRes = Res.string.onboarding_business_setup_translation,
-        apiValue = "통역/번역"
+        apiValueKo = "통역/번역",
+        apiValueEn = "Interpretation / Translation"
     ),
     TUTORING(
         displayNameRes = Res.string.onboarding_business_setup_learn,
-        apiValue = "과외/학습보조"
+        apiValueKo = "과외/학습보조",
+        apiValueEn = "Tutoring / Learning Assistant"
     ),
     EVENT(
         displayNameRes = Res.string.onboarding_business_setup_event,
-        apiValue = "행사/이벤트스태프"
+        apiValueKo = "행사/이벤트스태프",
+        apiValueEn = "Event Staff / Promotional Support"
     );
+
+    fun apiValue(language: AppLanguage): String = when (language) {
+        AppLanguage.KOREAN -> apiValueKo
+        AppLanguage.ENGLISH -> apiValueEn
+    }
 
     /**
      * Composable에서 현재 언어에 맞는 표시 이름 반환
@@ -64,7 +77,7 @@ enum class Business(
          * API 값(한글)을 기반으로 Business 찾기
          */
         fun fromApiValue(apiValue: String): Business? {
-            return entries.find { it.apiValue == apiValue }
+            return entries.find { it.apiValueKo == apiValue }
         }
 
         /**
@@ -98,7 +111,7 @@ enum class Business(
          * 모든 Business 목록을 API 값으로 변환
          */
         fun toApiValues(businesses: List<Business>): String {
-            return businesses.joinToString(",") { it.apiValue }
+            return businesses.joinToString(",") { it.apiValueKo }
         }
     }
 }

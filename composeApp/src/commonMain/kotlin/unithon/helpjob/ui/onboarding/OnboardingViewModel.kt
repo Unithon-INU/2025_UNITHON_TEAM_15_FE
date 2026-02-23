@@ -183,7 +183,7 @@ class OnboardingViewModel(
             val industryToRemove = Business.fromDisplayText(business)
             if (industryToRemove != null) {
                 currentIndustries.remove(industryToRemove)
-                Logger.d("업종 제거: ${industryToRemove.name} -> API값: ${industryToRemove.apiValue}")
+                Logger.d("업종 제거: ${industryToRemove.name} -> API값: ${industryToRemove.apiValueKo}")
             }
         } else {
             // 새로운 업종 추가
@@ -193,7 +193,7 @@ class OnboardingViewModel(
             val industryToAdd = Business.fromDisplayText(business)
             if (industryToAdd != null && industryToAdd !in currentIndustries) {
                 currentIndustries.add(industryToAdd)
-                Logger.d("업종 추가: ${industryToAdd.name} -> API값: ${industryToAdd.apiValue}")
+                Logger.d("업종 추가: ${industryToAdd.name} -> API값: ${industryToAdd.apiValueKo}")
             }
         }
 

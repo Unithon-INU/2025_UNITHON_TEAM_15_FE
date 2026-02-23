@@ -31,13 +31,12 @@ fun WorkplaceInfo1Screen(
     onCompanyNameValueChange: (String) -> Unit,
     businessRegisterNumberValue: String,
     onBusinessRegisterNumberValueChange: (String) -> Unit,
-    categoryOfBusinessValue: String,
-    onCategoryOfBusinessValueChange: (String) -> Unit,
+    categoryOfBusinessValue: Business?,
+    onCategoryOfBusinessValueChange: (Business) -> Unit,
     enabled: Boolean,
     onNext: () -> Unit
 ){
     val businessList = Business.entries
-    val selectedBusiness = Business.fromApiValue(categoryOfBusinessValue)
     // 🆕 미리 displayName 맵 생성 (@Composable 컨텍스트에서)
     val businessDisplayMap = businessList.associateWith { it.getDisplayName() }
 
@@ -71,10 +70,10 @@ fun WorkplaceInfo1Screen(
             Spacer(Modifier.height(27.dp))
 
             HelpJobDropdown(
-                selectedItem = selectedBusiness,
+                selectedItem = categoryOfBusinessValue,
                 items = businessList,
                 onItemSelected = { business ->
-                    onCategoryOfBusinessValueChange(business.apiValue)
+                    onCategoryOfBusinessValueChange(business)
                 },
                 label = stringResource(Res.string.document_workplace_info_1_category_of_business_label),
                 placeholder = stringResource(Res.string.document_workplace_info_1_category_of_business_placeholder),
