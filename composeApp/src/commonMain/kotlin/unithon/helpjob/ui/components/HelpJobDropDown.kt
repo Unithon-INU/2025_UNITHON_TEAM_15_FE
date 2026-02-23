@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import unithon.helpjob.ui.theme.Grey000
@@ -151,7 +152,7 @@ fun <T> HelpJobDropdown(
                 containerColor = Grey000,
                 shadowElevation = 0.dp,
                 offset = DpOffset(
-                    y = 6.dp,
+                    y = 0.dp,
                     x = 0.dp
                 ),
                 scrollState = scrollState
@@ -182,9 +183,11 @@ fun <T> HelpJobDropdown(
                     }
                     if (items.size > 5 && showScrollbar) {
                         CustomScrollbar(
-                            modifier =
-                                Modifier.align(Alignment.TopEnd).padding(end =
-                                    4.dp),
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .offset { IntOffset(0,
+                                    scrollState.value) }  // 스크롤 상쇄
+                                .padding(end = 4.dp),
                             scrollState = scrollState,
                             dropdownHeight = 230.dp,
                             totalItems = items.size,
