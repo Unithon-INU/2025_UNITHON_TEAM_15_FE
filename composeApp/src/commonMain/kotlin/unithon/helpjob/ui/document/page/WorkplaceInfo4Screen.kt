@@ -336,19 +336,24 @@ private fun WorkHoursSummary(
         // 주중/주말 시간 (가로 배치)
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (weekdayTotalHours > 0) {
-                if (!isVacation && isWeekdayOvertime) {
-                    Icon(
-                        painter = painterResource(Res.drawable.exclamation_mark),
-                        contentDescription = null,
-                        tint = Warning
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (!isVacation && isWeekdayOvertime) {
+                        Icon(
+                            painter = painterResource(Res.drawable.exclamation_mark),
+                            contentDescription = null,
+                            tint = Warning
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Text(
+                        text = stringResource(Res.string.document_work_hours_weekday, formatHours(weekdayTotalHours)),
+                        style = MaterialTheme.typography.title1,
+                        color = if (!isVacation && isWeekdayOvertime) Warning else Grey600
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(
-                    text = stringResource(Res.string.document_work_hours_weekday, formatHours(weekdayTotalHours)),
-                    style = MaterialTheme.typography.title1,
-                    color = if (!isVacation && isWeekdayOvertime) Warning else Grey600
-                )
             }
 
             if (weekdayTotalHours > 0 && weekendTotalHours > 0) {
@@ -356,20 +361,25 @@ private fun WorkHoursSummary(
             }
 
             if (weekendTotalHours > 0) {
-                // 주말 무제한이면 ⚠️ 아이콘 숨김
-                if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) {
-                    Icon(
-                        painter = painterResource(Res.drawable.exclamation_mark),
-                        contentDescription = null,
-                        tint = Warning
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // 주말 무제한이면 ⚠️ 아이콘 숨김
+                    if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) {
+                        Icon(
+                            painter = painterResource(Res.drawable.exclamation_mark),
+                            contentDescription = null,
+                            tint = Warning
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
+                    Text(
+                        text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
+                        style = MaterialTheme.typography.title1,
+                        color = if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) Warning else Grey600
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(
-                    text = stringResource(Res.string.document_work_hours_weekend, formatHours(weekendTotalHours)),
-                    style = MaterialTheme.typography.title1,
-                    color = if (!isVacation && isWeekendOvertime && !isWeekendUnlimited) Warning else Grey600
-                )
             }
         }
 
