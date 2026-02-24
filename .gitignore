@@ -21,6 +21,7 @@ GoogleService-Info.plist
 GEMINI.md
 CLAUDE.md
 .claude/
+.gemini/
 
 # Xcode 사용자 설정 파일
 *.xcuserstate
