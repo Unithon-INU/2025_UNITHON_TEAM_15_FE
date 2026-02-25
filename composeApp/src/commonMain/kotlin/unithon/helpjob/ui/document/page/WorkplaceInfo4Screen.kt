@@ -37,6 +37,8 @@ import helpjob.composeapp.generated.resources.document_work_hours_weekday_overti
 import helpjob.composeapp.generated.resources.document_work_hours_weekday
 import helpjob.composeapp.generated.resources.document_work_hours_weekend
 import helpjob.composeapp.generated.resources.document_work_hours_vacation_info
+import helpjob.composeapp.generated.resources.document_workplace_info_4_end_time_placeholder
+import helpjob.composeapp.generated.resources.document_workplace_info_4_start_time_placeholder
 import helpjob.composeapp.generated.resources.document_workplace_info_4_vacation
 import helpjob.composeapp.generated.resources.document_workplace_info_4_same_time
 import helpjob.composeapp.generated.resources.document_workplace_info_4_work_days_label
@@ -245,8 +247,8 @@ fun WorkplaceInfo4Screen(
                                     } else ""
                                     onWorkDayStartTimeChange(workDay, formatted)
                                 },
-                                hourPlaceholder = "예) 13",
-                                minutePlaceholder = "30",
+                                hourPlaceholder = stringResource(Res.string.document_workplace_info_4_start_time_placeholder),
+                                minutePlaceholder = "00",
                                 modifier = Modifier.weight(1f),
                                 nextFocusRequester = endTimeFocusRequester
                             )
@@ -274,8 +276,8 @@ fun WorkplaceInfo4Screen(
                                     } else ""
                                     onWorkDayEndTimeChange(workDay, formatted)
                                 },
-                                hourPlaceholder = "예) 16",
-                                minutePlaceholder = "30",
+                                hourPlaceholder = stringResource(Res.string.document_workplace_info_4_end_time_placeholder),
+                                minutePlaceholder = "00",
                                 modifier = Modifier.weight(1f),
                                 focusRequester = endTimeFocusRequester,
                                 imeAction = ImeAction.Done

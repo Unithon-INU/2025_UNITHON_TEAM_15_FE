@@ -40,7 +40,9 @@
 
     <!-- 🆕 이메일 인증 -->
     <string name="send_button">send</string>
+    <string name="sent_button">sent</string>
     <string name="verify_button">verify</string>
+    <string name="loading_indicator">...</string>
     <string name="resend_button">Resend</string>
     <string name="verification_code_hint">인증번호 입력</string>
     <string name="verification_code_instruction">이메일로 전송된 인증번호를 입력해주세요</string>
@@ -197,7 +199,7 @@
 
     <!-- DocumentScreen(BasicInfo1) -->
     <string name="document_basic_info_1_name_label">이름</string>
-    <string name="document_basic_info_1_name_placeholder">예) 유니톤</string>
+    <string name="document_basic_info_1_name_placeholder">예) 홍길동</string>
     <string name="document_basic_info_1_foreigner_register_number_label">외국인 등록번호</string>
     <string name="document_basic_info_1_foreigner_register_number_placeholder">예) 123456-1234567</string>
     <string name="document_basic_info_1_major_label">학과 및 전공</string>
@@ -221,7 +223,7 @@
     <string name="document_basic_info_2_phone_number_label">전화번호</string>
     <string name="document_basic_info_2_phone_number_placeholder">예) 010-1234-5678</string>
     <string name="document_basic_info_2_email_address_label">이메일 주소</string>
-    <string name="document_basic_info_2_email_address_placeholder">예) unithon@gmail.com</string>
+    <string name="document_basic_info_2_email_address_placeholder">예) example@gmail.com</string>
 
     <!-- DocumentScreen(WorkplaceInfo1) -->
     <string name="document_workplace_info_1_company_name_label">업체명</string>
@@ -233,7 +235,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo2) -->
     <string name="document_workplace_info_2_company_address_label">업체 주소</string>
-    <string name="document_workplace_info_2_company_address_placeholder">주소</string>
+    <string name="document_workplace_info_2_company_address_placeholder">예) 서울특별시 강남구 테헤란로 152</string>
     <string name="document_workplace_info_2_employer_name_label">고용주 성명</string>
     <string name="document_workplace_info_2_employer_name_placeholder">예) 김길동</string>
     <string name="document_workplace_info_2_employer_phone_number_label">고용주 전화번호</string>
@@ -241,16 +243,16 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">시급 입력</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,320</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">예) 10,030</string>
     <string name="document_workplace_info_3_work_start_date_label">근무 시작일</string>
-    <string name="document_workplace_info_3_work_start_year_placeholder">예) 2024</string>
+    <string name="document_workplace_info_3_work_start_year_placeholder">예) 2025</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">년</string>
     <string name="document_workplace_info_3_work_start_month_placeholder">예) 01</string>
     <string name="document_workplace_info_3_work_start_month_trailing_text">월</string>
     <string name="document_workplace_info_3_work_start_day_placeholder">예) 01</string>
     <string name="document_workplace_info_3_work_start_day_trailing_text">일</string>
     <string name="document_workplace_info_3_work_end_day_label">근무 종료일</string>
-    <string name="document_workplace_info_3_work_end_year_placeholder">예) 2024</string>
+    <string name="document_workplace_info_3_work_end_year_placeholder">예) 2025</string>
     <string name="document_workplace_info_3_work_end_year_trailing_text">년</string>
     <string name="document_workplace_info_3_work_end_month_placeholder">예) 01</string>
     <string name="document_workplace_info_3_work_end_day_placeholder">예) 01</string>
@@ -262,8 +264,8 @@
     <string name="document_workplace_info_4_vacation">방학</string>
     <string name="document_workplace_info_4_work_time_label">시작/종료 시간</string>
     <string name="document_workplace_info_4_same_time">시간 모두 같음</string>
-    <string name="document_workplace_info_4_start_time_placeholder">예) 01</string>
-    <string name="document_workplace_info_4_end_time_placeholder">예) 05</string>
+    <string name="document_workplace_info_4_start_time_placeholder">예) 09</string>
+    <string name="document_workplace_info_4_end_time_placeholder">예) 18</string>
     <string name="document_workplace_info_4_time_unit">시/분</string>
     <string name="workday_monday">월</string>
     <string name="workday_tuesday">화</string>
@@ -306,8 +308,8 @@
 
     <!-- Profile Screen -->
     <string name="profile_greeting">안녕하세요 \n%1$s님</string>
-    <string name="profile_nickname_default">유니톤</string>
-    <string name="profile_email_default">temp@naver.com</string>
+    <string name="profile_nickname_default">사용자</string>
+    <string name="profile_email_default"></string>
     <string name="profile_email_signup_type">이메일 가입</string>
     <string name="profile_visa_type">비자 종류</string>
     <string name="profile_visa_default">D-?</string>

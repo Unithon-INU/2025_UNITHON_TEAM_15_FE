@@ -31,7 +31,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import helpjob.composeapp.generated.resources.Res
+import helpjob.composeapp.generated.resources.loading_indicator
 import helpjob.composeapp.generated.resources.resend_button
+import helpjob.composeapp.generated.resources.send_button
+import helpjob.composeapp.generated.resources.sent_button
+import helpjob.composeapp.generated.resources.verify_button
 import helpjob.composeapp.generated.resources.sign_up_confirm_password_hint
 import helpjob.composeapp.generated.resources.sign_up_confirm_password_label
 import helpjob.composeapp.generated.resources.sign_up_email_hint
@@ -194,13 +198,13 @@ private fun SignUpScreenContent(
                 ) {
                     if (uiState.isSendingEmail) {
                         Text(
-                            text = "...",
+                            text = stringResource(Res.string.loading_indicator),
                             style = MaterialTheme.typography.titleMedium,
                             maxLines = 1
                         )
                     } else {
                         Text(
-                            text = if (uiState.isEmailSent) "sent" else "send",
+                            text = stringResource(if (uiState.isEmailSent) Res.string.sent_button else Res.string.send_button),
                             style = MaterialTheme.typography.titleMedium,
                             maxLines = 1
                         )
@@ -269,13 +273,13 @@ private fun SignUpScreenContent(
                     ) {
                         if (uiState.isVerifyingCode) {
                             Text(
-                                text = "...",
+                                text = stringResource(Res.string.loading_indicator),
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1
                             )
                         } else {
                             Text(
-                                text = "verify",
+                                text = stringResource(Res.string.verify_button),
                                 style = MaterialTheme.typography.titleMedium,
                                 maxLines = 1
                             )
