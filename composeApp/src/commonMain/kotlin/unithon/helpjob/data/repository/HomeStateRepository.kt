@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.update
 import unithon.helpjob.data.model.request.Steps
 import unithon.helpjob.data.model.request.UpdateEmploymentCheckRequest
 import unithon.helpjob.data.model.response.EmploymentCheckRes
+import unithon.helpjob.util.Logger
 
 /**
  * HomeViewModel의 서버 데이터 상태를 관리하는 Repository
@@ -36,11 +37,11 @@ class HomeStateRepository(
      * @throws Exception 네트워크 오류 또는 서버 오류 시
      */
     suspend fun loadHomeInfo() {
-        println("🔥 [HomeStateRepository] loadHomeInfo() 시작")
+        Logger.d("[HomeStateRepository]", "loadHomeInfo() 시작")
 
         val response = employmentCheckRepository.getHomeInfo()
 
-        println("🔥 [HomeStateRepository] API 응답: nickname=${response.nickname}, email=${response.email}, progress=${response.progress}")
+        Logger.d("[HomeStateRepository]", "API 응답: nickname=${response.nickname}, email=${response.email}, progress=${response.progress}")
 
         val latestCheckedStep = findLatestCheckedStep(response.employmentCheckRes)
 
@@ -54,7 +55,7 @@ class HomeStateRepository(
             )
         }
 
-        println("🔥 [HomeStateRepository] loadHomeInfo() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
+        Logger.d("[HomeStateRepository]", "loadHomeInfo() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
     }
 
     /**
@@ -119,8 +120,8 @@ class HomeStateRepository(
      * 인메모리 캐시 초기화 (로그아웃 시 호출)
      */
     override fun clearCache() {
-        println("🔥 [HomeStateRepository] clearCache() 호출됨!")
+        Logger.d("[HomeStateRepository]", "clearCache() 호출됨!")
         _homeState.value = HomeState()
-        println("🔥 [HomeStateRepository] clearCache() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
+        Logger.d("[HomeStateRepository]", "clearCache() 완료! 현재 상태: nickname=${_homeState.value.nickname}, email=${_homeState.value.email}")
     }
 }

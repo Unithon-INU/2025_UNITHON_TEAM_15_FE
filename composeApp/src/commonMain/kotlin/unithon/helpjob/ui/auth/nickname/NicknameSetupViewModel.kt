@@ -92,7 +92,7 @@ class NicknameSetupViewModel(
                 if (signUpData == null) {
                     _snackbarMessage.emit(Res.string.nickname_setup_failed)
                     _uiState.update { it.copy(isLoading = false) }
-                    println("[NicknameSetupViewModel] SignUp data is null")
+                    Logger.e("[NicknameSetupViewModel]", "SignUp data is null")
                     return@launch
                 }
 
@@ -137,7 +137,7 @@ class NicknameSetupViewModel(
             } catch (e: Exception) {
                 _snackbarMessage.emit(Res.string.nickname_setup_failed)
                 _uiState.update { it.copy(isLoading = false) }
-                println("[NicknameSetupViewModel] Nickname setup failed: ${e.message}")
+                Logger.e("[NicknameSetupViewModel]", "Nickname setup failed: ${e.message}")
             }
         }
     }

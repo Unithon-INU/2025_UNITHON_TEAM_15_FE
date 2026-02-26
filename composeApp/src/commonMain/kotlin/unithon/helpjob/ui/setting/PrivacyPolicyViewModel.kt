@@ -2,6 +2,7 @@ package unithon.helpjob.ui.setting
 
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class PrivacyPolicyViewModel(
     private val policyRepository: PolicyRepository
@@ -11,7 +12,7 @@ class PrivacyPolicyViewModel(
         return try {
             policyRepository.getPrivacyPolicy()
         } catch (e: Exception) {
-            println("[PrivacyPolicyViewModel] Failed to load privacy policy: ${e.message}")
+            Logger.e("[PrivacyPolicyViewModel]", "Failed to load privacy policy: ${e.message}")
             ""
         }
     }

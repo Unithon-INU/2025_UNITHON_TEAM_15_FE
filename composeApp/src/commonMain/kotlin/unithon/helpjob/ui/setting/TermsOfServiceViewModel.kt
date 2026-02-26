@@ -2,6 +2,7 @@ package unithon.helpjob.ui.setting
 
 import unithon.helpjob.data.repository.PolicyRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class TermsOfServiceViewModel(
     private val policyRepository: PolicyRepository
@@ -11,7 +12,7 @@ class TermsOfServiceViewModel(
         return try {
             policyRepository.getTermsOfService()
         } catch (e: Exception) {
-            println("[TermsOfServiceViewModel] Failed to load terms of service: ${e.message}")
+            Logger.e("[TermsOfServiceViewModel]", "Failed to load terms of service: ${e.message}")
             ""
         }
     }

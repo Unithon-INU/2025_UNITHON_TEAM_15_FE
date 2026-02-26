@@ -40,7 +40,7 @@ class DefaultAuthRepository(
     private val guestChecklistKey = stringPreferencesKey("guest_checklist")
 
     override suspend fun signIn(email: String, password: String): TokenResponse {
-        println("🔥 [Auth] 로그인 시도: $email")
+        Logger.d("[Auth]", "로그인 시도: $email")
         val tokenResponse = apiService.signIn(MemberSignInReq(email, password))
         saveToken(tokenResponse.token)
         return tokenResponse
@@ -101,7 +101,7 @@ class DefaultAuthRepository(
         dataStore.edit { preferences ->
             preferences[tokenKey] = token
         }
-        println("🔥 [Auth] 토큰 저장 완료")
+        Logger.d("[Auth]", "토큰 저장 완료")
     }
 
     override suspend fun getToken(): String? {
@@ -111,27 +111,27 @@ class DefaultAuthRepository(
     }
 
     override suspend fun clearToken() {
-        println("🔥 [DefaultAuthRepository] clearToken() 시작")
+        Logger.d("[DefaultAuthRepository]", "clearToken() 시작")
 
         // 1. DataStore의 모든 데이터 삭제 (토큰, 언어 설정 등)
         dataStore.edit { preferences ->
             preferences.clear()
         }
-        println("🔥 [DefaultAuthRepository] DataStore 초기화 완료")
+        Logger.d("[DefaultAuthRepository]", "DataStore 초기화 완료")
 
         // 2. 모든 Repository의 인메모리 캐시 일괄 초기화
         val cacheableRepos = koin.getAll<CacheableRepository>()
-        println("🔥 [DefaultAuthRepository] 찾은 CacheableRepository: ${cacheableRepos.size}개")
+        Logger.d("[DefaultAuthRepository]", "찾은 CacheableRepository: ${cacheableRepos.size}개")
 
         cacheableRepos.forEach { repository ->
-            println("🔥 [DefaultAuthRepository] clearCache() 호출: ${repository::class.simpleName}")
+            Logger.d("[DefaultAuthRepository]", "clearCache() 호출: ${repository::class.simpleName}")
             repository.clearCache()
         }
 
         // 3. GlobalLanguageState 초기화 (로그아웃 시 언어 설정 기본값으로 리셋)
         GlobalLanguageState.initializeLanguage(AppLanguage.ENGLISH)
 
-        println("🔥 [DefaultAuthRepository] clearToken() 완료")
+        Logger.d("[DefaultAuthRepository]", "clearToken() 완료")
     }
 
     // 🆕 온보딩 완료 여부 체크 구현
