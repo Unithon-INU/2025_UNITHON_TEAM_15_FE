@@ -43,25 +43,6 @@ class AppLocaleManager(
     }
 
     /**
-     * 앱 시작 시 저장된 언어 복원
-     */
-    suspend fun restoreSavedLanguage() {
-        try {
-            val savedLanguageCode = dataStore.data
-                .map { it[KEY_LANGUAGE_CODE] }
-                .firstOrNull()
-
-            if (savedLanguageCode != null) {
-                val savedLanguage = AppLanguage.fromCode(savedLanguageCode)
-                GlobalLanguageState.updateLanguage(savedLanguage)
-                Timber.d("✅ 저장된 언어 복원: ${savedLanguage.displayName}")
-            }
-        } catch (e: Exception) {
-            Timber.e(e, "❌ 언어 복원 실패")
-        }
-    }
-
-    /**
      * 현재 설정된 언어 코드 가져오기 (DataStore에서 읽기)
      */
     private suspend fun getCurrentLanguageCode(): String {

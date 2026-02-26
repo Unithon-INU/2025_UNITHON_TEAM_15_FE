@@ -1,6 +1,8 @@
 package unithon.helpjob.data.repository
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.snapshotFlow
+import androidx.core.os.LocaleListCompat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import timber.log.Timber
@@ -24,6 +26,11 @@ class AndroidLanguageRepository(
 
             // ✅ DataStore에 저장 (앱 재시작 시 복원용)
             appLocaleManager.saveLanguageToDataStore(language.code)
+
+            // ✅ AppCompatDelegate에 저장 (다음 프로세스 시작 시 Phase 1 동기 읽기용 캐시)
+            AppCompatDelegate.setApplicationLocales(
+                LocaleListCompat.forLanguageTags(language.code)
+            )
 
             Timber.d("✅ 언어 설정 완료: ${language.code}")
         } catch (e: Exception) {
