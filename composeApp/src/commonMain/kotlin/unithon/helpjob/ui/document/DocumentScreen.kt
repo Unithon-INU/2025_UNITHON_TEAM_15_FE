@@ -280,6 +280,7 @@ private fun DocumentScreenImpl(
                     workEndDayValue = uiState.workEndDay,
                     onWorkEndDayValueChange = {viewModel.updateWorkEndDay(it)},
                     isDateOrderError = !uiState.isWorkDateOrderValid,
+                    isPeriodOverOneYear = uiState.isWorkPeriodOverOneYear,
                     enabled = uiState.isWorkplaceInfo3Valid,
                     onNext = {
                         scope.launch {

@@ -41,6 +41,7 @@ import unithon.helpjob.ui.theme.Grey600
 import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Warning
 import helpjob.composeapp.generated.resources.error_work_date_order
+import helpjob.composeapp.generated.resources.error_work_period_over_one_year
 
 /**
  * 윤년 판별 함수
@@ -88,6 +89,7 @@ fun WorkplaceInfo3Screen(
     workEndDayValue: String,
     onWorkEndDayValueChange: (String) -> Unit,
     isDateOrderError: Boolean,
+    isPeriodOverOneYear: Boolean,
     enabled: Boolean,
     onNext: () -> Unit
 ){
@@ -284,6 +286,13 @@ fun WorkplaceInfo3Screen(
                 if (isDateOrderError) {
                     Text(
                         text = stringResource(Res.string.error_work_date_order),
+                        color = Warning,
+                        style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                } else if (isPeriodOverOneYear) {
+                    Text(
+                        text = stringResource(Res.string.error_work_period_over_one_year),
                         color = Warning,
                         style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.padding(top = 8.dp)

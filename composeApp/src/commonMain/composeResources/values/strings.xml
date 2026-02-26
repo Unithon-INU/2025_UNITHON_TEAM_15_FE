@@ -303,6 +303,7 @@
     <string name="error_invalid_work_start_date">Invalid work start date</string>
     <string name="error_invalid_work_end_date">Invalid work end date</string>
     <string name="error_work_date_order">ⓘ Work end date cannot be earlier than start date</string>
+    <string name="error_work_period_over_one_year">ⓘ Work period cannot exceed 1 year. Please submit a separate document for each year.</string>
     <string name="document_submit_success">Document submitted successfully</string>
     <string name="error_document_submit_failed">Failed to submit document</string>
     <string name="error_university_search_failed">University not found. Please check the name.</string>
