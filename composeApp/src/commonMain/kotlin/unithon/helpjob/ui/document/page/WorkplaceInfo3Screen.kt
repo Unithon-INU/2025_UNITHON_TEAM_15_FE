@@ -3,7 +3,6 @@ package unithon.helpjob.ui.document.page
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,15 +32,14 @@ import helpjob.composeapp.generated.resources.document_workplace_info_3_work_sta
 import helpjob.composeapp.generated.resources.document_workplace_info_3_work_start_month_trailing_text
 import helpjob.composeapp.generated.resources.document_workplace_info_3_work_start_year_placeholder
 import helpjob.composeapp.generated.resources.document_workplace_info_3_work_start_year_trailing_text
+import helpjob.composeapp.generated.resources.error_work_date_order
+import helpjob.composeapp.generated.resources.error_work_period_over_one_year
+import helpjob.composeapp.generated.resources.warning_hourly_wage_below_minimum
 import org.jetbrains.compose.resources.stringResource
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.document.components.DocumentWageTextField
-import unithon.helpjob.ui.theme.Grey500
 import unithon.helpjob.ui.theme.Grey600
-import unithon.helpjob.ui.theme.HelpJobTheme
 import unithon.helpjob.ui.theme.Warning
-import helpjob.composeapp.generated.resources.error_work_date_order
-import helpjob.composeapp.generated.resources.error_work_period_over_one_year
 
 /**
  * 윤년 판별 함수

@@ -40,18 +40,18 @@ enum class Business(
     ),
     OFFICE(
         displayNameRes = Res.string.onboarding_business_setup_office,
-        apiValueKo = "사무보조/문서정리",
+        apiValueKo = "사무활동보조",
         apiValueEn = "Office Assistant"
     ),
     TRANSLATION(
         displayNameRes = Res.string.onboarding_business_setup_translation,
-        apiValueKo = "통역/번역",
-        apiValueEn = "Interpretation / Translation"
+        apiValueKo = "통역활동보조",
+        apiValueEn = "Interpretation Assistant"
     ),
     TUTORING(
         displayNameRes = Res.string.onboarding_business_setup_learn,
-        apiValueKo = "과외/학습보조",
-        apiValueEn = "Tutoring / Learning Assistant"
+        apiValueKo = "학습활동보조",
+        apiValueEn = "Learning Assistant"
     ),
     EVENT(
         displayNameRes = Res.string.onboarding_business_setup_event,
@@ -90,8 +90,8 @@ enum class Business(
                 displayText.contains("편의점") || displayText.contains("마트") -> MART
                 displayText.contains("물류") -> LOGISTICS
                 displayText.contains("사무") -> OFFICE
-                displayText.contains("번역") -> TRANSLATION
-                displayText.contains("과외") || displayText.contains("학습") -> TUTORING
+                displayText.contains("번역") || displayText.contains("통역") -> TRANSLATION
+                displayText.contains("학습") -> TUTORING
                 displayText.contains("이벤트") || displayText.contains("단기") -> EVENT
 
                 // 영어 버전 매핑
@@ -99,8 +99,8 @@ enum class Business(
                 displayText.contains("Mart") || displayText.contains("Retail") -> MART
                 displayText.contains("Logistics") -> LOGISTICS
                 displayText.contains("Office") -> OFFICE
-                displayText.contains("Translation") -> TRANSLATION
-                displayText.contains("Tutoring") || displayText.contains("Learn") -> TUTORING
+                displayText.contains("Translation") || displayText.contains("Interpretation") -> TRANSLATION
+                displayText.contains("Learning") -> TUTORING
                 displayText.contains("Event") || displayText.contains("Part-time") -> EVENT
 
                 else -> null // 매칭되지 않은 경우

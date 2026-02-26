@@ -127,9 +127,9 @@
     <string name="onboarding_business_setup_restaurant">음식점/카페</string>
     <string name="onboarding_business_setup_mart">편의점/마트</string>
     <string name="onboarding_business_setup_logistics">물류/창고 작업 보조</string>
-    <string name="onboarding_business_setup_office">사무보조/문서정리</string>
-    <string name="onboarding_business_setup_translation">통역/번역</string>
-    <string name="onboarding_business_setup_learn">과외/학습 보조</string>
+    <string name="onboarding_business_setup_office">사무활동보조</string>
+    <string name="onboarding_business_setup_translation">통역활동보조</string>
+    <string name="onboarding_business_setup_learn">학습활동보조</string>
     <string name="onboarding_business_setup_event">행사/이벤트 스태프</string>
 
     <!-- Home Screen -->
