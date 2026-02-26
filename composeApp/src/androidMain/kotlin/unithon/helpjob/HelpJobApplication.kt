@@ -1,7 +1,8 @@
 package unithon.helpjob
 
 import android.app.Application
-import java.util.Locale
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -11,13 +12,11 @@ import timber.log.Timber
 import unithon.helpjob.data.analytics.AnalyticsService
 import unithon.helpjob.data.analytics.AndroidAnalyticsService
 import unithon.helpjob.data.model.AppLanguage
-import unithon.helpjob.data.repository.AppLocaleManager
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.data.repository.LanguageRepository
 
 class HelpJobApplication : Application() {
     private val languageRepository: LanguageRepository by inject()
-    private val appLocaleManager: AppLocaleManager by inject()
 
     companion object {
         lateinit var analytics: AnalyticsService
@@ -28,11 +27,21 @@ class HelpJobApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // ✅ Phase 1: 시스템 언어로 즉시 초기화 (Progressive Enhancement)
-        val systemLanguage = Locale.getDefault().language
-        GlobalLanguageState.initializeLanguage(
-            AppLanguage.fromCode(systemLanguage)
-        )
+        // ✅ Phase 1: AppCompatDelegate에서 저장된 언어 동기 읽기
+        // - AppLocalesMetadataHolderService(autoStoreLocales=true)가 자동 저장
+        // - DataStore(비동기)보다 먼저 실행되어 플래시 방지
+        try {
+            val savedLocales = AppCompatDelegate.getApplicationLocales()
+            if (!savedLocales.isEmpty) {
+                val languageTag = savedLocales[0]?.language ?: ""
+                if (languageTag.isNotBlank()) {
+                    GlobalLanguageState.initializeLanguage(AppLanguage.fromCode(languageTag))
+                }
+            }
+            // empty면 mutableStateOf(ENGLISH) 기본값 유지 (첫 실행 시)
+        } catch (e: Exception) {
+            Timber.w(e, "Phase 1 언어 초기화 실패, 기본값 ENGLISH 사용")
+        }
 
         // Koin 초기화 (가장 먼저!)
         unithon.helpjob.di.initKoin(this)
@@ -63,18 +72,20 @@ class HelpJobApplication : Application() {
     private fun initializeLanguage() {
         applicationScope.launch {
             try {
-                // ✅ 저장된 언어 복원
-                appLocaleManager.restoreSavedLanguage()
-
-                // ✅ 현재 언어 가져오기 (DataStore)
+                // ✅ DataStore에서 저장된 언어 읽기 (정확한 값으로 확인)
                 val savedLanguage = languageRepository.getCurrentLanguage()
                 Timber.d("저장된 언어: ${savedLanguage.code}")
 
-                // ✅ GlobalLanguageState 초기화 (UI 반영)
+                // ✅ GlobalLanguageState 갱신 (Phase 1과 동일하면 recomposition 없음)
                 GlobalLanguageState.initializeLanguage(savedLanguage)
+
+                // ✅ AppCompatDelegate에 저장 (이후 Phase 1 동기 읽기용 캐시)
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(savedLanguage.code)
+                )
             } catch (e: Exception) {
                 Timber.e(e, "Failed to initialize language")
-                // 저장된 언어가 없으면 시스템 언어 그대로
+                // Phase 1에서 설정한 값 유지 (ENGLISH 기본값)
             }
         }
     }

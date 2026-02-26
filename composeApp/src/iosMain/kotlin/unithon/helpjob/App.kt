@@ -10,6 +10,7 @@ import platform.Foundation.NSBundle
 import platform.Foundation.NSUserDefaults
 import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.theme.HelpJobTheme
+import unithon.helpjob.util.Logger
 
 /**
  * iOS 진입점 래퍼
@@ -32,7 +33,7 @@ fun App() {
         defaults.setObject(listOf(currentLanguage.code), forKey = "AppleLanguages")
         defaults.synchronize()
 
-        println("[iOS] AppleLanguages 설정: ${currentLanguage.code}")
+        Logger.d("[iOS] AppleLanguages 설정: ${currentLanguage.code}")
 
         onDispose { }
     }

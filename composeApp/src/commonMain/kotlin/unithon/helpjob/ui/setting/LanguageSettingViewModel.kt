@@ -13,6 +13,7 @@ import org.jetbrains.compose.resources.StringResource
 import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.repository.LanguageRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class LanguageSettingViewModel(
     private val languageRepository: LanguageRepository
@@ -38,9 +39,9 @@ class LanguageSettingViewModel(
             try {
                 val currentLanguage = languageRepository.getCurrentLanguage()
                 _uiState.value = _uiState.value.copy(currentLanguage = currentLanguage)
-                println("[LanguageSettingViewModel] 현재 언어 로드: ${currentLanguage.displayName}")
+                Logger.d("[LanguageSettingViewModel]", "현재 언어 로드: ${currentLanguage.displayName}")
             } catch (e: Exception) {
-                println("[LanguageSettingViewModel] 현재 언어 로드 실패: ${e.message}")
+                Logger.e("[LanguageSettingViewModel]", "현재 언어 로드 실패: ${e.message}")
             }
         }
     }
@@ -48,12 +49,12 @@ class LanguageSettingViewModel(
     fun setLanguage(language: AppLanguage) {
         viewModelScope.launch(crashPreventionHandler) {
             try {
-                println("[LanguageSettingViewModel] 언어 변경 시작: ${language.displayName}")
+                Logger.d("[LanguageSettingViewModel]", "언어 변경 시작: ${language.displayName}")
                 languageRepository.setLanguage(language)
                 _uiState.value = _uiState.value.copy(currentLanguage = language)
-                println("[LanguageSettingViewModel] 언어 변경 완료: ${language.displayName}")
+                Logger.d("[LanguageSettingViewModel]", "언어 변경 완료: ${language.displayName}")
             } catch (e: Exception) {
-                println("[LanguageSettingViewModel] 언어 변경 실패: ${e.message}")
+                Logger.e("[LanguageSettingViewModel]", "언어 변경 실패: ${e.message}")
                 _snackbarMessage.emit(Res.string.language_change_failed)
             }
         }

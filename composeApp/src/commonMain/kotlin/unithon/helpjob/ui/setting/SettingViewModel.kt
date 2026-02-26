@@ -11,6 +11,7 @@ import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.data.repository.EmploymentCheckRepository
 import unithon.helpjob.data.repository.HomeStateRepository
 import unithon.helpjob.ui.base.BaseViewModel
+import unithon.helpjob.util.Logger
 
 class SettingViewModel(
     private val employmentCheckRepository: EmploymentCheckRepository,
@@ -26,10 +27,10 @@ class SettingViewModel(
             try {
                 employmentCheckRepository.resetProgress()
                 homeStateRepository.loadHomeInfo()
-                println("[SettingViewModel] 진행 상황 초기화 성공")
+                Logger.d("[SettingViewModel]", "진행 상황 초기화 성공")
             } catch (e: Exception) {
                 _snackbarMessage.emit(Res.string.reset_progress_error)
-                println("[SettingViewModel] 진행 상황 초기화 실패: ${e.message}")
+                Logger.e("[SettingViewModel]", "진행 상황 초기화 실패: ${e.message}")
             }
         }
     }
