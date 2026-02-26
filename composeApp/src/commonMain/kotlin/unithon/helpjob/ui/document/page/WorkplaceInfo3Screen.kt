@@ -88,6 +88,7 @@ fun WorkplaceInfo3Screen(
     onWorkEndMonthValueChange: (String) -> Unit,
     workEndDayValue: String,
     onWorkEndDayValueChange: (String) -> Unit,
+    isHourlyWageBelowMinimum: Boolean,
     isDateOrderError: Boolean,
     isPeriodOverOneYear: Boolean,
     enabled: Boolean,
@@ -161,6 +162,15 @@ fun WorkplaceInfo3Screen(
                 placeholderText = stringResource(Res.string.document_workplace_info_3_hourly_wage_placeholder),
                 imeAction = ImeAction.Done
             )
+
+            if (isHourlyWageBelowMinimum) {
+                Text(
+                    text = stringResource(Res.string.warning_hourly_wage_below_minimum),
+                    color = Warning,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
 
             Spacer(Modifier.height(27.dp))
 

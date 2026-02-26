@@ -279,6 +279,7 @@ private fun DocumentScreenImpl(
                     onWorkEndMonthValueChange = {viewModel.updateWorkEndMonth(it)},
                     workEndDayValue = uiState.workEndDay,
                     onWorkEndDayValueChange = {viewModel.updateWorkEndDay(it)},
+                    isHourlyWageBelowMinimum = uiState.isHourlyWageBelowMinimum,
                     isDateOrderError = !uiState.isWorkDateOrderValid,
                     isPeriodOverOneYear = uiState.isWorkPeriodOverOneYear,
                     enabled = uiState.isWorkplaceInfo3Valid,

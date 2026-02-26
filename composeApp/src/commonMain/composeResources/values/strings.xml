@@ -244,7 +244,7 @@
 
     <!-- DocumentScreen(WorkplaceInfo3) -->
     <string name="document_workplace_info_3_hourly_wage_label">Hourly Wage</string>
-    <string name="document_workplace_info_3_hourly_wage_placeholder">ex) 10,030</string>
+    <string name="document_workplace_info_3_hourly_wage_placeholder">ex) 10,320</string>
     <string name="document_workplace_info_3_work_start_date_label">Work Start Date</string>
     <string name="document_workplace_info_3_work_start_year_placeholder">ex) 2025</string>
     <string name="document_workplace_info_3_work_start_year_trailing_text">Y</string>
@@ -304,6 +304,7 @@
     <string name="error_invalid_work_end_date">Invalid work end date</string>
     <string name="error_work_date_order">ⓘ Work end date cannot be earlier than start date</string>
     <string name="error_work_period_over_one_year">ⓘ Work period cannot exceed 1 year. Please submit a separate document for each year.</string>
+    <string name="warning_hourly_wage_below_minimum">ⓘ The hourly wage is below the 2025 minimum wage (10,320 won).</string>
     <string name="document_submit_success">Document submitted successfully</string>
     <string name="error_document_submit_failed">Failed to submit document</string>
     <string name="error_university_search_failed">University not found. Please check the name.</string>

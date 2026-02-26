@@ -771,6 +771,9 @@ class DocumentViewModel(
         private val isHourlyWageValid: Boolean
             get() = hourlyWage.matches(Regex("^\\d+$")) && hourlyWage.isNotBlank()
 
+        val isHourlyWageBelowMinimum: Boolean
+            get() = hourlyWage.toLongOrNull()?.let { it in 1..<10320 } ?: false
+
         private val isWorkStartYearValid: Boolean
             get() = workStartYear.matches(Regex("^\\d{4}$"))
 
@@ -914,9 +917,10 @@ class DocumentViewModel(
             }
 
         val isWorkplaceInfo3Valid: Boolean
-            get() = isHourlyWageValid && isWorkStartYearValid && isWorkStartMonthValid &&
-                    isWorkStartDayValid && isWorkEndYearValid && isWorkEndMonthValid &&
-                    isWorkEndDayValid && isWorkDateOrderValid && !isWorkPeriodOverOneYear
+            get() = isHourlyWageValid && !isHourlyWageBelowMinimum && isWorkStartYearValid &&
+                    isWorkStartMonthValid && isWorkStartDayValid && isWorkEndYearValid &&
+                    isWorkEndMonthValid && isWorkEndDayValid && isWorkDateOrderValid &&
+                    !isWorkPeriodOverOneYear
 
         val isWorkplaceInfo4Valid: Boolean
             get() = isWorkDayValid && isWorkTimeValid && (isVacation || (!isWeekdayOvertime && !isWeekendOvertime))
