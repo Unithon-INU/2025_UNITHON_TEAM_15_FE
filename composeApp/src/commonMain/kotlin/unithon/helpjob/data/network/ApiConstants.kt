@@ -17,7 +17,9 @@ object ApiConstants {
     const val GET_TIPS = "api/employment/tips"
     const val RESET_PROGRESS = "api/employment/progress"
     const val POST_CERTIFICATION = "api/cert"
-    const val SEARCH_UNIVERSITY = "api/universities"
+    // TODO[LEGACY]: 대학 검색 API 재통합 시 해제
+    // const val SEARCH_UNIVERSITY = "api/universities"
+    const val GET_ACCREDITED_UNIVERSITIES = "api/universities/accredited"
     const val GET_WORKING_TIME_LIMIT = "api/cert/working-time"
     const val PRIVACY_POLICY = "privacy"
     const val TERMS_OF_SERVICE = "terms"

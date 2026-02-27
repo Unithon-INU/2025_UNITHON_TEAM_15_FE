@@ -3,6 +3,7 @@ package unithon.helpjob.data.model
 import androidx.compose.runtime.Composable
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_no_topik
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik2
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik3
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik4_over
 import org.jetbrains.compose.resources.StringResource
@@ -20,6 +21,10 @@ enum class TopikLevel(
     NO_TOPIK(
         displayNameRes = Res.string.onboarding_korean_level_setup_no_topik,
         apiValue = "없음"
+    ),
+    TOPIK_2(
+        displayNameRes = Res.string.onboarding_korean_level_setup_topik2,
+        apiValue = "TOPIK 2급"
     ),
     TOPIK_3_OR_BELOW(
         displayNameRes = Res.string.onboarding_korean_level_setup_topik3,
@@ -44,6 +49,8 @@ enum class TopikLevel(
          */
         fun fromDisplayText(displayText: String): TopikLevel {
             return when {
+                displayText.contains("TOPIK 2급") || displayText.contains("Level 2") -> TOPIK_2
+
                 displayText.contains("TOPIK 3급") || displayText.contains("Level 3") -> TOPIK_3_OR_BELOW
 
                 displayText.contains("TOPIK 4급") || displayText.contains("Level 4") -> TOPIK_4_OR_ABOVE

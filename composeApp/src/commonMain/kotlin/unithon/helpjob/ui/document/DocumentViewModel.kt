@@ -11,7 +11,7 @@ import helpjob.composeapp.generated.resources.error_invalid_foreigner_number
 import helpjob.composeapp.generated.resources.error_invalid_phone_number
 import helpjob.composeapp.generated.resources.error_invalid_work_end_date
 import helpjob.composeapp.generated.resources.error_invalid_work_start_date
-import helpjob.composeapp.generated.resources.error_university_search_failed
+// TODO[LEGACY]: import helpjob.composeapp.generated.resources.error_university_search_failed
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,9 +27,10 @@ import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Business
 import unithon.helpjob.data.model.Semester
 import unithon.helpjob.data.model.WorkDay
-import unithon.helpjob.data.model.response.MajorInfo
-import unithon.helpjob.data.model.response.UniversityResponse
+import unithon.helpjob.data.model.response.UniversityInfo
 import unithon.helpjob.data.model.request.DocumentRequest
+// TODO[LEGACY]: import unithon.helpjob.data.model.response.MajorInfo
+// TODO[LEGACY]: import unithon.helpjob.data.model.response.UniversityResponse
 import unithon.helpjob.data.model.request.WeekdayWorkTime
 import unithon.helpjob.data.model.request.WeekendWorkTime
 import unithon.helpjob.data.repository.AuthRepository
@@ -94,109 +95,100 @@ class DocumentViewModel(
         _uiState.value = _uiState.value.copy(foreignerNumber = numbersOnly)
     }
 
-    // 대학교 검색 입력 (Cascading: 검색어 변경 → 모든 하위 필드 초기화)
-    fun updateUniversityQuery(input: String) {
-        _uiState.update {
-            it.copy(
-                universityQuery = input,
-                universitySearchResults = emptyList(),
-                universityName = null,
-                universityType = null,
-                universityMajors = emptyList(),
-                universitySearchError = false,
-                universitySearchErrorMessage = null,
-                major = "",
-                semester = null,
-                selectedMajorMaxGrade = 4,
-                weeklyHoursLimit = null,
-                maxWeekdayHours = null,
-                isWorkingTimeLoaded = false
-            )
-        }
-    }
+    // TODO[LEGACY]: 대학 검색 API 재통합 시 해제
+    // fun updateUniversityQuery(input: String) { ... }
+    // fun searchUniversity() { ... }
+    // fun dismissUniversitySearchResults() { ... }
+    // fun selectUniversity(university: UniversityResponse) { ... }
+    // fun selectMajor(majorInfo: MajorInfo) { ... }
 
-    // 대학교 검색 실행 (검색 버튼 또는 IME Search)
-    fun searchUniversity() {
-        val query = _uiState.value.universityQuery.trim()
-        if (query.isBlank()) return
-
+    // 인증대학 목록 로드 (이미 로드됐으면 스킵)
+    fun loadAccreditedUniversities() {
+        if (_uiState.value.accreditedUniversities.isNotEmpty()) return
         viewModelScope.launch(crashPreventionHandler) {
-            _uiState.update { it.copy(isUniversitySearching = true) }
+            _uiState.update { it.copy(isAccreditedUniversitiesLoading = true) }
             try {
-                val responseList = documentRepository.searchUniversity(query)
-                if (responseList.isNotEmpty()) {
-                    _uiState.update {
-                        it.copy(
-                            universitySearchResults = responseList,
-                            isUniversitySearching = false,
-                            universitySearchError = false,
-                            universitySearchErrorMessage = null
-                        )
-                    }
-                    Logger.d("University search success: ${responseList.size} results for '$query'")
-                } else {
-                    _uiState.update {
-                        it.copy(
-                            universitySearchResults = emptyList(),
-                            isUniversitySearching = false,
-                            universitySearchError = true,
-                            universitySearchErrorMessage = Res.string.error_university_search_failed
-                        )
-                    }
-                    Logger.d("University search returned empty list for: $query")
-                }
-            } catch (e: Exception) {
-                Logger.e(e, "University search failed for: $query")
+                val universities = documentRepository.getAccreditedUniversities()
                 _uiState.update {
                     it.copy(
-                        isUniversitySearching = false,
-                        universitySearchError = true,
-                        universitySearchErrorMessage = Res.string.error_university_search_failed
+                        accreditedUniversities = universities,
+                        isAccreditedUniversitiesLoading = false
                     )
                 }
+                Logger.d("Accredited universities loaded: ${universities.size}")
+            } catch (e: Exception) {
+                Logger.e(e, "Failed to load accredited universities")
+                _uiState.update { it.copy(isAccreditedUniversitiesLoading = false) }
             }
         }
     }
 
-    // 검색 결과 드롭다운 닫기 (선택 없이 바깥 탭 시)
-    fun dismissUniversitySearchResults() {
-        _uiState.update {
-            it.copy(universitySearchResults = emptyList())
-        }
+    fun updateUniversityFilterQuery(query: String) {
+        _uiState.update { it.copy(universityFilterQuery = query) }
     }
 
-    // 대학교 선택 (Cascading: 대학 변경 → 학과/학기/근무시간 초기화)
-    fun selectUniversity(university: UniversityResponse) {
+    fun openUniversitySearchDialog() {
+        _uiState.update { it.copy(isUniversitySearchDialogOpen = true, universityFilterQuery = "") }
+    }
+
+    fun closeUniversitySearchDialog() {
+        _uiState.update { it.copy(isUniversitySearchDialogOpen = false, universityFilterQuery = "") }
+    }
+
+    // 인증대 선택 (Cascading: 인증대 변경 → 대학종류 자동설정, 학기/근무시간 초기화, major 유지)
+    fun selectAccreditedUniversity(university: UniversityInfo) {
+        val language = GlobalLanguageState.currentLanguage.value
+        val displayName = if (language == AppLanguage.KOREAN) university.nameKo else university.nameEn
         _uiState.update {
             it.copy(
-                universityQuery = university.university,
-                universityName = university.university,
+                isAccredited = true,
+                universityName = displayName,
                 universityType = university.universityType,
-                universityMajors = university.majors,
-                universitySearchResults = emptyList(),
-                major = "",
+                isUniversitySearchDialogOpen = false,
+                universityFilterQuery = "",
                 semester = null,
-                selectedMajorMaxGrade = 4,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
                 isWorkingTimeLoaded = false
             )
         }
-        Logger.d("University selected: ${university.university}, type: ${university.universityType}")
+        Logger.d("Accredited university selected: $displayName, type: ${university.universityType}")
     }
 
-    // 학과 선택 (Cascading: 학과 변경 → 학기/근무시간 초기화)
-    fun selectMajor(majorInfo: MajorInfo) {
+    // 비인증대 선택 (Cascading: universityType 수동 선택 필요, 학기/근무시간 초기화, major 유지)
+    fun selectNonAccredited() {
         _uiState.update {
             it.copy(
-                major = majorInfo.major,
-                selectedMajorMaxGrade = Semester.parseMaxGrade(majorInfo.studyPeriod),
+                isAccredited = false,
+                universityName = null,
+                universityType = null,
+                isUniversitySearchDialogOpen = false,
+                universityFilterQuery = "",
                 semester = null,
                 weeklyHoursLimit = null,
                 maxWeekdayHours = null,
                 isWorkingTimeLoaded = false
             )
         }
+        Logger.d("Non-accredited selected")
+    }
+
+    // 대학 종류 변경 (Cascading: 학기/근무시간 초기화)
+    fun updateUniversityType(type: String) {
+        _uiState.update {
+            it.copy(
+                universityType = type,
+                semester = null,
+                weeklyHoursLimit = null,
+                maxWeekdayHours = null,
+                isWorkingTimeLoaded = false
+            )
+        }
+    }
+
+    // 학과 직접 입력
+    fun updateMajor(input: String) {
+        _uiState.update { it.copy(major = input) }
     }
 
     fun updateSemester(semester: Semester) {
@@ -213,11 +205,10 @@ class DocumentViewModel(
         fetchWorkingTimeLimit()
     }
 
-    // 근무시간 제한 조회 (대학교 + 학과 + 학기 모두 선택 시)
+    // 근무시간 제한 조회 (인증대 여부 + 대학 종류 + 학기 모두 선택 시)
     private fun fetchWorkingTimeLimit() {
         val state = _uiState.value
-        val university = state.universityName ?: return
-        val major = state.major.ifBlank { return }
+        val isAccredited = state.isAccredited ?: return
         val semester = state.semester ?: return
 
         val isAssociate = state.universityType == "ASSOCIATE"
@@ -226,7 +217,7 @@ class DocumentViewModel(
         workingTimeLimitJob?.cancel()
         workingTimeLimitJob = viewModelScope.launch(crashPreventionHandler) {
             try {
-                val response = documentRepository.getWorkingTimeLimit(university, major, year)
+                val response = documentRepository.getWorkingTimeLimit(isAccredited, year)
                 _uiState.update {
                     it.copy(
                         weeklyHoursLimit = response.weeklyHours,
@@ -687,16 +678,22 @@ class DocumentViewModel(
         val emailAddress: String = "",
         val emailError: Boolean = false,
         val emailErrorMessage: StringResource? = null,
-        // 대학교 검색
-        val universityQuery: String = "",
-        val universitySearchResults: List<UniversityResponse> = emptyList(),
-        val universityName: String? = null,
-        val universityType: String? = null,
-        val universityMajors: List<MajorInfo> = emptyList(),
-        val isUniversitySearching: Boolean = false,
-        val universitySearchError: Boolean = false,
-        val universitySearchErrorMessage: StringResource? = null,
-        val selectedMajorMaxGrade: Int = 4,
+        // 대학교 (인증대 기반)
+        val isAccredited: Boolean? = null,           // null=미선택, true=인증대, false=비인증대
+        val universityName: String? = null,          // 인증대 선택 시 nameKo 저장, 비인증대면 null
+        val universityType: String? = null,          // "BACHELOR" | "ASSOCIATE" | "GRADUATE"
+        val accreditedUniversities: List<UniversityInfo> = emptyList(),
+        val universityFilterQuery: String = "",
+        val isUniversitySearchDialogOpen: Boolean = false,
+        val isAccreditedUniversitiesLoading: Boolean = false,
+        // TODO[LEGACY]: 대학 검색 API 재통합 시 해제
+        // val universityQuery: String = "",
+        // val universitySearchResults: List<UniversityResponse> = emptyList(),
+        // val universityMajors: List<MajorInfo> = emptyList(),
+        // val isUniversitySearching: Boolean = false,
+        // val universitySearchError: Boolean = false,
+        // val universitySearchErrorMessage: StringResource? = null,
+        // val selectedMajorMaxGrade: Int = 4,
         // 근무시간 제한 (서버 응답)
         val weeklyHoursLimit: Int? = null,
         val maxWeekdayHours: Float? = null,
@@ -729,6 +726,13 @@ class DocumentViewModel(
     ) {
         val isGraduate: Boolean
             get() = universityType == "GRADUATE"
+
+        val filteredUniversities: List<UniversityInfo>
+            get() = if (universityFilterQuery.isBlank()) accreditedUniversities
+                    else accreditedUniversities.filter {
+                        it.nameKo.contains(universityFilterQuery, ignoreCase = true) ||
+                        it.nameEn.contains(universityFilterQuery, ignoreCase = true)
+                    }
 
         private val isNameValid: Boolean
             get() = name.isNotBlank()
@@ -872,7 +876,7 @@ class DocumentViewModel(
             get() = isNameValid && isForeignerNumberValid && isPhoneNumberValid
 
         val isBasicInfo2Valid: Boolean
-            get() = universityName != null && isMajorValid && isSemesterValid
+            get() = isAccredited != null && universityType != null && isMajorValid && isSemesterValid
 
         val isWorkplaceInfo1Valid: Boolean
             get() = isCompanyNameValid && isBusinessRegisterNumberValid &&

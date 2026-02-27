@@ -178,27 +178,34 @@ private fun DocumentScreenImpl(
         // 기본 정보 입력2
         DocumentPage(
             content = {
+                // 화면 진입 시 인증대학 목록 로드 (이미 로드됐으면 스킵)
+                LaunchedEffect(Unit) {
+                    viewModel.loadAccreditedUniversities()
+                }
                 BasicInfoStep2Screen(
                     modifier = Modifier.fillMaxSize(),
                     step = 1,
                     title = stringResource(Res.string.document_step_1_title),
-                    // University
-                    universityQuery = uiState.universityQuery,
-                    onUniversityQueryChange = { viewModel.updateUniversityQuery(it) },
-                    onUniversitySearch = { viewModel.searchUniversity() },
-                    isUniversitySearching = uiState.isUniversitySearching,
+                    // 인증대 여부 + 대학 검색 다이얼로그
+                    isAccredited = uiState.isAccredited,
                     universityName = uiState.universityName,
-                    universitySearchResults = uiState.universitySearchResults,
-                    onUniversitySelected = { viewModel.selectUniversity(it) },
-                    onDismissUniversityResults = { viewModel.dismissUniversitySearchResults() },
-                    universitySearchError = uiState.universitySearchError,
-                    universitySearchErrorMessage = uiState.universitySearchErrorMessage,
-                    // Major
-                    majorItems = uiState.universityMajors,
-                    selectedMajor = uiState.major.ifBlank { null },
-                    onMajorSelected = { viewModel.selectMajor(it) },
-                    // Semester
-                    semesterItems = Semester.filteredByMaxGrade(uiState.selectedMajorMaxGrade),
+                    universityType = uiState.universityType,
+                    isUniversitySearchDialogOpen = uiState.isUniversitySearchDialogOpen,
+                    filteredUniversities = uiState.filteredUniversities,
+                    universityFilterQuery = uiState.universityFilterQuery,
+                    isAccreditedUniversitiesLoading = uiState.isAccreditedUniversitiesLoading,
+                    onOpenUniversitySearchDialog = { viewModel.openUniversitySearchDialog() },
+                    onCloseUniversitySearchDialog = { viewModel.closeUniversitySearchDialog() },
+                    onUpdateUniversityFilterQuery = { viewModel.updateUniversityFilterQuery(it) },
+                    onSelectAccreditedUniversity = { viewModel.selectAccreditedUniversity(it) },
+                    onSelectNonAccredited = { viewModel.selectNonAccredited() },
+                    // 대학 종류
+                    onUniversityTypeChange = { viewModel.updateUniversityType(it) },
+                    // 학과 직접 입력
+                    major = uiState.major,
+                    onMajorChange = { viewModel.updateMajor(it) },
+                    // 이수학기 (항상 전체 8학기 표시)
+                    semesterItems = Semester.entries.toList(),
                     semesterValue = uiState.semester,
                     onSemesterValueChange = { viewModel.updateSemester(it) },
                     // Common

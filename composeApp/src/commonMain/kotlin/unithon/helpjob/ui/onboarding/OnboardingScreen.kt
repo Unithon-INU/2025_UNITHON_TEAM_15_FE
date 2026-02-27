@@ -38,6 +38,7 @@ import helpjob.composeapp.generated.resources.onboarding_agreement_setup_title
 import helpjob.composeapp.generated.resources.onboarding_business_setup_title
 import helpjob.composeapp.generated.resources.onboarding_done_button
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_no_topik
+import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik2
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik3
 import helpjob.composeapp.generated.resources.onboarding_korean_level_setup_topik4_over
 import helpjob.composeapp.generated.resources.onboarding_language_level_setup_title
@@ -444,6 +445,7 @@ private fun KoreanLevelContent(
     onLevelSelected: (String) -> Unit
 ) {
     val koreanLevelTitles = listOf(
+        stringResource(Res.string.onboarding_korean_level_setup_topik2),
         stringResource(Res.string.onboarding_korean_level_setup_topik3),
         stringResource(Res.string.onboarding_korean_level_setup_topik4_over),
         stringResource(Res.string.onboarding_korean_level_setup_no_topik)

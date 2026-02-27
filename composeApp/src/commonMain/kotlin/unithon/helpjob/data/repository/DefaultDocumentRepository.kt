@@ -1,9 +1,10 @@
 package unithon.helpjob.data.repository
 
 import unithon.helpjob.data.model.request.DocumentRequest
-import unithon.helpjob.data.model.response.UniversityResponse
+import unithon.helpjob.data.model.response.UniversityInfo
 import unithon.helpjob.data.model.response.WorkingTimeLimitResponse
 import unithon.helpjob.data.network.HelpJobApiService
+// TODO[LEGACY]: import unithon.helpjob.data.model.response.UniversityResponse
 
 class DefaultDocumentRepository(
     private val apiService: HelpJobApiService,
@@ -14,15 +15,19 @@ class DefaultDocumentRepository(
         apiService.postCertification(documentRequest)
     }
 
-    override suspend fun searchUniversity(university: String): List<UniversityResponse> {
-        return apiService.searchUniversity(university)
+    // TODO[LEGACY]: 대학 검색 API 재통합 시 해제
+    // override suspend fun searchUniversity(university: String): List<UniversityResponse> {
+    //     return apiService.searchUniversity(university)
+    // }
+
+    override suspend fun getAccreditedUniversities(): List<UniversityInfo> {
+        return apiService.getAccreditedUniversities().university
     }
 
     override suspend fun getWorkingTimeLimit(
-        university: String,
-        major: String,
+        isAccredited: Boolean,
         year: String
     ): WorkingTimeLimitResponse {
-        return apiService.getWorkingTimeLimit(university, major, year)
+        return apiService.getWorkingTimeLimit(isAccredited, year)
     }
 }

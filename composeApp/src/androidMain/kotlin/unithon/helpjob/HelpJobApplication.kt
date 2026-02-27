@@ -79,10 +79,14 @@ class HelpJobApplication : Application() {
                 // ✅ GlobalLanguageState 갱신 (Phase 1과 동일하면 recomposition 없음)
                 GlobalLanguageState.initializeLanguage(savedLanguage)
 
-                // ✅ AppCompatDelegate에 저장 (이후 Phase 1 동기 읽기용 캐시)
-                AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(savedLanguage.code)
-                )
+                // ✅ AppCompatDelegate에 저장 (이미 맞는 언어면 호출 안 함 → config change 방지)
+                val currentLocales = AppCompatDelegate.getApplicationLocales()
+                val currentCode = if (!currentLocales.isEmpty) currentLocales[0]?.language ?: "" else ""
+                if (currentCode != savedLanguage.code) {
+                    AppCompatDelegate.setApplicationLocales(
+                        LocaleListCompat.forLanguageTags(savedLanguage.code)
+                    )
+                }
             } catch (e: Exception) {
                 Timber.e(e, "Failed to initialize language")
                 // Phase 1에서 설정한 값 유지 (ENGLISH 기본값)
