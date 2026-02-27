@@ -126,6 +126,7 @@
 
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">Please select\nyour topic rating</string>
+    <string name="onboarding_korean_level_setup_topik2">TOPIK Level 2</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK Level 3</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK Level 4 or higher</string>
     <string name="onboarding_korean_level_setup_no_topik">No TOPIK certification</string>

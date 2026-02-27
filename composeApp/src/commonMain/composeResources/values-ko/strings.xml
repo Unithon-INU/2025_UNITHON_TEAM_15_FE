@@ -111,6 +111,7 @@
 
     <!-- Onboarding Screen(korean level) -->
     <string name="onboarding_korean_level_setup_title">사용자님의 한국어 능력을\n선택해 주세요</string>
+    <string name="onboarding_korean_level_setup_topik2">TOPIK 2급</string>
     <string name="onboarding_korean_level_setup_topik3">TOPIK 3급</string>
     <string name="onboarding_korean_level_setup_topik4_over">TOPIK 4급 이상</string>
     <string name="onboarding_korean_level_setup_no_topik">TOPIK 없음</string>
