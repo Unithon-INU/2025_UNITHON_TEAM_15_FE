@@ -195,7 +195,7 @@
     <string name="document_onboarding_description_2">The completed document will be sent to your email address.\nPlease check your mailbox!</string>
 
     <!-- Document Screen(Title) -->
-    <string name="document_step_1_title">Please enter your basic information</string>
+    <string name="document_step_1_title">Enter your basic information</string>
     <string name="document_step_2_title">Please enter information about \nyour prospective workplace</string>
 
     <!-- DocumentScreen(BasicInfo1) -->
@@ -217,7 +217,7 @@
     <string name="semester_4_1">4th Year 1st Semester</string>
     <string name="semester_4_2">4th Year 2nd Semester</string>
     <string name="semester_graduate">Graduate</string>
-    <string name="document_basic_info_2_university_label">University</string>
+    <string name="document_basic_info_2_university_label">University Accreditation</string>
     <string name="document_basic_info_2_university_placeholder">Search university name</string>
     <string name="document_basic_info_2_major_dropdown_placeholder">Select</string>
     <string name="document_basic_info_2_semester_placeholder">Select</string>
@@ -397,5 +397,16 @@
 
     <!-- Searchable Dropdown -->
     <string name="searchable_dropdown_no_results">No results found</string>
+
+    <!-- DocumentScreen(BasicInfo2) University Accredited -->
+    <string name="document_university_accredited">Accredited Univ</string>
+    <string name="document_university_not_accredited">Non-Accredited Univ</string>
+    <string name="document_university_accredited_hint">Not listed? Select Non-Accredited Univ below.</string>
+    <string name="document_university_search_placeholder">Search university name</string>
+    <string name="document_university_not_accredited_proceed">Proceed as Non-Accredited Univ</string>
+    <string name="document_university_type_label">University Type</string>
+    <string name="document_university_type_bachelor">University (4-yr)</string>
+    <string name="document_university_type_associate">Junior College</string>
+    <string name="document_university_type_graduate">Graduate School</string>
 
 </resources>

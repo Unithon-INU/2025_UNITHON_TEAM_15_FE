@@ -216,7 +216,7 @@
     <string name="semester_4_1">4학년 1학기</string>
     <string name="semester_4_2">4학년 2학기</string>
     <string name="semester_graduate">석박사</string>
-    <string name="document_basic_info_2_university_label">대학교</string>
+    <string name="document_basic_info_2_university_label">인증대학교 여부</string>
     <string name="document_basic_info_2_university_placeholder">대학교명을 검색하세요</string>
     <string name="document_basic_info_2_major_dropdown_placeholder">선택</string>
     <string name="document_basic_info_2_semester_placeholder">선택</string>
@@ -396,5 +396,16 @@
 
     <!-- Searchable Dropdown -->
     <string name="searchable_dropdown_no_results">검색 결과가 없습니다</string>
+
+    <!-- DocumentScreen(BasicInfo2) University Accredited -->
+    <string name="document_university_accredited">인증 대학교</string>
+    <string name="document_university_not_accredited">비인증 대학교</string>
+    <string name="document_university_accredited_hint">목록에 없다면 아래 비인증 대학교 버튼을 선택해주세요.</string>
+    <string name="document_university_search_placeholder">대학교 이름을 검색하세요</string>
+    <string name="document_university_not_accredited_proceed">비인증 대학교로 진행</string>
+    <string name="document_university_type_label">대학 종류</string>
+    <string name="document_university_type_bachelor">일반대</string>
+    <string name="document_university_type_associate">전문대</string>
+    <string name="document_university_type_graduate">대학원</string>
 
 </resources>

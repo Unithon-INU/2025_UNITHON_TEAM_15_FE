@@ -1,69 +1,62 @@
 package unithon.helpjob.ui.document.page
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntRect
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupPositionProvider
-import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import helpjob.composeapp.generated.resources.Res
 import helpjob.composeapp.generated.resources.document_basic_info_1_major_label
+import helpjob.composeapp.generated.resources.document_basic_info_1_major_placeholder
 import helpjob.composeapp.generated.resources.document_basic_info_2_major_dropdown_placeholder
 import helpjob.composeapp.generated.resources.document_basic_info_2_semester_label
 import helpjob.composeapp.generated.resources.document_basic_info_2_semester_placeholder
 import helpjob.composeapp.generated.resources.document_basic_info_2_university_label
 import helpjob.composeapp.generated.resources.document_basic_info_2_university_placeholder
+import helpjob.composeapp.generated.resources.document_university_accredited
+import helpjob.composeapp.generated.resources.document_university_accredited_hint
+import helpjob.composeapp.generated.resources.document_university_not_accredited
+import helpjob.composeapp.generated.resources.document_university_not_accredited_proceed
+import helpjob.composeapp.generated.resources.document_university_search_placeholder
+import helpjob.composeapp.generated.resources.document_university_type_associate
+import helpjob.composeapp.generated.resources.document_university_type_bachelor
+import helpjob.composeapp.generated.resources.document_university_type_graduate
+import helpjob.composeapp.generated.resources.document_university_type_label
+import helpjob.composeapp.generated.resources.ic_check
 import helpjob.composeapp.generated.resources.search_normal
-import helpjob.composeapp.generated.resources.searchable_dropdown_no_results
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import unithon.helpjob.data.model.AppLanguage
 import unithon.helpjob.data.model.Semester
-import unithon.helpjob.data.model.response.MajorInfo
-import unithon.helpjob.data.model.response.UniversityResponse
-import unithon.helpjob.ui.components.CustomScrollbar
+import unithon.helpjob.data.model.response.UniversityInfo
+import unithon.helpjob.data.repository.GlobalLanguageState
 import unithon.helpjob.ui.components.HelpJobDropdown
 import unithon.helpjob.ui.components.HelpJobTextField
 import unithon.helpjob.ui.theme.Grey000
@@ -71,51 +64,105 @@ import unithon.helpjob.ui.theme.Grey200
 import unithon.helpjob.ui.theme.Grey300
 import unithon.helpjob.ui.theme.Grey400
 import unithon.helpjob.ui.theme.Grey600
+import unithon.helpjob.ui.theme.Grey700
 import unithon.helpjob.ui.theme.Primary500
-import unithon.helpjob.ui.theme.Warning
 import unithon.helpjob.util.noRippleClickable
+
+// TODO[LEGACY]: 기존 대학 검색 API 기반 임포트 — 재통합 시 해제
+// import androidx.compose.foundation.BorderStroke
+// import androidx.compose.foundation.layout.width
+// import androidx.compose.foundation.layout.WindowInsets
+// import androidx.compose.foundation.layout.ime
+// import androidx.compose.foundation.rememberScrollState
+// import androidx.compose.foundation.verticalScroll
+// import androidx.compose.foundation.text.KeyboardActions
+// import androidx.compose.foundation.text.KeyboardOptions
+// import androidx.compose.material3.DropdownMenu
+// import androidx.compose.ui.focus.onFocusChanged
+// import androidx.compose.ui.geometry.Size
+// import androidx.compose.ui.layout.onGloballyPositioned
+// import androidx.compose.ui.platform.LocalFocusManager
+// import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+// import androidx.compose.ui.text.input.ImeAction
+// import androidx.compose.ui.unit.IntOffset
+// import androidx.compose.ui.unit.IntRect
+// import androidx.compose.ui.unit.IntSize
+// import androidx.compose.ui.unit.LayoutDirection
+// import androidx.compose.ui.unit.toSize
+// import androidx.compose.ui.window.Popup
+// import androidx.compose.ui.window.PopupPositionProvider
+// import androidx.compose.ui.window.PopupProperties
+// import unithon.helpjob.ui.components.CustomScrollbar
+// import unithon.helpjob.data.model.response.MajorInfo
+// import unithon.helpjob.data.model.response.UniversityResponse
+// import org.jetbrains.compose.resources.StringResource
+// import helpjob.composeapp.generated.resources.document_basic_info_2_major_dropdown_placeholder
+// import helpjob.composeapp.generated.resources.searchable_dropdown_no_results
+// import unithon.helpjob.ui.theme.Warning
 
 @Composable
 fun BasicInfoStep2Screen(
     modifier: Modifier = Modifier,
     step: Int,
     title: String,
-    // University
-    universityQuery: String,
-    onUniversityQueryChange: (String) -> Unit,
-    onUniversitySearch: () -> Unit,
-    isUniversitySearching: Boolean,
+    // 인증대 여부 + 대학 검색 다이얼로그
+    isAccredited: Boolean?,
     universityName: String?,
-    universitySearchResults: List<UniversityResponse> = emptyList(),
-    onUniversitySelected: (UniversityResponse) -> Unit,
-    onDismissUniversityResults: () -> Unit,
-    universitySearchError: Boolean = false,
-    universitySearchErrorMessage: StringResource? = null,
-    // Major
-    majorItems: List<MajorInfo>,
-    selectedMajor: String?,
-    onMajorSelected: (MajorInfo) -> Unit,
-    // Semester
+    universityType: String?,
+    isUniversitySearchDialogOpen: Boolean,
+    filteredUniversities: List<UniversityInfo>,
+    universityFilterQuery: String,
+    isAccreditedUniversitiesLoading: Boolean,
+    onOpenUniversitySearchDialog: () -> Unit,
+    onCloseUniversitySearchDialog: () -> Unit,
+    onUpdateUniversityFilterQuery: (String) -> Unit,
+    onSelectAccreditedUniversity: (UniversityInfo) -> Unit,
+    onSelectNonAccredited: () -> Unit,
+    // 대학 종류
+    onUniversityTypeChange: (String) -> Unit,
+    // 학과 직접 입력
+    major: String,
+    onMajorChange: (String) -> Unit,
+    // 이수학기
     semesterItems: List<Semester>,
     semesterValue: Semester?,
     onSemesterValueChange: (Semester) -> Unit,
-    // Common
+    // 공통
     enabled: Boolean,
     onNext: () -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
     val semesterDisplayMap = semesterItems.associateWith { it.getDisplayName() }
+    val universityTypeItems = listOf("BACHELOR", "ASSOCIATE", "GRADUATE")
+    val universityTypeDisplayMap = mapOf(
+        "BACHELOR" to stringResource(Res.string.document_university_type_bachelor),
+        "ASSOCIATE" to stringResource(Res.string.document_university_type_associate),
+        "GRADUATE" to stringResource(Res.string.document_university_type_graduate)
+    )
+
+    // 대학 검색 다이얼로그
+    if (isUniversitySearchDialogOpen) {
+        UniversitySearchDialog(
+            filterQuery = universityFilterQuery,
+            onFilterQueryChange = onUpdateUniversityFilterQuery,
+            filteredUniversities = filteredUniversities,
+            isLoading = isAccreditedUniversitiesLoading,
+            onSelectUniversity = onSelectAccreditedUniversity,
+            onSelectNonAccredited = onSelectNonAccredited,
+            onDismiss = onCloseUniversitySearchDialog,
+            universityTypeDisplayMap = universityTypeDisplayMap
+        )
+    }
 
     DocumentInfoScreen(
         modifier = modifier,
         step = step,
         title = title,
         enabled = enabled,
+        contentPadding = 20.dp,
         onNext = onNext
     ) {
         Column {
-            // 1. 대학교 검색
+            // 1. 대학교 선택 (인증대 여부)
             Column {
                 Text(
                     text = stringResource(Res.string.document_basic_info_2_university_label),
@@ -124,121 +171,98 @@ fun BasicInfoStep2Screen(
                     modifier = Modifier.padding(bottom = 9.dp)
                 )
 
-                var textFieldSize by remember { mutableStateOf(Size.Zero) }
-
-                Box {
-                    HelpJobTextField(
-                        value = universityQuery,
-                        onValueChange = onUniversityQueryChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(46.dp)
-                            .onGloballyPositioned { layoutCoordinates ->
-                                textFieldSize = layoutCoordinates.size.toSize()
-                            },
-                        placeholder = {
-                            Text(
-                                text = stringResource(Res.string.document_basic_info_2_university_placeholder),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = Grey300
-                            )
-                        },
-                        trailingIcon = {
-                            if (isUniversitySearching) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(20.dp),
-                                    strokeWidth = 2.dp,
-                                    color = Primary500
-                                )
-                            } else {
-                                Icon(
-                                    painter = painterResource(Res.drawable.search_normal),
-                                    contentDescription = null,
-                                    tint = if (universityName != null) Primary500 else Grey600,
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .noRippleClickable {
-                                            keyboardController?.hide()
-                                            onUniversitySearch()
-                                        }
-                                )
-                            }
-                        },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Search
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onSearch = {
-                                keyboardController?.hide()
-                                onUniversitySearch()
-                            }
-                        ),
-                        isError = universitySearchError
-                    )
-
-                    // 검색 결과 드롭다운 (검색 필드 바로 아래 자동 펼침)
-                    DropdownMenu(
-                        expanded = universitySearchResults.isNotEmpty(),
-                        onDismissRequest = { onDismissUniversityResults() },
-                        modifier = Modifier
-                            .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
-                            .heightIn(max = 240.dp),
-                        border = BorderStroke(
+                // HelpJobTextField와 동일 스펙: 46dp 높이, 10dp 모서리, 1dp 테두리
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(46.dp)
+                        .background(Grey000, RoundedCornerShape(10.dp))
+                        .border(
                             width = 1.dp,
-                            color = Grey200
-                        ),
-                        shape = RoundedCornerShape(10.dp),
-                        containerColor = Grey000,
-                        shadowElevation = 0.dp,
+                            color = Grey200,
+                            shape = RoundedCornerShape(10.dp)
+                        )
+                        .noRippleClickable { onOpenUniversitySearchDialog() }
+                        .padding(start = 16.dp, end = 16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        universitySearchResults.forEach { university ->
-                            DropdownMenuItem(
-                                text = {
-                                    Text(
-                                        text = university.university,
-                                        style = MaterialTheme.typography.titleSmall,
-                                        color = Grey600
-                                    )
-                                },
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    onUniversitySelected(university)
-                                },
-                                contentPadding = PaddingValues(
-                                    vertical = 11.5.dp,
-                                    horizontal = 12.dp
-                                )
-                            )
-                        }
+                        Text(
+                            text = when {
+                                isAccredited == true && universityName != null ->
+                                    "${stringResource(Res.string.document_university_accredited)} • $universityName"
+                                isAccredited == false ->
+                                    stringResource(Res.string.document_university_not_accredited)
+                                else ->
+                                    stringResource(Res.string.document_basic_info_2_university_placeholder)
+                            },
+                            style = MaterialTheme.typography.titleSmall,
+                            color = if (isAccredited != null) Grey700 else Grey300,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Icon(
+                            painter = painterResource(
+                                if (isAccredited != null) Res.drawable.ic_check else Res.drawable.search_normal
+                            ),
+                            contentDescription = null,
+                            tint = if (isAccredited != null) Primary500 else Grey600,
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
                 }
 
-                // 에러 메시지 (TextField 하단)
-                if (universitySearchError && universitySearchErrorMessage != null) {
-                    Text(
-                        text = stringResource(universitySearchErrorMessage),
-                        color = Warning,
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
+                // 안내 문구
+                Text(
+                    text = stringResource(Res.string.document_university_accredited_hint),
+                    color = Primary500,
+                    style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
             }
 
-            Spacer(Modifier.height(27.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // 2. 학과/전공 선택 (검색 가능한 드롭다운)
-            MajorSearchDropdown(
-                selectedItem = majorItems.find { it.major == selectedMajor },
-                items = majorItems,
-                onItemSelected = onMajorSelected,
-                label = stringResource(Res.string.document_basic_info_1_major_label),
+            // 2. 대학 종류 드롭다운
+            HelpJobDropdown(
+                selectedItem = universityType,
+                items = universityTypeItems,
+                onItemSelected = onUniversityTypeChange,
+                label = stringResource(Res.string.document_university_type_label),
                 placeholder = stringResource(Res.string.document_basic_info_2_major_dropdown_placeholder),
-                itemToString = { it.major }
+                itemToString = { universityTypeDisplayMap[it] ?: it }
             )
 
-            Spacer(Modifier.height(27.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // 3. 이수학기 선택 (드롭다운)
+            // 3. 학과 직접 입력
+            Column {
+                Text(
+                    text = stringResource(Res.string.document_basic_info_1_major_label),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Grey600,
+                    modifier = Modifier.padding(bottom = 9.dp)
+                )
+                HelpJobTextField(
+                    value = major,
+                    onValueChange = onMajorChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(46.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(Res.string.document_basic_info_1_major_placeholder),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Grey300
+                        )
+                    }
+                )
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            // 4. 이수학기 선택
             HelpJobDropdown(
                 selectedItem = semesterValue,
                 items = semesterItems,
@@ -247,199 +271,138 @@ fun BasicInfoStep2Screen(
                 placeholder = stringResource(Res.string.document_basic_info_2_semester_placeholder),
                 itemToString = { semester ->
                     semesterDisplayMap[semester] ?: ""
-                },
+                }
             )
         }
     }
 }
 
 @Composable
-private fun <T> MajorSearchDropdown(
-    modifier: Modifier = Modifier,
-    label: String = "",
-    selectedItem: T?,
-    items: List<T>,
-    onItemSelected: (T) -> Unit,
-    itemToString: (T) -> String,
-    placeholder: String = "",
+private fun UniversitySearchDialog(
+    filterQuery: String,
+    onFilterQueryChange: (String) -> Unit,
+    filteredUniversities: List<UniversityInfo>,
+    isLoading: Boolean,
+    onSelectUniversity: (UniversityInfo) -> Unit,
+    onSelectNonAccredited: () -> Unit,
+    onDismiss: () -> Unit,
+    universityTypeDisplayMap: Map<String, String>
 ) {
-    val focusManager = LocalFocusManager.current
-    var query by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(false) }
-    var rowSize by remember { mutableStateOf(Size.Zero) }
-    val scrollState = rememberScrollState()
-    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
-    val density = LocalDensity.current
-    val popupPositionProvider = remember(isKeyboardVisible, density) {
-        object : PopupPositionProvider {
-            override fun calculatePosition(
-                anchorBounds: IntRect,
-                windowSize: IntSize,
-                layoutDirection: LayoutDirection,
-                popupContentSize: IntSize
-            ): IntOffset {
-                return IntOffset(
-                    x = anchorBounds.left,
-                    y = if (isKeyboardVisible)
-                        anchorBounds.top - popupContentSize.height
-                    else
-                        anchorBounds.bottom
-                )
-            }
-        }
-    }
+    val language by GlobalLanguageState.currentLanguage
 
-    // 외부에서 selectedItem이 변경되면 (예: 대학 변경으로 학과 초기화) query 동기화
-    LaunchedEffect(selectedItem) {
-        if (!expanded) {
-            query = selectedItem?.let { itemToString(it) } ?: ""
-        }
-    }
-
-    val filteredItems = remember(items, query) {
-        if (query.isBlank()) items
-        else items.filter { itemToString(it).contains(query, ignoreCase = true) }
-    }
-
-    Column(modifier = modifier) {
-        if (label.isNotEmpty()) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.titleSmall,
-                color = Grey600
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        Box {
-            HelpJobTextField(
-                value = query,
-                onValueChange = { input ->
-                    query = input
-                    expanded = input.isNotEmpty()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(46.dp)
-                    .onGloballyPositioned { layoutCoordinates ->
-                        rowSize = layoutCoordinates.size.toSize()
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(16.dp),
+            color = Grey000,
+            shadowElevation = 8.dp
+        ) {
+            Column {
+                // 검색창
+                HelpJobTextField(
+                    value = filterQuery,
+                    onValueChange = onFilterQueryChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                        .height(46.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(Res.string.document_university_search_placeholder),
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Grey300
+                        )
+                    },
+                    trailingIcon = {
+                        Icon(
+                            painter = painterResource(Res.drawable.search_normal),
+                            contentDescription = null,
+                            tint = Grey600,
+                            modifier = Modifier.size(20.dp)
+                        )
                     }
-                    .onFocusChanged { focusState ->
-                        if (focusState.isFocused && !expanded) {
-                            query = ""
-                            // expanded = true 하지 않음: 타이핑해야 목록 표시
-                        } else if (!focusState.isFocused) {
-                            // 진짜 포커스 해제(외부 탭, 항목 선택): dropdown 닫고 선택 항목명 복원
-                            expanded = false
-                            query = selectedItem?.let { itemToString(it) } ?: ""
-                        }
-                    },
-                placeholder = {
-                    Text(
-                        text = placeholder,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = Grey300
-                    )
-                },
-                trailingIcon = {
-                    Icon(
-                        painter = painterResource(Res.drawable.search_normal),
-                        contentDescription = null,
-                        tint = if (selectedItem != null) Primary500 else Grey600,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
-            )
+                )
 
-            // PopupPositionProvider로 키보드 상태에 따라 정확히 6dp 간격 유지
-            // (DropdownMenu 내부 DropdownMenuPositionProvider는 최소 gap 강제로 offset만으로는 제어 불가)
-            if (expanded && items.isNotEmpty()) {
-                Popup(
-                    popupPositionProvider = popupPositionProvider,
-                    onDismissRequest = {
-                        expanded = false
-                        // query 리셋 없음: 한글 IME가 onDismissRequest를 트리거해도 타이핑 중인 텍스트 보존
-                        // query 복원은 onFocusChanged(unfocused)에서 처리
-                    },
-                    // focusable = false: TextField가 포커스를 유지하여 타이핑 가능
-                    properties = PopupProperties(focusable = false)
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .width(with(LocalDensity.current) { rowSize.width.toDp() })
-                            .heightIn(max = 240.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        color = Grey000,
-                        border = BorderStroke(1.dp, Grey200),
-                        shadowElevation = 0.dp,
-                        tonalElevation = 0.dp
-                    ) {
-                        Column(modifier = Modifier.verticalScroll(scrollState)) {
-                            if (filteredItems.isEmpty()) {
+                HorizontalDivider(color = Grey200, thickness = 1.dp)
+
+                // 목록 or 로딩
+                Box(modifier = Modifier.heightIn(max = 320.dp)) {
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(32.dp),
+                                color = Primary500,
+                                strokeWidth = 2.dp
+                            )
+                        }
+                    } else {
+                        LazyColumn {
+                            items(filteredUniversities) { university ->
                                 DropdownMenuItem(
                                     text = {
-                                        Text(
-                                            text = stringResource(Res.string.searchable_dropdown_no_results),
-                                            style = MaterialTheme.typography.titleSmall,
-                                            color = Grey400
-                                        )
+                                        Column {
+                                            Text(
+                                                text = if (language == AppLanguage.KOREAN) university.nameKo else university.nameEn,
+                                                style = MaterialTheme.typography.titleSmall,
+                                                color = Grey600
+                                            )
+                                            Text(
+                                                text = universityTypeDisplayMap[university.universityType]
+                                                    ?: university.universityType,
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = Grey400
+                                            )
+                                        }
                                     },
-                                    onClick = {},
-                                    enabled = false,
+                                    onClick = { onSelectUniversity(university) },
                                     contentPadding = PaddingValues(
                                         vertical = 11.5.dp,
                                         horizontal = 12.dp
                                     )
                                 )
-                            } else {
-                                filteredItems.forEach { item ->
-                                    DropdownMenuItem(
-                                        text = {
-                                            Text(
-                                                text = itemToString(item),
-                                                style = MaterialTheme.typography.titleSmall,
-                                                color = Grey600
-                                            )
-                                        },
-                                        onClick = {
-                                            onItemSelected(item)
-                                            query = itemToString(item)
-                                            expanded = false
-                                            focusManager.clearFocus()
-                                        },
-                                        contentPadding = PaddingValues(
-                                            vertical = 11.5.dp,
-                                            horizontal = 12.dp
-                                        )
-                                    )
-                                }
                             }
                         }
                     }
                 }
-            }
 
-            // Custom Scrollbar
-            if (expanded && filteredItems.size > 5) {
-                val scrollbarOffset = with(LocalDensity.current) {
-                    IntOffset(
-                        x = (rowSize.width.toDp() + ((-10).dp)).toPx().toInt(),
-                        y = if (isKeyboardVisible)
-                            (-235).dp.toPx().toInt()
-                        else
-                            (46 + 5).dp.toPx().toInt()
-                    )
-                }
+                HorizontalDivider(color = Grey200, thickness = 1.dp)
 
-                Popup(offset = scrollbarOffset) {
-                    CustomScrollbar(
-                        scrollState = scrollState,
-                        dropdownHeight = 230.dp,
-                        totalItems = filteredItems.size,
-                        visibleItems = 5
+                // 비인증대로 진행 버튼
+                TextButton(
+                    onClick = onSelectNonAccredited,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.document_university_not_accredited_proceed),
+                        color = Primary500,
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }
         }
     }
 }
+
+// TODO[LEGACY]: 기존 MajorSearchDropdown — 대학 검색 API 재통합 시 해제
+// @Composable
+// private fun <T> MajorSearchDropdown(
+//     modifier: Modifier = Modifier,
+//     label: String = "",
+//     selectedItem: T?,
+//     items: List<T>,
+//     onItemSelected: (T) -> Unit,
+//     itemToString: (T) -> String,
+//     placeholder: String = "",
+// ) { ... }

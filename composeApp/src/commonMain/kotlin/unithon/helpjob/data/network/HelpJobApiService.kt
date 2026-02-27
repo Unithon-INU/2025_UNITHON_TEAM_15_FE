@@ -23,9 +23,10 @@ import unithon.helpjob.data.model.response.HomeInfoResponse
 import unithon.helpjob.data.model.response.MemberProfileGetRes
 import unithon.helpjob.data.model.response.TipResponseItem
 import unithon.helpjob.data.model.response.TokenResponse
-import unithon.helpjob.data.model.response.UniversityResponse
+import unithon.helpjob.data.model.response.AccreditedUniversityRes
 import unithon.helpjob.data.model.response.UpdateEmploymentCheckResponse
 import unithon.helpjob.data.model.response.WorkingTimeLimitResponse
+// TODO[LEGACY]: import unithon.helpjob.data.model.response.UniversityResponse
 
 class HelpJobApiService(private val client: HttpClient) {
     // 회원 관련 API
@@ -112,22 +113,25 @@ class HelpJobApiService(private val client: HttpClient) {
         }
     }
 
-    // 대학교 검색 API
-    suspend fun searchUniversity(university: String): List<UniversityResponse> {
-        return client.get(ApiConstants.SEARCH_UNIVERSITY) {
-            parameter("university", university)
-        }.body()
+    // TODO[LEGACY]: 대학 검색 API 재통합 시 해제
+    // suspend fun searchUniversity(university: String): List<UniversityResponse> {
+    //     return client.get(ApiConstants.SEARCH_UNIVERSITY) {
+    //         parameter("university", university)
+    //     }.body()
+    // }
+
+    // 인증대학 목록 조회 API
+    suspend fun getAccreditedUniversities(): AccreditedUniversityRes {
+        return client.get(ApiConstants.GET_ACCREDITED_UNIVERSITIES).body()
     }
 
     // 시간제취업 근무 가능 시간 조회 API
     suspend fun getWorkingTimeLimit(
-        university: String,
-        major: String,
+        isAccredited: Boolean,
         year: String
     ): WorkingTimeLimitResponse {
         return client.get(ApiConstants.GET_WORKING_TIME_LIMIT) {
-            parameter("university", university)
-            parameter("major", major)
+            parameter("isAccredited", isAccredited)
             parameter("year", year)
         }.body()
     }
