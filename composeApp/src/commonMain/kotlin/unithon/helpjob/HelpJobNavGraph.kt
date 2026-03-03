@@ -206,6 +206,9 @@ fun HelpJobNavGraph(
                 val profileViewModel = koinViewModel<ProfileViewModel>(
                     viewModelStoreOwner = parentEntry
                 )
+                val homeViewModel = koinViewModel<HomeViewModel>(
+                    viewModelStoreOwner = parentEntry
+                )
 
                 val currentValue = when (profileField) {
                     ProfileField.VISA_TYPE -> profileViewModel.uiState.value.visaType ?: ""
@@ -223,6 +226,7 @@ fun HelpJobNavGraph(
                     onBack = { navController.popBackStack() },
                     onSaveSuccess = {
                         profileViewModel.refreshProfile()
+                        homeViewModel.refresh()
                         navController.popBackStack()
                     }
                 )
