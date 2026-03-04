@@ -6,6 +6,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.navigation.compose.rememberNavController
 import platform.Foundation.NSBundle
 import platform.Foundation.NSUserDefaults
 import unithon.helpjob.data.repository.GlobalLanguageState
@@ -21,6 +22,7 @@ import unithon.helpjob.util.Logger
 @Composable
 fun App() {
     val currentLanguage by GlobalLanguageState.currentLanguage
+    val navController = rememberNavController()
 // iOS에서 fontScale을 1.0으로 고정하여 Android와 동일한 폰트 크기 유지
     val currentDensity = LocalDensity.current
     val fixedDensity = Density(
@@ -41,7 +43,9 @@ fun App() {
         HelpJobTheme {
             // 언어가 변경될 때마다 전체 UI를 재구성
             androidx.compose.runtime.key(currentLanguage.code) {
-                HelpJobApp()
+                HelpJobApp(
+                    navController = navController
+                )
             }
         }
     }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import unithon.helpjob.ui.components.HelpJobBottomBar
@@ -24,8 +25,9 @@ import unithon.helpjob.ui.components.HelpJobBottomBar
  * - 플랫폼 독립적 UI 로직
  */
 @Composable
-fun HelpJobApp() {
-    val navController = rememberNavController()
+fun HelpJobApp(
+    navController: NavHostController = rememberNavController()
+) {
     val navActions = remember(navController) { HelpJobNavigationActions(navController) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
