@@ -12,11 +12,11 @@ data class TokenResponse(
 @Serializable
 data class MemberProfileGetRes(
     @SerialName("language")
-    val language: String,
+    val language: String = "",
     @SerialName("visaType")
-    val visaType: String,
+    val visaType: String = "",
     @SerialName("languageLevel")
-    val languageLevel: String,
+    val languageLevel: String = "",
     @SerialName("industry")
-    val industry: String
+    val industry: String = ""
 )

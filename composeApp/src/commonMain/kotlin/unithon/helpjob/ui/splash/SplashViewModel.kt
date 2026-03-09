@@ -1,11 +1,14 @@
 package unithon.helpjob.ui.splash
 
 import androidx.lifecycle.viewModelScope
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.SerializationException
 import unithon.helpjob.data.repository.AuthRepository
 import unithon.helpjob.ui.base.BaseViewModel
 import unithon.helpjob.util.Logger
@@ -48,10 +51,24 @@ class SplashViewModel(
                                 NavigationTarget.Onboarding
                             }
                         } catch (e: Exception) {
-                            // 프로필 조회 실패 (토큰 만료 등)
-                            Logger.e("[Splash]", "프로필 조회 실패 - 로그인으로 이동: ${e.message}")
-                            authRepository.clearToken()
-                            NavigationTarget.Login
+                            when (e) {
+                                is ClientRequestException -> {
+                                    if (e.response.status == HttpStatusCode.Unauthorized ||
+                                        e.response.status == HttpStatusCode.Forbidden) {
+                                        authRepository.clearToken()
+                                    }
+                                    Logger.e("[Splash]", "프로필 조회 실패 - 로그인으로 이동: ${e.message}")
+                                    NavigationTarget.Login
+                                }
+                                is SerializationException -> {
+                                    Logger.e("[Splash]", "프로필 역직렬화 실패 - 온보딩으로 이동: ${e.message}")
+                                    NavigationTarget.Onboarding
+                                }
+                                else -> {
+                                    Logger.e("[Splash]", "프로필 조회 실패 - 로그인으로 이동: ${e.message}")
+                                    NavigationTarget.Login
+                                }
+                            }
                         }
                     }
 
