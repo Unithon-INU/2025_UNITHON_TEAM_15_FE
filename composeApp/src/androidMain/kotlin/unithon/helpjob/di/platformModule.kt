@@ -131,6 +131,7 @@ val androidNetworkModule = module {
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
+                    coerceInputValues = true
                     isLenient = true
                 })
             }
